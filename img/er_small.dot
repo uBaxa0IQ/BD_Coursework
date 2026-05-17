@@ -1,0 +1,38 @@
+graph NBA_ER_Compact {
+    layout=dot;
+    rankdir=TB;
+    nodesep=0.8;
+    ranksep=0.8;
+    splines=ortho;
+    node [fontname="Arial", fontsize=14, style=filled];
+
+    node [shape=box, fillcolor="#D9D2E9", width=1.5, height=0.6];
+    Pos    [label="Позиция"];
+    Player [label="Игрок"];
+    Season [label="Сезон"];
+    Match  [label="Матч"];
+    Team   [label="Команда"];
+
+    node [shape=diamond, fillcolor="#F3F3F3", width=1.5, height=0.9, fontsize=11];
+    RelHas        [label="Имеет"];
+    RelHistory    [label="История\nпереходов"];
+    RelStatSeason [label="Статистика\nза сезон"];
+    RelStatMatch  [label="Статистика\nв матче"];
+    RelBelongs    [label="Проходит в"];
+    RelHome       [label="Дом. команда"];
+    RelAway       [label="Гостевая ком."];
+
+    { rank=same; RelHistory; RelStatSeason; RelStatMatch }
+    { rank=same; RelHome; RelAway }
+
+    // Центральная вертикаль
+    Pos    -- RelHas       -- Player;
+    Player -- RelStatSeason -- Season;
+    Season -- RelBelongs   -- Match;
+    Match  -- RelHome      -- Team;
+    Match  -- RelAway      -- Team;
+
+    // Боковые связи
+    Player -- RelHistory   -- Team;
+    Player -- RelStatMatch -- Match;
+}

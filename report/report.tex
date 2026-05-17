@@ -1,0 +1,27 @@
+\input{preambula}
+
+\begin{document}
+	% Титульный лист: раскомментируйте при наличии title.pdf
+	%\includepdf[pages={1}]{title.pdf}
+	\setcounter{page}{4}
+
+	% Остальные разделы курсовой (введение, конструкторский, технологический,
+	% исследовательский, заключение, список литературы, приложения) --- по мере подготовки.
+
+	%\include{abstract}
+	\tableofcontents
+	%\include{intro}
+
+	\include{analytic_part}
+	\include{design_part}
+	\include{technological_part}
+	%\include{research_part}
+
+	%\include{conclusion}
+
+	\def\bibname{\begin{center}\Large СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ\end{center}}
+	\include{links}
+
+	%\include{appendix}
+
+\end{document}

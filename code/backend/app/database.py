@@ -1,0 +1,94 @@
+from typing import AsyncGenerator, Literal, Optional
+
+from fastapi import Header
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase
+
+from app.config import settings
+
+DbRole = Literal["analyst", "reader", "admin"]
+
+
+def _make_engine(url: str):
+    return create_async_engine(
+        url,
+        echo=settings.ENVIRONMENT == "development",
+        pool_size=10,
+        max_overflow=20,
+        pool_pre_ping=True,
+    )
+
+
+engine_analyst = _make_engine(settings.DATABASE_URL)
+engine_reader = _make_engine(settings.DATABASE_URL_READER)
+engine_admin = _make_engine(settings.DATABASE_URL_ADMIN)
+
+# Обратная совместимость (health, старые импорты)
+engine = engine_analyst
+
+SessionAnalyst = async_sessionmaker(
+    bind=engine_analyst,
+    class_=AsyncSession,
+    expire_on_commit=False,
+    autoflush=False,
+    autocommit=False,
+)
+SessionReader = async_sessionmaker(
+    bind=engine_reader,
+    class_=AsyncSession,
+    expire_on_commit=False,
+    autoflush=False,
+    autocommit=False,
+)
+SessionAdmin = async_sessionmaker(
+    bind=engine_admin,
+    class_=AsyncSession,
+    expire_on_commit=False,
+    autoflush=False,
+    autocommit=False,
+)
+
+AsyncSessionLocal = SessionAnalyst
+
+_ROLE_SESSIONS = {
+    "analyst": SessionAnalyst,
+    "reader": SessionReader,
+    "admin": SessionAdmin,
+}
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+def _normalize_db_role(raw: Optional[str]) -> DbRole:
+    if not raw:
+        return "analyst"
+    role = raw.strip().lower()
+    if role in ("analyst", "reader", "admin", "db_admin"):
+        return "admin" if role == "db_admin" else role  # type: ignore[return-value]
+    return "analyst"
+
+
+async def _session_for_role(role: DbRole) -> AsyncGenerator[AsyncSession, None]:
+    factory = _ROLE_SESSIONS[role]
+    async with factory() as session:
+        try:
+            yield session
+        except Exception:
+            await session.rollback()
+            raise
+
+
+async def get_db(
+    x_db_role: Optional[str] = Header(None, alias="X-DB-Role"),
+) -> AsyncGenerator[AsyncSession, None]:
+    """Сессия БД в соответствии с ролью (заголовок X-DB-Role, по умолчанию analyst)."""
+    async for session in _session_for_role(_normalize_db_role(x_db_role)):
+        yield session
+
+
+async def get_db_admin() -> AsyncGenerator[AsyncSession, None]:
+    """Сессия от имени администратора (процедуры, DDL)."""
+    async for session in _session_for_role("admin"):
+        yield session

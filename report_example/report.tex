@@ -1,0 +1,33 @@
+\include{preambula}
+
+\begin{document}
+	\includepdf[pages={1}]{title.pdf}
+	
+	\setcounter{page}{4}
+
+	\include{referat}
+	
+	\clearpage
+	\begin{center}
+		\LARGE\bfseries\MakeUppercase{СОДЕРЖАНИЕ}
+	\end{center}
+	\vspace*{-31mm}
+	\begingroup
+	\let\contentsname\relax
+	\tableofcontents
+	\endgroup
+
+	\include{socr}
+	\include{intro}
+	\include{analytic_part}
+	\include{design_part}
+	\include{tech_part}
+	\include{experimental_part}
+	\include{conclusion}
+	
+	\def\bibname{\begin{center}\Large СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ\end{center}}
+	\include{links}
+
+	\include{additions}
+	%\include{additions_2}
+\end{document}

@@ -1,0 +1,108 @@
+\chapter*{ПРИЛОЖЕНИЯ}
+\addcontentsline{toc}{chapter}{ПРИЛОЖЕНИЯ}
+
+\section*{Приложение А. Скрипты создания структуры базы данных}
+\addcontentsline{toc}{section}{Приложение А. Скрипты создания структуры базы данных}
+
+\begin{lstlisting}[language=SQL]
+CREATE TABLE positions (
+    position_id SERIAL PRIMARY KEY,
+    code VARCHAR(2) UNIQUE NOT NULL,
+    name VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE seasons (
+    season_id SERIAL PRIMARY KEY,
+    label VARCHAR(9) UNIQUE NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    season_type VARCHAR(15) NOT NULL
+);
+
+CREATE TABLE teams (
+    team_id SERIAL PRIMARY KEY,
+    nba_team_id INT UNIQUE NOT NULL,
+    name VARCHAR(60) UNIQUE NOT NULL,
+    abbreviation CHAR(3) UNIQUE NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    conference VARCHAR(4) NOT NULL,
+    division VARCHAR(20) NOT NULL,
+    arena_name VARCHAR(80),
+    founded_year SMALLINT,
+    is_active BOOLEAN DEFAULT TRUE
+);
+\end{lstlisting}
+
+\section*{Приложение Б. Скрипты создания функций и процедур}
+\addcontentsline{toc}{section}{Приложение Б. Скрипты создания функций и процедур}
+
+\begin{lstlisting}[language=SQL]
+CREATE OR REPLACE FUNCTION calculate_efg(
+    p_player_id INT,
+    p_season_id INT,
+    p_team_id   INT DEFAULT NULL
+)
+RETURNS DECIMAL(5,4)
+LANGUAGE plpgsql
+STABLE
+AS $$
+DECLARE
+    v_fgm NUMERIC := 0;
+    v_fg3m NUMERIC := 0;
+    v_fga NUMERIC := 0;
+BEGIN
+    SELECT
+        COALESCE(SUM(gps.fgm), 0),
+        COALESCE(SUM(gps.fg3m), 0),
+        COALESCE(SUM(gps.fga), 0)
+    INTO v_fgm, v_fg3m, v_fga
+    FROM game_player_stats gps
+    JOIN games g ON g.game_id = gps.game_id
+    WHERE gps.player_id = p_player_id
+      AND g.season_id   = p_season_id
+      AND (p_team_id IS NULL OR gps.team_id = p_team_id);
+
+    IF v_fga = 0 THEN
+        RETURN NULL;
+    END IF;
+
+    RETURN ROUND((v_fgm + 0.5 * v_fg3m) / v_fga, 4);
+END;
+$$;
+\end{lstlisting}
+
+\section*{Приложение В. Исходный код механизма кэширования}
+\addcontentsline{toc}{section}{Приложение В. Исходный код механизма кэширования}
+
+\begin{lstlisting}[language=Python]
+import json
+from functools import wraps
+from fastapi import Request, Response
+
+def cache_response(ttl_seconds: int = 300):
+    def decorator(func):
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            request: Request = kwargs.get("request")
+            redis_client = request.app.state.redis
+            
+            cache_key = f"api_cache:{request.url.path}?{request.url.query}"
+            
+            cached_data = await redis_client.get(cache_key)
+            if cached_data:
+                return Response(
+                    content=cached_data, 
+                    media_type="application/json"
+                )
+                
+            response = await func(*args, **kwargs)
+            
+            await redis_client.setex(
+                cache_key, 
+                ttl_seconds, 
+                json.dumps(response)
+            )
+            return response
+        return wrapper
+    return decorator
+\end{lstlisting}

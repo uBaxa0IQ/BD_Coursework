@@ -1,0 +1,38 @@
+[
+  {
+    "concurrency": 1,
+    "avg_ms": 30.47,
+    "median_ms": 30.47,
+    "p95_ms": 30.471838999801548,
+    "p99_ms": 30.471838999801548,
+    "total_ms": 31.35,
+    "errors": 0
+  },
+  {
+    "concurrency": 10,
+    "avg_ms": 56.46,
+    "median_ms": 59.72,
+    "p95_ms": 62.01,
+    "p99_ms": 62.01,
+    "total_ms": 68.06,
+    "errors": 0
+  },
+  {
+    "concurrency": 50,
+    "avg_ms": 160.39,
+    "median_ms": 172.78,
+    "p95_ms": 182.19,
+    "p99_ms": 182.68,
+    "total_ms": 194.42,
+    "errors": 0
+  },
+  {
+    "concurrency": 100,
+    "avg_ms": 357.25,
+    "median_ms": 375.65,
+    "p95_ms": 392.32,
+    "p99_ms": 404.5,
+    "total_ms": 417.51,
+    "errors": 0
+  }
+]

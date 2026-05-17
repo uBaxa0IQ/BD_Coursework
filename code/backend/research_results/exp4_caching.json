@@ -1,0 +1,8 @@
+{
+  "with_cache": {
+    "miss_ms": 9.89,
+    "hit_avg_ms": 2.12,
+    "hit_p95_ms": 3.45,
+    "speedup": 4.7
+  }
+}

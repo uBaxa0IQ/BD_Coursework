@@ -1,0 +1,63 @@
+graph NBA_ER_Full {
+    // Настройки для Draw.io
+    layout=dot;
+    nodesep=0.5;
+    ranksep=1.2;
+    splines=ortho; // Прямые углы
+    node [fontname="Arial", fontsize=12, shape=ellipse, style=filled, fillcolor="#FFF2CC"];
+    edge [color="#333333"];
+
+    // --- СУЩНОСТИ (Прямоугольники) ---
+    node [shape=box, fillcolor="#D9D2E9", width=1.5, height=0.6];
+    Pos [label="Позиция"];
+    Player [label="Игрок"];
+    Team [label="Команда"];
+    Season [label="Сезон"];
+    Match [label="Матч"];
+
+    // --- СВЯЗИ (Ромбы) ---
+    node [shape=diamond, fillcolor="#F3F3F3", width=1.2, height=0.8];
+    RelHas [label="Имеет"];
+    RelHistory [label="История"];
+    RelStatSeason [label="Стат. за сезон"];
+    RelStatMatch [label="Стат. в матче"];
+    RelBelongs [label="Относится"];
+    RelHome [label="Хозяева"];
+    RelAway [label="Гости"];
+
+    // --- АТРИБУТЫ ПОЗИЦИИ ---
+    node [shape=ellipse, fillcolor="#FFF2CC"];
+    Pos -- { "pos_id (PK)"; "code (UQ)"; "name" };
+
+    // --- АТРИБУТЫ ИГРОКА ---
+    Player -- { "player_id (PK)"; "nba_id"; "first_name"; "last_name"; "birth_date"; "nationality"; "height_cm"; "weight_kg"; "jersey_number"; "is_active"; "draft_year"; "draft_round"; "draft_pick" };
+
+    // --- АТРИБУТЫ КОМАНДЫ ---
+    Team -- { "team_id (PK)"; "nba_team_id"; "team_name"; "abbr"; "city"; "conf"; "div"; "arena"; "founded"; "team_active" };
+
+    // --- АТРИБУТЫ СЕЗОНА ---
+    Season -- { "season_id (PK)"; "label"; "start_date"; "end_date"; "season_type" };
+
+    // --- АТРИБУТЫ МАТЧА ---
+    Match -- { "game_id (PK)"; "game_date"; "home_score"; "away_score"; "status"; "overtime" };
+
+    // --- АТРИБУТЫ СВЯЗЕЙ (Сложные метрики из Таблиц 2.6-2.8) ---
+    RelStatMatch -- { "stat_id"; "min_played"; "pts"; "rebs"; "asts"; "stls"; "blks"; "fgm"; "fga"; "plus_minus" };
+    RelStatSeason -- { "pss_id"; "gp"; "avg_pts"; "efg%"; "ts%"; "per"; "bpm"; "usg%" };
+    RelHistory -- { "history_id"; "contract_type"; "h_start"; "h_end" };
+
+    // --- СОЕДИНЕНИЯ СУЩНОСТЕЙ ---
+    // Кардинальность (1, M, N) можно будет дописать текстом в Draw.io поверх линий
+    Pos -- RelHas -- Player;
+    Player -- RelHistory -- Team;
+    RelHistory -- Season;
+    
+    Player -- RelStatSeason -- Season;
+    
+    Player -- RelStatMatch -- Match;
+    RelStatMatch -- Team;
+
+    Season -- RelBelongs -- Match;
+    Match -- RelHome -- Team;
+    Match -- RelAway -- Team;
+}

@@ -1,0 +1,207 @@
+\appendix
+\ssr{ПРИЛОЖЕНИЕ А}
+
+К РПЗ работы прилагаются следующие материалы:
+\begin{enumerate}
+	\item Презентация к курсовой работе, состоящая из 12 слайдов.
+	\item USB-флеш-накопитель с исходными кодами, электронными версиями РПЗ и презентации. Структура файлов на накопителе:
+	\begin{verbatim}
+\rpz
+|
+----\report.pdf // Итоговая РПЗ
+----\prez // Презентация
+----\source // Исходные коды
+	\end{verbatim}
+\end{enumerate}
+
+\clearpage
+
+\setcounter{section}{0}
+\renewcommand{\thesection}{\Asbuk{section}}
+\renewcommand{\thelstlisting}{\Asbuk{section}.\arabic{lstlisting}}
+\setcounter{lstlisting}{0}
+\section{Листинги кода}
+
+\subsection{Функция расчета преломления луча}
+
+\begin{lstlisting}[caption={Функция \texttt{refract\_dir} --- расчет направления преломленного луча}, label=lst:refract_dir, language=C++]
+Vec3 refract_dir(const Vec3& dir, const Vec3& normal,
+                 double n1, double n2, bool& total_internal) {
+    Vec3 n = normal;
+    double cos_i = -dot(n, dir);
+    double eta = n1 / n2;
+    double k = 1.0 - eta * eta * (1.0 - cos_i * cos_i);
+    if (k < 0.0) {
+        total_internal = true;
+        return reflect_dir(dir, n);
+    }
+    total_internal = false;
+    return dir * eta + n * (eta * cos_i - std::sqrt(k));
+}
+\end{lstlisting}
+
+\subsection{Функция аппроксимации Френеля}
+
+\begin{lstlisting}[caption={Функция \texttt{fresnel\_schlick} --- аппроксимация Френеля по формуле Шлика}, label=lst:fresnel_schlick, language=C++]
+double fresnel_schlick(double cos_i, double n1, double n2) {
+    double r0 = ((n1 - n2) / (n1 + n2));
+    r0 = r0 * r0;
+    
+    double cos_i_clamped = std::max(0.0, std::min(1.0, std::abs(cos_i)));
+    double one_minus_cos = 1.0 - cos_i_clamped;
+    double power5 = one_minus_cos * one_minus_cos * one_minus_cos * one_minus_cos * one_minus_cos;
+    return r0 + (1.0 - r0) * power5;
+}
+\end{lstlisting}
+
+\subsection{Обработка преломления в колпачке}
+
+\begin{lstlisting}[caption={Метод \texttt{Shield::process} --- обработка преломления луча в защитном колпачке}, label=lst:shield_process, language=C++]
+std::optional<Ray> Shield::process(const Ray& incoming, std::mt19937& rng) const {
+    Vec3 to_inner = inner_center_ - incoming.origin;
+    double proj = dot(to_inner, incoming.direction);
+    double dist_sq = dot(to_inner, to_inner) - proj * proj;
+    double inner_sq = inner_radius_ * inner_radius_;
+    if (dist_sq > inner_sq) {
+        return incoming;
+    }
+
+    double thc = std::sqrt(inner_sq - dist_sq);
+    double t0 = proj - thc;
+    if (t0 < 1e-6) {
+        t0 = proj + thc;
+        if (t0 < 1e-6) {
+            return incoming;
+        }
+    }
+
+    Vec3 entry = incoming.at(t0);
+    Vec3 entry_normal = normalize(entry - inner_center_);
+    bool total = false;
+    Ray inside = refract(incoming, entry, entry_normal, 1.0, config_.refractive_index, total);
+    if (total) {
+        return inside;
+    }
+
+    Vec3 to_outer = center_ - inside.origin;
+    double proj_outer = dot(to_outer, inside.direction);
+    double dist_outer_sq = dot(to_outer, to_outer) - proj_outer * proj_outer;
+    double radius_sq = config_.radius * config_.radius;
+    if (dist_outer_sq > radius_sq) {
+        return inside;
+    }
+    double thc_outer = std::sqrt(radius_sq - dist_outer_sq);
+    double t_exit = proj_outer + thc_outer;
+    Vec3 exit_point = inside.at(t_exit);
+    Vec3 exit_normal = normalize(exit_point - center_);
+    Ray outside = refract(inside, exit_point, exit_normal,
+                          config_.refractive_index, 1.0, total);
+    if (total) {
+        Vec3 dir = normalize(inside.direction);
+        double cos_i = -dot(exit_normal, dir);
+        double fresnel_r = fresnel_schlick(cos_i, config_.refractive_index, 1.0);
+        double reflected_intensity = inside.intensity * fresnel_r;
+        outside = Ray{exit_point + exit_normal * 1e-4,
+                      reflect_dir(inside.direction, exit_normal),
+                      reflected_intensity, inside.color};
+    }
+
+    double absorption = std::max(0.0, 1.0 - config_.transparency);
+    outside.intensity *= (1.0 - absorption);
+    outside.color = outside.color * config_.color;
+
+    if (outside.intensity < 1e-5) {
+        return std::nullopt;
+    }
+
+    if (config_.scatter_factor > 0.0) {
+        std::normal_distribution<double> dist(0.0, config_.scatter_factor);
+        Vec3 jitter(dist(rng), dist(rng), dist(rng));
+        Vec3 new_dir = normalize(outside.direction + jitter);
+        outside.direction = new_dir;
+    }
+
+    return outside;
+}
+\end{lstlisting}
+
+\subsection{Ядро трассировки лучей}
+
+\begin{lstlisting}[caption={Метод \texttt{Renderer::trace\_ray} --- ядро алгоритма трассировки лучей}, label=lst:trace_ray, language=C++]
+void Renderer::trace_ray(const Ray& ray,
+                         const LightConfig& source,
+                         const std::vector<LightConfig>& lights,
+                         const WallConfig& wall,
+                         const std::vector<SphereConfig>& spheres,
+                         const RenderSettings& settings,
+                         ImageBuffer& wall_buffer,
+                         std::vector<ImageBuffer>& sphere_buffers) {
+    if (ray.intensity < 1e-5) {
+        return;
+    }
+
+    double closest_t = 1e10;
+    bool hit_object = false;
+    int hit_type = 0;
+    int hit_index = 0;
+    Vec3 hit_point;
+    Vec3 hit_normal;
+
+    for (size_t i = 0; i < spheres.size(); ++i) {
+        Vec3 point, normal;
+        double t = 0.0;
+        if (intersect_sphere(ray, spheres[i], point, normal, t)) {
+            if (t < closest_t && t > 1e-6) {
+                closest_t = t;
+                hit_object = true;
+                hit_type = 1;
+                hit_index = static_cast<int>(i);
+                hit_point = point;
+                hit_normal = normal;
+            }
+        }
+    }
+
+    Vec3 wall_point;
+    double wall_t = 0.0;
+    bool hit_wall = intersect_wall(ray, wall, wall_point, wall_t);
+    if (hit_wall && wall_t < closest_t && wall_t > 1e-6) {
+        closest_t = wall_t;
+        hit_object = true;
+        hit_type = 0;
+        hit_point = wall_point;
+        hit_normal = WALL_NORMAL;
+    }
+
+    if (!hit_object) {
+        return;
+    }
+
+    double lambert = std::max(0.0, dot(hit_normal, ray.direction * -1.0));
+    double final_intensity = ray.intensity * lambert;
+
+    if (hit_type == 0) {
+        double norm_x = (hit_point.x + wall.width * 0.5) / wall.width;
+        int pixel_x = static_cast<int>(norm_x * wall.resolution_x);
+        double norm_y = (hit_point.y + wall.height * 0.5) / wall.height;
+        int pixel_y = static_cast<int>((1.0 - norm_y) * wall.resolution_y);
+        wall_buffer.add_pixel(pixel_x, pixel_y, ray.color, final_intensity);
+    } else if (hit_type == 1) {
+        const auto& sphere = spheres[hit_index];
+        double u, v;
+        sphere_point_to_uv(hit_point, sphere, u, v);
+        int pixel_x = static_cast<int>(u * sphere.resolution);
+        int pixel_y = static_cast<int>((1.0 - v) * sphere.resolution);
+        if (hit_index < static_cast<int>(sphere_buffers.size())) {
+            sphere_buffers[hit_index].add_pixel(pixel_x, pixel_y, ray.color, final_intensity);
+        }
+    }
+}
+\end{lstlisting}
+
+\clearpage
+
+\ssr{ПРИЛОЖЕНИЕ Б}
+
+Презентация.
+

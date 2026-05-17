@@ -1,0 +1,737 @@
+\chapter{Конструкторский раздел}
+
+\section{Логическое проектирование базы данных}\label{sec:db-design}
+
+Инфологическая модель трансформирована в реляционную схему из восьми таблиц.
+Справочник \texttt{seasons} использует суррогатный ключ \texttt{season\_id}
+и метку \texttt{label} (формат «ГГГГ-ГГ»). Сборка фактов осуществляется в
+таблице \texttt{game\_player\_stats}, сезонные агрегаты хранятся в таблице
+\texttt{player\_season\_stats} в виде денормализованной витрины данных для
+минимизации времени отклика. Сводная схема связей между таблицами приведена на
+рисунке~\ref{fig:relational-schema}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{../img/11.pdf}
+\caption{Реляционная схема базы данных}
+\label{fig:relational-schema}
+\end{figure}
+
+{\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.12}%
+
+\begin{table}[H]
+\centering
+\caption{Таблица \texttt{positions} (справочник позиций)}
+\label{tab:pos}
+\begin{tabular}{|p{0.25\textwidth}|p{0.2\textwidth}|p{0.45\textwidth}|}
+\hline
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\hline
+position\_id & SERIAL & PK \\
+\hline
+code & VARCHAR(2) & UNIQUE; код PG, SG, SF, PF, C \\
+\hline
+name & VARCHAR(20) & полное название позиции \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Таблица \texttt{seasons} (сезоны)}
+\label{tab:seasons}
+\begin{tabular}{|p{0.25\textwidth}|p{0.2\textwidth}|p{0.45\textwidth}|}
+\hline
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\hline
+season\_id & SERIAL & PK \\
+\hline
+label & VARCHAR(9) & UNIQUE; метка сезона (напр.\ 2023-24) \\
+\hline
+start\_date & DATE & дата начала сезона \\
+\hline
+end\_date & DATE & дата окончания сезона \\
+\hline
+season\_type & VARCHAR(15) & Regular, Playoff, Preseason \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Таблица \texttt{teams} (команды)}
+\label{tab:teams}
+\begin{tabular}{|p{0.25\textwidth}|p{0.2\textwidth}|p{0.45\textwidth}|}
+\hline
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\hline
+team\_id & SERIAL & PK \\
+\hline
+nba\_team\_id & INTEGER & UNIQUE; id на NBA.com \\
+\hline
+name & VARCHAR(60) & UNIQUE; полное название \\
+\hline
+abbreviation & CHAR(3) & UNIQUE; аббревиатура \\
+\hline
+city & VARCHAR(50) & город базирования \\
+\hline
+conference & VARCHAR(4) & CHECK IN ('East','West') \\
+\hline
+division & VARCHAR(20) & дивизион NBA \\
+\hline
+arena\_name & VARCHAR(80) & домашняя арена \\
+\hline
+founded\_year & SMALLINT & год основания \\
+\hline
+is\_active & BOOLEAN & признак активной команды \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Таблица \texttt{players} (игроки)}
+\label{tab:players}
+\begin{tabular}{|p{0.25\textwidth}|p{0.2\textwidth}|p{0.45\textwidth}|}
+\hline
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\hline
+player\_id & SERIAL & PK \\
+\hline
+nba\_id & INTEGER & UNIQUE; id на NBA.com \\
+\hline
+first\_name & VARCHAR(50) & имя \\
+\hline
+last\_name & VARCHAR(50) & фамилия \\
+\hline
+birth\_date & DATE & дата рождения \\
+\hline
+nationality & VARCHAR(50) & гражданство \\
+\hline
+height\_cm & SMALLINT & рост (см) \\
+\hline
+weight\_kg & SMALLINT & вес (кг) \\
+\hline
+position\_id & INTEGER & FK $\rightarrow$ \texttt{positions} \\
+\hline
+jersey\_number & SMALLINT & номер на майке (0--99) \\
+\hline
+is\_active & BOOLEAN & действующий игрок \\
+\hline
+draft\_year & SMALLINT & год драфта \\
+\hline
+draft\_round & SMALLINT & раунд драфта (1 или 2) \\
+\hline
+draft\_pick & SMALLINT & номер выбора на драфте \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Таблица \texttt{games} (матчи)}
+\label{tab:games}
+\begin{tabular}{|p{0.25\textwidth}|p{0.2\textwidth}|p{0.45\textwidth}|}
+\hline
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\hline
+game\_id & SERIAL & PK \\
+\hline
+season\_id & INTEGER & FK $\rightarrow$ \texttt{seasons} \\
+\hline
+home\_team\_id & INTEGER & FK $\rightarrow$ \texttt{teams}; команда-хозяин \\
+\hline
+away\_team\_id & INTEGER & FK $\rightarrow$ \texttt{teams}; команда-гость \\
+\hline
+game\_date & DATE & дата матча \\
+\hline
+home\_score & SMALLINT & счёт хозяев \\
+\hline
+away\_score & SMALLINT & счёт гостей \\
+\hline
+status & VARCHAR(12) & Finished, Scheduled, Postponed \\
+\hline
+overtime & SMALLINT & число овертаймов (0--6) \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Таблица \texttt{game\_player\_stats} (факты матча)}
+\label{tab:gps}
+\begin{tabular}{|p{0.28\textwidth}|p{0.18\textwidth}|p{0.45\textwidth}|}
+\hline
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\hline
+stat\_id & SERIAL & PK \\
+\hline
+game\_id & INTEGER & FK $\rightarrow$ \texttt{games}, ON DELETE CASCADE \\
+\hline
+player\_id & INTEGER & FK $\rightarrow$ \texttt{players}, ON DELETE RESTRICT \\
+\hline
+team\_id & INTEGER & FK $\rightarrow$ \texttt{teams}, ON DELETE RESTRICT \\
+\hline
+minutes\_played & DECIMAL(4,1) & минуты на площадке \\
+\hline
+points & SMALLINT & очки (CHECK $\ge 0$) \\
+\hline
+rebounds\_off, rebounds\_def & SMALLINT & подборы в нападении и защите \\
+\hline
+assists, steals, blocks & SMALLINT & передачи, перехваты, блоки \\
+\hline
+turnovers, fouls & SMALLINT & потери и фолы \\
+\hline
+fgm, fga, fg3m, fg3a, ftm, fta & SMALLINT & попадания и попытки бросков \\
+\hline
+plus\_minus & SMALLINT & показатель плюс-минус \\
+\hline
+is\_starter & BOOLEAN & признак стартового состава \\
+\hline
+UNIQUE & --- & \texttt{(game\_id, player\_id)}~--- гарантирует
+              единственность записи игрока в матче \\
+\hline
+\end{tabular}
+\end{table}
+
+} % end footnotesize (таблицы)
+
+В таблице \texttt{game\_player\_stats} пара полей \texttt{game\_id} и
+\texttt{player\_id} закреплена ограничением \texttt{UNIQUE}. Это исключает
+дублирование строк статистики одного игрока в одном матче.
+
+{\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.12}%
+
+\begin{table}[H]
+\centering
+\caption{Таблица \texttt{player\_season\_stats} (агрегаты за сезон)}
+\label{tab:pss}
+\begin{tabular}{|p{0.30\textwidth}|p{0.18\textwidth}|p{0.45\textwidth}|}
+\hline
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\hline
+pss\_id & SERIAL & PK \\
+\hline
+player\_id & INTEGER & FK $\rightarrow$ \texttt{players}; часть UNIQUE \\
+\hline
+season\_id & INTEGER & FK $\rightarrow$ \texttt{seasons}; часть UNIQUE \\
+\hline
+team\_id & INTEGER & FK $\rightarrow$ \texttt{teams}; часть UNIQUE \\
+\hline
+games\_played & SMALLINT & число игр в сезоне \\
+\hline
+avg\_pts, avg\_reb, avg\_ast & DECIMAL(5,2) & средние за матч (очки, подборы, передачи) \\
+\hline
+avg\_stl, avg\_blk, avg\_tov, avg\_min & DECIMAL(5,2) & перехваты, блоки, потери, минуты \\
+\hline
+fg\_pct, fg3\_pct, ft\_pct & DECIMAL(5,4) & проценты попаданий (дробь $\in [0,1]$) \\
+\hline
+avg\_plus\_minus & DECIMAL(5,2) & средний плюс-минус \\
+\hline
+efg\_pct, ts\_pct, usg\_pct & DECIMAL(5,4) & eFG\%, TS\%, USG (доля 0--1; на UI $\times 100$) \\
+\hline
+per & DECIMAL(6,2) & PER \\
+\hline
+bpm & DECIMAL(5,2) & BPM \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Таблица \texttt{player\_team\_history} (история выступлений)}
+\label{tab:pth}
+\begin{tabular}{|p{0.25\textwidth}|p{0.2\textwidth}|p{0.45\textwidth}|}
+\hline
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\hline
+history\_id & SERIAL & PK \\
+\hline
+player\_id & INTEGER & FK $\rightarrow$ \texttt{players}; часть UNIQUE \\
+\hline
+team\_id & INTEGER & FK $\rightarrow$ \texttt{teams} \\
+\hline
+season\_id & INTEGER & FK $\rightarrow$ \texttt{seasons} \\
+\hline
+start\_date & DATE & дата начала выступления \\
+\hline
+end\_date & DATE & дата окончания (NULL --- по сей день) \\
+\hline
+contract\_type & VARCHAR(20) & Standard, Two-Way, 10-Day и др. \\
+\hline
+\end{tabular}
+\end{table}
+} % end footnotesize
+
+\subsection{Соответствие нормальным формам}
+
+Схема нормализована до третьей нормальной формы (3НФ). Ниже для всех восьми
+таблиц проверяется выполнение первой (1НФ), второй (2НФ) и третьей (3НФ)
+нормальных форм~\cite{date}.
+
+\textbf{Первая нормальная форма (1НФ).} В каждом отношении атрибуты атомарны:
+повторяющихся групп и многозначных полей нет. Статистика игрока в матче
+хранится отдельной строкой в \texttt{game\_player\_stats}, а не списком
+показателей в одной ячейке; справочники (\texttt{positions}, \texttt{teams})
+и сущности (\texttt{players}, \texttt{games}) разнесены по отдельным таблицам.
+
+\textbf{Вторая нормальная форма (2НФ).} Отношение в 2НФ, если оно в 1НФ и
+каждый неключевой атрибут полностью зависит от всего составного ключа.
+У таблиц \texttt{positions}, \texttt{seasons}, \texttt{teams}, \texttt{players},
+\texttt{games} первичный ключ простой (\texttt{*\_id}), поэтому частичных
+зависимостей быть не может. В \texttt{game\_player\_stats} показатели зависят
+от пары \texttt{game\_id} и \texttt{player\_id}, а не от каждого поля по
+отдельности. Аналогично в \texttt{player\_season\_stats} агрегаты зависят от
+составного ключа: \texttt{player\_id}, \texttt{season\_id}, \texttt{team\_id}.
+В \texttt{player\_team\_history} атрибут \texttt{contract\_type}
+относится к конкретному периоду игрока в команде и зависит от составного ключа
+записи.
+
+\textbf{Третья нормальная форма (3НФ).} Отношение в 3НФ, если оно в 2НФ и для
+каждой нетривиальной зависимости $X \to A$ либо $X$~--- суперключ, либо $A$
+входит в потенциальный ключ. В \texttt{teams} поля \texttt{city} и \texttt{conference}
+описывают команду напрямую и зависят только от \texttt{team\_id}. В \texttt{players} ФИО и
+физические параметры зависят только от \texttt{player\_id}, а не от
+\texttt{team\_id} (команда задаётся через \texttt{player\_team\_history}).
+Совпадение данных \texttt{player\_season\_stats} с агрегатами из
+\texttt{game\_player\_stats}~--- избыточность между таблицами (витрина для
+быстрых выборок), а не нарушение 3НФ внутри одного отношения.
+
+Таким образом, все таблицы схемы находятся в 1НФ, 2НФ и 3НФ.
+
+\subsection{Проектирование представлений}
+
+Для обеспечения доступа к данным без прямого обращения к базовым таблицам
+спроектированы четыре представления:
+\begin{enumerate}
+    \item \texttt{v\_player\_rankings}~--- объединяет \texttt{player\_season\_stats}
+          и \texttt{players}; предоставляет сводный рейтинг игроков за сезон по
+          очкам, подборам, передачам и расчётным метрикам;
+    \item \texttt{v\_team\_stats}~--- агрегирует данные \texttt{game\_player\_stats}
+          в разрезе команды и сезона; реализует функциональное требование расчёта
+          командной статистики без отдельной таблицы фактов;
+    \item \texttt{v\_team\_standings}~--- вычисляет турнирное положение команд
+          (число побед и поражений, процент побед) на основе завершённых матчей;
+    \item \texttt{v\_top\_players}~--- краткая сводка лидеров по PER для роли
+          \texttt{reader} (подмножество \texttt{v\_player\_rankings}).
+\end{enumerate}
+
+\subsection{Проектирование индексов}\label{subsec:indexes}
+
+Для обеспечения производительности аналитических запросов в соответствии с
+нефункциональными требованиями (раздел~\ref{sec:nfr}) спроектированы следующие
+индексы~\cite{postgres}:
+\begin{enumerate}
+    \item \texttt{idx\_gps\_player\_id} ON \texttt{game\_player\_stats(player\_id)}~---
+          ускоряет выборку всех выступлений игрока для агрегации сезонной
+          статистики;
+    \item \texttt{idx\_gps\_team\_game} ON
+          \texttt{game\_player\_stats(team\_id, game\_id)}~--- поддерживает
+          агрегацию командной статистики в представлении \texttt{v\_team\_stats};
+    \item \texttt{idx\_games\_season\_id} ON
+          \texttt{games(season\_id)}~--- ускоряет фильтрацию матчей по сезону;
+    \item \texttt{idx\_games\_date} ON \texttt{games(game\_date)}~---
+          обеспечивает диапазонную фильтрацию по дате проведения матча;
+    \item \texttt{idx\_pss\_season} ON
+          \texttt{player\_season\_stats(season\_id)}~--- ускоряет выборку
+          рейтингов за конкретный сезон;
+    \item \texttt{idx\_players\_name} ON
+          \texttt{players(last\_name, first\_name)}~--- поддерживает поиск
+          игрока по фамилии.
+\end{enumerate}
+
+Ограничение UNIQUE на \texttt{(game\_id, player\_id)} в таблице
+\texttt{game\_player\_stats} автоматически создаёт B-tree индекс, покрывающий
+запросы поиска по паре «матч~-- игрок». Все индексы реализованы как B-tree~---
+стандартная структура PostgreSQL, оптимальная для равенства и диапазонных
+предикатов в аналитических запросах.
+
+\section{Проектирование ограничений целостности}
+
+Помимо стандартных ограничений первичных (\texttt{PK}) и внешних (\texttt{FK})
+ключей, в СУБД реализована логика защиты бизнес-правил.
+
+\textbf{Внешние ключи и каскадное удаление.}
+При удалении матча из \texttt{games} связанные строки \texttt{game\_player\_stats}
+удаляются каскадно (\texttt{ON DELETE CASCADE}). Для справочников игроков и команд
+применяется стратегия \texttt{ON DELETE RESTRICT}: физическое удаление запрещено
+во избежание потери исторической статистики; вместо этого используется логическое
+удаление посредством флага \texttt{is\_active}.
+
+\textbf{CHECK-ограничения.}
+Обеспечивают согласованность бросков: \texttt{fg3m}~$\le$~\texttt{fgm},
+\texttt{fgm}~$\le$~\texttt{fga}; диапазон фолов от~0 до~6.
+В \texttt{games} поля \texttt{home\_team\_id} и \texttt{away\_team\_id} различаются.
+В \texttt{player\_team\_history} выполняется
+\texttt{start\_date}~$\le$~\texttt{end\_date}.
+
+\textbf{Бизнес-триггеры.}
+На таблице \texttt{game\_player\_stats} реализованы два триггера.
+Триггер \texttt{trg\_check\_team\_score} (\texttt{AFTER INSERT OR UPDATE},
+\texttt{FOR EACH ROW}) валидирует равенство суммы очков игроков ($\sum \mathrm{points}$)
+командному счёту (\texttt{home\_score} или \texttt{away\_score}) для завершённых матчей.
+Триггер \texttt{after\_game\_player\_stats\_insert} (\texttt{AFTER INSERT},
+\texttt{FOR EACH STATEMENT}) вызывает \texttt{update\_season\_stats} для пересчёта витрины.
+Ограничение по счёту применимо к полностью обработанным данным:
+игроки, не принявшие участие в матче, в таблицу \texttt{game\_player\_stats}
+не вносятся; загружаемые источники должны обеспечивать атрибуцию всех очков
+конкретным игрокам.
+
+\section{Проектирование алгоритмов обработки данных}
+
+\subsection{Алгоритмы расчёта метрик игроков}
+
+Функции расчёта метрик выполняются на стороне СУБД. При проектировании алгоритма
+учтено деление на ноль: если знаменатель равен нулю, функция возвращает
+\texttt{NULL}, что позволяет агрегатным функциям \texttt{AVG()} корректно
+исключить таких игроков из расчёта командной и лиговой статистики без внесения
+нулевых искажений.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=1.5cm,
+    every node/.style={font=\footnotesize},
+    startstop/.style={draw, rectangle, rounded corners=10pt, minimum width=3cm,
+      minimum height=0.8cm, text centered, fill=red!5},
+    process/.style={draw, rectangle, minimum width=3cm, minimum height=0.8cm,
+      text centered, fill=orange!5},
+    decision/.style={draw, diamond, aspect=2.5, minimum width=3cm,
+      minimum height=0.8cm, text centered, fill=green!5},
+    arrow/.style={thick,->,>=stealth}
+]
+\node (start)  [startstop] {Начало};
+\node (pro1)   [process,  below of=start] {Суммирование PTS, FGA, FTA};
+\node (pro2)   [process,  below of=pro1]
+  {$D = 2 \cdot (\mathrm{FGA} + 0{,}44 \cdot \mathrm{FTA})$};
+\node (dec1)   [decision, below of=pro2, yshift=-0.5cm] {$D = 0$?};
+\node (pro3a)  [process,  right of=dec1, xshift=3.5cm] {Возврат NULL};
+\node (pro3b)  [process,  below of=dec1, yshift=-0.5cm]
+  {Возврат $\mathrm{PTS} / D$};
+\node (stop)   [startstop, below of=pro3b] {Конец};
+
+\draw [arrow] (start)  -- (pro1);
+\draw [arrow] (pro1)   -- (pro2);
+\draw [arrow] (pro2)   -- (dec1);
+\draw [arrow] (dec1)   -- node[anchor=south] {Да}  (pro3a);
+\draw [arrow] (dec1)   -- node[anchor=east]  {Нет} (pro3b);
+\draw [arrow] (pro3b)  -- (stop);
+\draw [arrow] (pro3a)  |- (stop);
+\end{tikzpicture}
+\caption{Алгоритм функции \texttt{calculate\_ts}}
+\label{fig:algo-ts}
+\end{figure}
+
+\subsection{Алгоритм агрегирования командной статистики}
+
+Командная статистика не хранится в отдельной таблице: в соответствии с
+проектным решением она вычисляется динамически представлением
+\texttt{v\_team\_stats}. Для каждой пары «команда~-- сезон» представление
+суммирует показатели всех игроков из \texttt{game\_player\_stats} по матчам, в
+которых данная команда выступала в качестве хозяев или гостей, и делит
+накопленные суммы на число матчей. Принадлежность строки статистики
+к хозяевам или гостям определяется через JOIN с таблицей \texttt{games}
+по полям \texttt{home\_team\_id} и \texttt{away\_team\_id}. Результирующий
+набор содержит средние очки, подборы, передачи, потери и эффективные показатели
+команды за матч.
+
+\subsection{Алгоритм массового обновления агрегатов}
+
+Процедура \texttt{update\_season\_stats} пересчитывает агрегаты для указанного
+сезона. Алгоритм спроектирован с отказом от курсоров и построчного обхода.
+Применяется множественная операция с использованием конструкции
+\texttt{INSERT ... ON CONFLICT DO UPDATE}. Это позволяет СУБД задействовать
+внутренний оптимизатор и многократно сократить время пересчёта. Атомарность
+операции UPSERT на уровне СУБД предотвращает состояния гонки при параллельном
+пересчёте.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=1.5cm,
+    every node/.style={font=\footnotesize},
+    startstop/.style={draw, rectangle, rounded corners=10pt, minimum width=5cm,
+      minimum height=0.8cm, text centered, fill=red!5},
+    process/.style={draw, rectangle, minimum width=5cm, minimum height=0.8cm,
+      text centered, fill=orange!5},
+    arrow/.style={thick,->,>=stealth}
+]
+\node (start) [startstop] {Начало транзакции};
+\node (pro1)  [process, below of=start]
+  {CTE: GROUP BY player\_id, season\_id, team\_id};
+\node (pro2)  [process, below of=pro1]
+  {CTE: расчёт eFG\%, TS\%, USG\%, PER, BPM из агрегатов};
+\node (pro3)  [process, below of=pro2]
+  {UPSERT в player\_season\_stats};
+\node (stop)  [startstop, below of=pro3] {Конец транзакции};
+
+\draw [arrow] (start) -- (pro1);
+\draw [arrow] (pro1)  -- (pro2);
+\draw [arrow] (pro2)  -- (pro3);
+\draw [arrow] (pro3)  -- (stop);
+\end{tikzpicture}
+\caption{Алгоритм обновления агрегатов}
+\label{fig:algo-update}
+\end{figure}
+
+\section{Проектирование ролевой модели доступа}\label{sec:roles}
+
+В базе данных определены три роли: \texttt{db\_admin}, \texttt{analyst} и
+\texttt{reader}. Администратору выданы полные права на таблицы,
+последовательности и функции схемы. Аналитику доступны выборка из таблиц и
+выполнение расчётных функций. Читатель работает исключительно через
+представления без прямого доступа к базовым таблицам. Создание и изменение
+структуры объектов базы данных выполняются от имени выделенного
+пользователя-владельца схемы при развёртывании.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.25}
+\caption{Матрица прав доступа к объектам базы данных}
+\label{tab:acl-matrix}
+\begin{tabular}{|p{0.36\textwidth}|p{0.20\textwidth}|p{0.20\textwidth}|p{0.20\textwidth}|}
+\hline
+\textbf{Объект} & \textbf{\texttt{db\_admin}} & \textbf{\texttt{analyst}}
+  & \textbf{\texttt{reader}} \\
+\hline
+\texttt{positions}, \texttt{seasons}, \texttt{teams}, \texttt{players}
+  & CRUD & SELECT & --- \\
+\hline
+\texttt{games}, \texttt{game\_player\_stats} & CRUD & SELECT & --- \\
+\hline
+\texttt{player\_season\_stats}, \texttt{player\_team\_history}
+  & CRUD & SELECT & --- \\
+\hline
+Функции \texttt{calculate\_*} & EXECUTE & EXECUTE & --- \\
+\hline
+\texttt{v\_team\_stats}, \texttt{v\_team\_standings},
+\texttt{v\_top\_players} & --- & SELECT & SELECT \\
+\hline
+\texttt{v\_player\_rankings} & SELECT & SELECT & --- \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Проектирование программного обеспечения и кэширования}
+
+\subsection{Архитектура приложения}
+
+Программное обеспечение реализует трёхзвенную архитектуру. Уровень представления~---
+веб-клиент, формирующий HTTP-запросы к серверу. Уровень приложения~--- REST
+API-сервер, выполняющий маршрутизацию запросов, проверку авторизации и вызов
+процедур СУБД. Уровень данных~--- реляционная СУБД и in-memory кэш,
+взаимодействие которых описано в подразделе~\ref{subsec:cache}.
+
+API организован в пять групп маршрутов (\texttt{players}, \texttt{teams},
+\texttt{stats}, \texttt{league}, \texttt{admin}), соответствующих вариантам
+использования из раздела~\ref{sec:use-cases}. Итого спроектировано 21~бизнес-маршрут.
+
+\subsection{Спецификация REST API}
+\label{subsec:api-spec}
+
+Сезон в параметрах запроса передаётся целочисленным \texttt{season\_id}
+(внешний ключ таблицы \texttt{seasons}); метка \texttt{label} (например,
+\texttt{2023-24}) возвращается в ответах API для отображения в интерфейсе.
+Список сезонов клиент получает через \texttt{GET /league/seasons}.
+
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+\newcolumntype{A}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+
+\begin{table}[H]
+\centering
+\caption{Маршруты группы \texttt{/players}}
+\label{tab:api-players}
+\small
+\begin{tabularx}{\textwidth}{|A{1.1cm}|>{\ttfamily\RaggedRight\arraybackslash}X|>{\RaggedRight\arraybackslash}X|A{2.7cm}|}
+\hline
+\textbf{Метод} & \textbf{Путь} & \textbf{Параметры} & \textbf{Вариант исп.} \\
+\hline
+GET & /players & season\_id (обяз.), position, team\_id, search, limit, offset & Просмотр статистики \\
+\hline
+GET & /players/\{player\_id\} & --- & Просмотр статистики \\
+\hline
+GET & /players/\{player\_id\}/stats & season\_id (опц.) & Просмотр статистики \\
+\hline
+GET & /players/\{player\_id\}/gamelog & season\_id (обяз.) & Просмотр статистики \\
+\hline
+GET & /players/\{player\_id\}/career & --- & Просмотр статистики \\
+\hline
+GET & /players/\{player\_id\}/teams & --- & Просмотр статистики \\
+\hline
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Маршруты группы \texttt{/teams}}
+\label{tab:api-teams}
+\small
+\begin{tabularx}{\textwidth}{|A{1.1cm}|>{\ttfamily\RaggedRight\arraybackslash}X|>{\RaggedRight\arraybackslash}X|A{2.7cm}|}
+\hline
+\textbf{Метод} & \textbf{Путь} & \textbf{Параметры} & \textbf{Вариант исп.} \\
+\hline
+GET & /teams & --- & Просмотр статистики \\
+\hline
+GET & /teams/standings & season\_id (обяз.) & Просмотр статистики \\
+\hline
+GET & /teams/\{team\_id\} & --- & Просмотр статистики \\
+\hline
+GET & /teams/\{team\_id\}/roster & season\_id (обяз.) & Просмотр статистики \\
+\hline
+GET & /teams/\{team\_id\}/games & season\_id (опц.) & Просмотр статистики \\
+\hline
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Маршруты группы \texttt{/stats}}
+\label{tab:api-stats}
+\small
+\begin{tabularx}{\textwidth}{|A{1.1cm}|>{\ttfamily\RaggedRight\arraybackslash}X|>{\RaggedRight\arraybackslash}X|A{2.7cm}|}
+\hline
+\textbf{Метод} & \textbf{Путь} & \textbf{Параметры} & \textbf{Вариант исп.} \\
+\hline
+GET & /stats/leaders &
+metric, season\_id (обяз.), team\_id, position, min\_games, limit &
+Просмотр статистики \\
+\hline
+GET & /stats/advanced & season\_id (обяз.) & Расчёт метрик \\
+\hline
+GET & /stats/scatter & season\_id (обяз.) & Расчёт метрик \\
+\hline
+GET & /stats/boxscore/\{game\_id\} & --- & Просмотр статистики \\
+\hline
+GET & /stats/compare/players & p1\_id, p2\_id, season\_id (обяз.) & Просмотр статистики \\
+\hline
+\end{tabularx}
+\end{table}
+
+Параметр \texttt{metric} в маршруте \texttt{/stats/leaders} принимает одно из
+значений: \texttt{avg\_pts}, \texttt{avg\_reb}, \texttt{avg\_ast},
+\texttt{avg\_stl}, \texttt{avg\_blk}, \texttt{per}, \texttt{ts\_pct},
+\texttt{efg\_pct}, \texttt{bpm} и \texttt{usg\_pct}.
+
+\begin{table}[H]
+\centering
+\caption{Маршруты группы \texttt{/league}}
+\label{tab:api-league}
+\small
+\begin{tabularx}{\textwidth}{|A{1.1cm}|>{\ttfamily\RaggedRight\arraybackslash}X|>{\RaggedRight\arraybackslash}X|A{2.7cm}|}
+\hline
+\textbf{Метод} & \textbf{Путь} & \textbf{Параметры} & \textbf{Вариант исп.} \\
+\hline
+GET & /league/seasons & --- & Просмотр статистики \\
+\hline
+GET & /league/dashboard & season\_id (обяз.) & Просмотр статистики \\
+\hline
+GET & /league/trends & --- & Просмотр статистики \\
+\hline
+GET & /league/search & q (обяз., мин.\ 2 символа) & Просмотр статистики \\
+\hline
+\end{tabularx}
+\end{table}
+
+Маршрут \texttt{/league/seasons} возвращает перечень доступных сезонов.
+Ответ содержит поля \texttt{season\_id}, \texttt{label},
+\texttt{season\_type}, \texttt{start\_date} и \texttt{end\_date}; клиент
+использует его для формирования элементов выбора сезона.
+
+\begin{table}[H]
+\centering
+\caption{Маршруты группы \texttt{/admin}}
+\label{tab:api-admin}
+\small
+\begin{tabularx}{\textwidth}{|A{1.1cm}|>{\ttfamily\RaggedRight\arraybackslash}X|>{\RaggedRight\arraybackslash}X|A{2.7cm}|}
+\hline
+\textbf{Метод} & \textbf{Путь} & \textbf{Параметры} & \textbf{Вариант исп.} \\
+\hline
+POST & /admin/refresh/\{season\_id\} & заголовок X-Api-Key & Управление данными \\
+\hline
+\end{tabularx}
+\end{table}
+
+\normalsize
+
+Разграничение доступа на уровне API реализовано для группы \texttt{/admin}:
+маршрут проверяет наличие корректного значения в заголовке
+\texttt{X-Api-Key}. Разграничение ролей \texttt{analyst} и \texttt{reader}
+обеспечивается средствами СУБД в соответствии с матрицей прав (таблица~\ref{tab:acl-matrix}):
+API-сервер устанавливает соединение с базой данных от имени пользователя
+с соответствующим набором привилегий.
+
+\subsection{Кэширование результатов запросов}
+\label{subsec:cache}
+
+Для обеспечения высокой пропускной способности спроектирован паттерн Cache-Aside
+с использованием in-memory хранилища и API-сервера.
+
+Алгоритм: приложению поступает REST-запрос. Сервер проверяет наличие ключа в
+кэше. При попадании данные возвращаются из кэша. При промахе сервер запрашивает
+реляционную БД, сериализует ответ, сохраняет его в кэш с заданным временем жизни
+и возвращает клиенту.
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tikzpicture}[
+    node distance=3.5cm, auto,
+    every node/.style={font=\footnotesize},
+    lifeline/.style={draw, thick, dashed}
+]
+\node (client)  [draw, rectangle, minimum width=2.5cm, minimum height=0.8cm,
+  fill=blue!5] {Клиент};
+\node (backend) [draw, rectangle, minimum width=2.5cm, minimum height=0.8cm,
+  fill=blue!5, right of=client, xshift=1.5cm] {API-сервер};
+\node (redis)   [draw, rectangle, minimum width=2.5cm, minimum height=0.8cm,
+  fill=red!5, right of=backend, xshift=1.5cm] {Кэш};
+\node (db)      [draw, rectangle, minimum width=2.5cm, minimum height=0.8cm,
+  fill=green!5, right of=redis, xshift=1.5cm] {СУБД};
+
+\draw [lifeline] (client.south)  -- ++(0,-6.5) coordinate (client_end);
+\draw [lifeline] (backend.south) -- ++(0,-6.5) coordinate (backend_end);
+\draw [lifeline] (redis.south)   -- ++(0,-6.5) coordinate (redis_end);
+\draw [lifeline] (db.south)      -- ++(0,-6.5) coordinate (db_end);
+
+\draw [->, thick] ($(client.south)+(0,-0.5)$) --
+  node[above] {1. HTTP GET /stats} ($(backend.south)+(0,-0.5)$);
+\draw [->, thick] ($(backend.south)+(0,-1.2)$) --
+  node[above] {2. GET cache\_key} ($(redis.south)+(0,-1.2)$);
+\draw [<-, thick, dashed] ($(backend.south)+(0,-1.9)$) --
+  node[above] {3. Промах кэша} ($(redis.south)+(0,-1.9)$);
+\draw [->, thick] ($(backend.south)+(0,-2.6)$) --
+  node[above] {4. SQL SELECT} ($(db.south)+(0,-2.6)$);
+\draw [<-, thick, dashed] ($(backend.south)+(0,-3.5)$) --
+  node[above] {5. Result Set} ($(db.south)+(0,-3.5)$);
+\draw [->, thick] ($(backend.south)+(0,-4.4)$) --
+  node[above] {6. SETEX cache\_key} ($(redis.south)+(0,-4.4)$);
+\draw [<-, thick, dashed] ($(backend.south)+(0,-5.1)$) --
+  node[above] {7. OK} ($(redis.south)+(0,-5.1)$);
+\draw [<-, thick, dashed] ($(client.south)+(0,-5.8)$) --
+  node[above] {8. HTTP 200} ($(backend.south)+(0,-5.8)$);
+\end{tikzpicture}
+}
+\caption{UML-диаграмма последовательности при паттерне Cache-Aside}
+\label{fig:redis-seq}
+\end{figure}
+
+Инвалидация кэша выполняется по префиксам конкретных матчей и турнирных таблиц
+только для изменённого сезона, а не полным сбросом кэша: это предотвращает
+одновременную инвалидацию всех ключей и снижает риск пиковой нагрузки на СУБД
+при массовом промахе кэша~--- эффекта «шторма кэша», который
+возникает, когда множество параллельных запросов одновременно обнаруживают
+истёкший ключ и нагружают базу данных.
+
+\section{Выводы по конструкторскому разделу}
+
+Спроектирована реляционная схема из 8~таблиц, 4~представлений и 6~ключевых индексов;
+показано соответствие всех таблиц 1НФ, 2НФ и 3НФ. Бизнес-логика метрик
+реализована SQL-процедурами на стороне СУБД; ограничения целостности закреплены
+на уровне CHECK-ограничений и триггера. Определена ролевая модель из трёх ролей
+с разграничением прав на уровне таблиц, функций и представлений. Спроектировано
+REST API из 21~маршрута, организованных в пять групп и покрывающих все три
+варианта использования системы. Для снижения задержки аналитических выборок
+спроектировано кэширование по паттерну Cache-Aside с префиксной инвалидацией.
