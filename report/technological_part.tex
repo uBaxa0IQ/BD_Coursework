@@ -175,8 +175,8 @@ END; $$;
 \begin{lstlisting}[language=SQL, caption=Реализация бизнес-триггера (фрагмент)]
 CREATE OR REPLACE FUNCTION trg_validate_team_score_row()
 RETURNS TRIGGER LANGUAGE plpgsql AS $$
--- для game_id из NEW/OLD проверяет SUM(points) по каждой team_id
--- против home_score / away_score завершённого матча
+-- for game_id from NEW/OLD: validate SUM(points) per team_id
+-- against home_score / away_score of a completed game
 $$;
 
 CREATE TRIGGER trg_check_team_score
