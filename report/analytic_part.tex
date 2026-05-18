@@ -197,13 +197,15 @@ $\mathrm{lg\_aPER}$ учитываются игроки с $\mathrm{MP}_i > 100$
 показателей на 100~минут ($X_{100} = X / \mathrm{MP} \cdot 100$) и учётом
 перехватов, блоков и фолов. Итоговая формула:
 \begin{equation}
-\mathrm{raw}_i = 0{,}123 \cdot \mathrm{PTS}_{100}
+\begin{split}
+\mathrm{raw}_i = {}& 0{,}123 \cdot \mathrm{PTS}_{100}
                + 0{,}234 \cdot \mathrm{TRB}_{100}
                + 0{,}689 \cdot \mathrm{AST}_{100}
-               + 0{,}445 \cdot \mathrm{STL}_{100}
-               + 0{,}407 \cdot \mathrm{BLK}_{100}
+               + 0{,}445 \cdot \mathrm{STL}_{100} \\
+               &{} + 0{,}407 \cdot \mathrm{BLK}_{100}
                - 0{,}605 \cdot \mathrm{TOV}_{100}
                - 0{,}086 \cdot \mathrm{PF}_{100}
+\end{split}
 \end{equation}
 \begin{equation}
 \mathrm{BPM}_i = \mathrm{raw}_i - \mathrm{AVG}(\mathrm{raw}_i)
