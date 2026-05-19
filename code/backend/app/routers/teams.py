@@ -5,7 +5,7 @@ from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.cache import CacheManager, get_cache
-from app.database import get_db
+from app.database import get_db_analyst, get_db_reader
 from app.models.game import Game
 from app.models.game_player_stats import GamePlayerStats
 from app.models.player import Player
@@ -21,7 +21,7 @@ router = APIRouter()
 @router.get("", response_model=List[TeamResponse])
 async def get_teams(
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = "teams_list"
     cached = await cache.get(cache_key)
@@ -52,7 +52,7 @@ async def get_teams(
 async def get_standings(
     season_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_reader),
 ):
     cache_key = f"standings:{season_id}"
     cached = await cache.get(cache_key)
@@ -85,7 +85,7 @@ async def get_standings(
 async def get_team(
     team_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"team_detail:{team_id}"
     cached = await cache.get(cache_key)
@@ -118,7 +118,7 @@ async def get_team_roster(
     team_id: int,
     season_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"team_roster:{team_id}:{season_id}"
     cached = await cache.get(cache_key)
@@ -164,7 +164,7 @@ async def get_team_games(
     team_id: int,
     season_id: Optional[int] = None,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"team_games:{team_id}:{season_id}"
     cached = await cache.get(cache_key)

@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    """Параметры приложения. По умолчанию чтение — роль analyst (см. отчёт, матрица ACL)."""
+    """Параметры приложения. Три URL — по ролям СУБД (см. конструкторский раздел, матрица ACL)."""
 
     DATABASE_URL: str = (
         "postgresql+asyncpg://nba_analyst_user:analyst_pass_2024@localhost:5432/nba_stats"

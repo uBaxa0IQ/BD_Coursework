@@ -6,7 +6,7 @@ from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.cache import CacheManager, get_cache
-from app.database import get_db
+from app.database import get_db_analyst
 from app.models.game import Game
 from app.models.game_player_stats import GamePlayerStats
 from app.models.player import Player
@@ -32,7 +32,7 @@ async def get_leaders(
     min_games: int = 10,
     limit: int = 20,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     if metric not in VALID_METRICS:
         raise HTTPException(
@@ -104,7 +104,7 @@ async def get_leaders(
 async def get_advanced_stats(
     season_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"advanced:{season_id}"
     cached = await cache.get(cache_key)
@@ -151,7 +151,7 @@ async def get_advanced_stats(
 async def get_scatter_data(
     season_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"scatter:{season_id}"
     cached = await cache.get(cache_key)
@@ -194,7 +194,7 @@ async def get_scatter_data(
 async def get_boxscore(
     game_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"boxscore:{game_id}"
     cached = await cache.get(cache_key)
@@ -281,7 +281,7 @@ async def compare_players(
     p2_id: int,
     season_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"compare:{min(p1_id,p2_id)}:{max(p1_id,p2_id)}:{season_id}"
     cached = await cache.get(cache_key)

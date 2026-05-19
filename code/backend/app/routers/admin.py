@@ -4,17 +4,30 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.cache import CacheManager, get_cache
 from app.config import settings
-from app.database import get_db
+from app.database import get_db_admin
 from app.models.season import Season
 
 router = APIRouter()
+
+
+@router.delete("/cache/leaders")
+async def clear_leaders_cache(
+    x_api_key: str = Header(None),
+    cache: CacheManager = Depends(get_cache),
+):
+    """Сброс кэша лидерборда (для исследования Cache Miss / Hit)."""
+    if x_api_key != settings.SECRET_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+    deleted = await cache.delete_pattern("leaders:*")
+    return {"status": "ok", "cache_keys_deleted": deleted}
 
 
 @router.post("/refresh/{season_id}")
 async def refresh_season_stats(
     season_id: int,
     x_api_key: str = Header(None),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_admin),
     cache: CacheManager = Depends(get_cache),
 ):
     if x_api_key != settings.SECRET_KEY:

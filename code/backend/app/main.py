@@ -6,7 +6,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.cache import CacheManager, get_cache, get_redis
-from app.database import get_db
+from app.database import get_db_analyst
 from app.routers import players, teams, stats, league, admin
 
 logging.basicConfig(level=logging.INFO)
@@ -42,7 +42,7 @@ async def root():
 
 @app.get("/health", tags=["Health"])
 async def health_check(
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
     cache: CacheManager = Depends(get_cache),
 ):
     db_ok = False

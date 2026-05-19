@@ -9,7 +9,7 @@ from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.main import app
-from app.database import Base, get_db
+from app.database import Base, get_db, get_db_admin, get_db_analyst, get_db_reader
 from app.cache import get_cache, CacheManager
 
 TEST_DATABASE_URL = os.getenv(
@@ -54,6 +54,9 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
         yield db_session
 
     app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_db_analyst] = override_get_db
+    app.dependency_overrides[get_db_reader] = override_get_db
+    app.dependency_overrides[get_db_admin] = override_get_db
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as c:
         yield c
     app.dependency_overrides.clear()

@@ -307,7 +307,8 @@ CREATE TABLE IF NOT EXISTS player_team_history (
     end_date      DATE,
     contract_type VARCHAR(20) NOT NULL DEFAULT 'Standard'
         CHECK (contract_type IN ('Standard', 'Two-Way', '10-Day', 'Exhibit-10')),
-    CONSTRAINT chk_dates CHECK (end_date IS NULL OR end_date >= start_date)
+    CONSTRAINT chk_dates CHECK (end_date IS NULL OR end_date >= start_date),
+    CONSTRAINT uq_player_team_season UNIQUE (player_id, season_id, team_id)
 );
 
 COMMENT ON TABLE player_team_history IS 'История выступлений игроков в командах (~2000 строк)';

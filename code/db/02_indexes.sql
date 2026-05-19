@@ -17,7 +17,7 @@ CREATE INDEX IF NOT EXISTS idx_games_date
     ON games(game_date);
 
 CREATE INDEX IF NOT EXISTS idx_pss_season
-    ON player_season_stats(season_id);
+    ON player_season_stats(season_id, per DESC NULLS LAST);
 
 CREATE INDEX IF NOT EXISTS idx_players_name
     ON players(last_name, first_name);

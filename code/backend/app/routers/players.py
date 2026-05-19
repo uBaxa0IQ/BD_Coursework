@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from app.cache import CacheManager, get_cache
-from app.database import get_db
+from app.database import get_db_analyst
 from app.models.player import Player
 from app.models.player_season_stats import PlayerSeasonStats
 from app.models.player_team_history import PlayerTeamHistory
@@ -29,7 +29,7 @@ async def get_players(
     limit: int = 50,
     offset: int = 0,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"players_list:{season_id}:{position}:{team_id}:{search}:{limit}:{offset}"
     cached = await cache.get(cache_key)
@@ -80,7 +80,7 @@ async def get_players(
 async def get_player(
     player_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"player_detail:{player_id}"
     cached = await cache.get(cache_key)
@@ -131,7 +131,7 @@ async def get_player_stats(
     player_id: int,
     season_id: Optional[int] = None,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"player_stats:{player_id}:{season_id or 'all'}"
     cached = await cache.get(cache_key)
@@ -179,7 +179,7 @@ async def get_player_gamelog(
     player_id: int,
     season_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"player_gamelog:{player_id}:{season_id}"
     cached = await cache.get(cache_key)
@@ -239,7 +239,7 @@ async def get_player_gamelog(
 async def get_player_career(
     player_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"player_career:{player_id}"
     cached = await cache.get(cache_key)
@@ -301,7 +301,7 @@ async def get_player_career(
 async def get_player_teams(
     player_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"player_teams:{player_id}"
     cached = await cache.get(cache_key)

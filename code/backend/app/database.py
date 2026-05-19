@@ -80,15 +80,27 @@ async def _session_for_role(role: DbRole) -> AsyncGenerator[AsyncSession, None]:
             raise
 
 
-async def get_db(
-    x_db_role: Optional[str] = Header(None, alias="X-DB-Role"),
-) -> AsyncGenerator[AsyncSession, None]:
-    """Сессия БД в соответствии с ролью (заголовок X-DB-Role, по умолчанию analyst)."""
-    async for session in _session_for_role(_normalize_db_role(x_db_role)):
+async def get_db_reader() -> AsyncGenerator[AsyncSession, None]:
+    """Сессия reader: только SELECT на представления (v_team_standings и др.)."""
+    async for session in _session_for_role("reader"):
+        yield session
+
+
+async def get_db_analyst() -> AsyncGenerator[AsyncSession, None]:
+    """Сессия analyst: SELECT на таблицы и расчётные функции."""
+    async for session in _session_for_role("analyst"):
         yield session
 
 
 async def get_db_admin() -> AsyncGenerator[AsyncSession, None]:
-    """Сессия от имени администратора (процедуры, DDL)."""
+    """Сессия db_admin: процедуры update_season_stats, DDL."""
     async for session in _session_for_role("admin"):
+        yield session
+
+
+async def get_db(
+    x_db_role: Optional[str] = Header(None, alias="X-DB-Role"),
+) -> AsyncGenerator[AsyncSession, None]:
+    """Сессия по заголовку X-DB-Role (для тестов и исследований; по умолчанию analyst)."""
+    async for session in _session_for_role(_normalize_db_role(x_db_role)):
         yield session

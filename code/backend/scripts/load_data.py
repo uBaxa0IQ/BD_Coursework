@@ -11,8 +11,10 @@
 
 Примеры:
   python scripts/load_data.py
+  python scripts/load_data.py --sleep 0.65 --timeout 30
+  python scripts/load_data.py --sleep 0.5 --cooldown-every 400   # агрессивнее
   python scripts/load_data.py --refine-positions
-  python scripts/load_data.py --skip-repair-history --skip-usg-fix   # только сырые данные
+  python scripts/load_data.py --skip-repair-history --skip-usg-fix
 """
 import argparse
 import asyncio
@@ -40,8 +42,14 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 SEASONS = ["2019-20", "2020-21", "2021-22", "2022-23", "2023-24"]
-SLEEP_BETWEEN_REQUESTS = 1.0  # Базовая пауза
-MAX_RETRIES = 3               # Количество попыток при сбоях API
+# Паузы: официального лимита нет; nba_api community ~0.6s OK, <0.5s throttling;
+# с 2026 часто отсечка ~500–600 запросов → cooldown_every.
+DEFAULT_SLEEP = 0.65
+DEFAULT_REQUEST_TIMEOUT = 30
+DEFAULT_COOLDOWN_EVERY = 500
+DEFAULT_COOLDOWN_SEC = 45.0
+RETRY_BACKOFF_SEC = (5.0, 15.0, 45.0)
+MAX_RETRIES = 3
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
     "postgresql://nba_admin:nba_secure_pass_2024@localhost:5432/nba_stats",
@@ -101,6 +109,46 @@ CUSTOM_HEADERS = {
 }
 
 
+class LoadSettings:
+    """Параметры паузы API (задаются из CLI в main)."""
+
+    def __init__(
+        self,
+        sleep: float = DEFAULT_SLEEP,
+        request_timeout: int = DEFAULT_REQUEST_TIMEOUT,
+        cooldown_every: int = DEFAULT_COOLDOWN_EVERY,
+        cooldown_sec: float = DEFAULT_COOLDOWN_SEC,
+    ):
+        self.sleep = sleep
+        self.request_timeout = request_timeout
+        self.cooldown_every = cooldown_every
+        self.cooldown_sec = cooldown_sec
+
+
+_load_settings = LoadSettings()
+_api_call_count = 0
+
+
+async def _pace_api() -> None:
+    """Пауза перед запросом + периодический cooldown под лимит NBA/Akamai."""
+    global _api_call_count
+    await asyncio.sleep(_load_settings.sleep)
+    _api_call_count += 1
+    n = _load_settings.cooldown_every
+    if n > 0 and _api_call_count % n == 0:
+        logger.info(
+            "Cooldown %ds после %d запросов к stats.nba.com",
+            _load_settings.cooldown_sec,
+            _api_call_count,
+        )
+        await asyncio.sleep(_load_settings.cooldown_sec)
+
+
+def _retry_sleep(attempt: int) -> float:
+    idx = min(attempt, len(RETRY_BACKOFF_SEC) - 1)
+    return RETRY_BACKOFF_SEC[idx]
+
+
 def _iso_date(s: str) -> Optional[date]:
     """Безопасный парсинг даты для asyncpg."""
     if not s:
@@ -115,18 +163,21 @@ async def fetch_nba_api_data(endpoint_class: Any, **kwargs) -> Any:
     """Обертка для выполнения запросов к nba_api с ретраями, заголовками и без блокировки event loop."""
     kwargs['headers'] = CUSTOM_HEADERS
     if 'timeout' not in kwargs:
-        kwargs['timeout'] = 60  # Увеличиваем таймаут по умолчанию для надежности
+        kwargs['timeout'] = _load_settings.request_timeout
 
     for attempt in range(MAX_RETRIES):
         try:
-            await asyncio.sleep(SLEEP_BETWEEN_REQUESTS)
-            # Выполняем синхронный запрос в отдельном потоке
+            await _pace_api()
             resp = await asyncio.to_thread(endpoint_class, **kwargs)
             return resp
         except Exception as e:
-            logger.warning("Ошибка API %s (попытка %d/%d): %s", endpoint_class.__name__, attempt + 1, MAX_RETRIES, e)
-            await asyncio.sleep(3.0 * (attempt + 1))  # Увеличиваем паузу при ошибках
-            
+            backoff = _retry_sleep(attempt)
+            logger.warning(
+                "Ошибка API %s (попытка %d/%d, пауза %.0fs): %s",
+                endpoint_class.__name__, attempt + 1, MAX_RETRIES, backoff, e,
+            )
+            await asyncio.sleep(backoff)
+
     raise Exception(f"Не удалось получить данные {endpoint_class.__name__} после {MAX_RETRIES} попыток.")
 
 
@@ -761,12 +812,12 @@ async def refine_positions_from_common_player_info(conn: asyncpg.Connection) -> 
         pos_code: Optional[str] = None
         for attempt in range(MAX_RETRIES):
             try:
-                await asyncio.sleep(SLEEP_BETWEEN_REQUESTS)
+                await _pace_api()
                 resp = await asyncio.to_thread(
                     CommonPlayerInfo,
                     player_id=nba_id,
                     headers=CUSTOM_HEADERS,
-                    timeout=60,
+                    timeout=_load_settings.request_timeout,
                 )
                 df = resp.get_data_frames()[0]
                 if df.empty:
@@ -776,7 +827,7 @@ async def refine_positions_from_common_player_info(conn: asyncpg.Connection) -> 
                 break
             except Exception as e:
                 logger.debug("nba_id=%s попытка %d/%d: %s", nba_id, attempt + 1, MAX_RETRIES, e)
-                await asyncio.sleep(3.0 * (attempt + 1))
+                await asyncio.sleep(_retry_sleep(attempt))
 
         if pos_code is None:
             skipped_api_fail += 1
@@ -803,6 +854,30 @@ async def refine_positions_from_common_player_info(conn: asyncpg.Connection) -> 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Загрузка NBA stats в PostgreSQL")
     p.add_argument(
+        "--sleep",
+        type=float,
+        default=float(os.getenv("NBA_LOAD_SLEEP", DEFAULT_SLEEP)),
+        help=f"Пауза перед запросом, с (по умолчанию {DEFAULT_SLEEP}, community min ~0.6)",
+    )
+    p.add_argument(
+        "--timeout",
+        type=int,
+        default=int(os.getenv("NBA_LOAD_TIMEOUT", DEFAULT_REQUEST_TIMEOUT)),
+        help=f"HTTP timeout запроса, с (по умолчанию {DEFAULT_REQUEST_TIMEOUT})",
+    )
+    p.add_argument(
+        "--cooldown-every",
+        type=int,
+        default=int(os.getenv("NBA_LOAD_COOLDOWN_EVERY", DEFAULT_COOLDOWN_EVERY)),
+        help=f"Длинная пауза каждые N запросов, 0=выкл (по умолчанию {DEFAULT_COOLDOWN_EVERY})",
+    )
+    p.add_argument(
+        "--cooldown-sec",
+        type=float,
+        default=float(os.getenv("NBA_LOAD_COOLDOWN_SEC", DEFAULT_COOLDOWN_SEC)),
+        help=f"Длительность cooldown, с (по умолчанию {DEFAULT_COOLDOWN_SEC})",
+    )
+    p.add_argument(
         "--skip-repair-history",
         action="store_true",
         help="Не дозаполнять player_team_history по пропускам",
@@ -821,7 +896,22 @@ def parse_args() -> argparse.Namespace:
 
 
 async def main() -> None:
+    global _load_settings, _api_call_count
     args = parse_args()
+    _load_settings = LoadSettings(
+        sleep=max(0.0, args.sleep),
+        request_timeout=max(5, args.timeout),
+        cooldown_every=max(0, args.cooldown_every),
+        cooldown_sec=max(0.0, args.cooldown_sec),
+    )
+    _api_call_count = 0
+    logger.info(
+        "API pace: sleep=%.2fs timeout=%ds cooldown=%ds каждые %d запросов",
+        _load_settings.sleep,
+        _load_settings.request_timeout,
+        _load_settings.cooldown_sec,
+        _load_settings.cooldown_every,
+    )
     logger.info("Подключение к БД: %s", DATABASE_URL.split("@")[-1])
     conn = await asyncpg.connect(DATABASE_URL)
 

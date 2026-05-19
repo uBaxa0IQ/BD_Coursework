@@ -1,7 +1,7 @@
 import datetime
 from typing import TYPE_CHECKING, Optional
 
-from sqlalchemy import Date, ForeignKey, String
+from sqlalchemy import Date, ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -14,6 +14,9 @@ if TYPE_CHECKING:
 
 class PlayerTeamHistory(Base):
     __tablename__ = "player_team_history"
+    __table_args__ = (
+        UniqueConstraint("player_id", "season_id", "team_id", name="uq_player_team_season"),
+    )
 
     history_id: Mapped[int] = mapped_column(primary_key=True)
     player_id: Mapped[int] = mapped_column(ForeignKey("players.player_id"), nullable=False)

@@ -2,7 +2,7 @@
 Синтетическое заполнение PostgreSQL теми же порядками объёма, что и load_data.py:
   • матчи: 5 сезонов × ~1230 регулярных игр (NBA)
   • game_player_stats: ~200 000 строк
-  • player_season_stats: пересчёт через CALL update_season_stats (~3k строк при ≥20 мин за сезон)
+  • player_season_stats: пересчёт через CALL update_season_stats (~3k строк при ≥50 мин за сезон)
   • player_team_history: порядка нескольких тысяч записей
   • players: несколько тысяч строк (как «полный» список из API)
 
@@ -271,6 +271,7 @@ async def main_async(args: argparse.Namespace) -> None:
                         INSERT INTO player_team_history
                             (player_id, team_id, season_id, start_date, contract_type)
                         VALUES ($1, $2, $3, $4, 'Standard')
+                        ON CONFLICT (player_id, season_id, team_id) DO NOTHING
                         """,
                         pid,
                         tid,

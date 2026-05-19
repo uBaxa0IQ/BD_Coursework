@@ -14,10 +14,6 @@ AS $$
 DECLARE
     v_count INT;
 BEGIN
-    -- Удалить существующие записи сезона перед пересчётом
-    DELETE FROM player_season_stats WHERE season_id = p_season_id;
-
-    -- Вставить пересчитанную статистику
     INSERT INTO player_season_stats (
         player_id,
         season_id,
@@ -75,7 +71,7 @@ BEGIN
     JOIN games g ON g.game_id = gps.game_id
     WHERE g.season_id = p_season_id
     GROUP BY gps.player_id, gps.team_id
-    HAVING SUM(gps.minutes_played) >= 20
+    HAVING SUM(gps.minutes_played) >= 50
     ON CONFLICT (player_id, season_id, team_id) DO UPDATE SET
         team_id        = EXCLUDED.team_id,
         games_played   = EXCLUDED.games_played,
@@ -97,6 +93,21 @@ BEGIN
         bpm            = EXCLUDED.bpm;
 
     GET DIAGNOSTICS v_count = ROW_COUNT;
+
+    -- Удалить строки игроков, не прошедших квалификацию (≥50 мин)
+    DELETE FROM player_season_stats pss
+    WHERE pss.season_id = p_season_id
+      AND NOT EXISTS (
+          SELECT 1
+          FROM game_player_stats gps
+          JOIN games g ON g.game_id = gps.game_id
+          WHERE g.season_id = p_season_id
+            AND gps.player_id = pss.player_id
+            AND gps.team_id = pss.team_id
+          GROUP BY gps.player_id, gps.team_id
+          HAVING SUM(gps.minutes_played) >= 50
+      );
+
     RAISE NOTICE 'Обновлена статистика за сезон %: % игроков', p_season_id, v_count;
 END;
 $$;
@@ -104,7 +115,7 @@ $$;
 COMMENT ON PROCEDURE update_season_stats(INT) IS
     'Процедура пересчёта агрегированной статистики игроков за указанный сезон.
      Вызывается автоматически триггером или вручную после bulk-загрузки данных.
-     Минимальная квалификация для попадания в агрегат: 20 минут за сезон.';
+     Минимальная квалификация для попадания в агрегат: 50 минут за сезон.';
 
 -- ============================================================
 -- ФУНКЦИЯ-ТРИГГЕР: trigger_update_season_stats

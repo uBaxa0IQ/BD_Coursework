@@ -5,7 +5,7 @@ from sqlalchemy import Numeric, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.cache import CacheManager, get_cache
-from app.database import get_db
+from app.database import get_db_analyst
 from app.models.game import Game
 from app.models.player import Player
 from app.models.player_season_stats import PlayerSeasonStats
@@ -19,7 +19,7 @@ router = APIRouter()
 @router.get("/seasons")
 async def get_seasons(
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = "league_seasons"
     cached = await cache.get(cache_key)
@@ -47,7 +47,7 @@ async def get_seasons(
 @router.get("/trends")
 async def get_league_trends(
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = "league_trends:v2"
     cached = await cache.get(cache_key)
@@ -109,7 +109,7 @@ async def get_league_trends(
 async def get_league_dashboard(
     season_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"league_dashboard:{season_id}"
     cached = await cache.get(cache_key)
@@ -172,7 +172,7 @@ async def get_league_dashboard(
 async def search(
     q: str = Query(..., min_length=2),
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
     cache_key = f"search:{q.lower()}"
     cached = await cache.get(cache_key)
