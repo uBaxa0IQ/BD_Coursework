@@ -74,6 +74,12 @@ $$;
 \section*{Приложение В. Исходный код механизма кэширования}
 \addcontentsline{toc}{section}{Приложение В. Исходный код механизма кэширования}
 
+В приложении приведён обобщённый декоратор с ключом по пути и строке запроса.
+В реализованных маршрутах API (листинг~\ref{lst:cache-aside-pattern},
+технологический раздел) применяется явный формат ключа
+\texttt{leaders:\{metric\}:\{season\_id\}:...}, что обеспечивает точечную
+инвалидацию по шаблонам при вызове \texttt{POST /admin/refresh}.
+
 \begin{lstlisting}[language=Python]
 import json
 from functools import wraps

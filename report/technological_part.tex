@@ -2,49 +2,75 @@
 
 \section{Выбор и обоснование средств реализации}
 
-Разрабатываемая система является дата-интенсивным приложением, в котором основная вычислительная нагрузка ложится на слой хранения данных. Выбор технологического стека обусловлен необходимостью поддержания строгой транзакционной целостности (ACID), выполнения сложных аналитических расчётов и обеспечения высокой скорости чтения с помощью кэширования.
+Профиль нагрузки проектируемой системы носит гибридный характер (HTAP):
+преобладают аналитические запросы на чтение с агрегацией, при этом процедура
+массового обновления статистики требует транзакционной целостности.
 
-\textbf{Слой базы данных.} В качестве основной СУБД выбрана PostgreSQL 15. В отличие от рассматриваемых альтернатив (MySQL 8, MS SQL Server), PostgreSQL является свободно распространяемой системой с мощным встроенным языком PL/pgSQL. Данный язык критически важен для реализации алгоритмов расчёта спортивных метрик непосредственно на стороне хранилища. Кроме того, PostgreSQL обладает нативной поддержкой конструкции \texttt{UPSERT} и расширенными возможностями проверки ограничений целостности (\texttt{CHECK}).
+\subsection{СУБД}
 
-\textbf{Слой кэширования.} Для снижения нагрузки на дисковую подсистему при повторных аналитических запросах выбрана in-memory СУБД Redis 7. В отличие от Memcached, Redis поддерживает сложные структуры данных и позволяет выполнять эффективную инвалидацию кэша по префиксу ключа (pattern matching).
+В качестве основной СУБД выбрана PostgreSQL~15~\cite{postgres}. Её
+использование обосновано следующими факторами:
+\begin{itemize}
+    \item наличие встроенного процедурного языка PL/pgSQL, необходимого для
+          реализации математических алгоритмов расчёта продвинутых метрик;
+    \item поддержка атомарных операций слияния строк (конструкция
+      \newline\texttt{INSERT ... ON CONFLICT DO UPDATE}) для эффективного
+          пересчёта сезонных агрегатов;
+    \item возможность декларативного обеспечения целостности данных с помощью
+          \texttt{CHECK}-ограничений на уровне DDL.
+\end{itemize}
 
-\textbf{Серверный и клиентский слои.} Программный интерфейс (REST API) реализован на языке Python с применением асинхронного фреймворка FastAPI и драйвера \texttt{asyncpg}, обеспечивающего высокопроизводительное неблокирующее взаимодействие с базой данных. Клиентская часть разработана в виде Single Page Application (SPA) на базе React/TypeScript, чья задача сводится к маршрутизации REST-запросов и визуализации полученной статистики.
+\subsection{Кэширование}
 
-{\footnotesize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.2}
-\begin{table}[H]
-\centering
-\caption{\raggedleft Обоснование выбора технологий}
-\label{tab:tech-stack}
-\begin{tabular}{|p{0.14\textwidth}|p{0.16\textwidth}|p{0.16\textwidth}|p{0.16\textwidth}|p{0.30\textwidth}|}
-\hline
-\textbf{Уровень} & \textbf{Выбрано} & \textbf{Альт. 1} & \textbf{Альт. 2} & \textbf{Основание выбора} \\
-\hline
-СУБД & PostgreSQL 15 & MySQL 8 & MS SQL Server & Бесплатная лицензия, развитый PL/pgSQL, расширенные CHECK-ограничения и поддержка UPSERT~\cite{postgres} \\
-\hline
-Кэш & Redis 7 & Memcached & Hazelcast & Высокая производительность, атомарные операции и инвалидация по префиксу ключей~\cite{redis} \\
-\hline
-Backend & Python / FastAPI & Django REST & Node.js / Express & Асинхронная обработка (ASGI), нативная интеграция с высокоскоростным драйвером \texttt{asyncpg} \\
-\hline
-Frontend & React / TypeScript & Vue 3 & Angular & Строгая типизация моделей данных API; экосистема аналитических библиотек (Recharts) \\
-\hline
-\end{tabular}
-\end{table}
-}
+Паттерн Cache-Aside реализован на базе in-memory СУБД Redis~7~\cite{redis}.
+Выбор обоснован поддержкой операций сканирования и группового удаления по
+шаблону, что необходимо для инвалидации связанных ключей при пересчёте
+статистики отдельного сезона. Команда \texttt{SETEX} позволяет атомарно
+устанавливать значение и время жизни ключа, исключая состояние гонки.
+
+\subsection{Серверный слой}
+
+REST API реализован на Python~3.11 с фреймворком FastAPI~\cite{fastapi}.
+Фреймворк построен на стандарте ASGI и модели асинхронного ввода-вывода:
+каждый обработчик маршрута является корутиной, что позволяет обслуживать
+конкурентные запросы в одном процессе без блокировки потока. Механизм
+внедрения зависимостей позволяет декларативно привязать к маршруту сессию
+конкретной роли СУБД, что соответствует ролевой модели из
+раздела~\ref{sec:roles}: разграничение привилегий происходит на уровне
+соединения с PostgreSQL, а не в логике приложения. Для взаимодействия с
+СУБД применяется драйвер asyncpg~\cite{asyncpg}, реализующий бинарный
+протокол PostgreSQL, в связке с SQLAlchemy~2.0 для конструирования
+динамических аналитических запросов.
+
+\subsection{Клиентский слой}
+
+Клиентская часть реализована в виде одностраничного приложения (SPA) с
+использованием библиотеки React~18~\cite{react} и языка TypeScript. Строгая
+типизация моделей данных снижает риск ошибок при взаимодействии с API. Для
+визуализации статистики применена библиотека Recharts~\cite{recharts},
+поддерживающая построение линейных, столбчатых, радарных диаграмм и диаграмм
+рассеяния.
 
 \section{Физическая реализация базы данных}
 
 \subsection{Создание таблиц и ограничений}
 
-Физическая реализация структуры выполнена DDL-скриптами в соответствии со схемой, спроектированной в разделе~\ref{sec:db-design}. Полный код создания всех восьми таблиц, внешних ключей и ограничений вынесён в Приложение~А.
+Физическая реализация структуры базы данных выполнена с помощью DDL-скриптов
+(полный листинг приведён в Приложении~А). В листинге~\ref{lst:ddl-gps}
+представлен фрагмент создания таблицы фактов \texttt{game\_player\_stats},
+иллюстрирующий механизм декларативного обеспечения ссылочной и логической
+целостности.
 
-В листинге~\ref{lst:ddl-gps} приведён фрагмент создания таблицы фактов \texttt{game\_player\_stats}, иллюстрирующий декларативное обеспечение ссылочной и логической целостности на уровне СУБД.
-
-\begin{lstlisting}[language=SQL, label=lst:ddl-gps, caption=DDL таблицы \texttt{game\_player\_stats} (фрагмент)]
+\begin{lstlisting}[language=SQL, label=lst:ddl-gps,
+  caption=DDL таблицы \texttt{game\_player\_stats} (фрагмент)]
 CREATE TABLE game_player_stats (
     stat_id   SERIAL PRIMARY KEY,
-    game_id   INTEGER NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
-    player_id INTEGER NOT NULL REFERENCES players(player_id) ON DELETE RESTRICT,
-    team_id   INTEGER NOT NULL REFERENCES teams(team_id) ON DELETE RESTRICT,
+    game_id   INTEGER NOT NULL
+                REFERENCES games(game_id) ON DELETE CASCADE,
+    player_id INTEGER NOT NULL
+                REFERENCES players(player_id) ON DELETE RESTRICT,
+    team_id   INTEGER NOT NULL
+                REFERENCES teams(team_id) ON DELETE RESTRICT,
     points    SMALLINT NOT NULL DEFAULT 0 CHECK (points >= 0),
     fouls     SMALLINT NOT NULL DEFAULT 0 CHECK (fouls BETWEEN 0 AND 6),
     CONSTRAINT uq_game_player UNIQUE (game_id, player_id)
@@ -53,72 +79,114 @@ CREATE TABLE game_player_stats (
 
 \subsection{Реализация индексов}
 
-Все индексы, спроектированные для ускорения аналитических агрегаций, созданы на основе структуры B-дерева. Полный перечень индексов приведён в Приложении~А. В листинге~\ref{lst:indexes} продемонстрированы ключевые операторы создания индексов для таблицы фактов.
+Аналитические индексы (Приложение~А) реализованы на базе структуры B-дерева.
+В листинге~\ref{lst:indexes} продемонстрировано создание ключевых индексов
+для таблицы фактов.
 
-\begin{lstlisting}[language=SQL, label=lst:indexes, caption=Создание индексов аналитических запросов (фрагмент)]
-CREATE INDEX idx_gps_player_id ON game_player_stats(player_id);
-CREATE INDEX idx_gps_team_game ON game_player_stats(team_id, game_id);
-CREATE INDEX idx_pss_season ON player_season_stats(season_id, per DESC NULLS LAST);
+\begin{lstlisting}[language=SQL, label=lst:indexes,
+  caption=Создание индексов аналитических запросов (фрагмент)]
+CREATE INDEX idx_gps_player_id
+    ON game_player_stats(player_id);
+CREATE INDEX idx_gps_team_game
+    ON game_player_stats(team_id, game_id);
+CREATE INDEX idx_pss_season
+    ON player_season_stats(season_id, per DESC NULLS LAST);
 \end{lstlisting}
 
-Исследование эффективности данных структур и их влияния на время выполнения запросов приведено в исследовательском разделе (глава~4).
+Исследование эффективности данных структур и их влияния на время выполнения
+запросов приведено в исследовательском разделе (глава~4).
 
-\subsection{Загрузка тестовых данных}
+\subsection{Загрузка тестовых данных}\label{subsec:data-load}
 
-Первоначальное наполнение базы данных выполнялось программным ETL-скриптом
-\texttt{load\_data.py} на языке Python. Скрипт извлекает архивную статистику NBA
-за пять регулярных сезонов (2019/20--2023/24) из официального портала
-\texttt{NBA Stats}~\cite{nba-stats}. Доступ к протоколам матчей (Box Score)
-и справочникам лиги реализован через библиотеку \texttt{nba\_api}~\cite{nba-api},
-формирующую HTTP-запросы к сервису \texttt{stats.nba.com} и возвращающую
-структурированные ответы (JSON).
+Первоначальное наполнение базы данных выполнено ETL-скриптом
+\newline\texttt{scripts/load\_data.py} на языке Python. Скрипт извлекает архивную
+статистику NBA за пять регулярных сезонов (2019/20--2023/24) из официального
+портала NBA Stats~\cite{nba-stats} через библиотеку
+\texttt{nba\_api}~\cite{nba-api}, формирующую HTTP-запросы к сервису
+\texttt{stats.nba.com}.
 
-Полученные данные нормализуются в скрипте и загружаются в реляционные таблицы
-PostgreSQL пакетами (batch insert) с соблюдением порядка внешних ключей. Данный подход гарантирует происхождение данных (data provenance) из официального источника и сохраняет естественное распределение показателей реальных игроков. Естественное распределение критически важно для корректной верификации относительных метрик (таких как BPM и PER).
+Полученные данные нормализуются и загружаются в реляционные таблицы
+PostgreSQL пакетами в порядке, соответствующем иерархии внешних ключей:
+справочники, затем игроки, матчи, статистика матчей, история команд.
+Использование официального источника сохраняет естественное распределение
+показателей реальных игроков, что критически важно для корректной верификации
+относительных метрик.
 
-По результатам контрольных запросов объём таблицы фактов \texttt{game\_player\_stats} превысил 150\,000 записей, а таблицы \texttt{games}~--- 5\,800 матчей. Это полностью покрывает нефункциональное требование об объёме данных (рисунок~\ref{fig:db-count}).
+По результатам контрольных запросов \texttt{SELECT COUNT(*)} объём ключевых
+таблиц после загрузки приведён в таблице~\ref{tab:db-count}. Таблица фактов
+\texttt{game\_player\_stats} содержит 150\,629 записей, таблица
+\texttt{games}~--- 5\,829 матчей. Это полностью покрывает нефункциональное
+требование об объёме данных.
 
-\begin{figure}[H]
+{\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
+\begin{table}[H]
 \centering
-\fbox{\parbox{0.92\textwidth}{\centering\vspace{1.5cm}
-\textit{Скриншот результата выполнения SELECT COUNT(*) FROM game\_player\_stats
-и COUNT(*) FROM games, подтверждающего наличие 156\,314 и 5\,842 записей соответственно.}
-\vspace{1.5cm}}}
-\caption{Подтверждение объёма данных в таблицах}
-\label{fig:db-count}
-\end{figure}
+\caption{Объём загруженных данных (контрольный запрос \texttt{SELECT COUNT(*)})}
+\label{tab:db-count}
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Таблица} & \textbf{Число строк} \\
+\hline
+\texttt{game\_player\_stats} & 150\,629 \\
+\texttt{games}               & 5\,829 \\
+\texttt{players}              & 5\,126 \\
+\texttt{player\_season\_stats} & 2\,813 \\
+\texttt{teams}                & 30 \\
+\hline
+\end{tabular}
+\end{table}}
 
 \section{Реализация логики предметной области в СУБД}
 
 \subsection{Хранимые функции расчёта метрик}
 
-Все математические алгоритмы расчёта метрик перенесены на слой СУБД и реализованы в виде хранимых функций на языке PL/pgSQL. Исходный код всех функций вынесён в Приложение~Б. 
+Логика расчёта спортивных метрик реализована в виде хранимых
+PL/pgSQL-функций (Приложение~Б). В листинге~\ref{lst:ts} приведён фрагмент
+функции \texttt{calculate\_ts}, включающий программную защиту от деления на
+ноль.
 
-В листинге~\ref{lst:ts} приведён фрагмент функции \texttt{calculate\_ts}, вычисляющей истинный процент бросков (TS\%) с программной защитой от деления на ноль.
-
-\begin{lstlisting}[language=SQL, label=lst:ts, caption=Реализация функции \texttt{calculate\_ts} (фрагмент)]
+\begin{lstlisting}[language=SQL, label=lst:ts,
+  caption=Реализация функции \texttt{calculate\_ts} (фрагмент)]
 CREATE OR REPLACE FUNCTION calculate_ts(
     p_player_id INT, p_season_id INT, p_team_id INT DEFAULT NULL
 ) RETURNS DECIMAL(5,4) LANGUAGE plpgsql STABLE AS $$
 DECLARE
     v_pts NUMERIC; v_fga NUMERIC; v_fta NUMERIC; v_denom NUMERIC;
 BEGIN
+    SELECT COALESCE(SUM(gps.points), 0),
+           COALESCE(SUM(gps.fga), 0),
+           COALESCE(SUM(gps.fta), 0)
+    INTO v_pts, v_fga, v_fta
+    FROM game_player_stats gps
+    JOIN games g ON g.game_id = gps.game_id
+    WHERE gps.player_id = p_player_id
+      AND g.season_id = p_season_id
+      AND (p_team_id IS NULL OR gps.team_id = p_team_id);
+
     IF v_fga = 0 AND v_fta = 0 THEN RETURN NULL; END IF;
-    
+
     v_denom := 2.0 * (v_fga + 0.44 * v_fta);
     IF v_denom = 0 THEN RETURN NULL; END IF;
-    
+
     RETURN ROUND(v_pts::DECIMAL / v_denom, 4);
 END; $$;
 \end{lstlisting}
 
-Все расчётные функции помечены квалификатором \texttt{STABLE}, что позволяет оптимизатору запросов кэшировать результаты вызовов в рамках одного оператора. Агрегация сезонной статистики выполняется хранимой процедурой \texttt{update\_season\_stats} с использованием атомарной конструкции \texttt{INSERT ... ON CONFLICT DO UPDATE}.
+Все расчётные функции помечены квалификатором \texttt{STABLE}, что позволяет
+оптимизатору запросов кэшировать результаты вызовов в рамках одного
+оператора. Агрегация сезонной статистики выполняется
+хранимой процедурой \texttt{update\_season\_stats} с использованием
+атомарной конструкции \texttt{INSERT ... ON CONFLICT DO UPDATE}.
 
 \subsection{Триггеры логической целостности}
 
-Для защиты данных от аномалий реализован триггер \texttt{trg\_check\_team\_score}. Он проверяет фундаментальное правило предметной области: сумма очков всех игроков команды в конкретном матче должна быть равна итоговому командному счёту.
+Для защиты данных от аномалий реализован триггер
+\texttt{trg\_check\_team\_score}. Он проверяет бизнес-правило предметной
+области: сумма очков всех игроков команды в конкретном матче
+должна равняться итоговому командному счёту.
 
-\begin{lstlisting}[language=SQL, label=lst:trigger, caption=Триггер проверки корректности очков (фрагмент)]
+\begin{lstlisting}[language=SQL, label=lst:trigger,
+  caption=Триггер проверки корректности очков (фрагмент)]
 CREATE OR REPLACE FUNCTION trg_validate_team_score_row()
 RETURNS TRIGGER LANGUAGE plpgsql AS $$
 DECLARE
@@ -135,138 +203,211 @@ END; $$;
 
 \section{Реализация ролевой модели доступа}
 
-Разграничение прав реализовано с использованием ролей базы данных (\texttt{db\_admin}, \texttt{analyst}, \texttt{reader}). В соответствии с принципом минимальных привилегий, публичной роли \texttt{reader} запрещён прямой доступ к таблицам фактов; данные предоставляются исключительно через защищённые представления-витрины (листинг~\ref{lst:grants}).
+Настройка прав доступа (листинг~\ref{lst:grants}) выполнена в соответствии с
+принципом минимальных привилегий. Роль публичного доступа (\texttt{reader})
+лишена возможности прямого обращения к базовым таблицам; чтение
+осуществляется исключительно через защищённые представления.
 
-\begin{lstlisting}[language=SQL, label=lst:grants, caption=Разграничение доступа командными привилегиями]
+\begin{lstlisting}[language=SQL, label=lst:grants,
+  caption=Разграничение доступа командами привилегий]
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO analyst;
 GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO analyst;
 
-GRANT SELECT ON v_team_stats TO reader;
-GRANT SELECT ON v_top_players TO reader;
+GRANT SELECT ON v_team_stats   TO reader;
+GRANT SELECT ON v_top_players  TO reader;
 \end{lstlisting}
 
-Проверка выполнена путём подключения к БД от имени роли \texttt{reader}: прямой запрос к \texttt{game\_player\_stats} завершается ожидаемой ошибкой \texttt{permission denied}.
+Корректность ограничений для роли \texttt{reader} проверена подключением к БД
+от её имени: запрос \texttt{SELECT * FROM game\_player\_stats} завершился
+ошибкой \texttt{permission denied} на уровне PostgreSQL, тогда как
+\texttt{SELECT} из представлений \texttt{v\_team\_stats} и \texttt{v\_top\_players},
+перечисленных в листинге~\ref{lst:grants}, выполняется успешно.
+Аналитические маршруты API, в том числе \texttt{GET /teams/standings},
+открывают сессию под ролью \texttt{analyst} и для турнирной таблицы
+обращаются к представлению \texttt{v\_team\_standings}.
+У роли \texttt{analyst} есть \texttt{SELECT} к базовым таблицам (табл.~\ref{tab:acl-matrix}),
+поэтому представления для неё служат удобными витринами, а не единственным
+способом чтения данных.
 
 \section{Реализация программного обеспечения и интерфейса}
 
-\subsection{Слой маршрутизации и взаимодействия с БД (Backend)}
+\subsection{Серверное приложение}
 
-Серверная часть приложения выполняет роль прослойки доступа к данным
-(Data Access Layer). Бэкенд реализован на фреймворке FastAPI в соответствии
-со спецификацией REST API конструкторского раздела (подраздел~\ref{subsec:api-spec}).
-Для взаимодействия с PostgreSQL применяется асинхронный драйвер \texttt{asyncpg}
-в связке с ORM SQLAlchemy~2. Движки подключений настроены с пулом соединений
-(Connection Pooling, \texttt{pool\_size=10}, \texttt{max\_overflow=20}), что
-позволяет СУБД обслуживать конкурентные запросы аналитиков без постоянного
-открытия новых TCP-сессий.
+Серверное приложение реализовано в соответствии со спецификацией REST API
+конструкторского раздела (подраздел~\ref{subsec:api-spec}). Точкой входа
+служит \texttt{app/main.py}, регистрирующий пять групп маршрутов и
+CORS-middleware. Подключение к PostgreSQL организовано через три независимых
+пула соединений~--- по одному на каждую роль СУБД. Привязка маршрута к
+роли осуществляется через аргумент \texttt{Depends}:
 
-Жизненный цикл сессии базы данных управляется через механизм внедрения
-зависимостей (Dependency Injection): для каждого HTTP-запроса создаётся
-экземпляр \texttt{AsyncSession}, привязанный к роли пользователя СУБД
-(\texttt{analyst}, \texttt{reader}, \texttt{db\_admin}), и гарантированно
-закрывается по завершении обработки маршрута. Для снижения нагрузки
-на дисковую подсистему реализован паттерн Cache-Aside на базе Redis
-(класс \texttt{CacheManager}). В листинге~\ref{lst:fastapi} показан фрагмент
-маршрута \texttt{GET /players/\{player\_id\}/stats}; полный исходный код
-вынесён в приложение~В.
-
-\begin{lstlisting}[language=Python, label=lst:fastapi,
-  caption=Реализация взаимодействия с БД и кэшем (фрагмент)]
-@router.get("/{player_id}/stats")
-async def get_player_stats(
-    player_id: int,
-    season_id: int | None = None,
-    cache: CacheManager = Depends(get_cache),
+\begin{lstlisting}[language=Python, label=lst:di-role,
+  caption=Привязка маршрута к роли СУБД]
+@router.get("/leaders")
+async def get_leaders(
+    season_id: int,
     db: AsyncSession = Depends(get_db_analyst),
+    cache: CacheManager = Depends(get_cache),
 ):
-    cache_key = f"player_stats:{player_id}:{season_id or 'all'}"
-    cached = await cache.get(cache_key)
-    if cached:
-        return cached
-
-    query = (
-        select(PlayerSeasonStats.season_id, PlayerSeasonStats.ts_pct, ...)
-        .where(PlayerSeasonStats.player_id == player_id)
-    )
-    if season_id:
-        query = query.where(PlayerSeasonStats.season_id == season_id)
-
-    result = await db.execute(query)
-    data = [dict(row) for row in result.mappings().all()]
-    await cache.set(cache_key, data, ttl=300)
-    return data
 \end{lstlisting}
 
-\subsection{Пользовательский интерфейс (Frontend)}
+Маршрут \texttt{/stats/leaders} открывает соединение от имени роли
+\texttt{analyst}, имеющей право \texttt{SELECT} к агрегированной статистике
+и \texttt{EXECUTE} к функциям расчёта метрик; прямое изменение базовых
+таблиц по-прежнему запрещено. Жизненный цикл сессии управляется
+генератором: при любом исходе обработчика сессия закрывается,
+а незафиксированные изменения откатываются.
 
-Клиентское веб-приложение реализовано на React (TypeScript) и предоставляет
-графический интерфейс для анализа данных, извлекаемых из СУБД через REST API.
-Приложение не дублирует бизнес-логику расчёта метрик~--- все агрегаты
-формируются на стороне PostgreSQL (функции, представления, витрины).
-Основные разделы интерфейса:
+\subsection{Кэширование}
+
+Паттерн Cache-Aside реализован классом \texttt{CacheManager}. Структура
+каждого кэшируемого маршрута единообразна: вычисляется ключ из параметров
+запроса, выполняется попытка чтения из Redis; при промахе~--- SQL-запрос к
+PostgreSQL, запись результата в кэш с заданным временем жизни и возврат
+клиенту. Пример приведён в листинге~\ref{lst:cache-aside-pattern}.
+
+\begin{lstlisting}[language=Python, label=lst:cache-aside-pattern,
+  caption=Cache-Aside в маршруте \texttt{/stats/leaders}]
+cache_key = (
+    f"leaders:{metric}:{season_id}:{team_id}:{position}:{min_games}:{limit}"
+)
+cached = await cache.get(cache_key)
+if cached:
+    return cached
+result = await db.execute(query)
+data = [...]
+await cache.set(cache_key, data, ttl=900)
+return data
+\end{lstlisting}
+
+Время жизни ключей дифференцировано по типу данных: данные завершённых
+матчей кэшируются на один год, лидерборды и ростеры~--- на 15 минут,
+результаты поиска~--- на 2 минуты. Инвалидация при вызове
+\texttt{POST /admin/refresh/\{season\_id\}} выполняется по шаблонам ключей
+затронутого сезона в соответствии с проектным решением
+подраздела~\ref{subsec:cache}.
+
+\subsection{Пользовательский интерфейс}
+
+Клиентское одностраничное приложение реализовано на React~18 с TypeScript.
+Все типы моделей данных описаны в \texttt{src/types/index.ts} и используются
+совместно компонентами и функциями API-клиента.
+
+Приложение включает пять разделов навигации:
 \begin{enumerate}
-    \item \textbf{Dashboard}~--- сводная статистика лиги, последние матчи
-          и ключевые показатели сезона (данные из представлений и агрегатов СУБД);
-    \item \textbf{Players / Teams}~--- справочники с серверным поиском
-          (маршрут \texttt{/league/search}, индекс \texttt{idx\_players\_name})
-          и фильтрацией по сезону и команде;
-    \item \textbf{Leaderboard / Standings}~--- рейтинги лидеров и турнирная
-          таблица по метрикам PTS, AST, REB, PER, TS\%, eFG\%, BPM;
-    \item \textbf{Compare}~--- интерактивное сравнение двух игроков
-          (маршрут \texttt{/stats/compare}).
+    \item Dashboard~--- KPI-блок лиги, топ-5 игроков по PER,
+          диаграмма рассеяния «очки vs eFG\%», линейные графики
+          трендов по сезонам, горизонтальные гистограммы топ-10 команд
+          и игроков по USG\%;
+    \item Players~--- таблица игроков с серверными фильтрами по позиции,
+          команде и имени, пагинацией; клик открывает модальное окно
+          профиля;
+    \item Teams~--- турнирная таблица по конференциям (Восток/Запад) за выбранный
+          сезон (W, L, W\%, GB); переход на страницу команды с ростером;
+    \item Leaderboard~--- рейтинг по десяти метрикам; клик открывает
+          профиль игрока;
+    \item Advanced Stats~--- диаграммы рассеяния «USG\% vs TS\%»
+          и «PER vs среднее время на площадке».
 \end{enumerate}
 
-Метрики визуализируются радарными и столбчатыми диаграммами библиотеки Recharts.
-На рисунке~\ref{fig:ui-dashboard} представлен внешний вид главной страницы
-(Dashboard).
+Сравнение двух игроков вынесено в модальное окно:
+из профиля игрока кнопкой «добавить к сравнению» формируется список из двух
+участников; плавающая панель в углу экрана открывает окно с совмещённым
+радарным графиком, гистограммой базовой статистики и таблицей метрик
+с выделением лучшего значения (данные --- \texttt{GET /stats/compare/players}).
+
+Внешний вид раздела Dashboard представлен на
+рисунке~\ref{fig:ui-dashboard}.
 
 \begin{figure}[H]
 \centering
-\fbox{\parbox{0.92\textwidth}{\centering\vspace{3.5cm}
-\textit{Скриншот главной страницы (Dashboard): сводная статистика лиги,
-последние матчи, виджеты лидеров.}
-\vspace{3.5cm}}}
+\includegraphics[width=\textwidth]{../img/dash.png}
 \caption{Главная страница приложения (Dashboard)}
 \label{fig:ui-dashboard}
 \end{figure}
 
-На рисунке~\ref{fig:ui-compare} показан интерфейс раздела сравнения профилей
-игроков, демонстрирующий выдачу сложных агрегатов из базы данных.
+Модальное окно игрока доступно из любого раздела и отображает
+демографические данные, бейджи базовых и продвинутых метрик за выбранный
+сезон, радарный график характеристик по шести осям и игровой журнал
+последних 20 матчей (рисунок~\ref{fig:ui-modal}). Кнопка добавления
+в сравнение доступна в шапке модального окна.
 
 \begin{figure}[H]
 \centering
-\fbox{\parbox{0.92\textwidth}{\centering\vspace{3.5cm}
-\textit{Скриншот страницы сравнения двух игроков (Compare):
-радарный график продвинутых метрик, столбчатые диаграммы базовой статистики.}
-\vspace{3.5cm}}}
-\caption{Страница сравнения игроков}
+\includegraphics[width=\textwidth]{../img/player.png}
+\caption{Модальное окно профиля игрока: сезонные метрики и игровой журнал}
+\label{fig:ui-modal}
+\end{figure}
+
+Модальное окно сравнения двух выбранных игроков представлено на
+рисунке~\ref{fig:ui-compare}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{../img/comp.png}
+\caption{Модальное окно сравнения профилей двух игроков}
 \label{fig:ui-compare}
 \end{figure}
 
 \section{Тестирование и верификация аналитических данных}
 
-Тестирование логики СУБД проводилось методом чёрного ящика. Для проверки точности математических агрегаций выполнена ручная верификация на реальных данных из загруженной базы.
+Тестирование логики СУБД проводилось методом чёрного ящика. Для проверки
+точности математических агрегаций выполнен регрессионный тест на реальных
+данных из загруженной базы: эталонные значения получены независимым
+расчётом по формулам раздела~1.4, после чего сопоставлены с результатами
+хранимых функций PostgreSQL.
 
-В качестве тестового объекта был выбран профиль игрока Nikola Joki\'{c} (\texttt{player\_id = 2327}) за регулярный сезон 2023-24 (\texttt{season\_id = 5}). Прямой SQL-запрос суммы сырых фактов из таблицы \texttt{game\_player\_stats} вернул следующие значения:
+В качестве тестового объекта выбран профиль игрока Nikola Joki\'{c}
+(\texttt{player\_id = 2327}) за регулярный сезон 2023-24
+(\texttt{season\_id = 5}). Прямой SQL-запрос суммы сырых фактов из таблицы
+\texttt{game\_player\_stats} вернул следующие значения:
 \begin{itemize}
-    \item очки (PTS): 2085;
-    \item броски с игры (FGA): 1411;
-    \item штрафные попытки (FTA): 438.
+    \item очки: 2085;
+    \item броски с игры: 1411;
+    \item штрафные попытки: 438.
 \end{itemize}
 
-Ручной расчёт истинного процента бросков (TS\%) по формуле~(\ref{eq:ts}):
+Ручной расчёт истинного процента бросков по формуле~(\ref{eq:ts}):
 \[
 \mathrm{TS\%} = \frac{2085}{2 \cdot (1411 + 0{,}44 \cdot 438)}
-  = \frac{2085}{2 \cdot 1603{,}72}
   = \frac{2085}{3207{,}44} \approx 0{,}6501.
 \]
 
-Для верификации в СУБД был выполнен вызов разработанной хранимой функции:
+Для верификации в СУБД выполнен вызов хранимой функции:
 \begin{lstlisting}[language=SQL]
 SELECT calculate_ts(2327, 5);
 \end{lstlisting}
 
-Результат, возвращённый базой данных, абсолютно совпал с ручным аналитическим расчётом. Аналогичная верификация проведена для метрик eFG\% и USG\%; расхождений не выявлено. Тестирование граничных случаев (отсутствие попыток бросков, нулевое время на площадке) подтвердило корректную обработку исключений и возврат значения \texttt{NULL} без прерывания транзакций (таблица~\ref{tab:test-cases}).
+Результат совпал с ручным расчётом. Аналогичная верификация проведена для
+eFG\% и USG\%; расхождений не выявлено.
+
+Верификация PER выполнена по той же методике. Из таблицы
+\texttt{game\_player\_stats} получены сезонные суммы для
+\texttt{player\_id = 2327}: $\mathrm{PTS} = 2085$, $\mathrm{TRB} = 976$,
+$\mathrm{AST} = 708$, $\mathrm{STL} = 108$, $\mathrm{BLK} = 68$,
+$\mathrm{TOV} = 237$, $\mathrm{PF} = 194$, $\mathrm{FGM/FGA} = 822/1411$,
+$\mathrm{FTM/FTA} = 358/438$, $\mathrm{MP} = 2736{,}4$.
+Ненормализованный вклад по формуле uPER (раздел~1.4):
+\[
+\mathrm{uPER} =
+(2085 + 976 + 708 + 108 + 68 - 237 - 194 - 589 - 35{,}2)
+\cdot \frac{48}{2736{,}4} = 2889{,}8 \cdot \frac{48}{2736{,}4}
+\approx 50{,}69.
+\]
+Лиговое среднее по формуле~(1.5) по 475~игрокам с $\mathrm{MP} > 100$:
+$\mathrm{lg\_aPER} = 20{,}88$. Итоговый рейтинг по формуле~(1.6):
+\[
+\mathrm{PER} = 50{,}69 \cdot \frac{15}{20{,}88} \approx 36{,}41.
+\]
+Вызов \texttt{SELECT calculate\_per(2327, 5)} вернул $36{,}41$~---
+расхождений не выявлено.
+
+Тестирование граничных случаев подтвердило корректный возврат значения
+\texttt{NULL} при отсутствии попыток бросков и нулевом времени на площадке.
+Работа триггера \newline\texttt{trg\_check\_team\_score} проверена попыткой вставки
+строки с намеренно неверной суммой очков: триггер поднял исключение
+\texttt{Player points sum does not match team score}, вставка была
+отклонена~--- поведение соответствует ожидаемому
+(таблица~\ref{tab:test-cases}).
 
 {\footnotesize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.2}
 \begin{table}[H]
@@ -275,15 +416,28 @@ SELECT calculate_ts(2327, 5);
 \label{tab:test-cases}
 \begin{tabular}{|c|p{0.24\textwidth}|p{0.26\textwidth}|p{0.18\textwidth}|p{0.14\textwidth}|}
 \hline
-\textbf{№} & \textbf{Сценарий} & \textbf{Входные данные} & \textbf{Ожидание} & \textbf{Результат} \\
+\textbf{№} & \textbf{Сценарий} & \textbf{Входные данные}
+  & \textbf{Ожидание} & \textbf{Результат} \\
 \hline
-1 & Нормальный профиль & \texttt{calculate\_ts(2327, 5)} & $\approx 0{,}6501$ & совпало \\
+1 & Нормальный профиль & \texttt{calculate\_ts(2327, 5)}
+  & $\approx 0{,}6501$ & совпало \\
 \hline
-2 & Нет попыток броска & \texttt{calculate\_ts(0, 0)} & NULL & NULL \\
+2 & Нет попыток броска & \texttt{calculate\_ts(0, 0)}
+  & NULL & NULL \\
 \hline
-3 & Нулевые FGA (eFG\%) & \texttt{calculate\_efg(0, 0)} & NULL & NULL \\
+3 & Нулевые FGA (eFG\%) & \texttt{calculate\_efg(0, 0)}
+  & NULL & NULL \\
 \hline
-4 & Пересчёт витрины & \texttt{CALL update\_season\_stats(5)} & обновлены строки \texttt{pss} & выполнено \\
+4 & Пересчёт витрины & \texttt{CALL update\_season\_stats(5)}
+  & обновлены строки \texttt{pss} & выполнено \\
+\hline
+5 & Верификация PER & \texttt{calculate\_per(2327, 5)}
+  & $\approx 36{,}41$ (формулы 1.4--1.6) & 36{,}41, совпало \\
+\hline
+6 & Триггер целостности счёта & INSERT с суммой очков,
+  не совпадающей с \texttt{home\_score}
+  & EXCEPTION & исключение поднято,
+  вставка отклонена \\
 \hline
 \end{tabular}
 \end{table}
@@ -291,6 +445,11 @@ SELECT calculate_ts(2327, 5);
 
 \section*{Вывод}
 
-В технологическом разделе обоснован программный стек: PostgreSQL, Redis, FastAPI и React. Реализована физическая реляционная схема базы данных, включающая ссылочные ограничения и структуры B-деревьев. Разработанный ETL-скрипт обеспечил загрузку более 150~тысяч реальных фактов статистики из открытых источников. Вся расчётная логика предметной области успешно перенесена на уровень хранилища в виде функций PL/pgSQL и триггеров целостности. Реализована ролевая модель доступа, серверное REST API с пулом соединений
-и кэшированием Cache-Aside, а также клиентский интерфейс на React.
-Проведённая верификация с ручным расчётом метрик на живых данных подтвердила полную математическую корректность функционирования базы данных.
+В технологическом разделе обоснован стек технологий (PostgreSQL~15,
+Redis~7, FastAPI, React~18) и реализована физическая структура базы данных.
+Разработаны PL/pgSQL-функции и триггеры, обеспечивающие расчёт метрик и
+консистентность данных. С помощью написанного ETL-скрипта БД наполнена
+реальной статистикой NBA (более 150~тыс. фактов). Успешно реализованы
+механизмы кэширования (Cache-Aside) и ролевого доступа. Регрессионное
+тестирование на реальных данных подтвердило математическую корректность
+работы базы данных и хранимых процедур.
