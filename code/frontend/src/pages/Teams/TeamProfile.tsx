@@ -48,7 +48,7 @@ export default function TeamProfile() {
         <div>
           <h1 style={{ fontSize: 26, fontWeight: 700 }}>{team.name}</h1>
           <div style={{ color: 'var(--text-secondary)', fontSize: 14, marginTop: 4 }}>
-            {team.city} · {team.conference} · {team.division}
+            {team.city} · {team.conference}
           </div>
           {team.arena_name && (
             <div style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 2 }}>{team.arena_name}</div>

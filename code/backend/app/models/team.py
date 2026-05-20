@@ -20,7 +20,6 @@ class Team(Base):
     abbreviation: Mapped[str] = mapped_column(String(3), unique=True, nullable=False)
     city: Mapped[str] = mapped_column(String(50), nullable=False)
     conference: Mapped[str] = mapped_column(String(4), nullable=False)
-    division: Mapped[str] = mapped_column(String(20), nullable=False)
     arena_name: Mapped[Optional[str]] = mapped_column(String(80))
     founded_year: Mapped[Optional[int]] = mapped_column(SmallInteger)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)

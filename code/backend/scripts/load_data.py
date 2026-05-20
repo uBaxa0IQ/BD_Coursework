@@ -67,47 +67,38 @@ SEASON_DATES = {
     "2023-24": ("2023-10-24", "2024-06-17"),
 }
 
-DIVISION_TO_CONFERENCE = {
-    "Atlantic": "East",
-    "Central": "East",
-    "Southeast": "East",
-    "Northwest": "West",
-    "Pacific": "West",
-    "Southwest": "West",
-}
-
-# nba_api.stats.static.teams не содержит division/conference (только id, name, abbr, city)
-TEAM_META: Dict[str, tuple[str, str]] = {
-    "ATL": ("East", "Southeast"),
-    "BOS": ("East", "Atlantic"),
-    "BKN": ("East", "Atlantic"),
-    "CHA": ("East", "Southeast"),
-    "CHI": ("East", "Central"),
-    "CLE": ("East", "Central"),
-    "DAL": ("West", "Southwest"),
-    "DEN": ("West", "Northwest"),
-    "DET": ("East", "Central"),
-    "GSW": ("West", "Pacific"),
-    "HOU": ("West", "Southwest"),
-    "IND": ("East", "Central"),
-    "LAC": ("West", "Pacific"),
-    "LAL": ("West", "Pacific"),
-    "MEM": ("West", "Southwest"),
-    "MIA": ("East", "Southeast"),
-    "MIL": ("East", "Central"),
-    "MIN": ("West", "Northwest"),
-    "NOP": ("West", "Southwest"),
-    "NYK": ("East", "Atlantic"),
-    "OKC": ("West", "Northwest"),
-    "ORL": ("East", "Southeast"),
-    "PHI": ("East", "Atlantic"),
-    "PHX": ("West", "Pacific"),
-    "POR": ("West", "Northwest"),
-    "SAC": ("West", "Pacific"),
-    "SAS": ("West", "Southwest"),
-    "TOR": ("East", "Atlantic"),
-    "UTA": ("West", "Northwest"),
-    "WAS": ("East", "Southeast"),
+# nba_api.stats.static.teams не содержит conference (только id, name, abbr, city)
+TEAM_CONFERENCE: Dict[str, str] = {
+    "ATL": "East",
+    "BOS": "East",
+    "BKN": "East",
+    "CHA": "East",
+    "CHI": "East",
+    "CLE": "East",
+    "DAL": "West",
+    "DEN": "West",
+    "DET": "East",
+    "GSW": "West",
+    "HOU": "West",
+    "IND": "East",
+    "LAC": "West",
+    "LAL": "West",
+    "MEM": "West",
+    "MIA": "East",
+    "MIL": "East",
+    "MIN": "West",
+    "NOP": "West",
+    "NYK": "East",
+    "OKC": "West",
+    "ORL": "East",
+    "PHI": "East",
+    "PHX": "West",
+    "POR": "West",
+    "SAC": "West",
+    "SAS": "West",
+    "TOR": "East",
+    "UTA": "West",
+    "WAS": "East",
 }
 
 # CommonAllPlayers / CommonPlayerInfo — максимально полный маппинг к PG/SG/SF/PF/C
@@ -235,30 +226,26 @@ async def load_teams(conn: asyncpg.Connection) -> Dict[int, int]:
 
     for t in all_teams:
         abbr = t["abbreviation"]
-        meta = TEAM_META.get(abbr)
-        if meta:
-            conference, division = meta
-        else:
-            division = t.get("division") or "Atlantic"
-            conference = DIVISION_TO_CONFERENCE.get(division, "East")
+        conference = TEAM_CONFERENCE.get(abbr)
+        if not conference:
+            conference = "East"
             logger.warning(
-                "Команда %s (%s): нет в TEAM_META, conference=%s division=%s",
-                t["full_name"], abbr, conference, division,
+                "Команда %s (%s): нет в TEAM_CONFERENCE, conference=%s",
+                t["full_name"], abbr, conference,
             )
         try:
             team_id = await conn.fetchval(
                 """
-                INSERT INTO teams (nba_team_id, name, abbreviation, city, conference, division)
-                VALUES ($1, $2, $3, $4, $5, $6)
+                INSERT INTO teams (nba_team_id, name, abbreviation, city, conference)
+                VALUES ($1, $2, $3, $4, $5)
                 ON CONFLICT (nba_team_id) DO UPDATE
                     SET name         = EXCLUDED.name,
                         abbreviation = EXCLUDED.abbreviation,
                         city         = EXCLUDED.city,
-                        conference   = EXCLUDED.conference,
-                        division     = EXCLUDED.division
+                        conference   = EXCLUDED.conference
                 RETURNING team_id
                 """,
-                t["id"], t["full_name"], t["abbreviation"], t["city"], conference, division,
+                t["id"], t["full_name"], t["abbreviation"], t["city"], conference,
             )
             if team_id:
                 mapping[t["id"]] = team_id

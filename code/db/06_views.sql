@@ -58,7 +58,6 @@ SELECT
     t.abbreviation,
     t.city,
     t.conference,
-    t.division,
     t.nba_team_id,
     s.season_id,
     s.label AS season,
@@ -90,7 +89,7 @@ LEFT JOIN games g
     AND g.status    = 'Finished'
 GROUP BY
     t.team_id, t.name, t.abbreviation, t.city,
-    t.conference, t.division, t.nba_team_id,
+    t.conference, t.nba_team_id,
     s.season_id, s.label
 ORDER BY s.season_id, win_pct DESC NULLS LAST;
 
@@ -127,7 +126,6 @@ SELECT
     t.name AS team_name,
     t.abbreviation,
     t.conference,
-    t.division,
     s.season_id,
     s.label AS season,
     COUNT(*)::SMALLINT AS games_played,
@@ -148,7 +146,7 @@ FROM team_game tg
 JOIN teams t ON t.team_id = tg.team_id
 JOIN seasons s ON s.season_id = tg.season_id
 GROUP BY
-    t.team_id, t.name, t.abbreviation, t.conference, t.division,
+    t.team_id, t.name, t.abbreviation, t.conference,
     s.season_id, s.label
 ORDER BY s.season_id, avg_pts DESC NULLS LAST;
 

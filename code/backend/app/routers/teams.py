@@ -41,7 +41,6 @@ async def get_teams(
             "abbreviation": t.abbreviation,
             "city": t.city,
             "conference": t.conference,
-            "division": t.division,
         }
         for t in teams
     ]
@@ -62,7 +61,7 @@ async def get_standings(
 
     result = await db.execute(
         text("""
-            SELECT team_id, name, abbreviation, city, conference, division,
+            SELECT team_id, name, abbreviation, city, conference,
                    nba_team_id, season_id, season, wins, losses, games_played, win_pct
             FROM v_team_standings
             WHERE season_id = :season_id
@@ -137,7 +136,6 @@ async def get_team(
         "abbreviation": team.abbreviation,
         "city": team.city,
         "conference": team.conference,
-        "division": team.division,
         "arena_name": team.arena_name,
         "founded_year": team.founded_year,
         "is_active": team.is_active,

@@ -11,7 +11,6 @@ class TeamResponse(BaseModel):
     abbreviation: str
     city: str
     conference: str
-    division: str
 
     model_config = {"from_attributes": True}
 
@@ -28,7 +27,6 @@ class TeamDetailResponse(BaseModel):
     abbreviation: str
     city: str
     conference: str
-    division: str
     arena_name: Optional[str] = None
     founded_year: Optional[int] = None
     is_active: bool = True
@@ -48,7 +46,6 @@ class StandingsResponse(BaseModel):
     abbreviation: str
     city: str
     conference: str
-    division: str
     season_id: int
     season: str
     wins: int

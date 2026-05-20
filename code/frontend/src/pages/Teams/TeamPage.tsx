@@ -54,7 +54,7 @@ export default function TeamPage() {
         <div>
           <div style={{ fontSize: 20, fontWeight: 700 }}>{team.name}</div>
           <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>
-            {team.conference} · {team.division}
+            {team.conference}
             {team.arena_name && ` · ${team.arena_name}`}
           </div>
         </div>

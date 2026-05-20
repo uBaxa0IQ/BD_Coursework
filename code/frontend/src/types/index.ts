@@ -70,7 +70,6 @@ export interface Team {
   abbreviation: string
   city: string
   conference: string
-  division: string
   arena_name?: string
   founded_year?: number
   is_active?: boolean
@@ -84,7 +83,6 @@ export interface Standing {
   abbreviation: string
   city: string
   conference: string
-  division: string
   season_id: number
   season: string
   wins: number

@@ -73,7 +73,6 @@ CREATE TABLE IF NOT EXISTS teams (
     abbreviation CHAR(3)     NOT NULL UNIQUE,
     city         VARCHAR(50) NOT NULL,
     conference   VARCHAR(4)  NOT NULL CHECK (conference IN ('East', 'West')),
-    division     VARCHAR(20) NOT NULL,
     arena_name   VARCHAR(80),
     founded_year SMALLINT    CHECK (founded_year BETWEEN 1920 AND 2100),
     is_active    BOOLEAN     NOT NULL DEFAULT TRUE
@@ -86,42 +85,41 @@ COMMENT ON COLUMN teams.name IS 'Полное название команды';
 COMMENT ON COLUMN teams.abbreviation IS 'Аббревиатура команды (3 буквы)';
 COMMENT ON COLUMN teams.city IS 'Город базирования команды';
 COMMENT ON COLUMN teams.conference IS 'Конференция: East (Восток) или West (Запад)';
-COMMENT ON COLUMN teams.division IS 'Дивизион команды';
 COMMENT ON COLUMN teams.arena_name IS 'Название домашней арены';
 COMMENT ON COLUMN teams.founded_year IS 'Год основания команды';
 COMMENT ON COLUMN teams.is_active IS 'Признак активной команды';
 
-INSERT INTO teams (nba_team_id, name, abbreviation, city, conference, division, arena_name, founded_year) VALUES
-    (1610612737, 'Atlanta Hawks',          'ATL', 'Atlanta',        'East', 'Southeast', 'State Farm Arena',              1946),
-    (1610612738, 'Boston Celtics',         'BOS', 'Boston',         'East', 'Atlantic',  'TD Garden',                     1946),
-    (1610612751, 'Brooklyn Nets',          'BKN', 'Brooklyn',       'East', 'Atlantic',  'Barclays Center',               1967),
-    (1610612766, 'Charlotte Hornets',      'CHA', 'Charlotte',      'East', 'Southeast', 'Spectrum Center',               1988),
-    (1610612741, 'Chicago Bulls',          'CHI', 'Chicago',        'East', 'Central',   'United Center',                 1966),
-    (1610612739, 'Cleveland Cavaliers',    'CLE', 'Cleveland',      'East', 'Central',   'Rocket Mortgage FieldHouse',    1970),
-    (1610612742, 'Dallas Mavericks',       'DAL', 'Dallas',         'West', 'Southwest', 'American Airlines Center',      1980),
-    (1610612743, 'Denver Nuggets',         'DEN', 'Denver',         'West', 'Northwest', 'Ball Arena',                    1967),
-    (1610612765, 'Detroit Pistons',        'DET', 'Detroit',        'East', 'Central',   'Little Caesars Arena',          1941),
-    (1610612744, 'Golden State Warriors',  'GSW', 'San Francisco',  'West', 'Pacific',   'Chase Center',                  1946),
-    (1610612745, 'Houston Rockets',        'HOU', 'Houston',        'West', 'Southwest', 'Toyota Center',                 1967),
-    (1610612754, 'Indiana Pacers',         'IND', 'Indianapolis',   'East', 'Central',   'Gainbridge Fieldhouse',         1967),
-    (1610612746, 'LA Clippers',            'LAC', 'Los Angeles',    'West', 'Pacific',   'Crypto.com Arena',              1970),
-    (1610612747, 'Los Angeles Lakers',     'LAL', 'Los Angeles',    'West', 'Pacific',   'Crypto.com Arena',              1947),
-    (1610612763, 'Memphis Grizzlies',      'MEM', 'Memphis',        'West', 'Southwest', 'FedExForum',                    1995),
-    (1610612748, 'Miami Heat',             'MIA', 'Miami',          'East', 'Southeast', 'Kaseya Center',                 1988),
-    (1610612749, 'Milwaukee Bucks',        'MIL', 'Milwaukee',      'East', 'Central',   'Fiserv Forum',                  1968),
-    (1610612750, 'Minnesota Timberwolves', 'MIN', 'Minneapolis',    'West', 'Northwest', 'Target Center',                 1989),
-    (1610612740, 'New Orleans Pelicans',   'NOP', 'New Orleans',    'West', 'Southwest', 'Smoothie King Center',          2002),
-    (1610612752, 'New York Knicks',        'NYK', 'New York',       'East', 'Atlantic',  'Madison Square Garden',         1946),
-    (1610612760, 'Oklahoma City Thunder',  'OKC', 'Oklahoma City',  'West', 'Northwest', 'Paycom Center',                 1967),
-    (1610612753, 'Orlando Magic',          'ORL', 'Orlando',        'East', 'Southeast', 'Kia Center',                    1989),
-    (1610612755, 'Philadelphia 76ers',     'PHI', 'Philadelphia',   'East', 'Atlantic',  'Wells Fargo Center',            1946),
-    (1610612756, 'Phoenix Suns',           'PHX', 'Phoenix',        'West', 'Pacific',   'Footprint Center',              1968),
-    (1610612757, 'Portland Trail Blazers', 'POR', 'Portland',       'West', 'Northwest', 'Moda Center',                   1970),
-    (1610612758, 'Sacramento Kings',       'SAC', 'Sacramento',     'West', 'Pacific',   'Golden 1 Center',               1945),
-    (1610612759, 'San Antonio Spurs',      'SAS', 'San Antonio',    'West', 'Southwest', 'AT&T Center',                   1967),
-    (1610612761, 'Toronto Raptors',        'TOR', 'Toronto',        'East', 'Atlantic',  'Scotiabank Arena',              1995),
-    (1610612762, 'Utah Jazz',              'UTA', 'Salt Lake City', 'West', 'Northwest', 'Delta Center',                  1974),
-    (1610612764, 'Washington Wizards',     'WAS', 'Washington',     'East', 'Southeast', 'Capital One Arena',             1961)
+INSERT INTO teams (nba_team_id, name, abbreviation, city, conference, arena_name, founded_year) VALUES
+    (1610612737, 'Atlanta Hawks',          'ATL', 'Atlanta',        'East', 'State Farm Arena',              1946),
+    (1610612738, 'Boston Celtics',         'BOS', 'Boston',         'East', 'TD Garden',                     1946),
+    (1610612751, 'Brooklyn Nets',          'BKN', 'Brooklyn',       'East', 'Barclays Center',               1967),
+    (1610612766, 'Charlotte Hornets',      'CHA', 'Charlotte',      'East', 'Spectrum Center',               1988),
+    (1610612741, 'Chicago Bulls',          'CHI', 'Chicago',        'East', 'United Center',                 1966),
+    (1610612739, 'Cleveland Cavaliers',    'CLE', 'Cleveland',      'East', 'Rocket Mortgage FieldHouse',    1970),
+    (1610612742, 'Dallas Mavericks',       'DAL', 'Dallas',         'West', 'American Airlines Center',      1980),
+    (1610612743, 'Denver Nuggets',         'DEN', 'Denver',         'West', 'Ball Arena',                    1967),
+    (1610612765, 'Detroit Pistons',        'DET', 'Detroit',        'East', 'Little Caesars Arena',          1941),
+    (1610612744, 'Golden State Warriors',  'GSW', 'San Francisco',  'West', 'Chase Center',                  1946),
+    (1610612745, 'Houston Rockets',        'HOU', 'Houston',        'West', 'Toyota Center',                 1967),
+    (1610612754, 'Indiana Pacers',         'IND', 'Indianapolis',   'East', 'Gainbridge Fieldhouse',         1967),
+    (1610612746, 'LA Clippers',            'LAC', 'Los Angeles',    'West', 'Crypto.com Arena',              1970),
+    (1610612747, 'Los Angeles Lakers',     'LAL', 'Los Angeles',    'West', 'Crypto.com Arena',              1947),
+    (1610612763, 'Memphis Grizzlies',      'MEM', 'Memphis',        'West', 'FedExForum',                    1995),
+    (1610612748, 'Miami Heat',             'MIA', 'Miami',          'East', 'Kaseya Center',                 1988),
+    (1610612749, 'Milwaukee Bucks',        'MIL', 'Milwaukee',      'East', 'Fiserv Forum',                  1968),
+    (1610612750, 'Minnesota Timberwolves', 'MIN', 'Minneapolis',    'West', 'Target Center',                 1989),
+    (1610612740, 'New Orleans Pelicans',   'NOP', 'New Orleans',    'West', 'Smoothie King Center',          2002),
+    (1610612752, 'New York Knicks',        'NYK', 'New York',       'East', 'Madison Square Garden',         1946),
+    (1610612760, 'Oklahoma City Thunder',  'OKC', 'Oklahoma City',  'West', 'Paycom Center',                 1967),
+    (1610612753, 'Orlando Magic',          'ORL', 'Orlando',        'East', 'Kia Center',                    1989),
+    (1610612755, 'Philadelphia 76ers',     'PHI', 'Philadelphia',   'East', 'Wells Fargo Center',            1946),
+    (1610612756, 'Phoenix Suns',           'PHX', 'Phoenix',        'West', 'Footprint Center',              1968),
+    (1610612757, 'Portland Trail Blazers', 'POR', 'Portland',       'West', 'Moda Center',                   1970),
+    (1610612758, 'Sacramento Kings',       'SAC', 'Sacramento',     'West', 'Golden 1 Center',               1945),
+    (1610612759, 'San Antonio Spurs',      'SAS', 'San Antonio',    'West', 'AT&T Center',                   1967),
+    (1610612761, 'Toronto Raptors',        'TOR', 'Toronto',        'East', 'Scotiabank Arena',              1995),
+    (1610612762, 'Utah Jazz',              'UTA', 'Salt Lake City', 'West', 'Delta Center',                  1974),
+    (1610612764, 'Washington Wizards',     'WAS', 'Washington',     'East', 'Capital One Arena',             1961)
 ON CONFLICT (nba_team_id) DO NOTHING;
 
 -- ============================================================

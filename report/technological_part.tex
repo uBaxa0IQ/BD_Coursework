@@ -223,8 +223,8 @@ GRANT SELECT ON v_top_players  TO reader;
 \texttt{SELECT} из представлений \texttt{v\_team\_stats} и \texttt{v\_top\_players},
 перечисленных в листинге~\ref{lst:grants}, выполняется успешно.
 Аналитические маршруты API, в том числе \texttt{GET /teams/standings},
-открывают сессию под ролью \texttt{analyst} и для турнирной таблицы
-обращаются к представлению \texttt{v\_team\_standings}.
+открывают сессию под ролью \texttt{analyst} и для сводной командной
+статистики обращаются к представлению \texttt{v\_team\_stats}.
 У роли \texttt{analyst} есть \texttt{SELECT} к базовым таблицам (табл.~\ref{tab:acl-matrix}),
 поэтому представления для неё служат удобными витринами, а не единственным
 способом чтения данных.
@@ -414,7 +414,7 @@ $\mathrm{lg\_aPER} = 20{,}88$. Итоговый рейтинг по формул
 \centering
 \caption{\raggedleft Контрольные тест-кейсы функций расчёта метрик}
 \label{tab:test-cases}
-\begin{tabular}{|c|p{0.24\textwidth}|p{0.26\textwidth}|p{0.18\textwidth}|p{0.14\textwidth}|}
+\begin{tabular}{|c|p{0.24\textwidth}|p{0.27\textwidth}|p{0.17\textwidth}|p{0.14\textwidth}|}
 \hline
 \textbf{№} & \textbf{Сценарий} & \textbf{Входные данные}
   & \textbf{Ожидание} & \textbf{Результат} \\
