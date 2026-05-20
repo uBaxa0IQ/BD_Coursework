@@ -1,0 +1,195 @@
+{
+  "no_index": {
+    "median_ms": 0.64,
+    "mean_ms": 0.8,
+    "p95_ms": 1.49,
+    "error_pct": 0.0,
+    "season_id": 5,
+    "iterations": 100,
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 242.6,
+          "Total Cost": 242.65,
+          "Plan Rows": 20,
+          "Plan Width": 16,
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 242.6,
+              "Total Cost": 244.05,
+              "Plan Rows": 580,
+              "Plan Width": 16,
+              "Sort Key": [
+                "per DESC NULLS LAST"
+              ],
+              "Plans": [
+                {
+                  "Node Type": "Seq Scan",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Relation Name": "player_season_stats",
+                  "Alias": "player_season_stats",
+                  "Startup Cost": 0.0,
+                  "Total Cost": 227.16,
+                  "Plan Rows": 580,
+                  "Plan Width": 16,
+                  "Filter": "(season_id = 5)"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "simple": {
+    "median_ms": 0.55,
+    "mean_ms": 0.64,
+    "p95_ms": 1.09,
+    "error_pct": 0.0,
+    "season_id": 5,
+    "iterations": 100,
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 111.24,
+          "Total Cost": 111.29,
+          "Plan Rows": 20,
+          "Plan Width": 16,
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 111.24,
+              "Total Cost": 112.69,
+              "Plan Rows": 580,
+              "Plan Width": 16,
+              "Sort Key": [
+                "per DESC NULLS LAST"
+              ],
+              "Plans": [
+                {
+                  "Node Type": "Index Scan",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Scan Direction": "Forward",
+                  "Index Name": "idx_pss_season_simple",
+                  "Relation Name": "player_season_stats",
+                  "Alias": "player_season_stats",
+                  "Startup Cost": 0.28,
+                  "Total Cost": 95.81,
+                  "Plan Rows": 580,
+                  "Plan Width": 16,
+                  "Index Cond": "(season_id = 5)"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "composite": {
+    "median_ms": 0.28,
+    "mean_ms": 0.3,
+    "p95_ms": 0.47,
+    "error_pct": 0.0,
+    "season_id": 5,
+    "iterations": 100,
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 0.28,
+          "Total Cost": 14.13,
+          "Plan Rows": 20,
+          "Plan Width": 16,
+          "Plans": [
+            {
+              "Node Type": "Index Scan",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Scan Direction": "Forward",
+              "Index Name": "idx_pss_season_composite",
+              "Relation Name": "player_season_stats",
+              "Alias": "player_season_stats",
+              "Startup Cost": 0.28,
+              "Total Cost": 401.96,
+              "Plan Rows": 580,
+              "Plan Width": 16,
+              "Index Cond": "(season_id = 5)"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "partial": {
+    "median_ms": 0.55,
+    "mean_ms": 0.58,
+    "p95_ms": 0.75,
+    "error_pct": 0.0,
+    "season_id": 5,
+    "iterations": 100,
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 242.6,
+          "Total Cost": 242.65,
+          "Plan Rows": 20,
+          "Plan Width": 16,
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 242.6,
+              "Total Cost": 244.05,
+              "Plan Rows": 580,
+              "Plan Width": 16,
+              "Sort Key": [
+                "per DESC NULLS LAST"
+              ],
+              "Plans": [
+                {
+                  "Node Type": "Seq Scan",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Relation Name": "player_season_stats",
+                  "Alias": "player_season_stats",
+                  "Startup Cost": 0.0,
+                  "Total Cost": 227.16,
+                  "Plan Rows": 580,
+                  "Plan Width": 16,
+                  "Filter": "(season_id = 5)"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

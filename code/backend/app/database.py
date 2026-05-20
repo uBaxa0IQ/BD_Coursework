@@ -13,8 +13,8 @@ def _make_engine(url: str):
     return create_async_engine(
         url,
         echo=settings.ENVIRONMENT == "development",
-        pool_size=10,
-        max_overflow=20,
+        pool_size=20,
+        max_overflow=40,
         pool_pre_ping=True,
     )
 

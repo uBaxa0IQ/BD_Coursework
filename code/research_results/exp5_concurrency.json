@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "cache_warmed_before_round": true
+  },
+  "c1": {
+    "median_ms": 2.55,
+    "mean_ms": 3.01,
+    "p95_ms": 4.76,
+    "error_pct": 0.0,
+    "concurrency": 1,
+    "rounds": 10,
+    "total_requests": 10
+  },
+  "c10": {
+    "median_ms": 13.98,
+    "mean_ms": 15.08,
+    "p95_ms": 23.99,
+    "error_pct": 0.0,
+    "concurrency": 10,
+    "rounds": 10,
+    "total_requests": 100
+  },
+  "c50": {
+    "median_ms": 81.24,
+    "mean_ms": 85.66,
+    "p95_ms": 159.05,
+    "error_pct": 0.0,
+    "concurrency": 50,
+    "rounds": 10,
+    "total_requests": 500
+  },
+  "c100": {
+    "median_ms": 183.1,
+    "mean_ms": 190.02,
+    "p95_ms": 331.45,
+    "error_pct": 0.0,
+    "concurrency": 100,
+    "rounds": 10,
+    "total_requests": 1000
+  }
+}

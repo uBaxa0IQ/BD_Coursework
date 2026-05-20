@@ -5,8 +5,6 @@ const NAV_TABS = [
   { path: '/players',        label: 'players' },
   { path: '/teams',          label: 'teams' },
   { path: '/leaderboard',    label: 'leaderboard' },
-  { path: '/standings',      label: 'standings' },
-  { path: '/compare',        label: 'compare' },
   { path: '/stats/advanced', label: 'advanced' },
 ]
 

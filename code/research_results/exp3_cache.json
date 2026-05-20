@@ -1,0 +1,16 @@
+{
+  "cache_miss": {
+    "median_ms": 17.37,
+    "mean_ms": 18.29,
+    "p95_ms": 25.58,
+    "error_pct": 0.0,
+    "iterations": 30
+  },
+  "cache_hit": {
+    "median_ms": 4.3,
+    "mean_ms": 4.79,
+    "p95_ms": 8.47,
+    "error_pct": 0.0,
+    "iterations": 100
+  }
+}

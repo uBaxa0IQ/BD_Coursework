@@ -13,8 +13,9 @@ import MetricBadge from '../../components/MetricBadge'
 import type { LeagueDashboard, LeagueTrend, ScatterPlayerPoint } from '../../types'
 
 const n = (v: unknown) => {
+  if (v == null || v === '') return null
   const num = Number(v)
-  return isNaN(num) ? null : num
+  return Number.isFinite(num) ? num : null
 }
 
 function shortPlayerLabel(name: string): string {
@@ -152,7 +153,7 @@ export default function Dashboard() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
             {topPer.map((p, i) => (
               <div
-                key={p.player_id}
+                key={`${p.player_id}-${p.abbreviation ?? i}`}
                 role="button"
                 tabIndex={0}
                 onClick={() => setSelectedPlayer(p.player_id)}

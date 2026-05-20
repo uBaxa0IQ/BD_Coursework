@@ -1,15 +1,16 @@
 """
-Исследование производительности NBA Statistics Database.
-4 эксперимента: объём данных, индексы, нагрузка, кэширование.
-Соответствует исследовательскому разделу отчёта.
+NBA Stats — нагрузочные эксперименты (asyncpg + httpx).
+Результаты: ./research_results/exp*.json и summary.json
 """
+from __future__ import annotations
+
 import asyncio
 import json
 import os
 import statistics
 import time
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import asyncpg
 import httpx
@@ -21,321 +22,573 @@ DATABASE_URL = os.getenv(
 
 API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
 API_KEY = os.getenv("SECRET_KEY", "nba-stats-secret-key-2024")
-# season_id для метки 2023-24 Regular (последний сезон в 01_schema.sql)
-SEASON_2023_REGULAR = int(os.getenv("RESEARCH_SEASON_ID", "5"))
-RESULTS_DIR = Path(__file__).parent.parent.parent / "research_results"
-RESULTS_DIR.mkdir(exist_ok=True)
+SEASON_ID = 5
+WARMUP = 10
+ITERATIONS_DEFAULT = 100
 
 
-def print_table(headers: List[str], rows: List[List[Any]]) -> None:
-    widths = [max(len(str(h)), max((len(str(r[i])) for r in rows), default=0))
-              for i, h in enumerate(headers)]
-    fmt = "  ".join(f"{{:<{w}}}" for w in widths)
-    print(fmt.format(*headers))
-    print("  ".join("-" * w for w in widths))
-    for row in rows:
-        print(fmt.format(*row))
+def _resolve_results_dir() -> Path:
+    backend_root = Path(__file__).resolve().parents[2]
+    code_root = backend_root.parent
+    if (code_root / "docker-compose.yml").is_file():
+        return code_root / "research_results"
+    custom = os.getenv("RESEARCH_RESULTS_DIR")
+    if custom:
+        return Path(custom)
+    return backend_root / "research_results"
 
 
-async def measure_query(conn: asyncpg.Connection, query: str, params=None, runs: int = 10):
-    times = []
-    for _ in range(runs):
-        t0 = time.perf_counter()
-        await conn.fetch(query, *(params or []))
-        times.append((time.perf_counter() - t0) * 1000)
+RESULTS_DIR = _resolve_results_dir()
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
+# Запрос к витрине (предвычисленные агрегаты)
+LEADERS_QUERY = """
+    SELECT player_id, per, avg_pts
+    FROM player_season_stats
+    WHERE season_id = $1
+    ORDER BY per DESC NULLS LAST
+    LIMIT 20
+"""
+
+# Тяжёлый агрегирующий запрос напрямую по таблице фактов
+HEAVY_AGG_QUERY = """
+    SELECT
+        gps.player_id,
+        SUM(gps.points)         AS total_pts,
+        COUNT(*)                AS games,
+        AVG(gps.points::float)  AS avg_pts
+    FROM game_player_stats gps
+    JOIN games g ON g.game_id = gps.game_id
+    WHERE g.season_id = $1
+    GROUP BY gps.player_id
+    ORDER BY total_pts DESC
+    LIMIT 20
+"""
+
+LEADERS_URL = (
+    f"{API_BASE_URL}/stats/leaders"
+    f"?metric=per&season_id={SEASON_ID}&limit=20"
+)
+
+
+def p95_ms(times: list[float]) -> float:
+    if not times:
+        return 0.0
+    s = sorted(times)
+    idx = min(len(s) - 1, int(len(s) * 0.95))
+    return round(s[idx], 2)
+
+
+def timing_stats(times: list[float], errors: int = 0) -> dict[str, float]:
+    n = len(times)
+    err_pct = round(100.0 * errors / n, 2) if n else 0.0
     return {
-        "median_ms": round(statistics.median(times), 2),
-        "mean_ms": round(statistics.mean(times), 2),
-        "p95_ms": round(sorted(times)[int(0.95 * runs)], 2),
-        "min_ms": round(min(times), 2),
-        "max_ms": round(max(times), 2),
+        "median_ms": round(statistics.median(times), 2) if times else 0.0,
+        "mean_ms": round(statistics.mean(times), 2) if times else 0.0,
+        "p95_ms": p95_ms(times),
+        "error_pct": err_pct,
     }
 
 
-async def fact_row_count(conn: asyncpg.Connection, season_ids: List[int]) -> int:
+async def measure_sql(
+    conn: asyncpg.Connection,
+    season_ids: list[int],
+    iterations: int = ITERATIONS_DEFAULT,
+) -> list[float]:
+    for _ in range(WARMUP):
+        for sid in season_ids:
+            await conn.fetch(LEADERS_QUERY, sid)
+
+    samples: list[float] = []
+    for _ in range(iterations):
+        lap: list[float] = []
+        for sid in season_ids:
+            t0 = time.perf_counter()
+            await conn.fetch(LEADERS_QUERY, sid)
+            lap.append((time.perf_counter() - t0) * 1000)
+        samples.append(statistics.mean(lap))
+    return samples
+
+
+async def row_count(conn: asyncpg.Connection, season_ids: list[int]) -> int:
+    return await conn.fetchval(
+        "SELECT COUNT(*) FROM player_season_stats WHERE season_id = ANY($1::int[])",
+        season_ids,
+    )
+
+
+async def row_count_facts(conn: asyncpg.Connection, season_id: int) -> int:
     return await conn.fetchval(
         """
         SELECT COUNT(*)
         FROM game_player_stats gps
         JOIN games g ON g.game_id = gps.game_id
-        WHERE g.season_id = ANY($1::int[])
+        WHERE g.season_id = $1
         """,
-        season_ids,
+        season_id,
     )
 
 
-# ============================================================
-# ЭКСПЕРИМЕНТ 1: Влияние объёма данных
-# ============================================================
-async def experiment_1_data_volume(conn: asyncpg.Connection) -> List[Dict]:
-    """Топ-20 по PER при подмножествах 1, 3 и 5 сезонов."""
-    print("\n" + "=" * 60)
-    print("ЭКСПЕРИМЕНТ 1: Влияние объёма данных на производительность")
-    print("=" * 60)
-
-    query = """
-        SELECT p.first_name || ' ' || p.last_name AS full_name,
-               t.name AS team,
-               pss.per, pss.avg_pts
-        FROM player_season_stats pss
-        JOIN players p ON p.player_id = pss.player_id
-        JOIN teams   t ON t.team_id   = pss.team_id
-        WHERE pss.season_id = ANY($1::int[])
-        ORDER BY pss.per DESC NULLS LAST
-        LIMIT 20
-    """
-
-    results = []
-    for n_seasons in (1, 3, 5):
-        season_ids = list(range(1, n_seasons + 1))
-        volume = await fact_row_count(conn, season_ids)
-        metrics = await measure_query(conn, query, [season_ids], runs=10)
-        metrics["volume"] = volume
-        metrics["seasons"] = n_seasons
-        results.append(metrics)
-
-    print_table(
-        ["Сезонов", "Строк фактов", "Медиана (мс)", "P95 (мс)", "Среднее (мс)"],
-        [
-            [r["seasons"], r["volume"], r["median_ms"], r["p95_ms"], r["mean_ms"]]
-            for r in results
-        ],
+async def explain_json(
+    conn: asyncpg.Connection,
+    season_id: int,
+    query: str = LEADERS_QUERY,
+) -> Any:
+    plan = await conn.fetchval(
+        f"EXPLAIN (FORMAT JSON) {query}",
+        season_id,
     )
-
-    with open(RESULTS_DIR / "exp1_data_volume.json", "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2)
-
-    return results
+    if isinstance(plan, str):
+        return json.loads(plan)
+    return plan
 
 
-# ============================================================
-# ЭКСПЕРИМЕНТ 2: Стратегии индексирования
-# ============================================================
-async def experiment_2_indexing(conn: asyncpg.Connection) -> List[Dict]:
-    """Сравнение стратегий индексирования на полном объёме (5 сезонов)."""
-    print("\n" + "=" * 60)
-    print("ЭКСПЕРИМЕНТ 2: Стратегии индексирования")
-    print("=" * 60)
+async def measure_sql_single_season(
+    conn: asyncpg.Connection,
+    season_id: int,
+    query: str = LEADERS_QUERY,
+    iterations: int = ITERATIONS_DEFAULT,
+) -> list[float]:
+    for _ in range(WARMUP):
+        await conn.fetch(query, season_id)
 
-    # Эквивалент запроса из отчёта: start_year=2023, season_type='Regular'
-    query = """
-        SELECT pss.player_id, pss.per, pss.avg_pts
-        FROM player_season_stats pss
-        JOIN seasons s ON s.season_id = pss.season_id
-        WHERE s.label = '2023-24' AND s.season_type = 'Regular'
-        ORDER BY pss.per DESC NULLS LAST
-        LIMIT 20
-    """
+    times: list[float] = []
+    for _ in range(iterations):
+        t0 = time.perf_counter()
+        await conn.fetch(query, season_id)
+        times.append((time.perf_counter() - t0) * 1000)
+    return times
 
-    configurations = [
+
+# ---------------------------------------------------------------------------
+# Эксперимент 1 — влияние объёма витрины
+# ---------------------------------------------------------------------------
+async def experiment_1(conn: asyncpg.Connection) -> dict:
+    print("\n=== Эксперимент 1: объём данных (витрина player_season_stats) ===")
+    out: dict[str, Any] = {}
+
+    scenarios = [
+        ("1season", [1]),
+        ("3seasons", [1, 2, 3]),
+        ("5seasons", [1, 2, 3, 4, 5]),
+    ]
+
+    for key, season_ids in scenarios:
+        if len(season_ids) == 1:
+            times = await measure_sql_single_season(conn, season_ids[0])
+        else:
+            times = await measure_sql(conn, season_ids)
+        stats = timing_stats(times)
+        count = await row_count(conn, season_ids)
+        out[key] = {
+            **stats,
+            "season_ids": season_ids,
+            "row_count": count,
+            "iterations": len(times),
+        }
+        print(f"  {key}: rows={count}, median={stats['median_ms']} ms")
+
+    path = RESULTS_DIR / "exp1_volume.json"
+    path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Эксперимент 2 — стратегии индексации витрины
+# ---------------------------------------------------------------------------
+async def experiment_2(conn: asyncpg.Connection) -> dict:
+    print("\n=== Эксперимент 2: индексация (витрина player_season_stats) ===")
+    configs = [
         (
-            "Без индексов",
+            "no_index",
             """
             DROP INDEX IF EXISTS idx_pss_season;
-            DROP INDEX IF EXISTS idx_exp2_test;
-            DROP INDEX IF EXISTS idx_exp2_comp;
-            DROP INDEX IF EXISTS idx_exp2_partial;
+            DROP INDEX IF EXISTS idx_pss_season_simple;
+            DROP INDEX IF EXISTS idx_pss_season_composite;
+            DROP INDEX IF EXISTS idx_pss_season_partial;
+            SET enable_indexscan = off;
+            SET enable_bitmapscan = off;
+            """,
+            """
+            SET enable_indexscan = on;
+            SET enable_bitmapscan = on;
             """,
         ),
         (
-            "B-tree (season_id)",
+            "simple",
             """
-            DROP INDEX IF EXISTS idx_exp2_comp;
-            DROP INDEX IF EXISTS idx_exp2_partial;
-            CREATE INDEX IF NOT EXISTS idx_exp2_test ON player_season_stats(season_id);
+            DROP INDEX IF EXISTS idx_pss_season;
+            DROP INDEX IF EXISTS idx_pss_season_composite;
+            DROP INDEX IF EXISTS idx_pss_season_partial;
+            SET enable_indexscan = on;
+            SET enable_bitmapscan = on;
+            CREATE INDEX IF NOT EXISTS idx_pss_season_simple
+                ON player_season_stats(season_id);
             """,
+            None,
         ),
         (
-            "Составной (season_id, per DESC)",
+            "composite",
             """
-            DROP INDEX IF EXISTS idx_exp2_test;
-            DROP INDEX IF EXISTS idx_exp2_partial;
-            CREATE INDEX IF NOT EXISTS idx_exp2_comp
+            DROP INDEX IF EXISTS idx_pss_season_simple;
+            DROP INDEX IF EXISTS idx_pss_season_partial;
+            CREATE INDEX IF NOT EXISTS idx_pss_season_composite
                 ON player_season_stats(season_id, per DESC NULLS LAST);
             """,
+            None,
         ),
         (
-            "Частичный WHERE per IS NOT NULL",
+            "partial",
             """
-            DROP INDEX IF EXISTS idx_exp2_test;
-            DROP INDEX IF EXISTS idx_exp2_comp;
-            CREATE INDEX IF NOT EXISTS idx_exp2_partial
-                ON player_season_stats(season_id, per DESC NULLS LAST)
+            DROP INDEX IF EXISTS idx_pss_season_composite;
+            CREATE INDEX IF NOT EXISTS idx_pss_season_partial
+                ON player_season_stats(season_id, per DESC)
                 WHERE per IS NOT NULL;
             """,
+            None,
         ),
     ]
 
-    results = []
-    for name, setup_sql in configurations:
+    out: dict[str, Any] = {}
+    for key, setup_sql, teardown_sql in configs:
         await conn.execute(setup_sql)
-        await conn.execute("VACUUM ANALYZE player_season_stats")
-        metrics = await measure_query(conn, query, runs=10)
-        metrics["config"] = name
-        results.append(metrics)
-        print(f"  {name}: медиана={metrics['median_ms']}мс, p95={metrics['p95_ms']}мс")
+        await conn.execute("ANALYZE player_season_stats")
 
-    # Восстановить индекс из конструкторского раздела
-    await conn.execute("""
-        DROP INDEX IF EXISTS idx_exp2_test;
-        DROP INDEX IF EXISTS idx_exp2_comp;
-        DROP INDEX IF EXISTS idx_exp2_partial;
+        times = await measure_sql_single_season(conn, SEASON_ID)
+        explain = await explain_json(conn, SEASON_ID)
+        out[key] = {
+            **timing_stats(times),
+            "season_id": SEASON_ID,
+            "iterations": len(times),
+            "explain": explain,
+        }
+        print(f"  {key}: median={out[key]['median_ms']} ms")
+
+        if teardown_sql:
+            await conn.execute(teardown_sql)
+
+    # Восстановить рабочий индекс
+    await conn.execute(
+        """
+        DROP INDEX IF EXISTS idx_pss_season_simple;
+        DROP INDEX IF EXISTS idx_pss_season_composite;
+        DROP INDEX IF EXISTS idx_pss_season_partial;
         CREATE INDEX IF NOT EXISTS idx_pss_season
             ON player_season_stats(season_id, per DESC NULLS LAST);
-    """)
-
-    print_table(
-        ["Конфигурация", "Медиана (мс)", "P95 (мс)"],
-        [[r["config"], r["median_ms"], r["p95_ms"]] for r in results],
+        ANALYZE player_season_stats;
+        """
     )
 
-    with open(RESULTS_DIR / "exp2_indexing.json", "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2)
+    path = RESULTS_DIR / "exp2_indexes.json"
+    path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
+    return out
 
-    return results
+
+# ---------------------------------------------------------------------------
+# Эксперимент 3 — витрина vs прямая агрегация по таблице фактов
+# ---------------------------------------------------------------------------
+async def experiment_3(conn: asyncpg.Connection) -> dict:
+    print("\n=== Эксперимент 3: витрина vs прямая агрегация по game_player_stats ===")
+    out: dict[str, Any] = {}
+
+    # Число строк фактов для текущего сезона
+    facts_count = await row_count_facts(conn, SEASON_ID)
+    vitrina_count = await row_count(conn, [SEASON_ID])
+    print(f"  game_player_stats (season {SEASON_ID}): {facts_count} строк")
+    print(f"  player_season_stats (season {SEASON_ID}): {vitrina_count} строк")
+
+    # --- Прямая агрегация: 4 конфигурации индексов ---
+    agg_configs = [
+        (
+            "no_index",
+            """
+            DROP INDEX IF EXISTS idx_games_season_id;
+            DROP INDEX IF EXISTS idx_gps_player_id;
+            DROP INDEX IF EXISTS idx_gps_team_game;
+            SET enable_indexscan = off;
+            SET enable_bitmapscan = off;
+            """,
+            """
+            SET enable_indexscan = on;
+            SET enable_bitmapscan = on;
+            """,
+        ),
+        (
+            "idx_games_season",
+            """
+            SET enable_indexscan = on;
+            SET enable_bitmapscan = on;
+            CREATE INDEX IF NOT EXISTS idx_games_season_id
+                ON games(season_id);
+            """,
+            None,
+        ),
+        (
+            "idx_gps_player",
+            """
+            CREATE INDEX IF NOT EXISTS idx_gps_player_id
+                ON game_player_stats(player_id);
+            """,
+            None,
+        ),
+        (
+            "idx_both",
+            """
+            CREATE INDEX IF NOT EXISTS idx_gps_team_game
+                ON game_player_stats(team_id, game_id);
+            """,
+            None,
+        ),
+    ]
+
+    agg_results: dict[str, Any] = {}
+    for key, setup_sql, teardown_sql in agg_configs:
+        await conn.execute(setup_sql)
+        await conn.execute("ANALYZE game_player_stats")
+        await conn.execute("ANALYZE games")
+
+        times = await measure_sql_single_season(
+            conn, SEASON_ID, query=HEAVY_AGG_QUERY
+        )
+        explain = await explain_json(conn, SEASON_ID, query=HEAVY_AGG_QUERY)
+        agg_results[key] = {
+            **timing_stats(times),
+            "iterations": len(times),
+            "explain": explain,
+        }
+        print(f"  agg/{key}: median={agg_results[key]['median_ms']} ms")
+
+        if teardown_sql:
+            await conn.execute(teardown_sql)
+
+    # Восстановить рабочие индексы таблицы фактов
+    await conn.execute(
+        """
+        CREATE INDEX IF NOT EXISTS idx_games_season_id ON games(season_id);
+        CREATE INDEX IF NOT EXISTS idx_gps_player_id
+            ON game_player_stats(player_id);
+        CREATE INDEX IF NOT EXISTS idx_gps_team_game
+            ON game_player_stats(team_id, game_id);
+        ANALYZE game_player_stats;
+        ANALYZE games;
+        """
+    )
+
+    # --- Витрина с рабочим индексом (для прямого сравнения) ---
+    vitrina_times = await measure_sql_single_season(conn, SEASON_ID)
+    vitrina_stats = timing_stats(vitrina_times)
+    print(f"  vitrina (composite idx): median={vitrina_stats['median_ms']} ms")
+
+    out = {
+        "facts_row_count": facts_count,
+        "vitrina_row_count": vitrina_count,
+        "season_id": SEASON_ID,
+        "direct_aggregation": agg_results,
+        "vitrina": {**vitrina_stats, "iterations": len(vitrina_times)},
+    }
+
+    path = RESULTS_DIR / "exp3_vitrina_vs_agg.json"
+    path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
+    return out
 
 
-# ============================================================
-# ЭКСПЕРИМЕНТ 3: Параллельная нагрузка
-# ============================================================
-async def experiment_3_concurrent_load() -> List[Dict]:
-    """GET /players?season_id=<2023-24 Regular>, Cache Hit."""
-    print("\n" + "=" * 60)
-    print("ЭКСПЕРИМЕНТ 3: Параллельная нагрузка на API")
-    print("=" * 60)
+# ---------------------------------------------------------------------------
+# Эксперимент 4 — кэширование
+# ---------------------------------------------------------------------------
+async def clear_leaders_cache(client: httpx.AsyncClient) -> None:
+    resp = await client.delete(
+        f"{API_BASE_URL}/admin/cache/leaders",
+        headers={"X-Api-Key": API_KEY},
+        timeout=30.0,
+    )
+    if resp.status_code not in (200, 401):
+        resp.raise_for_status()
 
-    url = f"{API_BASE_URL}/players?season_id={SEASON_2023_REGULAR}"
-    concurrency_levels = [1, 10, 50, 100]
-    results = []
 
-    async def make_request(client: httpx.AsyncClient):
+async def experiment_4() -> dict:
+    print("\n=== Эксперимент 4: кэширование ===")
+
+    async with httpx.AsyncClient() as client:
+        # Cache Miss — 30 итераций
+        miss_times: list[float] = []
+        miss_errors = 0
+        for _ in range(WARMUP):
+            await clear_leaders_cache(client)
+            await client.get(LEADERS_URL, timeout=30.0)
+
+        for _ in range(30):
+            await clear_leaders_cache(client)
+            t0 = time.perf_counter()
+            try:
+                resp = await client.get(LEADERS_URL, timeout=30.0)
+                elapsed = (time.perf_counter() - t0) * 1000
+                if resp.status_code >= 500:
+                    miss_errors += 1
+            except Exception:
+                elapsed = (time.perf_counter() - t0) * 1000
+                miss_errors += 1
+            miss_times.append(elapsed)
+
+        cache_miss = {**timing_stats(miss_times, miss_errors), "iterations": 30}
+
+        # Cache Hit — прогрев + 100 итераций
+        await client.get(LEADERS_URL, timeout=30.0)
+        for _ in range(WARMUP):
+            await client.get(LEADERS_URL, timeout=30.0)
+
+        hit_times: list[float] = []
+        hit_errors = 0
+        for _ in range(ITERATIONS_DEFAULT):
+            t0 = time.perf_counter()
+            try:
+                resp = await client.get(LEADERS_URL, timeout=30.0)
+                elapsed = (time.perf_counter() - t0) * 1000
+                if resp.status_code >= 500:
+                    hit_errors += 1
+            except Exception:
+                elapsed = (time.perf_counter() - t0) * 1000
+                hit_errors += 1
+            hit_times.append(elapsed)
+
+        cache_hit = {
+            **timing_stats(hit_times, hit_errors),
+            "iterations": ITERATIONS_DEFAULT,
+        }
+
+    out = {"cache_miss": cache_miss, "cache_hit": cache_hit}
+    print(f"  miss: median={cache_miss['median_ms']} ms")
+    print(f"  hit:  median={cache_hit['median_ms']} ms")
+
+    path = RESULTS_DIR / "exp4_cache.json"
+    path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Эксперимент 5 — параллельная нагрузка
+# ---------------------------------------------------------------------------
+async def experiment_5() -> dict:
+    print("\n=== Эксперимент 5: параллельная нагрузка ===")
+    levels = [1, 10, 50, 100]
+    rounds = 10
+    timeout_s = 5.0
+    out: dict[str, Any] = {"metadata": {"cache_warmed_before_round": True}}
+
+    async def one_request(client: httpx.AsyncClient) -> tuple[float, bool]:
         t0 = time.perf_counter()
         try:
-            resp = await client.get(url, timeout=30)
+            resp = await client.get(LEADERS_URL, timeout=timeout_s)
             elapsed = (time.perf_counter() - t0) * 1000
-            return elapsed, resp.status_code == 200
+            ok = resp.status_code < 500 and elapsed <= timeout_s * 1000
+            return elapsed, ok
         except Exception:
             return (time.perf_counter() - t0) * 1000, False
 
-    # Прогрев кэша
     async with httpx.AsyncClient() as client:
-        await client.get(url, timeout=30)
+        for n in levels:
+            all_times: list[float] = []
+            errors = 0
 
-    for n in concurrency_levels:
-        async with httpx.AsyncClient() as client:
-            t_start = time.perf_counter()
-            tasks = [make_request(client) for _ in range(n)]
-            raw = await asyncio.gather(*tasks)
-            total_ms = (time.perf_counter() - t_start) * 1000
+            for _ in range(rounds):
+                await client.get(LEADERS_URL, timeout=30.0)
+                tasks = [one_request(client) for _ in range(n)]
+                results = await asyncio.gather(*tasks)
+                for elapsed, ok in results:
+                    all_times.append(elapsed)
+                    if not ok:
+                        errors += 1
 
-        times = [r[0] for r in raw]
-        errors = sum(1 for r in raw if not r[1])
-        sorted_t = sorted(times)
-
-        metrics = {
-            "concurrency": n,
-            "avg_ms": round(statistics.mean(times), 2),
-            "median_ms": round(statistics.median(times), 2),
-            "p95_ms": round(sorted_t[int(0.95 * n)], 2) if n > 1 else round(sorted_t[-1], 2),
-            "total_ms": round(total_ms, 2),
-            "errors": errors,
-        }
-        results.append(metrics)
-        print(f"  N={n:3d}: avg={metrics['avg_ms']}мс, p95={metrics['p95_ms']}мс, ошибок={errors}")
-
-    print_table(
-        ["N запросов", "Avg (мс)", "P95 (мс)", "Ошибок"],
-        [[r["concurrency"], r["avg_ms"], r["p95_ms"], r["errors"]] for r in results],
-    )
-
-    with open(RESULTS_DIR / "exp3_concurrent.json", "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2)
-
-    return results
-
-
-# ============================================================
-# ЭКСПЕРИМЕНТ 4: Эффективность кэширования
-# ============================================================
-async def experiment_4_caching() -> Dict:
-    """100 запросов GET /stats/leaders для сезона 2023-24 Regular."""
-    print("\n" + "=" * 60)
-    print("ЭКСПЕРИМЕНТ 4: Эффективность Redis-кэширования")
-    print("=" * 60)
-
-    url = (
-        f"{API_BASE_URL}/stats/leaders"
-        f"?metric=per&season_id={SEASON_2023_REGULAR}"
-    )
-    n_requests = 100
-
-    async def run_requests(client: httpx.AsyncClient) -> List[float]:
-        times = []
-        for _ in range(n_requests):
-            t0 = time.perf_counter()
-            await client.get(url, timeout=30)
-            times.append((time.perf_counter() - t0) * 1000)
-        return times
-
-    async with httpx.AsyncClient() as client:
-        try:
-            await client.delete(
-                f"{API_BASE_URL}/admin/cache/leaders",
-                headers={"X-Api-Key": API_KEY},
+            key = f"c{n}"
+            stats = timing_stats(all_times, errors)
+            out[key] = {
+                **stats,
+                "concurrency": n,
+                "rounds": rounds,
+                "total_requests": n * rounds,
+            }
+            print(
+                f"  N={n}: median={stats['median_ms']} ms, "
+                f"errors={stats['error_pct']}%"
             )
-        except Exception:
-            pass
 
-        cached_times = await run_requests(client)
+    path = RESULTS_DIR / "exp5_concurrency.json"
+    path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
+    return out
 
-    miss_time = cached_times[0]
-    hit_times = cached_times[1:]
 
-    hit_median = round(statistics.median(hit_times), 2) if hit_times else 0
-    hit_mean = round(statistics.mean(hit_times), 2) if hit_times else 0
-    hit_p95 = (
-        round(sorted(hit_times)[int(0.95 * len(hit_times))], 2)
-        if hit_times else 0
-    )
-
-    results = {
-        "with_cache": {
-            "miss_ms": round(miss_time, 2),
-            "miss_mean_ms": round(miss_time, 2),
-            "hit_median_ms": hit_median,
-            "hit_avg_ms": hit_mean,
-            "hit_p95_ms": hit_p95,
-            "speedup": round(miss_time / hit_median, 1) if hit_median > 0 else 0,
+def build_summary(
+    exp1: dict,
+    exp2: dict,
+    exp3: dict,
+    exp4: dict,
+    exp5: dict,
+) -> dict:
+    def pick(d: dict) -> dict:
+        return {
+            k: d[k]
+            for k in ("median_ms", "mean_ms", "p95_ms", "error_pct")
+            if k in d
         }
+
+    return {
+        "exp1_volume": {
+            "1season": pick(exp1["1season"]),
+            "3seasons": pick(exp1["3seasons"]),
+            "5seasons": pick(exp1["5seasons"]),
+        },
+        "exp2_indexes": {
+            "no_index": pick(exp2["no_index"]),
+            "simple": pick(exp2["simple"]),
+            "composite": pick(exp2["composite"]),
+            "partial": pick(exp2["partial"]),
+        },
+        "exp3_vitrina_vs_agg": {
+            "facts_row_count": exp3["facts_row_count"],
+            "vitrina_row_count": exp3["vitrina_row_count"],
+            "direct_agg_no_index": pick(exp3["direct_aggregation"]["no_index"]),
+            "direct_agg_idx_games": pick(exp3["direct_aggregation"]["idx_games_season"]),
+            "direct_agg_idx_player": pick(exp3["direct_aggregation"]["idx_gps_player"]),
+            "direct_agg_idx_both": pick(exp3["direct_aggregation"]["idx_both"]),
+            "vitrina": pick(exp3["vitrina"]),
+        },
+        "exp4_cache": {
+            "cache_miss": pick(exp4["cache_miss"]),
+            "cache_hit": pick(exp4["cache_hit"]),
+        },
+        "exp5_concurrency": {
+            "c1": pick(exp5["c1"]),
+            "c10": pick(exp5["c10"]),
+            "c50": pick(exp5["c50"]),
+            "c100": pick(exp5["c100"]),
+        },
     }
 
-    print(f"  Cache MISS:  {results['with_cache']['miss_ms']} мс")
-    print(f"  Cache HIT:   median={hit_median} мс, avg={hit_mean} мс, p95={hit_p95} мс")
-    print(f"  Ускорение:   {results['with_cache']['speedup']}x")
 
-    with open(RESULTS_DIR / "exp4_caching.json", "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2)
-
-    return results
-
-
-async def main():
-    print("NBA Statistics Database — Исследование производительности")
-    print("=" * 60)
+async def main() -> None:
+    print("NBA Stats — нагрузочные эксперименты")
+    print(f"Результаты: {RESULTS_DIR}")
 
     conn = await asyncpg.connect(DATABASE_URL)
     try:
-        await experiment_1_data_volume(conn)
-        await experiment_2_indexing(conn)
+        exp1 = await experiment_1(conn)
+        exp2 = await experiment_2(conn)
+        exp3 = await experiment_3(conn)
     finally:
         await conn.close()
 
-    await experiment_3_concurrent_load()
-    await experiment_4_caching()
+    exp4 = await experiment_4()
+    exp5 = await experiment_5()
 
-    print("\n" + "=" * 60)
-    print(f"Результаты сохранены в {RESULTS_DIR}/")
-    print("=" * 60)
+    summary = build_summary(exp1, exp2, exp3, exp4, exp5)
+    summary_path = RESULTS_DIR / "summary.json"
+    summary_path.write_text(
+        json.dumps(summary, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    print("\n=== summary.json ===")
+    print(json.dumps(summary, indent=2, ensure_ascii=False))
+    print(f"\nГотово: {RESULTS_DIR}")
 
 
 if __name__ == "__main__":

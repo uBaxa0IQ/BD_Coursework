@@ -7,18 +7,21 @@
   - PlayerCareerStats с league_id_nullable='00' (корректная лига в NBA API)
   - дозаполнение пропусков player_team_history по матчам
   - правка calculate_usg (доля 0–1, как ts_pct; UI ×100) и восстановление вьюх
-  - опционально: --refine-positions (CommonPlayerInfo по игрокам с матчами)
+  - позиции: CommonTeamRoster (30 команд × сезон, поле POSITION в API)
+  - опционально: --refine-positions (CommonPlayerInfo только для оставшихся без позиции)
 
 Примеры:
   python scripts/load_data.py
   python scripts/load_data.py --sleep 0.65 --timeout 30
   python scripts/load_data.py --sleep 0.5 --cooldown-every 400   # агрессивнее
-  python scripts/load_data.py --refine-positions
+  python scripts/load_data.py --positions-only
+  python scripts/load_data.py --positions-only --refine-positions
   python scripts/load_data.py --skip-repair-history --skip-usg-fix
 """
 import argparse
 import asyncio
 import logging
+import math
 import os
 from collections import defaultdict
 from datetime import date
@@ -28,6 +31,7 @@ import asyncpg
 from nba_api.stats.endpoints import (
     CommonAllPlayers,
     CommonPlayerInfo,
+    CommonTeamRoster,
     LeagueGameLog,
     BoxScoreTraditionalV2,
     PlayerCareerStats,
@@ -72,6 +76,40 @@ DIVISION_TO_CONFERENCE = {
     "Southwest": "West",
 }
 
+# nba_api.stats.static.teams не содержит division/conference (только id, name, abbr, city)
+TEAM_META: Dict[str, tuple[str, str]] = {
+    "ATL": ("East", "Southeast"),
+    "BOS": ("East", "Atlantic"),
+    "BKN": ("East", "Atlantic"),
+    "CHA": ("East", "Southeast"),
+    "CHI": ("East", "Central"),
+    "CLE": ("East", "Central"),
+    "DAL": ("West", "Southwest"),
+    "DEN": ("West", "Northwest"),
+    "DET": ("East", "Central"),
+    "GSW": ("West", "Pacific"),
+    "HOU": ("West", "Southwest"),
+    "IND": ("East", "Central"),
+    "LAC": ("West", "Pacific"),
+    "LAL": ("West", "Pacific"),
+    "MEM": ("West", "Southwest"),
+    "MIA": ("East", "Southeast"),
+    "MIL": ("East", "Central"),
+    "MIN": ("West", "Northwest"),
+    "NOP": ("West", "Southwest"),
+    "NYK": ("East", "Atlantic"),
+    "OKC": ("West", "Northwest"),
+    "ORL": ("East", "Southeast"),
+    "PHI": ("East", "Atlantic"),
+    "PHX": ("West", "Pacific"),
+    "POR": ("West", "Northwest"),
+    "SAC": ("West", "Pacific"),
+    "SAS": ("West", "Southwest"),
+    "TOR": ("East", "Atlantic"),
+    "UTA": ("West", "Northwest"),
+    "WAS": ("East", "Southeast"),
+}
+
 # CommonAllPlayers / CommonPlayerInfo — максимально полный маппинг к PG/SG/SF/PF/C
 POSITION_MAP = {
     "PG": "PG", "SG": "SG", "SF": "SF", "PF": "PF", "C": "C",
@@ -89,6 +127,14 @@ POSITION_MAP = {
     "SF-PF": "SF", "PF-SF": "PF",
     "PF-C": "PF", "C-PF": "C",
 }
+
+
+def normalize_position(pos_str: str) -> Optional[str]:
+    """Код PG/SG/... или None (CommonAllPlayers поля POSITION не отдаёт)."""
+    if not pos_str:
+        return None
+    return POSITION_MAP.get(pos_str.strip())
+
 
 # Имитация реального браузера для обхода блокировок NBA
 CUSTOM_HEADERS = {
@@ -188,8 +234,17 @@ async def load_teams(conn: asyncpg.Connection) -> Dict[int, int]:
     mapping = {}
 
     for t in all_teams:
-        division = t.get("division", "Atlantic")
-        conference = DIVISION_TO_CONFERENCE.get(division, "East")
+        abbr = t["abbreviation"]
+        meta = TEAM_META.get(abbr)
+        if meta:
+            conference, division = meta
+        else:
+            division = t.get("division") or "Atlantic"
+            conference = DIVISION_TO_CONFERENCE.get(division, "East")
+            logger.warning(
+                "Команда %s (%s): нет в TEAM_META, conference=%s division=%s",
+                t["full_name"], abbr, conference, division,
+            )
         try:
             team_id = await conn.fetchval(
                 """
@@ -246,10 +301,6 @@ async def load_players(conn: asyncpg.Connection) -> Dict[int, int]:
         logger.error("Критическая ошибка при получении списка игроков: %s", e)
         return {}
 
-    # Получить position_id по code из БД
-    pos_rows = await conn.fetch("SELECT position_id, code FROM positions")
-    pos_map = {r["code"]: r["position_id"] for r in pos_rows}
-
     mapping = {}
     for _, row in tqdm(df.iterrows(), total=len(df), desc="Игроки"):
         try:
@@ -260,22 +311,18 @@ async def load_players(conn: asyncpg.Connection) -> Dict[int, int]:
             last = parts[1] if len(parts) > 1 else ""
             is_active = bool(row.get("ROSTERSTATUS", 0))
 
-            pos_str = str(row.get("POSITION", "")).strip()
-            pos_code = POSITION_MAP.get(pos_str, "SG")
-            position_id = pos_map.get(pos_code)
-
+            # CommonAllPlayers не содержит POSITION — заполняется load_positions_from_rosters
             player_id = await conn.fetchval(
                 """
                 INSERT INTO players (nba_id, first_name, last_name, is_active, position_id)
-                VALUES ($1, $2, $3, $4, $5)
+                VALUES ($1, $2, $3, $4, NULL)
                 ON CONFLICT (nba_id) DO UPDATE SET
                     first_name  = EXCLUDED.first_name,
                     last_name   = EXCLUDED.last_name,
-                    is_active   = EXCLUDED.is_active,
-                    position_id = EXCLUDED.position_id
+                    is_active   = EXCLUDED.is_active
                 RETURNING player_id
                 """,
-                nba_id, first, last, is_active, position_id,
+                nba_id, first, last, is_active,
             )
             if player_id:
                 mapping[nba_id] = player_id
@@ -375,15 +422,24 @@ async def load_game_stats(
             if not player_id or not team_id:
                 continue
 
-            min_str = str(row.get("MIN", "") or "0")
-            try:
-                if ":" in min_str:
-                    parts = min_str.split(":")
-                    minutes = float(parts[0]) + float(parts[1]) / 60
-                else:
-                    minutes = float(min_str)
-            except Exception:
+            raw_min = row.get("MIN", "")
+            if raw_min is None or (isinstance(raw_min, float) and math.isnan(raw_min)):
                 minutes = 0.0
+            else:
+                min_str = str(raw_min).strip()
+                if not min_str or min_str.lower() in ("nan", "none"):
+                    minutes = 0.0
+                else:
+                    try:
+                        if ":" in min_str:
+                            parts = min_str.split(":")
+                            minutes = float(parts[0]) + float(parts[1]) / 60
+                        else:
+                            minutes = float(min_str)
+                        if not math.isfinite(minutes) or minutes < 0:
+                            minutes = 0.0
+                    except Exception:
+                        minutes = 0.0
 
             def safe_int(v, default=0):
                 try:
@@ -479,6 +535,17 @@ async def load_player_history(
                 pass
 
     logger.info("История команд загружена.")
+
+
+async def backfill_game_scores(conn: asyncpg.Connection) -> None:
+    """Счёт матчей из box score + очистка NaN в player_season_stats."""
+    try:
+        from app.sql.backfill_game_scores import BACKFILL_GAME_SCORES_SQL
+
+        await conn.execute(BACKFILL_GAME_SCORES_SQL)
+        logger.info("Backfill: счёт матчей и очистка NaN в метриках.")
+    except Exception as e:
+        logger.warning("Backfill game scores не выполнен: %s", e)
 
 
 async def print_counts(conn: asyncpg.Connection) -> None:
@@ -787,18 +854,108 @@ ORDER BY per DESC
         logger.error("Ошибка восстановления вьюх: %s", e)
 
 
-async def refine_positions_from_common_player_info(conn: asyncpg.Connection) -> None:
-    """Уточнение позиций через CommonPlayerInfo (медленно)."""
+async def load_positions_from_rosters(conn: asyncpg.Connection) -> int:
+    """
+    Позиции из CommonTeamRoster (в ответе есть POSITION).
+    ~30 команд × len(SEASONS) запросов; при конфликте побеждает более поздний сезон.
+    """
+    pos_rows = await conn.fetch("SELECT position_id, code FROM positions")
+    pos_map = {r["code"]: r["position_id"] for r in pos_rows}
+
+    cleared = await conn.execute("UPDATE players SET position_id = NULL")
+    logger.info("Сброс старых позиций: %s", cleared)
+
+    nba_id_to_code: Dict[int, str] = {}
+    teams = nba_teams_static.get_teams()
+    total_calls = len(teams) * len(SEASONS)
+    logger.info(
+        "Загрузка позиций из ростеров (CommonTeamRoster): %d запросов",
+        total_calls,
+    )
+
+    with tqdm(total=total_calls, desc="Ростеры") as pbar:
+        for season_label in SEASONS:
+            for t in teams:
+                pbar.update(1)
+                nba_team_id = int(t["id"])
+                try:
+                    resp = await fetch_nba_api_data(
+                        CommonTeamRoster,
+                        team_id=nba_team_id,
+                        season=season_label,
+                    )
+                    df = resp.common_team_roster.get_data_frame()
+                except Exception as e:
+                    logger.warning(
+                        "Ростер %s %s: %s", t.get("abbreviation"), season_label, e
+                    )
+                    continue
+
+                if df is None or df.empty:
+                    continue
+
+                for _, row in df.iterrows():
+                    try:
+                        nba_id = int(row["PLAYER_ID"])
+                    except (TypeError, ValueError, KeyError):
+                        continue
+                    code = normalize_position(str(row.get("POSITION", "")))
+                    if code:
+                        nba_id_to_code[nba_id] = code
+
+    updated = 0
+    for nba_id, code in nba_id_to_code.items():
+        position_id = pos_map.get(code)
+        if not position_id:
+            continue
+        status = await conn.execute(
+            "UPDATE players SET position_id = $1 WHERE nba_id = $2",
+            position_id,
+            nba_id,
+        )
+        if status and status.split()[-1].isdigit() and int(status.split()[-1]) > 0:
+            updated += 1
+
+    dist = await conn.fetch(
+        """
+        SELECT pos.code, COUNT(*) AS n
+        FROM players p
+        LEFT JOIN positions pos ON pos.position_id = p.position_id
+        GROUP BY pos.code
+        ORDER BY n DESC
+        """
+    )
+    logger.info(
+        "Ростеры: уникальных игроков с позицией %d, строк UPDATE %d; распределение: %s",
+        len(nba_id_to_code),
+        updated,
+        {r["code"] or "NULL": r["n"] for r in dist},
+    )
+    return updated
+
+
+async def refine_positions_from_common_player_info(
+    conn: asyncpg.Connection,
+    *,
+    only_missing: bool = True,
+) -> None:
+    """Дозаполнение позиций через CommonPlayerInfo (медленно, по одному игроку)."""
     pos_rows = await conn.fetch("SELECT position_id, code FROM positions ORDER BY position_id")
     pos_map = {r["code"]: r["position_id"] for r in pos_rows}
 
-    players = await conn.fetch("""
+    missing_filter = "AND p.position_id IS NULL" if only_missing else ""
+    players = await conn.fetch(f"""
         SELECT DISTINCT p.player_id, p.nba_id, p.first_name, p.last_name
         FROM players p
         JOIN game_player_stats gps ON gps.player_id = p.player_id
+        WHERE TRUE {missing_filter}
         ORDER BY p.nba_id
     """)
-    logger.info("Уточнение позиций (CommonPlayerInfo): %d игроков с матчами", len(players))
+    logger.info(
+        "Уточнение позиций (CommonPlayerInfo): %d игроков%s",
+        len(players),
+        " без позиции" if only_missing else "",
+    )
 
     updated = 0
     skipped_api_fail = 0
@@ -823,7 +980,7 @@ async def refine_positions_from_common_player_info(conn: asyncpg.Connection) -> 
                 if df.empty:
                     break
                 pos_str = str(df.iloc[0].get("POSITION", "")).strip()
-                pos_code = POSITION_MAP.get(pos_str)
+                pos_code = normalize_position(pos_str)
                 break
             except Exception as e:
                 logger.debug("nba_id=%s попытка %d/%d: %s", nba_id, attempt + 1, MAX_RETRIES, e)
@@ -888,9 +1045,14 @@ def parse_args() -> argparse.Namespace:
         help="Не применять правку USG% и вьюху v_player_rankings",
     )
     p.add_argument(
+        "--positions-only",
+        action="store_true",
+        help="Только обновить позиции (ростеры + опционально refine), без перезагрузки матчей",
+    )
+    p.add_argument(
         "--refine-positions",
         action="store_true",
-        help="Уточнить позиции через CommonPlayerInfo (долго)",
+        help="Дозаполнить оставшихся без позиции через CommonPlayerInfo (долго)",
     )
     return p.parse_args()
 
@@ -916,6 +1078,14 @@ async def main() -> None:
     conn = await asyncpg.connect(DATABASE_URL)
 
     try:
+        if args.positions_only:
+            await load_positions_from_rosters(conn)
+            if args.refine_positions:
+                await refine_positions_from_common_player_info(conn, only_missing=True)
+            await print_counts(conn)
+            logger.info("Обновление позиций завершено.")
+            return
+
         try:
             await conn.execute("ALTER TABLE game_player_stats DISABLE TRIGGER ALL")
             logger.info("Триггеры отключены.")
@@ -938,8 +1108,9 @@ async def main() -> None:
         await load_game_stats(conn, all_game_ids, player_map, team_map)
         await load_player_history(conn, player_map, team_map, season_map)
 
+        await load_positions_from_rosters(conn)
         if args.refine_positions:
-            await refine_positions_from_common_player_info(conn)
+            await refine_positions_from_common_player_info(conn, only_missing=True)
 
         if not args.skip_repair_history:
             await repair_missing_player_team_history(conn)
@@ -959,6 +1130,8 @@ async def main() -> None:
                 await conn.execute("CALL update_season_stats($1)", season_id)
             except Exception as e:
                 logger.error("Ошибка вызова процедуры update_season_stats: %s", e)
+
+        await backfill_game_scores(conn)
 
         await print_counts(conn)
         logger.info("Загрузка завершена успешно.")

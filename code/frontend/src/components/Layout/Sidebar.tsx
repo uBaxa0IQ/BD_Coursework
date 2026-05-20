@@ -6,8 +6,6 @@ const NAV_ITEMS = [
   { path: '/teams',          label: 'Teams',            icon: '🏀' },
   { path: '/stats',          label: 'Leaderboards',     icon: '📊' },
   { path: '/stats/advanced', label: 'Advanced Stats',   icon: '📈' },
-  { path: '/compare',        label: 'Compare',          icon: '⚖' },
-  { path: '/standings',      label: 'Standings',        icon: '🏆' },
 ]
 
 export default function Sidebar() {

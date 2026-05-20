@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select, func
+from sqlalchemy import func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
@@ -16,8 +16,11 @@ from app.models.season import Season
 from app.models.team import Team
 from app.models.position import Position
 from app.schemas.player import PlayerResponse, PlayerDetailResponse, PlayerStatsResponse, PlayerCareerResponse
+from app.utils.sanitize import sanitize_row, sanitize_rows
 
 router = APIRouter()
+
+PER_IS_FINITE = text("upper(player_season_stats.per::text) <> 'NAN'")
 
 
 @router.get("", response_model=List[PlayerResponse])
@@ -31,12 +34,12 @@ async def get_players(
     cache: CacheManager = Depends(get_cache),
     db: AsyncSession = Depends(get_db_analyst),
 ):
-    cache_key = f"players_list:{season_id}:{position}:{team_id}:{search}:{limit}:{offset}"
+    cache_key = f"players_list:v2:{season_id}:{position}:{team_id}:{search}:{limit}:{offset}"
     cached = await cache.get(cache_key)
     if cached:
         return cached
 
-    query = (
+    base = (
         select(
             Player.player_id,
             Player.nba_id,
@@ -56,22 +59,63 @@ async def get_players(
         .join(Team, Team.team_id == PlayerSeasonStats.team_id)
         .outerjoin(Position, Position.position_id == Player.position_id)
         .where(PlayerSeasonStats.season_id == season_id)
+        .where((PlayerSeasonStats.per.is_(None)) | PER_IS_FINITE)
     )
 
     if position:
-        query = query.where(Position.code == position)
+        base = base.where(Position.code == position)
     if team_id:
-        query = query.where(PlayerSeasonStats.team_id == team_id)
+        base = base.where(PlayerSeasonStats.team_id == team_id)
     if search:
-        query = query.where(
+        base = base.where(
             (Player.first_name + " " + Player.last_name).ilike(f"%{search}%")
         )
 
-    query = query.order_by(PlayerSeasonStats.per.desc().nulls_last()).limit(limit).offset(offset)
+    # Без фильтра по команде: один игрок — одна строка (макс. PER / больше матчей)
+    if team_id is None:
+        ranked = (
+            base.add_columns(
+                func.row_number()
+                .over(
+                    partition_by=Player.player_id,
+                    order_by=(
+                        PlayerSeasonStats.per.desc().nulls_last(),
+                        PlayerSeasonStats.games_played.desc(),
+                    ),
+                )
+                .label("rn")
+            )
+        ).subquery()
+        query = (
+            select(
+                ranked.c.player_id,
+                ranked.c.nba_id,
+                ranked.c.first_name,
+                ranked.c.last_name,
+                ranked.c.team_name,
+                ranked.c.team_abbreviation,
+                ranked.c.position,
+                ranked.c.games_played,
+                ranked.c.avg_pts,
+                ranked.c.avg_reb,
+                ranked.c.avg_ast,
+                ranked.c.per,
+                ranked.c.ts_pct,
+            )
+            .where(ranked.c.rn == 1)
+            .order_by(ranked.c.per.desc().nulls_last())
+            .limit(limit)
+            .offset(offset)
+        )
+    else:
+        query = (
+            base.order_by(PlayerSeasonStats.per.desc().nulls_last())
+            .limit(limit)
+            .offset(offset)
+        )
 
     result = await db.execute(query)
-    rows = result.mappings().all()
-    data = [dict(row) for row in rows]
+    data = sanitize_rows(result.mappings().all())
     await cache.set(cache_key, data, ttl=120)
     return data
 
@@ -133,7 +177,7 @@ async def get_player_stats(
     cache: CacheManager = Depends(get_cache),
     db: AsyncSession = Depends(get_db_analyst),
 ):
-    cache_key = f"player_stats:{player_id}:{season_id or 'all'}"
+    cache_key = f"player_stats:v2:{player_id}:{season_id or 'all'}"
     cached = await cache.get(cache_key)
     if cached:
         return cached
@@ -168,8 +212,7 @@ async def get_player_stats(
         query = query.where(PlayerSeasonStats.season_id == season_id)
 
     result = await db.execute(query)
-    rows = result.mappings().all()
-    data = [dict(row) for row in rows]
+    data = sanitize_rows(result.mappings().all())
     await cache.set(cache_key, data, ttl=300)
     return data
 
@@ -226,11 +269,11 @@ async def get_player_gamelog(
     result = await db.execute(query)
     rows = result.mappings().all()
     data = []
-    for row in rows:
-        r = dict(row)
-        if r.get("game_date"):
-            r["game_date"] = str(r["game_date"])
-        data.append(r)
+    data = []
+    for row in sanitize_rows(rows):
+        if row.get("game_date"):
+            row["game_date"] = str(row["game_date"])
+        data.append(row)
     await cache.set(cache_key, data, ttl=180)
     return data
 
@@ -279,13 +322,7 @@ async def get_player_career(
         .order_by(Season.season_id)
     )
     stats_res = await db.execute(stats_q)
-    seasons = []
-    for r in stats_res.mappings().all():
-        item = dict(r)
-        for k, v in item.items():
-            if v is not None and str(v) == "NaN":
-                item[k] = None
-        seasons.append(item)
+    seasons = sanitize_rows(stats_res.mappings().all())
 
     data = {
         "player_id": player.player_id,

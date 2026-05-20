@@ -149,7 +149,14 @@ BEGIN
         COALESCE(SUM(gps.fga), 0),
         COALESCE(SUM(gps.fta), 0),
         COALESCE(SUM(gps.turnovers), 0),
-        COALESCE(SUM(gps.minutes_played), 0)
+        COALESCE(SUM(
+            CASE
+                WHEN gps.minutes_played IS NOT NULL
+                     AND upper(gps.minutes_played::text) <> 'NAN'
+                THEN gps.minutes_played
+                ELSE 0
+            END
+        ), 0)
     INTO v_fga, v_fta, v_tov, v_mp
     FROM game_player_stats gps
     JOIN games g ON g.game_id = gps.game_id
@@ -165,7 +172,14 @@ BEGIN
         COALESCE(SUM(gps2.fga), 0),
         COALESCE(SUM(gps2.fta), 0),
         COALESCE(SUM(gps2.turnovers), 0),
-        COALESCE(SUM(gps2.minutes_played), 0)
+        COALESCE(SUM(
+            CASE
+                WHEN gps2.minutes_played IS NOT NULL
+                     AND upper(gps2.minutes_played::text) <> 'NAN'
+                THEN gps2.minutes_played
+                ELSE 0
+            END
+        ), 0)
     INTO v_tm_fga, v_tm_fta, v_tm_tov, v_tm_mp
     FROM game_player_stats gps2
     JOIN games g2 ON g2.game_id = gps2.game_id
@@ -285,10 +299,16 @@ BEGIN
         GROUP BY p2.player_id
         HAVING SUM(s2.minutes_played) > 100
     )
-    SELECT AVG(uper_val) INTO v_lg_per FROM league_uper;
+    SELECT AVG(uper_val) FILTER (WHERE upper(uper_val::text) <> 'NAN')
+    INTO v_lg_per
+    FROM league_uper;
 
-    IF v_lg_per IS NULL OR v_lg_per = 0 THEN
+    IF v_lg_per IS NULL OR v_lg_per = 0 OR upper(v_lg_per::text) = 'NAN' THEN
         v_lg_per := 15.0;
+    END IF;
+
+    IF v_uper IS NULL OR upper(v_uper::text) = 'NAN' THEN
+        RETURN NULL;
     END IF;
 
     RETURN ROUND(v_uper * (15.0 / v_lg_per), 2);
@@ -342,7 +362,14 @@ BEGIN
         COALESCE(SUM(gps.blocks), 0),
         COALESCE(SUM(gps.turnovers), 0),
         COALESCE(SUM(gps.fouls), 0),
-        COALESCE(SUM(gps.minutes_played), 0)
+        COALESCE(SUM(
+            CASE
+                WHEN gps.minutes_played IS NOT NULL
+                     AND upper(gps.minutes_played::text) <> 'NAN'
+                THEN gps.minutes_played
+                ELSE 0
+            END
+        ), 0)
     INTO v_pts, v_reb, v_ast, v_stl, v_blk, v_tov, v_fouls, v_minutes
     FROM game_player_stats gps
     JOIN games g ON g.game_id = gps.game_id
@@ -374,25 +401,58 @@ BEGIN
         - 0.086 * v_fouls100;
 
     -- Среднее по лиге
-    WITH lg AS (
+    WITH player_totals AS (
         SELECT
             s2.player_id,
-            (
-                  0.123 * COALESCE(SUM(s2.points), 0)          * 100.0 / NULLIF(SUM(s2.minutes_played), 0)
-                + 0.234 * COALESCE(SUM(s2.rebounds_off + s2.rebounds_def), 0) * 100.0 / NULLIF(SUM(s2.minutes_played), 0)
-                + 0.689 * COALESCE(SUM(s2.assists), 0)         * 100.0 / NULLIF(SUM(s2.minutes_played), 0)
-                + 0.445 * COALESCE(SUM(s2.steals), 0)          * 100.0 / NULLIF(SUM(s2.minutes_played), 0)
-                + 0.407 * COALESCE(SUM(s2.blocks), 0)          * 100.0 / NULLIF(SUM(s2.minutes_played), 0)
-                - 0.605 * COALESCE(SUM(s2.turnovers), 0)       * 100.0 / NULLIF(SUM(s2.minutes_played), 0)
-                - 0.086 * COALESCE(SUM(s2.fouls), 0)           * 100.0 / NULLIF(SUM(s2.minutes_played), 0)
-            ) AS raw
+            COALESCE(SUM(
+                CASE
+                    WHEN s2.minutes_played IS NOT NULL
+                         AND upper(s2.minutes_played::text) <> 'NAN'
+                    THEN s2.minutes_played
+                    ELSE 0
+                END
+            ), 0) AS minutes,
+            COALESCE(SUM(s2.points), 0) AS pts,
+            COALESCE(SUM(s2.rebounds_off + s2.rebounds_def), 0) AS reb,
+            COALESCE(SUM(s2.assists), 0) AS ast,
+            COALESCE(SUM(s2.steals), 0) AS stl,
+            COALESCE(SUM(s2.blocks), 0) AS blk,
+            COALESCE(SUM(s2.turnovers), 0) AS tov,
+            COALESCE(SUM(s2.fouls), 0) AS fouls
         FROM game_player_stats s2
         JOIN games g2 ON g2.game_id = s2.game_id
         WHERE g2.season_id = p_season_id
         GROUP BY s2.player_id
-        HAVING SUM(s2.minutes_played) > 100
+        HAVING COALESCE(SUM(
+            CASE
+                WHEN s2.minutes_played IS NOT NULL
+                     AND upper(s2.minutes_played::text) <> 'NAN'
+                THEN s2.minutes_played
+                ELSE 0
+            END
+        ), 0) > 100
+    ),
+    lg AS (
+        SELECT
+            player_id,
+            (
+                  0.123 * pts   * 100.0 / NULLIF(minutes, 0)
+                + 0.234 * reb   * 100.0 / NULLIF(minutes, 0)
+                + 0.689 * ast   * 100.0 / NULLIF(minutes, 0)
+                + 0.445 * stl   * 100.0 / NULLIF(minutes, 0)
+                + 0.407 * blk   * 100.0 / NULLIF(minutes, 0)
+                - 0.605 * tov   * 100.0 / NULLIF(minutes, 0)
+                - 0.086 * fouls * 100.0 / NULLIF(minutes, 0)
+            ) AS raw
+        FROM player_totals
     )
-    SELECT AVG(raw) INTO v_lg_avg FROM lg;
+    SELECT AVG(raw) FILTER (WHERE raw IS NOT NULL AND upper(raw::text) <> 'NAN')
+    INTO v_lg_avg
+    FROM lg;
+
+    IF v_raw_bpm IS NULL OR upper(v_raw_bpm::text) = 'NAN' THEN
+        RETURN NULL;
+    END IF;
 
     RETURN ROUND(v_raw_bpm - COALESCE(v_lg_avg, 0), 2);
 END;

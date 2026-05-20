@@ -40,7 +40,7 @@ export default function TeamPage() {
         onClick={() => navigate('/teams')}
         style={{ alignSelf: 'flex-start', fontSize: 12 }}
       >
-        ← standings
+        ← таблица
       </button>
 
       {/* Team header */}

@@ -90,8 +90,7 @@ export interface Standing {
   wins: number
   losses: number
   games_played: number
-  win_pct?: number
-  logo_url?: string
+  win_pct?: number | string | null
 }
 
 export interface LeaderboardEntry {

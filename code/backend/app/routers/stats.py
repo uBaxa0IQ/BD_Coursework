@@ -2,11 +2,12 @@ from decimal import Decimal
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select, text
+from sqlalchemy import func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.cache import CacheManager, get_cache
 from app.database import get_db_analyst
+from app.utils.sanitize import sanitize_rows
 from app.models.game import Game
 from app.models.game_player_stats import GamePlayerStats
 from app.models.player import Player
@@ -16,6 +17,18 @@ from app.models.team import Team
 from app.schemas.stats import GamePlayerStatsResponse, LeaderboardEntry
 
 router = APIRouter()
+
+def _finite(col: str):
+    return text(f"upper({col}::text) <> 'NAN'")
+
+
+METRIC_IS_FINITE = {
+    "per": _finite("player_season_stats.per"),
+    "ts_pct": _finite("player_season_stats.ts_pct"),
+    "efg_pct": _finite("player_season_stats.efg_pct"),
+    "bpm": _finite("player_season_stats.bpm"),
+    "usg_pct": _finite("player_season_stats.usg_pct"),
+}
 
 VALID_METRICS = {
     "avg_pts", "avg_reb", "avg_ast", "avg_stl", "avg_blk",
@@ -46,8 +59,9 @@ async def get_leaders(
         return cached
 
     metric_col = getattr(PlayerSeasonStats, metric)
+    finite_filter = METRIC_IS_FINITE.get(metric)
 
-    query = (
+    base = (
         select(
             Player.player_id,
             Player.nba_id,
@@ -58,6 +72,15 @@ async def get_leaders(
             Position.code.label("position"),
             PlayerSeasonStats.games_played,
             metric_col.label("value"),
+            func.row_number()
+            .over(
+                partition_by=Player.player_id,
+                order_by=(
+                    metric_col.desc().nulls_last(),
+                    PlayerSeasonStats.games_played.desc(),
+                ),
+            )
+            .label("rn"),
         )
         .join(Player, Player.player_id == PlayerSeasonStats.player_id)
         .join(Team, Team.team_id == PlayerSeasonStats.team_id)
@@ -65,25 +88,29 @@ async def get_leaders(
         .where(PlayerSeasonStats.season_id == season_id)
         .where(PlayerSeasonStats.games_played >= min_games)
         .where(metric_col.isnot(None))
-        .order_by(metric_col.desc().nulls_last())
+    )
+    if finite_filter is not None:
+        base = base.where(finite_filter)
+    if team_id:
+        base = base.where(PlayerSeasonStats.team_id == team_id)
+    if position:
+        base = base.where(Position.code == position)
+
+    ranked = base.subquery()
+    query = (
+        select(ranked)
+        .where(ranked.c.rn == 1)
+        .order_by(ranked.c.value.desc().nulls_last())
         .limit(limit)
     )
 
-    if team_id:
-        query = query.where(PlayerSeasonStats.team_id == team_id)
-    if position:
-        query = query.where(Position.code == position)
-
     result = await db.execute(query)
-    rows = result.mappings().all()
+    rows = sanitize_rows(result.mappings().all())
     data = []
     for i, r in enumerate(rows):
         val = r["value"]
-        if val is not None and str(val) == "NaN":
-            val = None
         if val is not None:
             val = float(val)
-
         data.append({
             "rank": i + 1,
             "player_id": r["player_id"],
@@ -134,15 +161,7 @@ async def get_advanced_stats(
         .order_by(PlayerSeasonStats.per.desc().nulls_last())
     )
     result = await db.execute(query)
-    rows = result.mappings().all()
-    data = []
-    for r in rows:
-        item = dict(r)
-        # Очистка NaN значений
-        for k, v in item.items():
-            if v is not None and str(v) == "NaN":
-                item[k] = None
-        data.append(item)
+    data = sanitize_rows(result.mappings().all())
     await cache.set(cache_key, data, ttl=900)
     return data
 
@@ -177,15 +196,7 @@ async def get_scatter_data(
         .order_by(PlayerSeasonStats.efg_pct.desc().nulls_last())
     )
     result = await db.execute(query)
-    rows = result.mappings().all()
-    data = []
-    for r in rows:
-        item = dict(r)
-        # Очистка NaN значений
-        for k, v in item.items():
-            if v is not None and str(v) == "NaN":
-                item[k] = None
-        data.append(item)
+    data = sanitize_rows(result.mappings().all())
     await cache.set(cache_key, data, ttl=900)
     return data
 

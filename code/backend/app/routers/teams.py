@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select, text
+from sqlalchemy import Numeric, func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.cache import CacheManager, get_cache
@@ -14,6 +14,7 @@ from app.models.position import Position
 from app.models.season import Season
 from app.models.team import Team
 from app.schemas.team import TeamDetailResponse, TeamResponse, StandingsResponse
+from app.utils.sanitize import sanitize_rows
 
 router = APIRouter()
 
@@ -52,9 +53,9 @@ async def get_teams(
 async def get_standings(
     season_id: int,
     cache: CacheManager = Depends(get_cache),
-    db: AsyncSession = Depends(get_db_reader),
+    db: AsyncSession = Depends(get_db_analyst),
 ):
-    cache_key = f"standings:{season_id}"
+    cache_key = f"standings:v2:{season_id}"
     cached = await cache.get(cache_key)
     if cached:
         return cached
@@ -69,16 +70,48 @@ async def get_standings(
         """),
         {"season_id": season_id},
     )
-    rows = result.mappings().all()
     standings: Dict[str, list] = {"East": [], "West": []}
-    for row in rows:
-        r = dict(row)
-        conf = r.get("conference", "East")
+    for row in sanitize_rows(result.mappings().all()):
+        conf = row.get("conference", "East")
         if conf in standings:
-            standings[conf].append(r)
+            standings[conf].append(row)
 
     await cache.set(cache_key, standings, ttl=900)
     return standings
+
+
+@router.get("/stats")
+async def get_teams_avg_stats(
+    season_id: int,
+    limit: int = 10,
+    order_by: str = "avg_pts",
+    cache: CacheManager = Depends(get_cache),
+    db: AsyncSession = Depends(get_db_analyst),
+):
+    if order_by != "avg_pts":
+        from fastapi import HTTPException
+        raise HTTPException(status_code=422, detail="Only order_by=avg_pts is supported")
+
+    cache_key = f"teams_avg_stats:{season_id}:{limit}:{order_by}"
+    cached = await cache.get(cache_key)
+    if cached:
+        return cached
+
+    result = await db.execute(
+        select(
+            Team.abbreviation.label("team_abbreviation"),
+            func.round(func.avg(PlayerSeasonStats.avg_pts).cast(Numeric), 2).label("avg_pts"),
+        )
+        .join(PlayerSeasonStats, PlayerSeasonStats.team_id == Team.team_id)
+        .where(PlayerSeasonStats.season_id == season_id)
+        .where(PlayerSeasonStats.games_played >= 5)
+        .group_by(Team.team_id, Team.abbreviation)
+        .order_by(func.avg(PlayerSeasonStats.avg_pts).desc().nulls_last())
+        .limit(limit)
+    )
+    data = sanitize_rows(result.mappings().all())
+    await cache.set(cache_key, data, ttl=900)
+    return data
 
 
 @router.get("/{team_id}", response_model=TeamDetailResponse)
@@ -147,14 +180,7 @@ async def get_team_roster(
     )
     result = await db.execute(query)
     rows = result.mappings().all()
-    data = []
-    for r in rows:
-        item = dict(r)
-        # Очистка NaN значений
-        for k, v in item.items():
-            if v is not None and str(v) == "NaN":
-                item[k] = None
-        data.append(item)
+    data = sanitize_rows(rows)
     await cache.set(cache_key, data, ttl=300)
     return data
 

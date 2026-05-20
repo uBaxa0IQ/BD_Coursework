@@ -6,8 +6,6 @@ import PlayerProfile from './pages/Players/PlayerProfile'
 import Teams from './pages/Teams'
 import TeamPage from './pages/Teams/TeamPage'
 import Leaderboard from './pages/Leaderboard'
-import Standings from './pages/Standings'
-import Compare from './pages/Compare'
 import Advanced from './pages/Stats/Advanced'
 
 export default function App() {
@@ -24,8 +22,7 @@ export default function App() {
           <Route path="leaderboard" element={<Leaderboard />} />
           <Route path="stats" element={<Navigate to="/leaderboard" replace />} />
           <Route path="stats/advanced" element={<Advanced />} />
-          <Route path="standings" element={<Standings />} />
-          <Route path="compare" element={<Compare />} />
+          <Route path="compare" element={<Navigate to="/players" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>

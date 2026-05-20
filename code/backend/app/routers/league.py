@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
-from sqlalchemy import Numeric, func, select
+from sqlalchemy import Numeric, func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.cache import CacheManager, get_cache
@@ -12,8 +12,12 @@ from app.models.player_season_stats import PlayerSeasonStats
 from app.models.season import Season
 from app.models.team import Team
 from app.models.position import Position
+from app.utils.sanitize import sanitize_row, sanitize_rows
 
 router = APIRouter()
+
+# PostgreSQL: NaN IS NOT NULL; отсекаем через cast в text
+PER_IS_FINITE = text("upper(player_season_stats.per::text) <> 'NAN'")
 
 
 @router.get("/seasons")
@@ -49,7 +53,7 @@ async def get_league_trends(
     cache: CacheManager = Depends(get_cache),
     db: AsyncSession = Depends(get_db_analyst),
 ):
-    cache_key = "league_trends:v2"
+    cache_key = "league_trends:v3"
     cached = await cache.get(cache_key)
     if cached:
         return cached
@@ -92,15 +96,7 @@ async def get_league_trends(
         .order_by(Season.season_id)
     )
     result = await db.execute(query)
-    rows = result.mappings().all()
-    data = []
-    for r in rows:
-        item = dict(r)
-        # Очистка NaN значений
-        for k, v in item.items():
-            if v is not None and str(v) == "NaN":
-                item[k] = None
-        data.append(item)
+    data = sanitize_rows(result.mappings().all())
     await cache.set(cache_key, data, ttl=3600)
     return data
 
@@ -111,7 +107,7 @@ async def get_league_dashboard(
     cache: CacheManager = Depends(get_cache),
     db: AsyncSession = Depends(get_db_analyst),
 ):
-    cache_key = f"league_dashboard:{season_id}"
+    cache_key = f"league_dashboard:v2:{season_id}"
     cached = await cache.get(cache_key)
     if cached:
         return cached
@@ -129,8 +125,8 @@ async def get_league_dashboard(
     agg_res = await db.execute(agg_q)
     agg = agg_res.mappings().first() or {}
 
-    # Топ-5 по PER
-    top_q = (
+    # Топ-5 по PER: один игрок = одна строка (основная команда = больше игр в сезоне)
+    ranked = (
         select(
             Player.player_id,
             Player.nba_id,
@@ -139,23 +135,40 @@ async def get_league_dashboard(
             Team.abbreviation,
             PlayerSeasonStats.per,
             PlayerSeasonStats.avg_pts,
+            func.row_number()
+            .over(
+                partition_by=Player.player_id,
+                order_by=(
+                    PlayerSeasonStats.per.desc().nulls_last(),
+                    PlayerSeasonStats.games_played.desc(),
+                ),
+            )
+            .label("rn"),
         )
         .join(Player, Player.player_id == PlayerSeasonStats.player_id)
         .join(Team, Team.team_id == PlayerSeasonStats.team_id)
         .where(PlayerSeasonStats.season_id == season_id)
         .where(PlayerSeasonStats.per.isnot(None))
+        .where(PER_IS_FINITE)
         .where(PlayerSeasonStats.games_played >= 20)
-        .order_by(PlayerSeasonStats.per.desc().nulls_last())
+    ).subquery()
+
+    top_q = (
+        select(
+            ranked.c.player_id,
+            ranked.c.nba_id,
+            ranked.c.player_name,
+            ranked.c.team_name,
+            ranked.c.abbreviation,
+            ranked.c.per,
+            ranked.c.avg_pts,
+        )
+        .where(ranked.c.rn == 1)
+        .order_by(ranked.c.per.desc().nulls_last())
         .limit(5)
     )
     top_res = await db.execute(top_q)
-    top_players = []
-    for r in top_res.mappings().all():
-        item = dict(r)
-        for k, v in item.items():
-            if v is not None and str(v) == "NaN":
-                item[k] = None
-        top_players.append(item)
+    top_players = sanitize_rows(top_res.mappings().all())
 
     data = {
         "season_id": season_id,

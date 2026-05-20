@@ -1,0 +1,122 @@
+{
+  "exp1_volume": {
+    "1season": {
+      "median_ms": 0.24,
+      "mean_ms": 0.26,
+      "p95_ms": 0.38,
+      "error_pct": 0.0
+    },
+    "3seasons": {
+      "median_ms": 0.26,
+      "mean_ms": 0.26,
+      "p95_ms": 0.35,
+      "error_pct": 0.0
+    },
+    "5seasons": {
+      "median_ms": 0.24,
+      "mean_ms": 0.24,
+      "p95_ms": 0.3,
+      "error_pct": 0.0
+    }
+  },
+  "exp2_indexes": {
+    "no_index": {
+      "median_ms": 0.64,
+      "mean_ms": 0.8,
+      "p95_ms": 1.49,
+      "error_pct": 0.0
+    },
+    "simple": {
+      "median_ms": 0.55,
+      "mean_ms": 0.64,
+      "p95_ms": 1.09,
+      "error_pct": 0.0
+    },
+    "composite": {
+      "median_ms": 0.28,
+      "mean_ms": 0.3,
+      "p95_ms": 0.47,
+      "error_pct": 0.0
+    },
+    "partial": {
+      "median_ms": 0.55,
+      "mean_ms": 0.58,
+      "p95_ms": 0.75,
+      "error_pct": 0.0
+    }
+  },
+  "exp3_vitrina_vs_agg": {
+    "facts_row_count": 32382,
+    "vitrina_row_count": 580,
+    "direct_agg_no_index": {
+      "median_ms": 46.81,
+      "mean_ms": 56.44,
+      "p95_ms": 145.26,
+      "error_pct": 0.0
+    },
+    "direct_agg_idx_games": {
+      "median_ms": 20.55,
+      "mean_ms": 24.18,
+      "p95_ms": 38.76,
+      "error_pct": 0.0
+    },
+    "direct_agg_idx_player": {
+      "median_ms": 19.66,
+      "mean_ms": 21.13,
+      "p95_ms": 32.44,
+      "error_pct": 0.0
+    },
+    "direct_agg_idx_both": {
+      "median_ms": 30.24,
+      "mean_ms": 54.24,
+      "p95_ms": 145.99,
+      "error_pct": 0.0
+    },
+    "vitrina": {
+      "median_ms": 0.32,
+      "mean_ms": 0.33,
+      "p95_ms": 0.42,
+      "error_pct": 0.0
+    }
+  },
+  "exp4_cache": {
+    "cache_miss": {
+      "median_ms": 14.38,
+      "mean_ms": 14.83,
+      "p95_ms": 20.07,
+      "error_pct": 0.0
+    },
+    "cache_hit": {
+      "median_ms": 3.08,
+      "mean_ms": 3.4,
+      "p95_ms": 5.11,
+      "error_pct": 0.0
+    }
+  },
+  "exp5_concurrency": {
+    "c1": {
+      "median_ms": 2.55,
+      "mean_ms": 3.01,
+      "p95_ms": 4.76,
+      "error_pct": 0.0
+    },
+    "c10": {
+      "median_ms": 13.98,
+      "mean_ms": 15.08,
+      "p95_ms": 23.99,
+      "error_pct": 0.0
+    },
+    "c50": {
+      "median_ms": 81.24,
+      "mean_ms": 85.66,
+      "p95_ms": 159.05,
+      "error_pct": 0.0
+    },
+    "c100": {
+      "median_ms": 183.1,
+      "mean_ms": 190.02,
+      "p95_ms": 331.45,
+      "error_pct": 0.0
+    }
+  }
+}

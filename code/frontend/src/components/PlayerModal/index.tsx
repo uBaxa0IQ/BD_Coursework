@@ -37,15 +37,26 @@ export default function PlayerModal({ playerId, seasonId, onClose }: Props) {
   const fetchData = useCallback(async () => {
     setLoading(true)
     try {
-      const [p, allStats, gl] = await Promise.all([
+      const [pRes, statsRes, glRes] = await Promise.allSettled([
         playersApi.getById(playerId),
         playersApi.getStats(playerId),
         playersApi.getGamelog(playerId, seasonId),
       ])
-      setPlayer(p)
-      const current = allStats.find((s: PlayerStats) => s.season_id === seasonId) || allStats[allStats.length - 1] || null
-      setStats(current)
-      setGamelog(gl)
+      if (pRes.status === 'fulfilled') {
+        setPlayer(pRes.value)
+      } else {
+        setPlayer(null)
+      }
+      if (statsRes.status === 'fulfilled') {
+        const allStats = statsRes.value
+        const current = allStats.find((s: PlayerStats) => s.season_id === seasonId)
+          || allStats[allStats.length - 1]
+          || null
+        setStats(current)
+      } else {
+        setStats(null)
+      }
+      setGamelog(glRes.status === 'fulfilled' ? glRes.value : [])
     } finally {
       setLoading(false)
     }
