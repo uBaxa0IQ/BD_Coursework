@@ -1,8 +1,8 @@
 {
   "1season": {
-    "median_ms": 0.24,
-    "mean_ms": 0.26,
-    "p95_ms": 0.38,
+    "median_ms": 0.21,
+    "mean_ms": 0.23,
+    "p95_ms": 0.36,
     "error_pct": 0.0,
     "season_ids": [
       1
@@ -11,9 +11,9 @@
     "iterations": 100
   },
   "3seasons": {
-    "median_ms": 0.26,
-    "mean_ms": 0.26,
-    "p95_ms": 0.35,
+    "median_ms": 0.2,
+    "mean_ms": 0.22,
+    "p95_ms": 0.39,
     "error_pct": 0.0,
     "season_ids": [
       1,
@@ -24,9 +24,9 @@
     "iterations": 100
   },
   "5seasons": {
-    "median_ms": 0.24,
-    "mean_ms": 0.24,
-    "p95_ms": 0.3,
+    "median_ms": 0.23,
+    "mean_ms": 0.26,
+    "p95_ms": 0.43,
     "error_pct": 0.0,
     "season_ids": [
       1,
