@@ -9,6 +9,7 @@
   - правка calculate_usg (доля 0–1, как ts_pct; UI ×100) и восстановление вьюх
   - позиции: CommonTeamRoster (30 команд × сезон, поле POSITION в API)
   - опционально: --refine-positions (CommonPlayerInfo только для оставшихся без позиции)
+  - опционально: --enrich-profiles (рост, вес, гражданство, драфт, номер через CommonPlayerInfo)
 
 Примеры:
   python scripts/load_data.py
@@ -16,6 +17,9 @@
   python scripts/load_data.py --sleep 0.5 --cooldown-every 400   # агрессивнее
   python scripts/load_data.py --positions-only
   python scripts/load_data.py --positions-only --refine-positions
+  python scripts/load_data.py --profiles-only                    # только профили (~970 игроков с матчами)
+  python scripts/load_data.py --profiles-only --profiles-all     # все игроки в БД (~5000+, долго)
+  python scripts/load_data.py --enrich-profiles                  # полная загрузка + профили
   python scripts/load_data.py --skip-repair-history --skip-usg-fix
 """
 import argparse
@@ -194,6 +198,95 @@ def _iso_date(s: str) -> Optional[date]:
         return date.fromisoformat(s[:10])
     except ValueError:
         return None
+
+
+def _parse_height_cm(height_str: str) -> Optional[int]:
+    """NBA API HEIGHT: '6-10' → см."""
+    if not height_str:
+        return None
+    s = str(height_str).strip()
+    if "-" not in s:
+        return None
+    parts = s.split("-", 1)
+    try:
+        feet = int(parts[0])
+        inches = int(float(parts[1]))
+        cm = round((feet * 12 + inches) * 2.54)
+        if 150 <= cm <= 250:
+            return cm
+    except (ValueError, IndexError):
+        pass
+    return None
+
+
+def _parse_weight_kg(weight_str: str) -> Optional[int]:
+    """NBA API WEIGHT в фунтах → кг."""
+    if not weight_str:
+        return None
+    try:
+        lbs = int(str(weight_str).strip())
+        kg = round(lbs * 0.453592)
+        if 60 <= kg <= 200:
+            return kg
+    except ValueError:
+        pass
+    return None
+
+
+def _parse_small_int(value: Any, lo: int, hi: int) -> Optional[int]:
+    if value is None or value == "":
+        return None
+    s = str(value).strip()
+    if s.lower() in ("undrafted", "none", "n/a"):
+        return None
+    try:
+        n = int(s)
+        if lo <= n <= hi:
+            return n
+    except ValueError:
+        pass
+    return None
+
+
+def _parse_nationality(country: Any) -> Optional[str]:
+    if country is None:
+        return None
+    s = str(country).strip()
+    return s if s else None
+
+
+def _player_info_to_fields(row: Any, pos_map: Dict[str, int]) -> Dict[str, Any]:
+    """Поля players из строки CommonPlayerInfo."""
+    pos_str = str(row.get("POSITION", "")).strip()
+    pos_code = normalize_position(pos_str)
+    position_id = pos_map.get(pos_code) if pos_code else None
+
+    return {
+        "nationality": _parse_nationality(row.get("COUNTRY")),
+        "birth_date": _iso_date(str(row.get("BIRTHDATE", "") or "")),
+        "height_cm": _parse_height_cm(str(row.get("HEIGHT", "") or "")),
+        "weight_kg": _parse_weight_kg(str(row.get("WEIGHT", "") or "")),
+        "jersey_number": _parse_small_int(row.get("JERSEY"), 0, 99),
+        "draft_year": _parse_small_int(row.get("DRAFT_YEAR"), 1946, 2030),
+        "draft_round": _parse_small_int(row.get("DRAFT_ROUND"), 1, 2),
+        "draft_pick": _parse_small_int(row.get("DRAFT_NUMBER"), 1, 60),
+        "position_id": position_id,
+    }
+
+
+async def _fetch_common_player_info_row(nba_id: int) -> Optional[Any]:
+    """Одна строка CommonPlayerInfo или None при ошибке/пустом ответе."""
+    for attempt in range(MAX_RETRIES):
+        try:
+            resp = await fetch_nba_api_data(CommonPlayerInfo, player_id=nba_id)
+            df = resp.get_data_frames()[0]
+            if df.empty:
+                return None
+            return df.iloc[0]
+        except Exception as e:
+            logger.debug("nba_id=%s попытка %d/%d: %s", nba_id, attempt + 1, MAX_RETRIES, e)
+            await asyncio.sleep(_retry_sleep(attempt))
+    return None
 
 
 async def fetch_nba_api_data(endpoint_class: Any, **kwargs) -> Any:
@@ -547,6 +640,19 @@ async def print_counts(conn: asyncpg.Connection) -> None:
             logger.info("  %-30s %d строк", table, count)
         except asyncpg.UndefinedTableError:
             logger.warning("  %-30s ТАБЛИЦА НЕ СУЩЕСТВУЕТ", table)
+    try:
+        with_stats = await conn.fetchval(
+            "SELECT COUNT(*) FROM players p "
+            "WHERE EXISTS (SELECT 1 FROM game_player_stats gps WHERE gps.player_id = p.player_id)"
+        )
+        with_height = await conn.fetchval("SELECT COUNT(*) FROM players WHERE height_cm IS NOT NULL")
+        with_nat = await conn.fetchval("SELECT COUNT(*) FROM players WHERE nationality IS NOT NULL")
+        with_pos = await conn.fetchval("SELECT COUNT(*) FROM players WHERE position_id IS NOT NULL")
+        logger.info("  %-30s %d / %d с матчами", "players.height_cm", with_height, with_stats)
+        logger.info("  %-30s %d / %d с матчами", "players.nationality", with_nat, with_stats)
+        logger.info("  %-30s %d / %d с матчами", "players.position_id", with_pos, with_stats)
+    except asyncpg.UndefinedTableError:
+        pass
 
 
 # --- Дозаполнение player_team_history (пропуски после первой загрузки карьеры) ---
@@ -921,78 +1027,151 @@ async def load_positions_from_rosters(conn: asyncpg.Connection) -> int:
     return updated
 
 
+async def enrich_player_profiles_from_common_player_info(
+    conn: asyncpg.Connection,
+    *,
+    only_with_stats: bool = True,
+    only_missing: bool = True,
+    update_profile: bool = True,
+    update_position: bool = True,
+) -> None:
+    """Дозаполнение профиля и/или позиции через CommonPlayerInfo (по одному игроку)."""
+    pos_rows = await conn.fetch("SELECT position_id, code FROM positions ORDER BY position_id")
+    pos_map = {r["code"]: r["position_id"] for r in pos_rows}
+
+    filters = ["TRUE"]
+    if only_with_stats:
+        filters.append(
+            "EXISTS (SELECT 1 FROM game_player_stats gps WHERE gps.player_id = p.player_id)"
+        )
+    if only_missing:
+        missing_parts = []
+        if update_profile:
+            missing_parts.extend([
+                "p.nationality IS NULL",
+                "p.birth_date IS NULL",
+                "p.height_cm IS NULL",
+                "p.weight_kg IS NULL",
+                "p.jersey_number IS NULL",
+                "p.draft_year IS NULL",
+            ])
+        if update_position:
+            missing_parts.append("p.position_id IS NULL")
+        if missing_parts:
+            filters.append(f"({' OR '.join(missing_parts)})")
+
+    where_sql = " AND ".join(filters)
+    players = await conn.fetch(f"""
+        SELECT p.player_id, p.nba_id, p.first_name, p.last_name
+        FROM players p
+        WHERE {where_sql}
+        ORDER BY p.nba_id
+    """)
+    logger.info(
+        "Обогащение профиля (CommonPlayerInfo): %d игроков%s%s",
+        len(players),
+        ", только с матчами" if only_with_stats else ", все в БД",
+        ", только пропуски" if only_missing else ", принудительно",
+    )
+
+    updated = 0
+    skipped_api_fail = 0
+    skipped_empty = 0
+
+    for row in tqdm(players, desc="Профили (API)"):
+        nba_id = int(row["nba_id"])
+        player_id = int(row["player_id"])
+
+        info_row = await _fetch_common_player_info_row(nba_id)
+        if info_row is None:
+            skipped_api_fail += 1
+            continue
+
+        fields = _player_info_to_fields(info_row, pos_map)
+        if not update_profile:
+            fields = {k: v for k, v in fields.items() if k == "position_id"}
+        if not update_position:
+            fields.pop("position_id", None)
+
+        if not any(v is not None for v in fields.values()):
+            skipped_empty += 1
+            continue
+
+        if only_missing:
+            await conn.execute(
+                """
+                UPDATE players SET
+                    nationality   = COALESCE($1, nationality),
+                    birth_date    = COALESCE($2, birth_date),
+                    height_cm     = COALESCE($3, height_cm),
+                    weight_kg     = COALESCE($4, weight_kg),
+                    jersey_number = COALESCE($5, jersey_number),
+                    draft_year    = COALESCE($6, draft_year),
+                    draft_round   = COALESCE($7, draft_round),
+                    draft_pick    = COALESCE($8, draft_pick),
+                    position_id   = COALESCE($9, position_id)
+                WHERE player_id = $10
+                """,
+                fields.get("nationality"),
+                fields.get("birth_date"),
+                fields.get("height_cm"),
+                fields.get("weight_kg"),
+                fields.get("jersey_number"),
+                fields.get("draft_year"),
+                fields.get("draft_round"),
+                fields.get("draft_pick"),
+                fields.get("position_id"),
+                player_id,
+            )
+        else:
+            await conn.execute(
+                """
+                UPDATE players SET
+                    nationality   = $1,
+                    birth_date    = $2,
+                    height_cm     = $3,
+                    weight_kg     = $4,
+                    jersey_number = $5,
+                    draft_year    = $6,
+                    draft_round   = $7,
+                    draft_pick    = $8,
+                    position_id   = COALESCE($9, position_id)
+                WHERE player_id = $10
+                """,
+                fields.get("nationality"),
+                fields.get("birth_date"),
+                fields.get("height_cm"),
+                fields.get("weight_kg"),
+                fields.get("jersey_number"),
+                fields.get("draft_year"),
+                fields.get("draft_round"),
+                fields.get("draft_pick"),
+                fields.get("position_id"),
+                player_id,
+            )
+        updated += 1
+
+    logger.info(
+        "Профили: обновлено %d, ошибки API %d, пустой ответ %d",
+        updated,
+        skipped_api_fail,
+        skipped_empty,
+    )
+
+
 async def refine_positions_from_common_player_info(
     conn: asyncpg.Connection,
     *,
     only_missing: bool = True,
 ) -> None:
     """Дозаполнение позиций через CommonPlayerInfo (медленно, по одному игроку)."""
-    pos_rows = await conn.fetch("SELECT position_id, code FROM positions ORDER BY position_id")
-    pos_map = {r["code"]: r["position_id"] for r in pos_rows}
-
-    missing_filter = "AND p.position_id IS NULL" if only_missing else ""
-    players = await conn.fetch(f"""
-        SELECT DISTINCT p.player_id, p.nba_id, p.first_name, p.last_name
-        FROM players p
-        JOIN game_player_stats gps ON gps.player_id = p.player_id
-        WHERE TRUE {missing_filter}
-        ORDER BY p.nba_id
-    """)
-    logger.info(
-        "Уточнение позиций (CommonPlayerInfo): %d игроков%s",
-        len(players),
-        " без позиции" if only_missing else "",
+    await enrich_player_profiles_from_common_player_info(
+        conn,
+        only_with_stats=True,
+        only_missing=only_missing,
+        update_profile=False,
+        update_position=True,
     )
-
-    updated = 0
-    skipped_api_fail = 0
-    skipped_no_pos = 0
-    unknown_positions: set = set()
-
-    for row in tqdm(players, desc="Позиции (API)"):
-        nba_id = int(row["nba_id"])
-        player_id = int(row["player_id"])
-
-        pos_code: Optional[str] = None
-        for attempt in range(MAX_RETRIES):
-            try:
-                await _pace_api()
-                resp = await asyncio.to_thread(
-                    CommonPlayerInfo,
-                    player_id=nba_id,
-                    headers=CUSTOM_HEADERS,
-                    timeout=_load_settings.request_timeout,
-                )
-                df = resp.get_data_frames()[0]
-                if df.empty:
-                    break
-                pos_str = str(df.iloc[0].get("POSITION", "")).strip()
-                pos_code = normalize_position(pos_str)
-                break
-            except Exception as e:
-                logger.debug("nba_id=%s попытка %d/%d: %s", nba_id, attempt + 1, MAX_RETRIES, e)
-                await asyncio.sleep(_retry_sleep(attempt))
-
-        if pos_code is None:
-            skipped_api_fail += 1
-            continue
-
-        position_id = pos_map.get(pos_code)
-        if not position_id:
-            unknown_positions.add(pos_code)
-            skipped_no_pos += 1
-            continue
-
-        await conn.execute(
-            "UPDATE players SET position_id = $1 WHERE player_id = $2",
-            position_id,
-            player_id,
-        )
-        updated += 1
-
-    logger.info("Позиции: обновлено %d, ошибки API %d, неизвестный код %d", updated, skipped_api_fail, skipped_no_pos)
-    if unknown_positions:
-        logger.warning("Неизвестные коды позиций: %s", unknown_positions)
 
 
 def parse_args() -> argparse.Namespace:
@@ -1041,6 +1220,26 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Дозаполнить оставшихся без позиции через CommonPlayerInfo (долго)",
     )
+    p.add_argument(
+        "--enrich-profiles",
+        action="store_true",
+        help="Обогатить профили (рост, вес, гражданство, драфт) через CommonPlayerInfo",
+    )
+    p.add_argument(
+        "--profiles-only",
+        action="store_true",
+        help="Только обогатить профили, без перезагрузки матчей",
+    )
+    p.add_argument(
+        "--profiles-all",
+        action="store_true",
+        help="С --profiles-only: все игроки в БД, не только с матчами (~5000+ запросов)",
+    )
+    p.add_argument(
+        "--profiles-force",
+        action="store_true",
+        help="Перезаписать профили даже если поля уже заполнены",
+    )
     return p.parse_args()
 
 
@@ -1065,6 +1264,18 @@ async def main() -> None:
     conn = await asyncpg.connect(DATABASE_URL)
 
     try:
+        if args.profiles_only:
+            await enrich_player_profiles_from_common_player_info(
+                conn,
+                only_with_stats=not args.profiles_all,
+                only_missing=not args.profiles_force,
+                update_profile=True,
+                update_position=True,
+            )
+            await print_counts(conn)
+            logger.info("Обогащение профилей завершено.")
+            return
+
         if args.positions_only:
             await load_positions_from_rosters(conn)
             if args.refine_positions:
@@ -1098,6 +1309,14 @@ async def main() -> None:
         await load_positions_from_rosters(conn)
         if args.refine_positions:
             await refine_positions_from_common_player_info(conn, only_missing=True)
+        if args.enrich_profiles:
+            await enrich_player_profiles_from_common_player_info(
+                conn,
+                only_with_stats=not args.profiles_all,
+                only_missing=not args.profiles_force,
+                update_profile=True,
+                update_position=True,
+            )
 
         if not args.skip_repair_history:
             await repair_missing_player_team_history(conn)

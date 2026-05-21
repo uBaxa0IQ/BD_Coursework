@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS players (
     is_active    BOOLEAN     NOT NULL DEFAULT TRUE,
     draft_year   SMALLINT,
     draft_round  SMALLINT    CHECK (draft_round IN (1, 2)),
-    draft_pick   SMALLINT    CHECK (draft_pick BETWEEN 1 AND 30)
+    draft_pick   SMALLINT    CHECK (draft_pick BETWEEN 1 AND 60)
 );
 
 COMMENT ON TABLE players IS 'Игроки NBA';
