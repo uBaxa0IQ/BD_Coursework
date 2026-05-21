@@ -1,8 +1,10 @@
 \chapter*{ПРИЛОЖЕНИЯ}
 \addcontentsline{toc}{chapter}{ПРИЛОЖЕНИЯ}
 
-\section*{Приложение А. Скрипты создания структуры базы данных}
-\addcontentsline{toc}{section}{Приложение А. Скрипты создания структуры базы данных}
+\input{appendix_a_flowcharts}
+
+\section*{Приложение Б. Скрипты создания структуры базы данных}
+\addcontentsline{toc}{section}{Приложение Б. Скрипты создания структуры базы данных}
 
 \begin{lstlisting}[language=SQL]
 CREATE TABLE positions (
@@ -32,8 +34,13 @@ CREATE TABLE teams (
 );
 \end{lstlisting}
 
-\section*{Приложение Б. Скрипты создания функций и процедур}
-\addcontentsline{toc}{section}{Приложение Б. Скрипты создания функций и процедур}
+\input{appendix_v_sql}
+
+\section*{Приложение Г. Скрипты создания функций и процедур}
+\addcontentsline{toc}{section}{Приложение Г. Скрипты создания функций и процедур}
+
+\renewcommand{\thelstlisting}{Г.\arabic{lstlisting}}
+\setcounter{lstlisting}{0}
 
 \begin{lstlisting}[language=SQL]
 CREATE OR REPLACE FUNCTION calculate_efg(
@@ -70,8 +77,60 @@ END;
 $$;
 \end{lstlisting}
 
-\section*{Приложение В. Исходный код механизма кэширования}
-\addcontentsline{toc}{section}{Приложение В. Исходный код механизма кэширования}
+\begin{lstlisting}[language=SQL, label=lst:ts,
+  caption=Реализация функции \texttt{calculate\_ts} (фрагмент)]
+CREATE OR REPLACE FUNCTION calculate_ts(
+    p_player_id INT, p_season_id INT, p_team_id INT DEFAULT NULL
+) RETURNS DECIMAL(5,4) LANGUAGE plpgsql STABLE AS $$
+DECLARE
+    v_pts NUMERIC; v_fga NUMERIC; v_fta NUMERIC; v_denom NUMERIC;
+BEGIN
+    SELECT COALESCE(SUM(gps.points), 0),
+           COALESCE(SUM(gps.fga), 0),
+           COALESCE(SUM(gps.fta), 0)
+    INTO v_pts, v_fga, v_fta
+    FROM game_player_stats gps
+    JOIN games g ON g.game_id = gps.game_id
+    WHERE gps.player_id = p_player_id
+      AND g.season_id = p_season_id
+      AND (p_team_id IS NULL OR gps.team_id = p_team_id);
+
+    IF v_fga = 0 AND v_fta = 0 THEN RETURN NULL; END IF;
+
+    v_denom := 2.0 * (v_fga + 0.44 * v_fta);
+    IF v_denom = 0 THEN RETURN NULL; END IF;
+
+    RETURN ROUND(v_pts::DECIMAL / v_denom, 4);
+END; $$;
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL, label=lst:trigger,
+  caption=Триггер проверки корректности очков (фрагмент)]
+CREATE OR REPLACE FUNCTION trg_validate_team_score_row()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+DECLARE
+    v_sum INT; v_expected INT;
+BEGIN
+    IF v_expected IS NOT NULL AND v_sum <> v_expected THEN
+        RAISE EXCEPTION
+            'Player points sum (%) does not match team score (%)',
+            v_sum, v_expected;
+    END IF;
+    RETURN COALESCE(NEW, OLD);
+END; $$;
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL, label=lst:grants,
+  caption=Разграничение доступа командами привилегий]
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO analyst;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO analyst;
+
+GRANT SELECT ON v_team_stats   TO reader;
+GRANT SELECT ON v_top_players  TO reader;
+\end{lstlisting}
+
+\section*{Приложение Д. Исходный код механизма кэширования}
+\addcontentsline{toc}{section}{Приложение Д. Исходный код механизма кэширования}
 
 В приложении приведён обобщённый декоратор с ключом по пути и строке запроса.
 В реализованных маршрутах API (листинг~\ref{lst:cache-aside-pattern},
@@ -111,3 +170,7 @@ def cache_response(ttl_seconds: int = 300):
         return wrapper
     return decorator
 \end{lstlisting}
+
+\input{appendix_e_ui}
+
+\input{appendix_zh_presentation}

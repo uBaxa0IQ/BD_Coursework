@@ -2,22 +2,29 @@
 
 \section{Выбор и обоснование средств реализации}
 
-Профиль нагрузки проектируемой системы носит гибридный характер (HTAP):
+Профиль нагрузки проектируемой системы является гибридным (HTAP):
 преобладают аналитические запросы на чтение с агрегацией, при этом процедура
 массового обновления статистики требует транзакционной целостности.
 
 \subsection{СУБД}
 
-В качестве основной СУБД выбрана PostgreSQL~15~\cite{postgres}. Её
-использование обосновано следующими факторами:
+В качестве основной СУБД выбрана PostgreSQL~15~\cite{postgres} в связи
+с наличием проверенных драйверов асинхронного взаимодействия и стабильной
+работой используемых механизмов процедурного расширения. Выбор данного
+решения обоснован следующими факторами:
 \begin{itemize}
     \item наличие встроенного процедурного языка PL/pgSQL, необходимого для
-          реализации математических алгоритмов расчёта продвинутых метрик;
-    \item поддержка атомарных операций слияния строк (конструкция
-      \newline\texttt{INSERT ... ON CONFLICT DO UPDATE}) для эффективного
-          пересчёта сезонных агрегатов;
-    \item возможность декларативного обеспечения целостности данных с помощью
-          \texttt{CHECK}-ограничений на уровне DDL.
+          реализации сложных математических алгоритмов расчёта продвинутых
+          спортивных метрик на стороне базы данных;
+    \item поддержка атомарных операций слияния строк через конструкцию
+          пакетного обновления для эффективного пересчёта сезонных агрегатов
+          без возникновения состояния гонки;
+    \item наличие развитого оптимизатора запросов для построения эффективных
+          планов выполнения с использованием B-tree индексов при многотабличных
+          операциях соединения;
+    \item возможность декларативного обеспечения логической целостности данных
+          с помощью проверочных ограничений и механизма триггеров на уровне
+          схемы данных.
 \end{itemize}
 
 \subsection{Кэширование}
@@ -44,19 +51,22 @@ REST API реализован на Python~3.11 с фреймворком FastAPI
 
 \subsection{Клиентский слой}
 
-Клиентская часть реализована в виде одностраничного приложения (SPA) с
-использованием библиотеки React~18~\cite{react} и языка TypeScript. Строгая
-типизация моделей данных снижает риск ошибок при взаимодействии с API. Для
-визуализации статистики применена библиотека Recharts~\cite{recharts},
-поддерживающая построение линейных, столбчатых, радарных диаграмм и диаграмм
-рассеяния.
+Клиентская часть представляет собой одностраничное веб-приложение
+на базе библиотеки React~18~\cite{react} и строго типизированного языка
+TypeScript. Выбор данного стека технологий обусловлен компонентным подходом
+к разработке пользовательского интерфейса, что позволяет эффективно
+переиспользовать элементы отображения: таблицы статистики, графики
+и карточки игроков. Использование механизма теневого дерева документа
+в React обеспечивает высокую производительность при рендеринге объёмных
+наборов данных и динамическом обновлении аналитических дашбордов без
+полной перезагрузки страницы.
 
 \section{Физическая реализация базы данных}
 
 \subsection{Создание таблиц и ограничений}
 
 Физическая реализация структуры базы данных выполнена с помощью DDL-скриптов
-(полный листинг приведён в Приложении~А). В листинге~\ref{lst:ddl-gps}
+(полный листинг приведён в Приложении~Б). В листинге~\ref{lst:ddl-gps}
 представлен фрагмент создания таблицы фактов \texttt{game\_player\_stats},
 иллюстрирующий механизм декларативного обеспечения ссылочной и логической
 целостности.
@@ -79,7 +89,7 @@ CREATE TABLE game_player_stats (
 
 \subsection{Реализация индексов}
 
-Аналитические индексы (Приложение~А) реализованы на базе структуры B-дерева.
+Аналитические индексы (Приложение~Б) реализованы на базе структуры B-дерева.
 В листинге~\ref{lst:indexes} продемонстрировано создание ключевых индексов
 для таблицы фактов.
 
@@ -98,17 +108,16 @@ CREATE INDEX idx_pss_season
 
 \subsection{Загрузка тестовых данных}\label{subsec:data-load}
 
-Первоначальное наполнение базы данных выполнено ETL-скриптом
-\newline\texttt{scripts/load\_data.py} на языке Python. Скрипт извлекает архивную
-статистику NBA за пять регулярных сезонов (2019/20--2023/24) из официального
-портала NBA Stats~\cite{nba-stats} через библиотеку
+Первоначальное наполнение базы данных выполнено средствами языка Python
+через официальный API NBA Stats~\cite{nba-stats} и библиотеку
 \texttt{nba\_api}~\cite{nba-api}, формирующую HTTP-запросы к сервису
-\texttt{stats.nba.com}.
+\texttt{stats.nba.com}. Скрипт извлекает архивную
+статистику NBA за пять регулярных сезонов 2019/20--2023/24.
 
 Полученные данные нормализуются и загружаются в реляционные таблицы
 PostgreSQL пакетами в порядке, соответствующем иерархии внешних ключей:
 справочники, затем игроки, матчи, статистика матчей, история команд.
-Использование официального источника сохраняет естественное распределение
+Использование официального источника сохраняет репрезентативное распределение
 показателей реальных игроков, что критически важно для корректной верификации
 относительных метрик.
 
@@ -127,50 +136,171 @@ PostgreSQL пакетами в порядке, соответствующем и
 \hline
 \textbf{Таблица} & \textbf{Число строк} \\
 \hline
-\texttt{game\_player\_stats} & 150\,629 \\
-\texttt{games}               & 5\,829 \\
-\texttt{players}              & 5\,126 \\
+\texttt{game\_player\_stats}  & 150\,629 \\
+\texttt{games}                 & 5\,829 \\
+\texttt{players}               & 5\,126 \\
 \texttt{player\_season\_stats} & 2\,813 \\
-\texttt{teams}                & 30 \\
+\texttt{teams}                 & 30 \\
+\texttt{positions}             & 5 \\
+\texttt{seasons}               & 5 \\
 \hline
 \end{tabular}
 \end{table}}
+
+\subsection{Примеры запросов к базе данных}
+
+Для верификации корректности схемы и демонстрации аналитических
+возможностей системы разработан набор SQL-запросов, охватывающий основные
+классы операций выборки.
+
+Простой запрос с фильтрацией. Выборка активных игроков позиции
+центрового (текст запроса см. в Приложении~В, листинг~\ref{lst:sql-filter}).
+Результат выполнения запроса приведён в таблице~\ref{tab:sql-filter-result}.
+
+{\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
+\begin{table}[H]
+\centering
+\caption{Результат запроса с фильтрацией по позиции центрового}
+\label{tab:sql-filter-result}
+\begin{tabular}{|r|l|l|}
+\hline
+\textbf{ID} & \textbf{Имя} & \textbf{Фамилия} \\
+\hline
+23  & Steven  & Adams   \\
+25  & Bam     & Adebayo \\
+61  & Jarrett & Allen   \\
+172 & Deandre & Ayton   \\
+260 & Charles & Bassey  \\
+361 & Goga    & Bitadze \\
+363 & Bismack & Biyombo \\
+480 & Tony    & Bradley \\
+602 & Thomas  & Bryant  \\
+694 & Clint   & Capela  \\
+\hline
+\end{tabular}
+\end{table}}
+
+Многотабличный запрос. Получение результатов матчей с названиями
+команд и меткой сезона (текст запроса см. в Приложении~В,
+листинг~\ref{lst:sql-join}).
+Результат выполнения запроса (первые 10 строк из 1230) приведён
+в таблице~\ref{tab:sql-join-result}.
+
+{\footnotesize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{table}[H]
+\centering
+\caption{Результат многотабличного запроса по матчам сезона 2023-24}
+\label{tab:sql-join-result}
+\begin{tabular}{|l|c|l|r|r|l|c|}
+\hline
+\textbf{Сезон} & \textbf{Дата} & \textbf{Хозяева} & \textbf{Дом.} & \textbf{Гост.} & \textbf{Гости} & \textbf{OT} \\
+\hline
+2023-24 & 24.10.2023 & Denver Nuggets        & 119 & 107 & Los Angeles Lakers       & 0 \\
+2023-24 & 24.10.2023 & Golden State Warriors &  97 & 108 & Phoenix Suns             & 0 \\
+2023-24 & 25.10.2023 & Los Angeles Clippers  & 123 & 111 & Portland Trail Blazers   & 0 \\
+2023-24 & 25.10.2023 & Miami Heat            & 103 & 102 & Detroit Pistons          & 0 \\
+2023-24 & 25.10.2023 & Orlando Magic         & 116 &  86 & Houston Rockets          & 0 \\
+2023-24 & 25.10.2023 & Charlotte Hornets     & 116 & 110 & Atlanta Hawks            & 0 \\
+2023-24 & 25.10.2023 & Indiana Pacers        & 143 & 120 & Washington Wizards       & 0 \\
+2023-24 & 25.10.2023 & Chicago Bulls         & 104 & 124 & Oklahoma City Thunder    & 0 \\
+2023-24 & 25.10.2023 & Toronto Raptors       &  97 &  94 & Minnesota Timberwolves   & 0 \\
+2023-24 & 25.10.2023 & Utah Jazz             & 114 & 130 & Sacramento Kings         & 0 \\
+\hline
+\end{tabular}
+\end{table}}
+
+Итоговый запрос с агрегацией и группировкой. Средняя
+результативность по позициям за сезон, с фильтрацией игроков
+с достаточным игровым временем (текст запроса см. в Приложении~В,
+листинг~\ref{lst:sql-group}).
+Результат выполнения запроса приведён в таблице~\ref{tab:sql-group-result}.
+
+{\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
+\begin{table}[H]
+\centering
+\caption{Средняя результативность по позициям (сезон 2023-24)}
+\label{tab:sql-group-result}
+\begin{tabular}{|c|r|r|r|r|r|}
+\hline
+\textbf{Поз.} & \textbf{Игроков} & \textbf{PTS} & \textbf{REB} & \textbf{AST} & \textbf{PER} \\
+\hline
+C  & 35  & 12.74 & 8.32 & 2.17 & 21.40 \\
+PF & 19  & 13.63 & 6.86 & 2.51 & 20.93 \\
+SG & 129 & 13.20 & 3.53 & 3.84 & 15.67 \\
+SF & 110 & 11.53 & 4.42 & 2.29 & 14.96 \\
+\hline
+\end{tabular}
+\end{table}}
+
+Запрос с подзапросом. Игроки, чей PER превышает среднее
+по лиге за сезон (текст запроса см. в Приложении~В,
+листинг~\ref{lst:sql-subquery}).
+Результат выполнения запроса (10 строк из 271) приведён
+в таблице~\ref{tab:sql-subquery-result}.
+
+{\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
+\begin{table}[H]
+\centering
+\caption{Игроки с PER выше среднего по лиге (сезон 2023-24)}
+\label{tab:sql-subquery-result}
+\begin{tabular}{|l|c|r|r|}
+\hline
+\textbf{Игрок} & \textbf{Команда} & \textbf{PER} & \textbf{PTS} \\
+\hline
+Joel Embiid               & PHI & 37.60 & 31.47 \\
+Nikola Jokić              & DEN & 36.41 & 26.39 \\
+Giannis Antetokounmpo     & MIL & 34.85 & 30.44 \\
+Luka Dončić               & DAL & 32.90 & 33.86 \\
+Anthony Davis             & LAL & 30.96 & 23.75 \\
+Shai Gilgeous-Alexander   & OKC & 30.77 & 30.05 \\
+Leonard Miller            & MIN & 30.75 &  0.91 \\
+Victor Wembanyama         & SAS & 29.65 & 21.14 \\
+Domantas Sabonis          & SAC & 29.41 & 19.43 \\
+LeBron James              & LAL & 28.98 & 24.96 \\
+\hline
+\end{tabular}
+\end{table}}
+
+Составной запрос (UNION). Сводный список лидеров по очкам
+и передачам в одной выборке (текст запроса см. в Приложении~В,
+листинг~\ref{lst:sql-union}).
+Результат выполнения запроса приведён в таблице~\ref{tab:sql-union-result}.
+
+{\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
+\begin{table}[H]
+\centering
+\caption{Топ-5 лидеров по очкам и передачам (сезон 2023-24)}
+\label{tab:sql-union-result}
+\begin{tabular}{|l|l|r|}
+\hline
+\textbf{Категория} & \textbf{Игрок} & \textbf{Значение} \\
+\hline
+Scoring & Luka Dončić               & 33.86 \\
+Scoring & Joel Embiid               & 31.47 \\
+Scoring & Giannis Antetokounmpo     & 30.44 \\
+Scoring & Shai Gilgeous-Alexander   & 30.05 \\
+Scoring & Devin Booker              & 27.07 \\
+Assists & Tyrese Haliburton         & 10.90 \\
+Assists & Luka Dončić               &  9.80 \\
+Assists & Trae Young                &  9.40 \\
+Assists & Nikola Jokić              &  8.96 \\
+Assists & James Harden              &  8.53 \\
+\hline
+\end{tabular}
+\end{table}}
+
+Приведённые запросы охватывают простую фильтрацию, многотабличные
+соединения, агрегацию с группировкой, скалярные подзапросы и составные
+запросы с объединением результатов.
 
 \section{Реализация логики предметной области в СУБД}
 
 \subsection{Хранимые функции расчёта метрик}
 
 Логика расчёта спортивных метрик реализована в виде хранимых
-PL/pgSQL-функций (Приложение~Б). В листинге~\ref{lst:ts} приведён фрагмент
-функции \texttt{calculate\_ts}, включающий программную защиту от деления на
-ноль.
-
-\begin{lstlisting}[language=SQL, label=lst:ts,
-  caption=Реализация функции \texttt{calculate\_ts} (фрагмент)]
-CREATE OR REPLACE FUNCTION calculate_ts(
-    p_player_id INT, p_season_id INT, p_team_id INT DEFAULT NULL
-) RETURNS DECIMAL(5,4) LANGUAGE plpgsql STABLE AS $$
-DECLARE
-    v_pts NUMERIC; v_fga NUMERIC; v_fta NUMERIC; v_denom NUMERIC;
-BEGIN
-    SELECT COALESCE(SUM(gps.points), 0),
-           COALESCE(SUM(gps.fga), 0),
-           COALESCE(SUM(gps.fta), 0)
-    INTO v_pts, v_fga, v_fta
-    FROM game_player_stats gps
-    JOIN games g ON g.game_id = gps.game_id
-    WHERE gps.player_id = p_player_id
-      AND g.season_id = p_season_id
-      AND (p_team_id IS NULL OR gps.team_id = p_team_id);
-
-    IF v_fga = 0 AND v_fta = 0 THEN RETURN NULL; END IF;
-
-    v_denom := 2.0 * (v_fga + 0.44 * v_fta);
-    IF v_denom = 0 THEN RETURN NULL; END IF;
-
-    RETURN ROUND(v_pts::DECIMAL / v_denom, 4);
-END; $$;
-\end{lstlisting}
+PL/pgSQL-функций (Приложение~Г). Функция \texttt{calculate\_ts}
+включает программную защиту от деления на ноль (Приложение~Г,
+листинг~\ref{lst:ts}).
 
 Все расчётные функции помечены квалификатором \texttt{STABLE}, что позволяет
 оптимизатору запросов кэшировать результаты вызовов в рамках одного
@@ -183,45 +313,22 @@ END; $$;
 Для защиты данных от аномалий реализован триггер
 \texttt{trg\_check\_team\_score}. Он проверяет бизнес-правило предметной
 области: сумма очков всех игроков команды в конкретном матче
-должна равняться итоговому командному счёту.
-
-\begin{lstlisting}[language=SQL, label=lst:trigger,
-  caption=Триггер проверки корректности очков (фрагмент)]
-CREATE OR REPLACE FUNCTION trg_validate_team_score_row()
-RETURNS TRIGGER LANGUAGE plpgsql AS $$
-DECLARE
-    v_sum INT; v_expected INT;
-BEGIN
-    IF v_expected IS NOT NULL AND v_sum <> v_expected THEN
-        RAISE EXCEPTION
-            'Player points sum (%) does not match team score (%)',
-            v_sum, v_expected;
-    END IF;
-    RETURN COALESCE(NEW, OLD);
-END; $$;
-\end{lstlisting}
+должна равняться итоговому командному счёту. Текст функции-триггера
+приведён в Приложении~Г (листинг~\ref{lst:trigger}).
 
 \section{Реализация ролевой модели доступа}
 
-Настройка прав доступа (листинг~\ref{lst:grants}) выполнена в соответствии с
-принципом минимальных привилегий. Роль публичного доступа (\texttt{reader})
+Настройка прав доступа выполнена в соответствии с
+принципом минимальных привилегий (Приложение~Г, листинг~\ref{lst:grants}).
+Роль публичного доступа (\texttt{reader})
 лишена возможности прямого обращения к базовым таблицам; чтение
 осуществляется исключительно через защищённые представления.
 
-\begin{lstlisting}[language=SQL, label=lst:grants,
-  caption=Разграничение доступа командами привилегий]
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO analyst;
-GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO analyst;
-
-GRANT SELECT ON v_team_stats   TO reader;
-GRANT SELECT ON v_top_players  TO reader;
-\end{lstlisting}
-
 Корректность ограничений для роли \texttt{reader} проверена подключением к БД
-от её имени: запрос \texttt{SELECT * FROM game\_player\_stats} завершился
+от имени пользователя с назначенной ролью \texttt{reader}: запрос \texttt{SELECT * FROM game\_player\_stats} завершился
 ошибкой \texttt{permission denied} на уровне PostgreSQL, тогда как
 \texttt{SELECT} из представлений \texttt{v\_team\_stats} и \texttt{v\_top\_players},
-перечисленных в листинге~\ref{lst:grants}, выполняется успешно.
+перечисленных в приложении~Г (листинг~\ref{lst:grants}), выполняется успешно.
 Аналитические маршруты API, в том числе \texttt{GET /teams/standings},
 открывают сессию под ролью \texttt{analyst} и для сводной командной
 статистики обращаются к представлению \texttt{v\_team\_stats}.
@@ -259,11 +366,10 @@ async def get_leaders(
 
 \subsection{Кэширование}
 
-Паттерн Cache-Aside реализован классом \texttt{CacheManager}. Структура
-каждого кэшируемого маршрута единообразна: вычисляется ключ из параметров
-запроса, выполняется попытка чтения из Redis; при промахе~--- SQL-запрос к
-PostgreSQL, запись результата в кэш с заданным временем жизни и возврат
-клиенту. Пример приведён в листинге~\ref{lst:cache-aside-pattern}.
+Алгоритм паттерна Cache-Aside (класс \texttt{CacheManager}): генерация ключа
+на основе параметров, чтение из Redis; при промахе~--- выполнение SQL-запроса,
+кэширование результата с установкой времени жизни (TTL) и возврат ответа.
+Пример приведён в листинге~\ref{lst:cache-aside-pattern}.
 
 \begin{lstlisting}[language=Python, label=lst:cache-aside-pattern,
   caption=Cache-Aside в маршруте \texttt{/stats/leaders}]
@@ -280,7 +386,8 @@ return data
 \end{lstlisting}
 
 Время жизни ключей дифференцировано по типу данных: данные завершённых
-матчей кэшируются на один год, лидерборды и ростеры~--- на 15 минут,
+матчей кэшируются на один год, лидерборды и списки составов команд~---
+на 15 минут,
 результаты поиска~--- на 2 минуты. Инвалидация при вызове
 \texttt{POST /admin/refresh/\{season\_id\}} выполняется по шаблонам ключей
 затронутого сезона в соответствии с проектным решением
@@ -288,65 +395,19 @@ return data
 
 \subsection{Пользовательский интерфейс}
 
-Клиентское одностраничное приложение реализовано на React~18 с TypeScript.
-Все типы моделей данных описаны в \texttt{src/types/index.ts} и используются
-совместно компонентами и функциями API-клиента.
+Интеграция библиотеки Recharts~\cite{recharts} обеспечивает рендеринг
+диаграмм и графиков трендов.
 
-Приложение включает пять разделов навигации:
-\begin{enumerate}
-    \item Dashboard~--- KPI-блок лиги, топ-5 игроков по PER,
-          диаграмма рассеяния «очки vs eFG\%», линейные графики
-          трендов по сезонам, горизонтальные гистограммы топ-10 команд
-          и игроков по USG\%;
-    \item Players~--- таблица игроков с серверными фильтрами по позиции,
-          команде и имени, пагинацией; клик открывает модальное окно
-          профиля;
-    \item Teams~--- турнирная таблица по конференциям (Восток/Запад) за выбранный
-          сезон (W, L, W\%, GB); переход на страницу команды с ростером;
-    \item Leaderboard~--- рейтинг по десяти метрикам; клик открывает
-          профиль игрока;
-    \item Advanced Stats~--- диаграммы рассеяния «USG\% vs TS\%»
-          и «PER vs среднее время на площадке».
-\end{enumerate}
+Навигация включает аналитический дашборд с KPI-метриками лиги, таблицу
+игроков с серверной фильтрацией, турнирные сводки конференций, глобальный
+рейтинг лидеров и раздел расширенной статистики с диаграммами рассеяния.
 
-Сравнение двух игроков вынесено в модальное окно:
-из профиля игрока кнопкой «добавить к сравнению» формируется список из двух
-участников; плавающая панель в углу экрана открывает окно с совмещённым
-радарным графиком, гистограммой базовой статистики и таблицей метрик
-с выделением лучшего значения (данные --- \texttt{GET /stats/compare/players}).
+Модуль сравнения игроков реализован в виде интерактивного модального окна
+с совмещённым радарным графиком, гистограммой базовой статистики
+и цветовым выделением превосходящих метрик.
 
-Внешний вид раздела Dashboard представлен на
-рисунке~\ref{fig:ui-dashboard}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{../img/dash.png}
-\caption{Главная страница приложения (Dashboard)}
-\label{fig:ui-dashboard}
-\end{figure}
-
-Модальное окно игрока доступно из любого раздела и отображает
-демографические данные, бейджи базовых и продвинутых метрик за выбранный
-сезон, радарный график характеристик по шести осям и игровой журнал
-последних 20 матчей (рисунок~\ref{fig:ui-modal}). Кнопка добавления
-в сравнение доступна в шапке модального окна.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{../img/player.png}
-\caption{Модальное окно профиля игрока: сезонные метрики и игровой журнал}
-\label{fig:ui-modal}
-\end{figure}
-
-Модальное окно сравнения двух выбранных игроков представлено на
-рисунке~\ref{fig:ui-compare}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{../img/comp.png}
-\caption{Модальное окно сравнения профилей двух игроков}
-\label{fig:ui-compare}
-\end{figure}
+Внешний вид раздела Dashboard, а также модальных окон профиля и сравнения
+игроков представлен в Приложении~Е.
 
 \section{Тестирование и верификация аналитических данных}
 
@@ -357,8 +418,8 @@ return data
 хранимых функций PostgreSQL.
 
 В качестве тестового объекта выбран профиль игрока Nikola Joki\'{c}
-(\texttt{player\_id = 2327}) за регулярный сезон 2023-24
-(\texttt{season\_id = 5}). Прямой SQL-запрос суммы сырых фактов из таблицы
+с идентификатором~2327 за регулярный сезон 2023-24 с идентификатором~5.
+Прямой SQL-запрос суммы сырых фактов из таблицы
 \texttt{game\_player\_stats} вернул следующие значения:
 \begin{itemize}
     \item очки: 2085;
@@ -412,7 +473,7 @@ $\mathrm{lg\_aPER} = 20{,}88$. Итоговый рейтинг по формул
 {\footnotesize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.2}
 \begin{table}[H]
 \centering
-\caption{\raggedleft Контрольные тест-кейсы функций расчёта метрик}
+\caption{Контрольные тест-кейсы функций расчёта метрик}
 \label{tab:test-cases}
 \begin{tabular}{|c|p{0.24\textwidth}|p{0.27\textwidth}|p{0.17\textwidth}|p{0.14\textwidth}|}
 \hline
@@ -442,6 +503,57 @@ $\mathrm{lg\_aPER} = 20{,}88$. Итоговый рейтинг по формул
 \end{tabular}
 \end{table}
 }
+
+Для формализации тестового покрытия каждой функции на стороне СУБД
+выделены классы эквивалентности~--- непересекающиеся разделы входных
+данных, для которых ожидается одинаковое поведение функции. Разбиение
+приведено в таблице~\ref{tab:eq-classes}.
+
+\begin{table}[H]
+\centering
+\caption{Классы эквивалентности функций на стороне СУБД}
+\label{tab:eq-classes}
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.21\textwidth}|c|>{\raggedright\arraybackslash}p{0.28\textwidth}|>{\raggedright\arraybackslash}p{0.22\textwidth}|>{\raggedright\arraybackslash}p{0.14\textwidth}|}
+\hline
+\textbf{Функция} & \textbf{КЭ} & \textbf{Условие раздела} & \textbf{Представитель} & \textbf{Ожидание} \\
+\hline
+
+\texttt{calculate\_efg}
+ & КЭ1 & FGA $> 0$, FG3M $\geq 0$ & \texttt{calc\_efg(2327, 5)} & $\in (0; 1]$ \\
+ & КЭ2 & FGA $= 0$ (нет бросков) & \texttt{calc\_efg(0, 0)} & NULL \\
+ & КЭ3 & team\_id IS NULL (агрегация по всем командам) & \texttt{calc\_efg(2327, 5, NULL)} & $=$ КЭ1 \\
+\hline
+\texttt{calculate\_usg}
+ & КЭ1 & MP $\geq 1$, denom $> 0$ & \texttt{calc\_usg(2327, 5)} & $\in (0; 1]$ \\
+ & КЭ2 & MP $< 1$ (игрок не выходил) & несуществующий player\_id & NULL \\
+ & КЭ3 & командный знаменатель $= 0$ & аномальные тестовые данные & NULL \\
+ & КЭ4 & team\_id не определён (нет матчей) & несуществующий player\_id & NULL \\
+\hline
+\texttt{calculate\_ts}
+ & КЭ1 & FGA $> 0$ или FTA $> 0$ & \texttt{calc\_ts(2327, 5)} & $\approx 0{,}6501$ \\
+ & КЭ2 & FGA $= 0$ и FTA $= 0$ & \texttt{calc\_ts(0, 0)} & NULL \\
+ & КЭ3 & знаменатель $= 0$ при FGA $= 0$, FTA $> 0$ (редкий) & аномальные тестовые данные & NULL \\
+\hline
+\texttt{calculate\_per}
+ & КЭ1 & MP $\geq 50$, lg\_aPER $> 0$ & \texttt{calc\_per(2327, 5)} & $\approx 36{,}41$ \\
+ & КЭ2 & MP $< 50$ (дисквалифицирован) & игрок с малым числом игр & NULL \\
+ & КЭ3 & lg\_aPER $= 0$ или NULL (пустой сезон) & фиктивный season\_id без данных & нормировка на $15{,}0$ \\
+\hline
+\texttt{calculate\_bpm}
+ & КЭ1 & MP $\geq 50$ & \texttt{calc\_bpm(2327, 5)} & числовое значение \\
+ & КЭ2 & MP $< 50$ & игрок с малым числом игр & NULL \\
+\hline
+\texttt{trg\_validate\_} \texttt{team\_score\_row}
+ & КЭ1 & статус $\neq$ \texttt{Finished} или счёт NULL & INSERT в незавершённый матч & принято без проверки \\
+ & КЭ2 & статус \texttt{Finished}, $\sum\mathrm{points} =$ счёт & корректный INSERT & принято \\
+ & КЭ3 & статус \texttt{Finished}, $\sum\mathrm{points} \neq$ счёт & INSERT с неверной суммой очков & EXCEPTION \\
+\hline
+\texttt{trigger\_update\_} \texttt{season\_stats}
+ & КЭ1 & season\_id найден & штатный INSERT в \texttt{game\_player\_stats} & вызов \texttt{update\_} \texttt{season\_stats} \\
+ & КЭ2 & season\_id IS NULL (пустая таблица) & таблица без строк & возврат NULL без вызова \\
+\hline
+\end{tabular}
+\end{table}
 
 \section*{Вывод}
 
