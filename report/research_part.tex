@@ -107,14 +107,14 @@ LIMIT 20;
       /pgf/number format/precision=2},
     every node near coord/.append style={yshift=2pt},
 ]
-\addplot+[fill=gray!20, draw=black,
+\addplot+[fill=white, draw=black,
           postaction={pattern=north east lines}] coordinates {
     (Без индекса, 0.51)
     (B-tree,      0.42)
     (Составной,   0.26)
     (Частичный,   0.51)
 };
-\addplot+[fill=gray!60, draw=black,
+\addplot+[fill=white, draw=black,
           postaction={pattern=crosshatch}] coordinates {
     (Без индекса, 1.54)
     (B-tree,      1.03)
@@ -271,19 +271,19 @@ Redis (Cache Hit)       &  7{,}03 &  8{,}33 & 15{,}72 \\
     legend style={at={(0.05,0.95)}, anchor=north west, font=\small},
     mark size=3pt,
 ]
-\addplot+[mark=*, thick, color=blue] coordinates {
+\addplot+[mark=*, thick, color=black] coordinates {
     (1,   8.77)
     (10,  37.42)
     (50,  54.64)
     (100, 128.78)
 };
-\addplot+[mark=square*, thick, color=red, dashed] coordinates {
+\addplot+[mark=square*, thick, color=black, dashed] coordinates {
     (1,   11.56)
     (10,  79.26)
     (50,  90.08)
     (100, 218.92)
 };
-\addplot+[mark=none, thick, color=gray!70, dotted] coordinates {
+\addplot+[mark=none, thick, color=black, dotted] coordinates {
     (1, 100) (100, 100)
 };
 \legend{Среднее время, P95, Требование 100\,мс}
