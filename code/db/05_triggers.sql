@@ -118,49 +118,50 @@ COMMENT ON PROCEDURE update_season_stats(INT) IS
      Минимальная квалификация для попадания в агрегат: 50 минут за сезон.';
 
 -- ============================================================
--- ФУНКЦИЯ-ТРИГГЕР: trigger_update_season_stats
+-- ФУНКЦИЯ-ТРИГГЕР: trg_update_season_stats_func
 -- Автоматически пересчитывает статистику при вставке данных
 -- ============================================================
-CREATE OR REPLACE FUNCTION trigger_update_season_stats()
+CREATE OR REPLACE FUNCTION trg_update_season_stats_func()
 RETURNS TRIGGER
 LANGUAGE plpgsql
 AS $$
 DECLARE
     v_season_id INT;
 BEGIN
-    -- Определить season_id из последнего добавленного матча
-    SELECT g.season_id
-    INTO v_season_id
-    FROM games g
-    WHERE g.game_id = (SELECT MAX(game_id) FROM game_player_stats)
-    LIMIT 1;
-
-    IF v_season_id IS NOT NULL THEN
+    FOR v_season_id IN
+        SELECT DISTINCT g.season_id
+        FROM inserted_rows r
+        JOIN games g ON r.game_id = g.game_id
+    LOOP
         CALL update_season_stats(v_season_id);
-    END IF;
+    END LOOP;
 
     RETURN NULL;
 END;
 $$;
 
-COMMENT ON FUNCTION trigger_update_season_stats() IS
+COMMENT ON FUNCTION trg_update_season_stats_func() IS
     'Функция-триггер для автоматического пересчёта сезонной статистики.
-     Срабатывает AFTER INSERT на game_player_stats (FOR EACH STATEMENT).';
+     Использует переходную таблицу inserted_rows (REFERENCING NEW TABLE).';
 
 -- ============================================================
--- ТРИГГЕР: after_game_player_stats_insert
--- FOR EACH STATEMENT — один вызов на весь INSERT (не на каждую строку)
+-- ТРИГГЕР: trigger_update_season_stats
+-- FOR EACH STATEMENT + переходная таблица inserted_rows
 -- ============================================================
+DROP TRIGGER IF EXISTS trigger_update_season_stats ON game_player_stats;
 DROP TRIGGER IF EXISTS after_game_player_stats_insert ON game_player_stats;
+DROP FUNCTION IF EXISTS trigger_update_season_stats();
+DROP FUNCTION IF EXISTS trg_update_season_stats_func();
 
-CREATE TRIGGER after_game_player_stats_insert
+CREATE TRIGGER trigger_update_season_stats
     AFTER INSERT ON game_player_stats
+    REFERENCING NEW TABLE AS inserted_rows
     FOR EACH STATEMENT
-    EXECUTE FUNCTION trigger_update_season_stats();
+    EXECUTE FUNCTION trg_update_season_stats_func();
 
-COMMENT ON TRIGGER after_game_player_stats_insert ON game_player_stats IS
+COMMENT ON TRIGGER trigger_update_season_stats ON game_player_stats IS
     'Триггер автопересчёта сезонной статистики после вставки данных матча.
-     FOR EACH STATEMENT — избегает N лишних вызовов при bulk insert.';
+     Переходная таблица inserted_rows позволяет обработать все season_id пакета.';
 
 -- ============================================================
 -- ТРИГГЕР: trg_check_team_score
@@ -225,20 +226,22 @@ $$;
 
 DROP TRIGGER IF EXISTS trg_check_team_score ON game_player_stats;
 
-CREATE TRIGGER trg_check_team_score
+CREATE CONSTRAINT TRIGGER trg_check_team_score
     AFTER INSERT OR UPDATE ON game_player_stats
+    DEFERRABLE INITIALLY DEFERRED
     FOR EACH ROW
     EXECUTE FUNCTION trg_validate_team_score_row();
 
 COMMENT ON TRIGGER trg_check_team_score ON game_player_stats IS
-    'Проверяет равенство суммы очков игроков командному счёту для завершённых матчей.';
+    'Отложенная проверка равенства суммы очков игроков командному счёту
+     для завершённых матчей (валидация на COMMIT).';
 
 -- ============================================================
 -- ПРИМЕЧАНИЕ: управление триггером при bulk-загрузке
 -- ============================================================
 -- Перед массовой загрузкой данных отключить триггеры:
 --   ALTER TABLE game_player_stats DISABLE TRIGGER ALL;
---   (отключает after_game_player_stats_insert и trg_check_team_score)
+--   (отключает trigger_update_season_stats и trg_check_team_score)
 --
 -- После загрузки включить и пересчитать вручную:
 --   ALTER TABLE game_player_stats ENABLE TRIGGER ALL;

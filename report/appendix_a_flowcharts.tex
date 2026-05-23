@@ -284,10 +284,10 @@
     arrow/.style={thick,->,>=stealth}
 ]
 \node (start) [startstop] {Начало};
-\node (get)   [io,  below of=start] {Получить season\_id из \texttt{games} \\ по MAX(game\_id) вставленных строк};
-\node (dec1)  [decision, below of=get] {season\_id IS NULL?};
+\node (get)   [io,  below of=start] {Получить список уникальных season\_id \\ из новых строк (переходная таблица NEW)};
+\node (dec1)  [decision, below of=get] {Список season\_id пуст?};
 \node (null1) [io,  right of=dec1, xshift=4.5cm] {Вывод:\\ значение не определено};
-\node (call)  [process,  below of=dec1] {\texttt{CALL update\_season\_stats(season\_id)}};
+\node (call)  [process,  below of=dec1] {Для каждого season\_id: \\ \texttt{CALL update\_season\_stats(season\_id)}};
 \node (ret)   [io,  below of=call] {Вывод:\\ значение не определено};
 \node (stop)  [startstop, below of=ret] {Конец};
 
@@ -299,7 +299,7 @@
 \draw [arrow] (ret)   -- (stop);
 \draw [arrow] (null1.east) -- ++(0.6,0) |- (stop);
 \end{tikzpicture}
-\caption{Схема алгоритма функции-триггера \texttt{trigger\_update\_season\_stats}}
+\caption{Схема алгоритма функции-триггера \texttt{trg\_update\_season\_stats\_func}}
 \label{fig:algo-trg-update}
 \end{figure}
 
