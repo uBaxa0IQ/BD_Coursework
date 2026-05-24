@@ -1,0 +1,111 @@
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    >=Stealth,
+    entity/.style={rectangle, draw=black, thick, minimum width=2.8cm,
+      minimum height=1.2cm, text centered, fill=white, font=\small\bfseries},
+    attribute/.style={ellipse, draw=black, thick, minimum width=2.4cm,
+      minimum height=0.7cm, text centered, inner sep=0pt, font=\scriptsize,
+      fill=white},
+    relation/.style={diamond, draw=black, thick, minimum width=3.4cm,
+      minimum height=1.6cm, text centered, aspect=1.8, font=\footnotesize,
+      fill=white},
+    line/.style={draw=black, thick},
+    lbl/.style={font=\scriptsize, fill=white, inner sep=1.5pt}
+]
+
+    % ================= СУЩНОСТИ =================
+    \node[entity] (Position) at (0, 7) {Позиция};
+    \node[entity] (Player)   at (0, 3) {Игрок};
+    \node[entity] (GameStat) at (0, -3) {Стат. в матче};
+    \node[entity] (Game)     at (0, -9) {Матч};
+
+    \node[entity] (Team)     at (14, 3) {Команда};
+    \node[entity] (Season)   at (14, -9) {Сезон};
+
+    % ================= СВЯЗИ (РОМБЫ) =================
+    \node[relation] (HasPos)     at (0, 5) {Имеет};
+
+    \node[relation] (History)    at (7, 7) {История};
+    \node[relation] (SeasonStat) at (7, 3) {Стат. за сезон};
+    \node[relation] (Home)       at (7, -3) {Дом. команда};
+    \node[relation] (Away)       at (7, -6) {Гост. команда};
+    \node[relation] (InSeason)   at (7, -9) {Проходит в};
+
+    % ================= ИДЕАЛЬНАЯ ТРАССИРОВКА ЛИНИЙ =================
+    \draw[line] (Player.north) -- (HasPos.south) node[midway, lbl] {M};
+    \draw[line] (HasPos.north) -- (Position.south) node[midway, lbl] {1};
+    \draw[line] (Player.south) -- (GameStat.north) node[midway, lbl] {M};
+    \draw[line] (GameStat.south) -- (Game.north) node[midway, lbl] {N};
+
+    \draw[line] (Player.north east) -- ++(1.5, 0.5) |- (History.west)
+      node[near start, lbl] {M};
+    \draw[line] (Team.north) |- (History.east) node[near start, lbl] {N};
+    \draw[line] (Season.east) -- (21, -9) -- (21, 9) -| (History.north)
+      node[near end, lbl] {K};
+
+    \draw[line] (Player.east) -- (SeasonStat.west) node[midway, lbl] {M};
+    \draw[line] (Team.west) -- (SeasonStat.east) node[midway, lbl] {N};
+    \draw[line] (SeasonStat.south) -- (7, 1.5) -- (10.5, 1.5) -- (10.5, -7.5)
+      -| (Season.north) node[near end, lbl] {K};
+
+    \draw[line] (Game.east) -- (InSeason.west) node[near end, lbl] {M};
+    \draw[line] (2.5, -9) -- (2.5, -3) -- (Home.west) node[midway, lbl] {M};
+    \draw[line] (2.5, -6) -- (Away.west) node[midway, lbl] {M};
+
+    \draw[line] (Team.south) -- (14, 0) -- (12, 0) -- (12, -6) -- (Away.east)
+      node[near end, lbl] {1};
+    \draw[line] (12, -3) -- (Home.east) node[near end, lbl] {1};
+
+    \draw[line] (Season.west) -- (InSeason.east) node[midway, lbl] {1};
+
+    % ================= АТРИБУТЫ (ОВАЛЫ) =================
+    \node[attribute] (pos_id) at (-3.5, 7.6) {\underline{position\_id}};
+    \node[attribute] (pos_cd) at (-3.5, 6.4) {code};
+    \draw[line] (Position) -- (pos_id);
+    \draw[line] (Position) -- (pos_cd);
+
+    \node[attribute] (pl_id) at (-3.5, 4) {\underline{player\_id}};
+    \node[attribute] (pl_fn) at (-3.8, 3) {first\_name};
+    \node[attribute] (pl_ln) at (-3.5, 2) {last\_name};
+    \draw[line] (Player) -- (pl_id);
+    \draw[line] (Player) -- (pl_fn);
+    \draw[line] (Player) -- (pl_ln);
+
+    \node[attribute] (gs_pts) at (-3.5, -2) {points};
+    \node[attribute] (gs_min) at (-4.0, -3) {minutes};
+    \node[attribute] (gs_reb) at (-3.5, -4) {rebounds};
+    \draw[line] (GameStat) -- (gs_pts);
+    \draw[line] (GameStat) -- (gs_min);
+    \draw[line] (GameStat) -- (gs_reb);
+
+    \node[attribute] (gm_id) at (-3.5, -8) {\underline{game\_id}};
+    \node[attribute] (gm_dt) at (-3.8, -9) {game\_date};
+    \node[attribute] (gm_st) at (-3.5, -10) {status};
+    \draw[line] (Game) -- (gm_id);
+    \draw[line] (Game) -- (gm_dt);
+    \draw[line] (Game) -- (gm_st);
+
+    \node[attribute] (tm_id) at (17.5, 4) {\underline{team\_id}};
+    \node[attribute] (tm_nm) at (18.0, 3) {name};
+    \node[attribute] (tm_ct) at (17.5, 2) {city};
+    \draw[line] (Team) -- (tm_id);
+    \draw[line] (Team) -- (tm_nm);
+    \draw[line] (Team) -- (tm_ct);
+
+    \node[attribute] (sn_id) at (17.5, -8) {\underline{season\_id}};
+    \node[attribute] (sn_lb) at (17.5, -10) {label};
+    \draw[line] (Season) -- (sn_id);
+    \draw[line] (Season) -- (sn_lb);
+
+    \node[attribute] (h_ctr) at (4.5, 8.5) {contract\_type};
+    \draw[line] (History) -- (h_ctr);
+
+    \node[attribute] (ss_per) at (4.5, 4.5) {per};
+    \node[attribute] (ss_bpm) at (7.0, 4.8) {bpm};
+    \node[attribute] (ss_tsp) at (9.5, 4.5) {ts\_pct};
+    \draw[line] (SeasonStat) -- (ss_per);
+    \draw[line] (SeasonStat) -- (ss_bpm);
+    \draw[line] (SeasonStat) -- (ss_tsp);
+
+\end{tikzpicture}%
+}
