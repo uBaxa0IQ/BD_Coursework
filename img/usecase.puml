@@ -1,0 +1,36 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor White
+  BorderColor Black
+}
+skinparam actor {
+  BackgroundColor White
+  BorderColor Black
+}
+
+actor "Читатель\n(болельщик)" as reader
+actor "Аналитик" as analyst
+actor "Администратор" as admin
+
+admin --|> analyst
+analyst --|> reader
+
+rectangle "Система анализа статистики NBA" {
+  usecase "Просмотр дашбордов\nи рейтингов" as UC1
+  usecase "Выполнение\nрасчетных функций" as UC2
+  usecase "Загрузка и\nобновление данных" as UC3
+  usecase "Управление БД\nи пользователями" as UC4
+  usecase "Изменение схемы БД" as UC4a
+  usecase "Управление\nучётными записями" as UC4b
+}
+
+reader --> UC1
+analyst --> UC2
+admin --> UC3
+admin --> UC4
+
+UC4 ..> UC4a
+UC4 ..> UC4b
+@enduml

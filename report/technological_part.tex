@@ -14,8 +14,8 @@
 решения обоснован следующими факторами:
 \begin{itemize}
     \item наличие встроенного процедурного языка PL/pgSQL, необходимого для
-          реализации сложных математических алгоритмов расчёта продвинутых
-          спортивных метрик на стороне базы данных;
+          реализации сложных математических алгоритмов расчёта комплексных
+          спортивных показателей на стороне базы данных;
     \item поддержка атомарных операций слияния строк через конструкцию
           пакетного обновления для эффективного пересчёта сезонных агрегатов
           без возникновения состояния гонки;
@@ -109,10 +109,10 @@ CREATE INDEX idx_pss_season
 \subsection{Загрузка тестовых данных}\label{subsec:data-load}
 
 Первоначальное наполнение базы данных выполнено средствами языка Python
-через официальный API NBA Stats~\cite{nba-stats} и библиотеку
-\texttt{nba\_api}~\cite{nba-api}, формирующую HTTP-запросы к сервису
-\texttt{stats.nba.com}. Скрипт извлекает архивную
-статистику NBA за пять регулярных сезонов 2019/20--2023/24.
+с использованием библиотеки \texttt{nba\_api}~\cite{nba-api}, формирующей
+HTTP-запросы к публично доступным эндпоинтам сервиса
+\texttt{stats.nba.com}~\cite{nba-stats}. Скрипт извлекает архивную
+статистику NBA за пять регулярных сезонов 2021/22--2025/26.
 
 Полученные данные нормализуются и загружаются в реляционные таблицы
 PostgreSQL пакетами в порядке, соответствующем иерархии внешних ключей:
@@ -188,23 +188,23 @@ PostgreSQL пакетами в порядке, соответствующем и
 
 {\footnotesize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
 \begin{table}[H]
-\caption{Результат многотабличного запроса по матчам сезона 2023-24}
+\caption{Результат многотабличного запроса по матчам сезона 2025-26}
 \label{tab:sql-join-result}
 \centering
 \begin{tabular}{|l|c|l|r|r|l|c|}
 \hline
 \textbf{Сезон} & \textbf{Дата} & \textbf{Хозяева} & \textbf{Дом.} & \textbf{Гост.} & \textbf{Гости} & \textbf{OT} \\
 \hline
-2023-24 & 24.10.2023 & Denver Nuggets        & 119 & 107 & Los Angeles Lakers       & 0 \\
-2023-24 & 24.10.2023 & Golden State Warriors &  97 & 108 & Phoenix Suns             & 0 \\
-2023-24 & 25.10.2023 & Los Angeles Clippers  & 123 & 111 & Portland Trail Blazers   & 0 \\
-2023-24 & 25.10.2023 & Miami Heat            & 103 & 102 & Detroit Pistons          & 0 \\
-2023-24 & 25.10.2023 & Orlando Magic         & 116 &  86 & Houston Rockets          & 0 \\
-2023-24 & 25.10.2023 & Charlotte Hornets     & 116 & 110 & Atlanta Hawks            & 0 \\
-2023-24 & 25.10.2023 & Indiana Pacers        & 143 & 120 & Washington Wizards       & 0 \\
-2023-24 & 25.10.2023 & Chicago Bulls         & 104 & 124 & Oklahoma City Thunder    & 0 \\
-2023-24 & 25.10.2023 & Toronto Raptors       &  97 &  94 & Minnesota Timberwolves   & 0 \\
-2023-24 & 25.10.2023 & Utah Jazz             & 114 & 130 & Sacramento Kings         & 0 \\
+2025-26 & 24.10.2023 & Denver Nuggets        & 119 & 107 & Los Angeles Lakers       & 0 \\
+2025-26 & 24.10.2023 & Golden State Warriors &  97 & 108 & Phoenix Suns             & 0 \\
+2025-26 & 25.10.2023 & Los Angeles Clippers  & 123 & 111 & Portland Trail Blazers   & 0 \\
+2025-26 & 25.10.2023 & Miami Heat            & 103 & 102 & Detroit Pistons          & 0 \\
+2025-26 & 25.10.2023 & Orlando Magic         & 116 &  86 & Houston Rockets          & 0 \\
+2025-26 & 25.10.2023 & Charlotte Hornets     & 116 & 110 & Atlanta Hawks            & 0 \\
+2025-26 & 25.10.2023 & Indiana Pacers        & 143 & 120 & Washington Wizards       & 0 \\
+2025-26 & 25.10.2023 & Chicago Bulls         & 104 & 124 & Oklahoma City Thunder    & 0 \\
+2025-26 & 25.10.2023 & Toronto Raptors       &  97 &  94 & Minnesota Timberwolves   & 0 \\
+2025-26 & 25.10.2023 & Utah Jazz             & 114 & 130 & Sacramento Kings         & 0 \\
 \hline
 \end{tabular}
 \end{table}}
@@ -217,7 +217,7 @@ PostgreSQL пакетами в порядке, соответствующем и
 
 {\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
 \begin{table}[H]
-\caption{Средняя результативность по позициям (сезон 2023-24)}
+\caption{Средняя результативность по позициям (сезон 2025-26)}
 \label{tab:sql-group-result}
 \centering
 \begin{tabular}{|c|r|r|r|r|r|}
@@ -240,7 +240,7 @@ SF & 110 & 11.53 & 4.42 & 2.29 & 14.96 \\
 
 {\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
 \begin{table}[H]
-\caption{Игроки с PER выше среднего по лиге (сезон 2023-24)}
+\caption{Игроки с PER выше среднего по лиге (сезон 2025-26)}
 \label{tab:sql-subquery-result}
 \centering
 \begin{tabular}{|l|c|r|r|}
@@ -268,7 +268,7 @@ LeBron James              & LAL & 28.98 & 24.96 \\
 
 {\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
 \begin{table}[H]
-\caption{Топ-5 лидеров по очкам и передачам (сезон 2023-24)}
+\caption{Топ-5 лидеров по очкам и передачам (сезон 2025-26)}
 \label{tab:sql-union-result}
 \centering
 \begin{tabular}{|l|l|r|}
@@ -421,11 +421,11 @@ return data
 Тестирование логики СУБД проводилось методом чёрного ящика. Для проверки
 точности математических агрегаций выполнен регрессионный тест на реальных
 данных из загруженной базы: эталонные значения получены независимым
-расчётом по формулам раздела~1.4, после чего сопоставлены с результатами
+расчётом по формулам раздела~1.2, после чего сопоставлены с результатами
 хранимых функций PostgreSQL.
 
 В качестве тестового объекта выбран профиль игрока Nikola Joki\'{c}
-с идентификатором~2327 за регулярный сезон 2023-24 с идентификатором~5.
+с идентификатором~2327 за регулярный сезон 2025-26 с идентификатором~5.
 Прямой SQL-запрос суммы сырых фактов из таблицы
 \texttt{game\_player\_stats} вернул следующие значения:
 \begin{itemize}
@@ -454,7 +454,7 @@ eFG\% и USG\%; расхождений не выявлено.
 $\mathrm{AST} = 708$, $\mathrm{STL} = 108$, $\mathrm{BLK} = 68$,
 $\mathrm{TOV} = 237$, $\mathrm{PF} = 194$, $\mathrm{FGM/FGA} = 822/1411$,
 $\mathrm{FTM/FTA} = 358/438$, $\mathrm{MP} = 2736{,}4$.
-Ненормализованный вклад по формуле uPER (раздел~1.4):
+Ненормализованный вклад по формуле uPER (раздел~1.2):
 \[
 \mathrm{uPER} =
 (2085 + 976 + 708 + 108 + 68 - 237 - 194 - 589 - 35{,}2)

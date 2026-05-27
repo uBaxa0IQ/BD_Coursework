@@ -26,7 +26,7 @@ FROM games g
 JOIN seasons s  ON s.season_id  = g.season_id
 JOIN teams  ht  ON ht.team_id   = g.home_team_id
 JOIN teams  at  ON at.team_id   = g.away_team_id
-WHERE s.label = '2023-24'
+WHERE s.label = '2025-26'
   AND g.status = 'Finished'
 ORDER BY g.game_date
 LIMIT 10;
@@ -44,7 +44,7 @@ FROM player_season_stats pss
 JOIN players   pl ON pl.player_id   = pss.player_id
 JOIN positions p  ON p.position_id  = pl.position_id
 JOIN seasons   s  ON s.season_id    = pss.season_id
-WHERE s.label = '2023-24'
+WHERE s.label = '2025-26'
   AND pss.avg_min >= 15
 GROUP BY p.code
 ORDER BY avg_per DESC;
@@ -59,11 +59,11 @@ SELECT
 FROM player_season_stats pss
 JOIN players pl ON pl.player_id = pss.player_id
 JOIN teams   t  ON t.team_id    = pss.team_id
-WHERE pss.season_id = (SELECT season_id FROM seasons WHERE label = '2023-24')
+WHERE pss.season_id = (SELECT season_id FROM seasons WHERE label = '2025-26')
   AND pss.per > (
       SELECT AVG(per)
       FROM player_season_stats
-      WHERE season_id = (SELECT season_id FROM seasons WHERE label = '2023-24')
+      WHERE season_id = (SELECT season_id FROM seasons WHERE label = '2025-26')
         AND per IS NOT NULL
   )
 ORDER BY pss.per DESC
@@ -76,7 +76,7 @@ LIMIT 10;
         pss.avg_pts         AS value
  FROM player_season_stats pss
  JOIN players pl ON pl.player_id = pss.player_id
- WHERE pss.season_id = (SELECT season_id FROM seasons WHERE label = '2023-24')
+ WHERE pss.season_id = (SELECT season_id FROM seasons WHERE label = '2025-26')
  ORDER BY pss.avg_pts DESC
  LIMIT 5)
 
@@ -87,7 +87,7 @@ UNION ALL
         pss.avg_ast
  FROM player_season_stats pss
  JOIN players pl ON pl.player_id = pss.player_id
- WHERE pss.season_id = (SELECT season_id FROM seasons WHERE label = '2023-24')
+ WHERE pss.season_id = (SELECT season_id FROM seasons WHERE label = '2025-26')
  ORDER BY pss.avg_ast DESC
  LIMIT 5);
 \end{lstlisting}

@@ -74,3 +74,7 @@ postgres_data/
 *.tmp
 *.bak
 ~$*
+
+# --- Materials (local only, GitHub 100 MB limit) ---
+materials/05 - Connolly Begg - Bazy dannykh.pdf
+materials/05 - Connolly Begg - Bazy dannykh.*.pdf

@@ -1,0 +1,34 @@
+СООТВЕТСТВИЕ ПАПКИ materials И СПИСКА ИСТОЧНИКОВ РПЗ
+(номера совпадают со ссылками [1]–[23] в пояснительной записке)
+
+Локальный PDF в папке          | №  | Источник
+-------------------------------|----|------------------------------------------
+02 - Kubatko ...               |  2 | Kubatko et al. A Starting Point for Analyzing Basketball Statistics
+05 - Connolly Begg ...         |  5 | Коннолли, Бегг. Базы данных (локально, не в git: >100 MB)
+08 - Nielsen ...               |  8 | Nielsen. Usability Engineering
+10 - Oliver ...                | 10 | Oliver. Basketball on Paper
+11 - Hollinger ...             | 11 | Hollinger. Pro Basketball Forecast
+12 - Chen ...                  | 12 | Chen. The Entity-Relationship Model (ACM, 1976)
+13 - Kleppmann ...             | 13 | Клеппман. Высоконагруженные приложения
+14 - Fowler Sadalage ...       | 14 | Садаладж, Фаулер. NoSQL
+16 - Date ...                  | 16 | Дейт. Введение в системы баз данных
+
+Только онлайн (файла в папке нет):
+
+  1 | NBA Stats — https://www.nba.com/stats
+  3 | Basketball-Reference.com — https://www.basketball-reference.com/
+  4 | ESPN NBA — https://www.espn.com/nba/
+  6 | PER (Basketball-Reference) — https://www.basketball-reference.com/about/per.html
+  7 | BPM (Basketball-Reference) — https://www.basketball-reference.com/about/bpm.html
+  9 | NBA Stats Glossary — https://www.nba.com/stats/help/glossary
+ 15 | ClickHouse Documentation — https://clickhouse.com/docs/ru/intro
+ 17 | PostgreSQL 15 Documentation — https://www.postgresql.org/docs/15/
+ 18 | Redis Documentation — https://redis.io/docs/
+ 19 | FastAPI Documentation — https://fastapi.tiangolo.com/
+ 20 | asyncpg Documentation — https://magicstack.github.io/asyncpg/current/
+ 21 | React Documentation — https://react.dev/
+ 22 | nba_api — https://github.com/swar/nba_api
+ 23 | Recharts Documentation — https://recharts.org/
+
+Правило именования файлов: «NN - Автор - Краткое название.pdf»,
+где NN — номер источника в списке литературы РПЗ.
