@@ -1,0 +1,149 @@
+@startuml relational_schema
+hide circle
+skinparam linetype ortho
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundcorner 5
+
+skinparam class {
+  BackgroundColor White
+  BorderColor Black
+  ArrowColor Black
+}
+
+entity "positions" {
+  + position_id : Целочисленный (автоинкремент) «PK»
+  --
+  code : Строковый фиксированной длины «UNIQUE»
+  name : Строковый
+}
+
+entity "seasons" {
+  + season_id : Целочисленный (автоинкремент) «PK»
+  --
+  label : Строковый «UNIQUE»
+  start_date : Дата
+  end_date : Дата
+  season_type : Строковый
+}
+
+entity "teams" {
+  + team_id : Целочисленный (автоинкремент) «PK»
+  --
+  nba_team_id : Целочисленный «UNIQUE»
+  name : Строковый «UNIQUE»
+  abbreviation : Строковый фиксированной длины «UNIQUE»
+  city : Строковый
+  conference : Строковый
+  arena_name : Строковый
+  founded_year : Целочисленный
+  is_active : Логический
+}
+
+entity "players" {
+  + player_id : Целочисленный (автоинкремент) «PK»
+  --
+  position_id : Целочисленный «FK»
+  nba_id : Целочисленный «UNIQUE»
+  first_name : Строковый
+  last_name : Строковый
+  birth_date : Дата
+  nationality : Строковый
+  height_cm : Целочисленный
+  weight_kg : Целочисленный
+  jersey_number : Целочисленный
+  draft_year : Целочисленный
+  draft_round : Целочисленный
+  draft_pick : Целочисленный
+  is_active : Логический
+}
+
+entity "games" {
+  + game_id : Целочисленный (автоинкремент) «PK»
+  --
+  season_id : Целочисленный «FK»
+  home_team_id : Целочисленный «FK»
+  away_team_id : Целочисленный «FK»
+  game_date : Дата
+  home_score : Целочисленный
+  away_score : Целочисленный
+  status : Строковый
+  overtime : Целочисленный
+}
+
+entity "game_player_stats" {
+  + stat_id : Целочисленный (автоинкремент) «PK»
+  --
+  game_id : Целочисленный «FK»
+  player_id : Целочисленный «FK»
+  team_id : Целочисленный «FK»
+  minutes_played : Вещественный
+  points : Целочисленный
+  rebounds_off : Целочисленный
+  rebounds_def : Целочисленный
+  assists : Целочисленный
+  steals : Целочисленный
+  blocks : Целочисленный
+  turnovers : Целочисленный
+  fouls : Целочисленный
+  fgm : Целочисленный
+  fga : Целочисленный
+  fg3m : Целочисленный
+  fg3a : Целочисленный
+  ftm : Целочисленный
+  fta : Целочисленный
+  plus_minus : Целочисленный
+  is_starter : Логический
+}
+
+entity "player_season_stats" {
+  + pss_id : Целочисленный (автоинкремент) «PK»
+  --
+  player_id : Целочисленный «FK»
+  season_id : Целочисленный «FK»
+  team_id : Целочисленный «FK»
+  games_played : Целочисленный
+  avg_pts : Вещественный
+  avg_reb : Вещественный
+  avg_ast : Вещественный
+  avg_stl : Вещественный
+  avg_blk : Вещественный
+  avg_tov : Вещественный
+  avg_min : Вещественный
+  avg_plus_minus : Вещественный
+  fg_pct : Вещественный
+  fg3_pct : Вещественный
+  ft_pct : Вещественный
+  efg_pct : Вещественный
+  ts_pct : Вещественный
+  usg_pct : Вещественный
+  per : Вещественный
+  bpm : Вещественный
+}
+
+entity "player_team_history" {
+  + history_id : Целочисленный (автоинкремент) «PK»
+  --
+  player_id : Целочисленный «FK»
+  team_id : Целочисленный «FK»
+  season_id : Целочисленный «FK»
+  start_date : Дата
+  end_date : Дата
+  contract_type : Строковый
+}
+
+positions ||--o{ players : ""
+players ||--o{ game_player_stats : ""
+players ||--o{ player_season_stats : ""
+players ||--o{ player_team_history : ""
+teams ||--o{ games : "home_team_id"
+teams ||--o{ games : "away_team_id"
+teams ||--o{ game_player_stats : ""
+teams ||--o{ player_season_stats : ""
+teams ||--o{ player_team_history : ""
+seasons ||--o{ games : ""
+seasons ||--o{ player_season_stats : ""
+seasons ||--o{ player_team_history : ""
+games ||--o{ game_player_stats : ""
+
+@enduml

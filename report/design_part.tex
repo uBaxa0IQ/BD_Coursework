@@ -9,7 +9,7 @@
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{../img/11.pdf}
+\includegraphics[width=0.9\textwidth]{../img/relational_schema.png}
 \caption{Реляционная схема базы данных}
 \label{fig:relational-schema}
 \end{figure}
@@ -25,15 +25,15 @@
 \caption{Справочник игровых позиций}
 \label{tab:pos}
 \centering
-\begin{tabular}{|p{0.25\textwidth}|p{0.2\textwidth}|p{0.45\textwidth}|}
+\begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
 \hline
-position\_id & SERIAL & PK \\
+position\_id & Целочисленный (автоинкремент) & PK \\
 \hline
-code & VARCHAR(2) & UNIQUE; код PG, SG, SF, PF, C \\
+code & Строковый фиксированной длины & UNIQUE; код позиции \\
 \hline
-name & VARCHAR(20) & полное название позиции \\
+name & Строковый & полное название позиции \\
 \hline
 \end{tabular}
 \end{table}
@@ -47,19 +47,19 @@ name & VARCHAR(20) & полное название позиции \\
 \caption{Справочник сезонов}
 \label{tab:seasons}
 \centering
-\begin{tabular}{|p{0.25\textwidth}|p{0.2\textwidth}|p{0.45\textwidth}|}
+\begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
 \hline
-season\_id & SERIAL & PK \\
+season\_id & Целочисленный (автоинкремент) & PK \\
 \hline
-label & VARCHAR(9) & UNIQUE; метка сезона, в частности формата 2025-26 \\
+label & Строковый & UNIQUE; обозначение сезона, в частности формата 2025-26 \\
 \hline
-start\_date & DATE & дата начала сезона \\
+start\_date & Дата & дата начала сезона \\
 \hline
-end\_date & DATE & дата окончания сезона \\
+end\_date & Дата & дата окончания сезона \\
 \hline
-season\_type & VARCHAR(15) & Regular, Playoff, Preseason \\
+season\_type & Строковый & Regular, Playoff, Preseason \\
 \hline
 \end{tabular}
 \end{table}
@@ -73,27 +73,27 @@ season\_type & VARCHAR(15) & Regular, Playoff, Preseason \\
 \caption{Справочник команд}
 \label{tab:teams}
 \centering
-\begin{tabular}{|p{0.25\textwidth}|p{0.2\textwidth}|p{0.45\textwidth}|}
+\begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
 \hline
-team\_id & SERIAL & PK \\
+team\_id & Целочисленный (автоинкремент) & PK \\
 \hline
-nba\_team\_id & INTEGER & UNIQUE; id на NBA.com \\
+nba\_team\_id & Целочисленный & UNIQUE; id на NBA.com \\
 \hline
-name & VARCHAR(60) & UNIQUE; полное название \\
+name & Строковый & UNIQUE; полное название \\
 \hline
-abbreviation & CHAR(3) & UNIQUE; аббревиатура \\
+abbreviation & Строковый фиксированной длины & UNIQUE; аббревиатура \\
 \hline
-city & VARCHAR(50) & город базирования \\
+city & Строковый & город базирования \\
 \hline
-conference & VARCHAR(4) & CHECK IN ('East','West') \\
+conference & Строковый & CHECK IN ('East','West') \\
 \hline
-arena\_name & VARCHAR(80) & домашняя арена \\
+arena\_name & Строковый & домашняя арена \\
 \hline
-founded\_year & SMALLINT & год основания \\
+founded\_year & Целочисленный & год основания \\
 \hline
-is\_active & BOOLEAN & признак активной команды \\
+is\_active & Логический & признак активной команды \\
 \hline
 \end{tabular}
 \end{table}
@@ -107,37 +107,37 @@ is\_active & BOOLEAN & признак активной команды \\
 \caption{Справочник игроков}
 \label{tab:players}
 \centering
-\begin{tabular}{|p{0.25\textwidth}|p{0.2\textwidth}|p{0.45\textwidth}|}
+\begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
 \hline
-player\_id & SERIAL & PK \\
+player\_id & Целочисленный (автоинкремент) & PK \\
 \hline
-nba\_id & INTEGER & UNIQUE; id на NBA.com \\
+position\_id & Целочисленный & FK $\rightarrow$ \texttt{positions} \\
 \hline
-first\_name & VARCHAR(50) & имя \\
+nba\_id & Целочисленный & UNIQUE; id на NBA.com \\
 \hline
-last\_name & VARCHAR(50) & фамилия \\
+first\_name & Строковый & имя \\
 \hline
-birth\_date & DATE & дата рождения \\
+last\_name & Строковый & фамилия \\
 \hline
-nationality & VARCHAR(50) & гражданство \\
+birth\_date & Дата & дата рождения \\
 \hline
-height\_cm & SMALLINT & рост (см) \\
+nationality & Строковый & гражданство \\
 \hline
-weight\_kg & SMALLINT & вес (кг) \\
+height\_cm & Целочисленный & рост (см) \\
 \hline
-position\_id & INTEGER & FK $\rightarrow$ \texttt{positions} \\
+weight\_kg & Целочисленный & вес (кг) \\
 \hline
-jersey\_number & SMALLINT & номер на майке (0--99) \\
+jersey\_number & Целочисленный & номер на майке (0--99) \\
 \hline
-is\_active & BOOLEAN & действующий игрок \\
+draft\_year & Целочисленный & год драфта \\
 \hline
-draft\_year & SMALLINT & год драфта \\
+draft\_round & Целочисленный & раунд драфта (1 или 2) \\
 \hline
-draft\_round & SMALLINT & раунд драфта (1 или 2) \\
+draft\_pick & Целочисленный & номер выбора на драфте \\
 \hline
-draft\_pick & SMALLINT & номер выбора на драфте \\
+is\_active & Логический & действующий игрок \\
 \hline
 \end{tabular}
 \end{table}
@@ -151,27 +151,27 @@ draft\_pick & SMALLINT & номер выбора на драфте \\
 \caption{Матчи}
 \label{tab:games}
 \centering
-\begin{tabular}{|p{0.25\textwidth}|p{0.2\textwidth}|p{0.45\textwidth}|}
+\begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
 \hline
-game\_id & SERIAL & PK \\
+game\_id & Целочисленный (автоинкремент) & PK \\
 \hline
-season\_id & INTEGER & FK $\rightarrow$ \texttt{seasons} \\
+season\_id & Целочисленный & FK $\rightarrow$ \texttt{seasons} \\
 \hline
-home\_team\_id & INTEGER & FK $\rightarrow$ \texttt{teams}; команда-хозяин \\
+home\_team\_id & Целочисленный & FK $\rightarrow$ \texttt{teams}; команда-хозяин \\
 \hline
-away\_team\_id & INTEGER & FK $\rightarrow$ \texttt{teams}; команда-гость \\
+away\_team\_id & Целочисленный & FK $\rightarrow$ \texttt{teams}; команда-гость \\
 \hline
-game\_date & DATE & дата матча \\
+game\_date & Дата & дата матча \\
 \hline
-home\_score & SMALLINT & счёт хозяев \\
+home\_score & Целочисленный & счёт хозяев \\
 \hline
-away\_score & SMALLINT & счёт гостей \\
+away\_score & Целочисленный & счёт гостей \\
 \hline
-status & VARCHAR(12) & Finished, Scheduled, Postponed \\
+status & Строковый & Finished, Scheduled, Postponed \\
 \hline
-overtime & SMALLINT & число овертаймов (0--6) \\
+overtime & Целочисленный & число овертаймов (0--6) \\
 \hline
 \end{tabular}
 \end{table}
@@ -186,36 +186,49 @@ overtime & SMALLINT & число овертаймов (0--6) \\
 \caption{Факты статистики игрока в матче}
 \label{tab:gps}
 \centering
-\begin{tabular}{|p{0.28\textwidth}|p{0.18\textwidth}|p{0.45\textwidth}|}
+\begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
 \hline
-stat\_id & SERIAL & PK \\
+stat\_id & Целочисленный (автоинкремент) & PK \\
 \hline
-game\_id & INTEGER & FK $\rightarrow$ \texttt{games}, ON DELETE CASCADE \\
+game\_id & Целочисленный & FK $\rightarrow$ \texttt{games}, ON DELETE CASCADE \\
 \hline
-player\_id & INTEGER & FK $\rightarrow$ \texttt{players}, ON DELETE RESTRICT \\
+player\_id & Целочисленный & FK $\rightarrow$ \texttt{players}, ON DELETE RESTRICT \\
 \hline
-team\_id & INTEGER & FK $\rightarrow$ \texttt{teams}, ON DELETE RESTRICT \\
+team\_id & Целочисленный & FK $\rightarrow$ \texttt{teams}, ON DELETE RESTRICT \\
 \hline
-minutes\_played & DECIMAL(4,1) & минуты на площадке \\
+minutes\_played & Вещественный & минуты на площадке \\
 \hline
-points & SMALLINT & очки (CHECK $\ge 0$) \\
+points & Целочисленный & очки (CHECK $\ge 0$) \\
 \hline
-rebounds\_off, rebounds\_def & SMALLINT & подборы в нападении и защите \\
+rebounds\_off & Целочисленный & подборы в нападении \\
 \hline
-assists, steals, blocks & SMALLINT & передачи, перехваты, блоки \\
+rebounds\_def & Целочисленный & подборы в защите \\
 \hline
-turnovers, fouls & SMALLINT & потери и фолы \\
+assists & Целочисленный & передачи \\
 \hline
-fgm, fga, fg3m, fg3a, ftm, fta & SMALLINT & попадания и попытки бросков \\
+steals & Целочисленный & перехваты \\
 \hline
-plus\_minus & SMALLINT & показатель плюс-минус \\
+blocks & Целочисленный & блоки \\
 \hline
-is\_starter & BOOLEAN & признак стартового состава \\
+turnovers & Целочисленный & потери \\
 \hline
-UNIQUE & --- & \texttt{(game\_id, player\_id)}~--- гарантирует
-              единственность записи игрока в матче \\
+fouls & Целочисленный & фолы \\
+\hline
+fgm, fga & Целочисленный & попадания и попытки с игры \\
+\hline
+fg3m, fg3a & Целочисленный & попадания и попытки с трёхочковой \\
+\hline
+ftm, fta & Целочисленный & попадания и попытки штрафных \\
+\hline
+plus\_minus & Целочисленный & показатель плюс-минус \\
+\hline
+is\_starter & Логический & признак стартового состава \\
+\hline
+\multicolumn{3}{|p{\dimexpr\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{%
+\textbf{Ограничение UNIQUE:} \texttt{(game\_id, player\_id)}~---
+единственность записи игрока в матче} \\
 \hline
 \end{tabular}
 \end{table}
@@ -238,33 +251,51 @@ UNIQUE & --- & \texttt{(game\_id, player\_id)}~--- гарантирует
 \caption{Агрегаты статистики за сезон}
 \label{tab:pss}
 \centering
-\begin{tabular}{|p{0.30\textwidth}|p{0.18\textwidth}|p{0.45\textwidth}|}
+\begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
 \hline
-pss\_id & SERIAL & PK \\
+pss\_id & Целочисленный (автоинкремент) & PK \\
 \hline
-player\_id & INTEGER & FK $\rightarrow$ \texttt{players}; часть UNIQUE \\
+player\_id & Целочисленный & FK $\rightarrow$ \texttt{players}; часть UNIQUE \\
 \hline
-season\_id & INTEGER & FK $\rightarrow$ \texttt{seasons}; часть UNIQUE \\
+season\_id & Целочисленный & FK $\rightarrow$ \texttt{seasons}; часть UNIQUE \\
 \hline
-team\_id & INTEGER & FK $\rightarrow$ \texttt{teams}; часть UNIQUE \\
+team\_id & Целочисленный & FK $\rightarrow$ \texttt{teams}; часть UNIQUE \\
 \hline
-games\_played & SMALLINT & число игр в сезоне \\
+games\_played & Целочисленный & число игр в сезоне \\
 \hline
-avg\_pts, avg\_reb, avg\_ast & DECIMAL(5,2) & средние за матч (очки, подборы, передачи) \\
+avg\_pts & Вещественный & средние очки за матч \\
 \hline
-avg\_stl, avg\_blk, avg\_tov, avg\_min & DECIMAL(5,2) & перехваты, блоки, потери, минуты \\
+avg\_reb & Вещественный & средние подборы за матч \\
 \hline
-fg\_pct, fg3\_pct, ft\_pct & DECIMAL(5,4) & проценты попаданий (дробь $\in [0,1]$) \\
+avg\_ast & Вещественный & средние передачи за матч \\
 \hline
-avg\_plus\_minus & DECIMAL(5,2) & средний плюс-минус \\
+avg\_stl & Вещественный & средние перехваты за матч \\
 \hline
-efg\_pct, ts\_pct, usg\_pct & DECIMAL(5,4) & eFG\%, TS\%, USG (доля 0--1; на UI $\times 100$) \\
+avg\_blk & Вещественный & средние блоки за матч \\
 \hline
-per & DECIMAL(6,2) & PER \\
+avg\_tov & Вещественный & средние потери за матч \\
 \hline
-bpm & DECIMAL(5,2) & BPM \\
+avg\_min & Вещественный & среднее время на площадке \\
+\hline
+avg\_plus\_minus & Вещественный & средний плюс-минус \\
+\hline
+fg\_pct & Вещественный & процент попаданий с игры ($\in [0,1]$) \\
+\hline
+fg3\_pct & Вещественный & процент трёхочковых ($\in [0,1]$) \\
+\hline
+ft\_pct & Вещественный & процент штрафных ($\in [0,1]$) \\
+\hline
+efg\_pct & Вещественный & eFG\% (доля 0--1; на UI $\times 100$) \\
+\hline
+ts\_pct & Вещественный & TS\% (доля 0--1; на UI $\times 100$) \\
+\hline
+usg\_pct & Вещественный & USG\% (доля 0--1; на UI $\times 100$) \\
+\hline
+per & Вещественный & PER \\
+\hline
+bpm & Вещественный & BPM \\
 \hline
 \multicolumn{3}{|p{\dimexpr\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{%
 \textbf{Ограничение UNIQUE:} \texttt{(player\_id, season\_id, team\_id)}~---
@@ -282,23 +313,23 @@ bpm & DECIMAL(5,2) & BPM \\
 \caption{История выступлений игроков}
 \label{tab:pth}
 \centering
-\begin{tabular}{|p{0.25\textwidth}|p{0.2\textwidth}|p{0.45\textwidth}|}
+\begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
 \hline
-history\_id & SERIAL & PK \\
+history\_id & Целочисленный (автоинкремент) & PK \\
 \hline
-player\_id & INTEGER & FK $\rightarrow$ \texttt{players}; часть UNIQUE \\
+player\_id & Целочисленный & FK $\rightarrow$ \texttt{players}; часть UNIQUE \\
 \hline
-team\_id & INTEGER & FK $\rightarrow$ \texttt{teams} \\
+team\_id & Целочисленный & FK $\rightarrow$ \texttt{teams} \\
 \hline
-season\_id & INTEGER & FK $\rightarrow$ \texttt{seasons} \\
+season\_id & Целочисленный & FK $\rightarrow$ \texttt{seasons} \\
 \hline
-start\_date & DATE & дата начала выступления \\
+start\_date & Дата & дата начала выступления \\
 \hline
-end\_date & DATE & дата окончания (NULL --- по сей день) \\
+end\_date & Дата & дата окончания (NULL --- по сей день) \\
 \hline
-contract\_type & VARCHAR(20) & Standard, Two-Way, 10-Day и др. \\
+contract\_type & Строковый & Standard, Two-Way, 10-Day и др. \\
 \hline
 \end{tabular}
 \end{table}
@@ -670,7 +701,7 @@ API организован в пять групп маршрутов (\texttt{pl
 \label{subsec:api-spec}
 
 Сезон в параметрах запроса передаётся целочисленным \texttt{season\_id}
-(внешний ключ таблицы \texttt{seasons}); метка \texttt{label}, в частности
+(внешний ключ таблицы \texttt{seasons}); обозначение \texttt{label}, в частности
 формата \texttt{2025-26}, возвращается в ответах API для отображения в интерфейсе.
 Список сезонов клиент получает через \texttt{GET /league/seasons}.
 
