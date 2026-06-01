@@ -2,7 +2,7 @@
 
 \section{Логическое проектирование базы данных}\label{sec:db-design}
 
-Реляционная схема (рисунок~\ref{fig:relational-schema}) включает восемь
+Схема базы данных (рисунок~\ref{fig:relational-schema}) включает восемь
 таблиц. Факты хранятся в \newline \texttt{game\_player\_stats}, денормализованная
 витрина \texttt{player\_season\_stats} ускоряет аналитические выборки.
 Справочники используют суррогатные ключи.
@@ -10,7 +10,7 @@
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{../img/relational_schema.png}
-\caption{Реляционная схема базы данных}
+\caption{Схема реляционной базы данных}
 \label{fig:relational-schema}
 \end{figure}
 
@@ -27,11 +27,11 @@
 \centering
 \begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
 \hline
-position\_id & Целочисленный (автоинкремент) & PK \\
+position\_id & Целочисленный (автоинкремент) & первичный ключ \\
 \hline
-code & Строковый фиксированной длины & UNIQUE; код позиции \\
+code & Строковый фиксированной длины & уникальный; код позиции \\
 \hline
 name & Строковый & полное название позиции \\
 \hline
@@ -49,11 +49,11 @@ name & Строковый & полное название позиции \\
 \centering
 \begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
 \hline
-season\_id & Целочисленный (автоинкремент) & PK \\
+season\_id & Целочисленный (автоинкремент) & первичный ключ \\
 \hline
-label & Строковый & UNIQUE; обозначение сезона, в частности формата 2025-26 \\
+label & Строковый & уникальный; обозначение сезона, в частности формата 2025-26 \\
 \hline
 start\_date & Дата & дата начала сезона \\
 \hline
@@ -75,19 +75,19 @@ season\_type & Строковый & Regular, Playoff, Preseason \\
 \centering
 \begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
 \hline
-team\_id & Целочисленный (автоинкремент) & PK \\
+team\_id & Целочисленный (автоинкремент) & первичный ключ \\
 \hline
-nba\_team\_id & Целочисленный & UNIQUE; id на NBA.com \\
+nba\_team\_id & Целочисленный & уникальный; id на NBA.com \\
 \hline
-name & Строковый & UNIQUE; полное название \\
+name & Строковый & уникальный; полное название \\
 \hline
-abbreviation & Строковый фиксированной длины & UNIQUE; аббревиатура \\
+abbreviation & Строковый фиксированной длины & уникальный; аббревиатура \\
 \hline
 city & Строковый & город базирования \\
 \hline
-conference & Строковый & CHECK IN ('East','West') \\
+conference & Строковый & допустимые значения: East, West \\
 \hline
 arena\_name & Строковый & домашняя арена \\
 \hline
@@ -109,13 +109,13 @@ is\_active & Логический & признак активной команд
 \centering
 \begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
 \hline
-player\_id & Целочисленный (автоинкремент) & PK \\
+player\_id & Целочисленный (автоинкремент) & первичный ключ \\
 \hline
-position\_id & Целочисленный & FK $\rightarrow$ \texttt{positions} \\
+position\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{positions} \\
 \hline
-nba\_id & Целочисленный & UNIQUE; id на NBA.com \\
+nba\_id & Целочисленный & уникальный; id на NBA.com \\
 \hline
 first\_name & Строковый & имя \\
 \hline
@@ -153,15 +153,15 @@ is\_active & Логический & действующий игрок \\
 \centering
 \begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
 \hline
-game\_id & Целочисленный (автоинкремент) & PK \\
+game\_id & Целочисленный (автоинкремент) & первичный ключ \\
 \hline
-season\_id & Целочисленный & FK $\rightarrow$ \texttt{seasons} \\
+season\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{seasons} \\
 \hline
-home\_team\_id & Целочисленный & FK $\rightarrow$ \texttt{teams}; команда-хозяин \\
+home\_team\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{teams}; команда-хозяин \\
 \hline
-away\_team\_id & Целочисленный & FK $\rightarrow$ \texttt{teams}; команда-гость \\
+away\_team\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{teams}; команда-гость \\
 \hline
 game\_date & Дата & дата матча \\
 \hline
@@ -188,19 +188,19 @@ overtime & Целочисленный & число овертаймов (0--6) \
 \centering
 \begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
 \hline
-stat\_id & Целочисленный (автоинкремент) & PK \\
+stat\_id & Целочисленный (автоинкремент) & первичный ключ \\
 \hline
-game\_id & Целочисленный & FK $\rightarrow$ \texttt{games}, ON DELETE CASCADE \\
+game\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{games}; каскадное удаление \\
 \hline
-player\_id & Целочисленный & FK $\rightarrow$ \texttt{players}, ON DELETE RESTRICT \\
+player\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{players}; запрет удаления при зависимых записях \\
 \hline
-team\_id & Целочисленный & FK $\rightarrow$ \texttt{teams}, ON DELETE RESTRICT \\
+team\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{teams}; запрет удаления при зависимых записях \\
 \hline
 minutes\_played & Вещественный & минуты на площадке \\
 \hline
-points & Целочисленный & очки (CHECK $\ge 0$) \\
+points & Целочисленный & очки (только неотрицательные значения) \\
 \hline
 rebounds\_off & Целочисленный & подборы в нападении \\
 \hline
@@ -214,7 +214,7 @@ blocks & Целочисленный & блоки \\
 \hline
 turnovers & Целочисленный & потери \\
 \hline
-fouls & Целочисленный & фолы \\
+fouls & Целочисленный & фолы (диапазон 0--6) \\
 \hline
 fgm, fga & Целочисленный & попадания и попытки с игры \\
 \hline
@@ -227,7 +227,7 @@ plus\_minus & Целочисленный & показатель плюс-мин�
 is\_starter & Логический & признак стартового состава \\
 \hline
 \multicolumn{3}{|p{\dimexpr\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{%
-\textbf{Ограничение UNIQUE:} \texttt{(game\_id, player\_id)}~---
+\textbf{Ограничение уникальности:} \texttt{(game\_id, player\_id)}~---
 единственность записи игрока в матче} \\
 \hline
 \end{tabular}
@@ -236,7 +236,7 @@ is\_starter & Логический & признак стартового сос�
 } % end footnotesize (таблицы)
 
 В таблице \texttt{game\_player\_stats} пара полей \texttt{game\_id} и
-\texttt{player\_id} закреплена ограничением \texttt{UNIQUE}. Это исключает
+\texttt{player\_id} закреплена ограничением уникальности. Это исключает
 дублирование строк статистики одного игрока в одном матче.
 
 {\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.12}%
@@ -253,15 +253,15 @@ is\_starter & Логический & признак стартового сос�
 \centering
 \begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
 \hline
-pss\_id & Целочисленный (автоинкремент) & PK \\
+pss\_id & Целочисленный (автоинкремент) & первичный ключ \\
 \hline
-player\_id & Целочисленный & FK $\rightarrow$ \texttt{players}; часть UNIQUE \\
+player\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{players}; часть ограничения уникальности \\
 \hline
-season\_id & Целочисленный & FK $\rightarrow$ \texttt{seasons}; часть UNIQUE \\
+season\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{seasons}; часть ограничения уникальности \\
 \hline
-team\_id & Целочисленный & FK $\rightarrow$ \texttt{teams}; часть UNIQUE \\
+team\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{teams}; часть ограничения уникальности \\
 \hline
 games\_played & Целочисленный & число игр в сезоне \\
 \hline
@@ -287,18 +287,18 @@ fg3\_pct & Вещественный & процент трёхочковых ($\i
 \hline
 ft\_pct & Вещественный & процент штрафных ($\in [0,1]$) \\
 \hline
-efg\_pct & Вещественный & eFG\% (доля 0--1; на UI $\times 100$) \\
+efg\_pct & Вещественный & eFG\% (доля 0--1) \\
 \hline
-ts\_pct & Вещественный & TS\% (доля 0--1; на UI $\times 100$) \\
+ts\_pct & Вещественный & TS\% (доля 0--1) \\
 \hline
-usg\_pct & Вещественный & USG\% (доля 0--1; на UI $\times 100$) \\
+usg\_pct & Вещественный & USG\% (доля 0--1) \\
 \hline
 per & Вещественный & PER \\
 \hline
 bpm & Вещественный & BPM \\
 \hline
 \multicolumn{3}{|p{\dimexpr\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{%
-\textbf{Ограничение UNIQUE:} \texttt{(player\_id, season\_id, team\_id)}~---
+\textbf{Ограничение уникальности:} \texttt{(player\_id, season\_id, team\_id)}~---
 не более одной строки агрегата на игрока, сезон и команду} \\
 \hline
 \end{tabular}
@@ -315,19 +315,19 @@ bpm & Вещественный & BPM \\
 \centering
 \begin{tabular}{|p{0.22\textwidth}|p{0.28\textwidth}|p{0.42\textwidth}|}
 \hline
-\textbf{Атрибут} & \textbf{Логический тип} & \textbf{Ключ / назначение} \\
+\textbf{Атрибут} & \textbf{Тип} & \textbf{Ключ / назначение} \\
 \hline
-history\_id & Целочисленный (автоинкремент) & PK \\
+history\_id & Целочисленный (автоинкремент) & первичный ключ \\
 \hline
-player\_id & Целочисленный & FK $\rightarrow$ \texttt{players}; часть UNIQUE \\
+player\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{players}; часть ограничения уникальности \\
 \hline
-team\_id & Целочисленный & FK $\rightarrow$ \texttt{teams} \\
+team\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{teams} \\
 \hline
-season\_id & Целочисленный & FK $\rightarrow$ \texttt{seasons} \\
+season\_id & Целочисленный & внешний ключ $\rightarrow$ \texttt{seasons} \\
 \hline
 start\_date & Дата & дата начала выступления \\
 \hline
-end\_date & Дата & дата окончания (NULL --- по сей день) \\
+end\_date & Дата & дата окончания (не задана~--- по сей день) \\
 \hline
 contract\_type & Строковый & Standard, Two-Way, 10-Day и др. \\
 \hline
@@ -396,7 +396,7 @@ contract\_type & Строковый & Standard, Two-Way, 10-Day и др. \\
 Инкапсуляция базовых таблиц и ограничение прямого доступа реализованы
 через три представления:
 \begin{enumerate}
-    \item \texttt{v\_player\_rankings}~--- инкапсулирует операцию JOIN между
+    \item \texttt{v\_player\_rankings}~--- инкапсулирует операцию объединения между
           таблицей агрегатов \texttt{player\_season\_stats} и справочниками
           \texttt{players}, \texttt{teams}. Предоставляет денормализованный
           сводный рейтинг игроков за сезон по базовым и расчётным метрикам,
@@ -410,38 +410,39 @@ contract\_type & Строковый & Standard, Two-Way, 10-Day и др. \\
     \item \texttt{v\_top\_players}~--- обеспечивает безопасность данных для
           публичной роли \texttt{reader}. Является фильтрованным подмножеством
           представления \texttt{v\_player\_rankings} с ограничением выборки
-          (\texttt{LIMIT}) и сортировкой (\texttt{ORDER BY}) лидеров по
-          метрике PER.
+          и сортировкой лидеров по метрике PER.
 \end{enumerate}
 
 \subsection{Проектирование индексов}\label{subsec:indexes}
 
 Производительность аналитических запросов (согласно п.~\ref{sec:nfr})
-обеспечена созданием B-tree индексов~\cite{postgres}:
+обеспечена созданием B-tree индексов~\cite{connolly}:
 \begin{enumerate}
-    \item \texttt{idx\_gps\_player\_id} ON \texttt{game\_player\_stats(player\_id)}~---
-          ускоряет выборку всех выступлений игрока для агрегации сезонной
-          статистики;
-    \item \texttt{idx\_gps\_team\_game} ON
-          \texttt{game\_player\_stats(team\_id, game\_id)}~--- поддерживает
-          агрегацию командной статистики в представлении \texttt{v\_team\_stats};
-    \item \texttt{idx\_games\_season\_id} ON
-          \texttt{games(season\_id)}~--- ускоряет фильтрацию матчей по сезону;
-    \item \texttt{idx\_games\_date} ON \texttt{games(game\_date)}~---
-          обеспечивает диапазонную фильтрацию по дате проведения матча;
-    \item \texttt{idx\_pss\_season} ON
-          \texttt{player\_season\_stats(season\_id)}~--- ускоряет выборку
-          рейтингов за конкретный сезон;
-    \item \texttt{idx\_players\_name} ON
-          \texttt{players(last\_name, first\_name)}~--- поддерживает поиск
-          игрока по фамилии.
+    \item \texttt{idx\_gps\_player\_id}~--- индекс по полю \texttt{player\_id}
+          в таблице \texttt{game\_player\_stats}; ускоряет выборку всех выступлений
+          игрока для агрегации сезонной статистики;
+    \item \texttt{idx\_gps\_team\_game}~--- составной индекс по полям
+          \texttt{team\_id}, \texttt{game\_id} в таблице \texttt{game\_player\_stats};
+          поддерживает агрегацию командной статистики в представлении
+          \texttt{v\_team\_stats};
+    \item \texttt{idx\_games\_season\_id}~--- индекс по полю \texttt{season\_id}
+          в таблице \texttt{games}; ускоряет фильтрацию матчей по сезону;
+    \item \texttt{idx\_games\_date}~--- индекс по полю \texttt{game\_date} в таблице
+          \texttt{games}; обеспечивает диапазонную фильтрацию по дате проведения
+          матча;
+    \item \texttt{idx\_pss\_season}~--- индекс по полю \texttt{season\_id} в таблице
+          \texttt{player\_season\_stats}; ускоряет выборку рейтингов за конкретный
+          сезон;
+    \item \texttt{idx\_players\_name}~--- составной индекс по полям
+          \texttt{last\_name}, \texttt{first\_name} в таблице \texttt{players};
+          поддерживает поиск игрока по фамилии.
 \end{enumerate}
 
-Ограничение UNIQUE на \texttt{(game\_id, player\_id)} в таблице
+Ограничение уникальности на \texttt{(game\_id, player\_id)} в таблице
 \texttt{game\_player\_stats} автоматически создаёт B-tree индекс, покрывающий
-запросы поиска по паре «матч~-- игрок». Все индексы реализованы как B-tree~---
-стандартная структура PostgreSQL, оптимальная для равенства и диапазонных
-предикатов в аналитических запросах.
+запросы поиска по паре «матч~-- игрок». Все индексы построены на основе
+сбалансированного дерева (B-tree)~--- структуры, обеспечивающей логарифмическую
+сложность поиска по предикатам равенства и диапазона.
 
 \section{Проектирование ограничений целостности}
 
@@ -452,26 +453,25 @@ contract\_type & Строковый & Standard, Two-Way, 10-Day и др. \\
 Для справочников игроков и команд физическое удаление на уровне внешних ключей
 запрещено; применяется логическое удаление флагом активности.
 
-\textbf{CHECK-ограничения.}
+\textbf{Ограничения-проверки (предикатные).}
 Обеспечивают согласованность бросков: \texttt{fg3m}~$\le$~\texttt{fgm},
 \texttt{fgm}~$\le$~\texttt{fga}; диапазон фолов от~0 до~6.
-Для таблицы \texttt{games} задано ограничение
-\texttt{CHECK (home\_team\_id <> away\_team\_id)}. Для
-\texttt{player\_team\_history}~--- ограничение
-\texttt{CHECK (start\_date <= end\_date)}.
+Для таблицы \texttt{games} задано ограничение, запрещающее совпадение
+команды-хозяина и команды-гостя (\texttt{home\_team\_id} $\neq$
+\texttt{away\_team\_id}). Для \texttt{player\_team\_history}~--- ограничение,
+требующее, чтобы дата начала не превышала дату окончания
+(\texttt{start\_date} $\le$ \texttt{end\_date}).
 
 \textbf{Процедурные ограничения целостности (триггеры).}
 На таблице \texttt{game\_player\_stats} реализованы два триггера.
 Для проверки равенства суммы очков игроков командному счёту реализован
-отложенный триггер ограничения (\texttt{CONSTRAINT TRIGGER ...
-DEFERRABLE INITIALLY DEFERRED}). Отложенный запуск гарантирует, что
-валидация выполняется не при построчной вставке игроков, а в самом конце
-транзакции (на этапе \texttt{COMMIT}), когда в БД загружена статистика
-всех участников матча.
-Триггер \texttt{trigger\_update\_season\_stats} (\texttt{AFTER INSERT},
-\texttt{FOR EACH STATEMENT}, \texttt{REFERENCING NEW TABLE}) с помощью
-переходных таблиц извлекает уникальные \texttt{season\_id} из пакета
-вставленных строк и для каждого вызывает \texttt{update\_season\_stats}.
+отложенный триггер-ограничение, выполняющий проверку не при построчной
+вставке, а в конце транзакции, когда статистика всех участников матча уже
+загружена.
+Триггер \texttt{trigger\_update\_season\_stats}, срабатывающий после вставки
+на уровне оператора, с помощью механизма переходных таблиц извлекает
+уникальные \texttt{season\_id} из пакета вставленных строк и для каждого
+вызывает \texttt{update\_season\_stats}.
 Ограничение по счёту применимо к полностью обработанным данным:
 игроки, не принявшие участие в матче, в таблицу фактов \texttt{game\_player\_stats}
 они не вносятся; загружаемые источники должны обеспечивать атрибуцию всех очков
@@ -500,7 +500,7 @@ DEFERRABLE INITIALLY DEFERRED}). Отложенный запуск гарант�
 Функция \texttt{calculate\_usg} вычисляет долю командных владений,
 завершаемых игроком, по формуле~(1.3). Алгоритм требует двух проходов:
 суммирования индивидуальных показателей игрока и вычисления командных
-агрегатов по общим матчам. Функция возвращает \texttt{NULL} в трёх случаях: команда игрока не
+агрегатов по общим матчам. Функция возвращает неопределённое значение в трёх случаях: команда игрока не
 определена, суммарное время на площадке менее одной минуты, либо командный
 знаменатель равен нулю. Схема алгоритма вычисления представлена в Приложении~А
 (рисунок~\ref{fig:algo-usg}).
@@ -532,20 +532,19 @@ uPER на основе сезонных сумм всех базовых пок�
 Для каждой команды, присутствующей в таблице фактов данного матча,
 вычисляется сумма очков и сравнивается с \texttt{home\_score}
 или \texttt{away\_score}. При несовпадении триггер поднимает исключение
-и инициирует откат транзакции на этапе \texttt{COMMIT}. Схема алгоритма представлена в Приложении~А
+и инициирует откат транзакции в её конце. Схема алгоритма представлена в Приложении~А
 (рисунок~\ref{fig:algo-trg-score}).
 
 Триггеры \texttt{trg\_update\_season\_stats\_func} и
 \texttt{trigger\_update\_season\_stats} обеспечивают автоматическое
 обновление витрины \texttt{player\_season\_stats} после
 каждой пакетной вставки в таблицу фактов. С помощью механизма переходных
-таблиц (\texttt{REFERENCING} \texttt{NEW} \texttt{TABLE}) триггер
-извлекает список уникальных \texttt{season\_id} из всего пакета
+таблиц триггер извлекает список уникальных \texttt{season\_id} из всего пакета
 вставленных строк. Затем в цикле вызывается процедура
 \texttt{update\_season\_stats} для каждого затронутого сезона.
 Это гарантирует корректный пересчёт витрины даже при массовой загрузке
 исторических данных, затрагивающих несколько разных турниров одновременно.
-Триггер срабатывает на уровне оператора (\texttt{FOR EACH STATEMENT}),
+Триггер срабатывает на уровне оператора,
 что исключает многократный пересчёт витрины при пакетной загрузке данных.
 Схема алгоритма представлена в Приложении~А (рисунок~\ref{fig:algo-trg-update}).
 
@@ -557,7 +556,7 @@ uPER на основе сезонных сумм всех базовых пок�
 суммирует показатели всех игроков из \texttt{game\_player\_stats} по матчам, в
 которых данная команда выступала в качестве хозяев или гостей, и делит
 накопленные суммы на число матчей. Принадлежность строки статистики
-к хозяевам или гостям определяется через JOIN с таблицей \texttt{games}
+к хозяевам или гостям определяется через объединение с таблицей \texttt{games}
 по полям \texttt{home\_team\_id} и \texttt{away\_team\_id}. Результирующий
 набор содержит средние очки, подборы, передачи, потери и эффективные показатели
 команды за матч.
@@ -566,8 +565,9 @@ uPER на основе сезонных сумм всех базовых пок�
 
 Процедура \texttt{update\_season\_stats} пересчитывает витрину
 \texttt{player\_season\_stats} для указанного сезона. Алгоритм спроектирован
-с отказом от курсоров: применяется один наборочный \texttt{INSERT ... SELECT}
-с последующим \texttt{ON CONFLICT DO UPDATE}. Логика процедуры включает
+с отказом от курсоров: применяется одна множественная вставка по результатам
+выборки с последующим обновлением при конфликте (вставка с обновлением).
+Логика процедуры включает
 пять шагов:
 \begin{enumerate}
     \item агрегация по \texttt{(player\_id, team\_id)} из \texttt{game\_player\_stats}
@@ -583,7 +583,7 @@ uPER на основе сезонных сумм всех базовых пок�
           после чего результат нормируется относительно лигового среднего;
     \item вызов \texttt{calculate\_efg} и \texttt{calculate\_ts} по сезонным
           суммам игрока;
-    \item UPSERT в \texttt{player\_season\_stats} по ключу
+    \item вставка с обновлением в \texttt{player\_season\_stats} по ключу
           \texttt{(player\_id, season\_id, team\_id)}.
 \end{enumerate}
 
@@ -612,17 +612,17 @@ uPER на основе сезонных сумм всех базовых пок�
 \hline
 \textbf{Объект} & \textbf{db\_admin} & \textbf{analyst} & \textbf{reader} \\
 \hline
-positions, seasons, teams, players & CRUD & SELECT & --- \\
+positions, seasons, teams, players & полный доступ & чтение & --- \\
 \hline
-games, game\_player\_stats & CRUD & SELECT & --- \\
+games, game\_player\_stats & полный доступ & чтение & --- \\
 \hline
-player\_season\_stats, player\_team\_history & CRUD & SELECT & --- \\
+player\_season\_stats, player\_team\_history & полный доступ & чтение & --- \\
 \hline
-Функции calculate\_* & EXECUTE & EXECUTE & --- \\
+Функции calculate\_* & выполнение & выполнение & --- \\
 \hline
-v\_team\_stats, v\_top\_players & --- & SELECT & SELECT \\
+v\_team\_stats, v\_top\_players & --- & чтение & чтение \\
 \hline
-v\_player\_rankings & SELECT & SELECT & --- \\
+v\_player\_rankings & чтение & чтение & --- \\
 \hline
 \end{tabular}
 \end{table}
@@ -678,14 +678,14 @@ API организован в пять групп маршрутов (\texttt{pl
 \draw [arrow] ([yshift=5pt]react.east) -- node[label, above] {HTTP / REST} ([yshift=5pt]api.west);
 \draw [arrow, dashed] ([yshift=-5pt]api.west) -- node[label, below] {JSON} ([yshift=-5pt]react.east);
 
-% Arrows API <-> PostgreSQL
+% Arrows API <-> DB
 \draw [arrow] ([yshift=8pt]api.east) -- ++(0.8,0) |- ([yshift=5pt]pg.west)
-  node[pos=0.8, above, font=\scriptsize] {SQL};
+  node[pos=0.8, above, font=\scriptsize] {запрос к БД};
 \draw [arrow, dashed] ([yshift=-5pt]pg.west) -| ++(-0.6,0) |- ([yshift=2pt]api.east);
 
-% Arrows API <-> Redis
+% Arrows API <-> Cache
 \draw [arrow] ([yshift=-2pt]api.east) -- ++(0.8,0) |- ([yshift=5pt]redis.west)
-  node[pos=0.8, above, font=\scriptsize] {KV / RESP};
+  node[pos=0.8, above, font=\scriptsize] {ключ--значение};
 \draw [arrow, dashed] ([yshift=-5pt]redis.west) -| ++(-0.6,0) |- ([yshift=-8pt]api.east);
 
 % Labels
@@ -807,7 +807,7 @@ GET & /league/search & q (обяз., мин.\ 2 символа) & Просмот
 \texttt{season\_type}, \texttt{start\_date} и \texttt{end\_date}; клиент
 использует его для формирования элементов выбора сезона.
 Маршрут \texttt{/league/search} реализует полнотекстовый поиск или поиск
-по подстроке (ILIKE) по полям \texttt{first\_name} и \texttt{last\_name} таблицы
+по подстроке без учёта регистра по полям \texttt{first\_name} и \texttt{last\_name} таблицы
 \texttt{players}, а также \texttt{name} таблицы \texttt{teams}, возвращая
 комбинированный массив совпадений.
 
@@ -845,6 +845,9 @@ API-сервер устанавливает соединение с базой �
 реляционную БД, сериализует ответ, сохраняет его в кэш с заданным временем жизни
 и возвращает клиенту.
 
+Последовательность взаимодействия компонентов при обработке запроса по
+паттерну Cache-Aside приведена на рисунке~\ref{fig:redis-seq}.
+
 \begin{figure}[H]
 \centering
 \resizebox{\textwidth}{!}{
@@ -874,11 +877,11 @@ API-сервер устанавливает соединение с базой �
 \draw [<-, thick, dashed] ($(backend.south)+(0,-1.9)$) --
   node[above] {3. Промах кэша} ($(redis.south)+(0,-1.9)$);
 \draw [->, thick] ($(backend.south)+(0,-2.6)$) --
-  node[above] {4. SQL SELECT} ($(db.south)+(0,-2.6)$);
+  node[above] {4. запрос выборки} ($(db.south)+(0,-2.6)$);
 \draw [<-, thick, dashed] ($(backend.south)+(0,-3.5)$) --
-  node[above] {5. Result Set} ($(db.south)+(0,-3.5)$);
+  node[above] {5. результат выборки} ($(db.south)+(0,-3.5)$);
 \draw [->, thick] ($(backend.south)+(0,-4.4)$) --
-  node[above] {6. SETEX cache\_key} ($(redis.south)+(0,-4.4)$);
+  node[above] {6. запись в кэш с TTL} ($(redis.south)+(0,-4.4)$);
 \draw [<-, thick, dashed] ($(backend.south)+(0,-5.1)$) --
   node[above] {7. OK} ($(redis.south)+(0,-5.1)$);
 \draw [<-, thick, dashed] ($(client.south)+(0,-5.8)$) --
@@ -900,8 +903,8 @@ API-сервер устанавливает соединение с базой �
 
 Спроектирована реляционная схема из 8~таблиц, 3~представлений и 6~ключевых индексов;
 показано соответствие всех таблиц 1НФ, 2НФ и 3НФ. Бизнес-логика метрик
-реализована SQL-процедурами на стороне СУБД; ограничения целостности закреплены
-на уровне CHECK-ограничений и триггера. Определена ролевая модель из трёх ролей
+реализована хранимыми процедурами на стороне СУБД; ограничения целостности закреплены
+на уровне ограничений-проверок и триггера. Определена ролевая модель из трёх ролей
 с разграничением прав на уровне таблиц, функций и представлений. Спроектировано
 REST API из 20~маршрутов, организованных в пять групп и покрывающих все три
 варианта использования системы. Для снижения задержки аналитических выборок

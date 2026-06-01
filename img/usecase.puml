@@ -1,36 +1,38 @@
 @startuml
 left to right direction
+skinparam monochrome true
+skinparam shadowing false
 skinparam packageStyle rectangle
-skinparam usecase {
-  BackgroundColor White
-  BorderColor Black
-}
-skinparam actor {
-  BackgroundColor White
-  BorderColor Black
-}
+skinparam defaultFontName Arial
 
-actor "Читатель\n(болельщик)" as reader
-actor "Аналитик" as analyst
-actor "Администратор" as admin
+actor "Читатель\n(болельщик)" as Reader
+actor "Аналитик" as Analyst
+actor "Администратор" as Admin
 
-admin --|> analyst
-analyst --|> reader
+Admin --|> Analyst
+Analyst --|> Reader
 
 rectangle "Система анализа статистики NBA" {
   usecase "Просмотр дашбордов\nи рейтингов" as UC1
-  usecase "Выполнение\nрасчетных функций" as UC2
+  usecase "Выполнение\nрасчётных функций" as UC2
   usecase "Загрузка и\nобновление данных" as UC3
   usecase "Управление БД\nи пользователями" as UC4
-  usecase "Изменение схемы БД" as UC4a
-  usecase "Управление\nучётными записями" as UC4b
+
+  usecase "Создание\nучётной записи" as O1
+  usecase "Редактирование\nучётной записи" as O2
+  usecase "Удаление\nучётной записи" as O3
+  usecase "Назначение роли" as O4
+  usecase "Изменение\nсхемы БД" as O5
 }
 
-reader --> UC1
-analyst --> UC2
-admin --> UC3
-admin --> UC4
+Reader --> UC1
+Analyst --> UC2
+Admin --> UC3
+Admin --> UC4
 
-UC4 ..> UC4a
-UC4 ..> UC4b
+UC4 ..> O1
+UC4 ..> O2
+UC4 ..> O3
+UC4 ..> O4
+UC4 ..> O5
 @enduml

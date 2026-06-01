@@ -1,7 +1,7 @@
 @startuml relational_schema
 hide circle
 skinparam linetype ortho
-skinparam defaultFontSize 11
+skinparam defaultFontSize 14
 skinparam shadowing false
 skinparam roundcorner 5
 
@@ -12,27 +12,27 @@ skinparam class {
 }
 
 entity "positions" {
-  + position_id : Целочисленный (автоинкремент) «PK»
+  + position_id : Целочисленный (автоинкремент) «ПК»
   --
-  code : Строковый фиксированной длины «UNIQUE»
+  code : Строковый фиксированной длины «уникальный»
   name : Строковый
 }
 
 entity "seasons" {
-  + season_id : Целочисленный (автоинкремент) «PK»
+  + season_id : Целочисленный (автоинкремент) «ПК»
   --
-  label : Строковый «UNIQUE»
+  label : Строковый «уникальный»
   start_date : Дата
   end_date : Дата
   season_type : Строковый
 }
 
 entity "teams" {
-  + team_id : Целочисленный (автоинкремент) «PK»
+  + team_id : Целочисленный (автоинкремент) «ПК»
   --
-  nba_team_id : Целочисленный «UNIQUE»
-  name : Строковый «UNIQUE»
-  abbreviation : Строковый фиксированной длины «UNIQUE»
+  nba_team_id : Целочисленный «уникальный»
+  name : Строковый «уникальный»
+  abbreviation : Строковый фиксированной длины «уникальный»
   city : Строковый
   conference : Строковый
   arena_name : Строковый
@@ -41,10 +41,10 @@ entity "teams" {
 }
 
 entity "players" {
-  + player_id : Целочисленный (автоинкремент) «PK»
+  + player_id : Целочисленный (автоинкремент) «ПК»
   --
-  position_id : Целочисленный «FK»
-  nba_id : Целочисленный «UNIQUE»
+  position_id : Целочисленный «ВК»
+  nba_id : Целочисленный «уникальный»
   first_name : Строковый
   last_name : Строковый
   birth_date : Дата
@@ -59,11 +59,11 @@ entity "players" {
 }
 
 entity "games" {
-  + game_id : Целочисленный (автоинкремент) «PK»
+  + game_id : Целочисленный (автоинкремент) «ПК»
   --
-  season_id : Целочисленный «FK»
-  home_team_id : Целочисленный «FK»
-  away_team_id : Целочисленный «FK»
+  season_id : Целочисленный «ВК»
+  home_team_id : Целочисленный «ВК»
+  away_team_id : Целочисленный «ВК»
   game_date : Дата
   home_score : Целочисленный
   away_score : Целочисленный
@@ -72,11 +72,11 @@ entity "games" {
 }
 
 entity "game_player_stats" {
-  + stat_id : Целочисленный (автоинкремент) «PK»
+  + stat_id : Целочисленный (автоинкремент) «ПК»
   --
-  game_id : Целочисленный «FK»
-  player_id : Целочисленный «FK»
-  team_id : Целочисленный «FK»
+  game_id : Целочисленный «ВК»
+  player_id : Целочисленный «ВК»
+  team_id : Целочисленный «ВК»
   minutes_played : Вещественный
   points : Целочисленный
   rebounds_off : Целочисленный
@@ -97,11 +97,11 @@ entity "game_player_stats" {
 }
 
 entity "player_season_stats" {
-  + pss_id : Целочисленный (автоинкремент) «PK»
+  + pss_id : Целочисленный (автоинкремент) «ПК»
   --
-  player_id : Целочисленный «FK»
-  season_id : Целочисленный «FK»
-  team_id : Целочисленный «FK»
+  player_id : Целочисленный «ВК»
+  season_id : Целочисленный «ВК»
+  team_id : Целочисленный «ВК»
   games_played : Целочисленный
   avg_pts : Вещественный
   avg_reb : Вещественный
@@ -122,11 +122,11 @@ entity "player_season_stats" {
 }
 
 entity "player_team_history" {
-  + history_id : Целочисленный (автоинкремент) «PK»
+  + history_id : Целочисленный (автоинкремент) «ПК»
   --
-  player_id : Целочисленный «FK»
-  team_id : Целочисленный «FK»
-  season_id : Целочисленный «FK»
+  player_id : Целочисленный «ВК»
+  team_id : Целочисленный «ВК»
+  season_id : Целочисленный «ВК»
   start_date : Дата
   end_date : Дата
   contract_type : Строковый

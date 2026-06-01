@@ -1,0 +1,16 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, fit}
+\begin{document}
+\begin{tikzpicture}[
+    relation/.style={diamond, draw=black, thick, minimum width=3.6cm,
+      minimum height=1.6cm, align=center, text centered, aspect=1.8, font=\footnotesize,
+      fill=white}
+]
+    \node[relation] (GameStat) at (0, -3) {Статистика\\игрока в матче};
+    \node[draw=black, thick, inner sep=0pt, fit=(GameStat)] {};
+\end{tikzpicture}
+\end{document}
