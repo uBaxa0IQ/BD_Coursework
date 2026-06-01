@@ -1,10 +1,11 @@
 \chapter*{ПРИЛОЖЕНИЯ}
 \addcontentsline{toc}{chapter}{ПРИЛОЖЕНИЯ}
 
-\input{appendix_a_flowcharts}
+\section*{Приложение А. Скрипты создания структуры базы данных}
+\addcontentsline{toc}{section}{Приложение А. Скрипты создания структуры базы данных}
 
-\section*{Приложение Б. Скрипты создания структуры базы данных}
-\addcontentsline{toc}{section}{Приложение Б. Скрипты создания структуры базы данных}
+\renewcommand{\thelstlisting}{А.\arabic{lstlisting}}
+\setcounter{lstlisting}{0}
 
 \begin{lstlisting}[language=SQL]
 CREATE TABLE positions (
@@ -36,10 +37,10 @@ CREATE TABLE teams (
 
 \input{appendix_v_sql}
 
-\section*{Приложение Г. Скрипты создания функций и процедур}
-\addcontentsline{toc}{section}{Приложение Г. Скрипты создания функций и процедур}
+\section*{Приложение В. Скрипты создания функций и процедур}
+\addcontentsline{toc}{section}{Приложение В. Скрипты создания функций и процедур}
 
-\renewcommand{\thelstlisting}{Г.\arabic{lstlisting}}
+\renewcommand{\thelstlisting}{В.\arabic{lstlisting}}
 \setcounter{lstlisting}{0}
 
 \begin{lstlisting}[language=SQL]
@@ -163,8 +164,8 @@ GRANT SELECT ON v_team_stats   TO reader;
 GRANT SELECT ON v_top_players  TO reader;
 \end{lstlisting}
 
-\section*{Приложение Д. Исходный код механизма кэширования}
-\addcontentsline{toc}{section}{Приложение Д. Исходный код механизма кэширования}
+\section*{Приложение Г. Исходный код механизма кэширования}
+\addcontentsline{toc}{section}{Приложение Г. Исходный код механизма кэширования}
 
 В приложении приведён обобщённый декоратор с ключом по пути и строке запроса.
 В реализованных маршрутах API (листинг~\ref{lst:cache-aside-pattern},

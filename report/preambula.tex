@@ -21,7 +21,10 @@
 \usepackage{pdfpages}
 \usepackage{enumerate,letltxmacro}
 \usepackage{threeparttable}
+\usepackage{xurl}
+\PassOptionsToPackage{hyphens,spaces,obeyspaces}{url}
 \usepackage[breaklinks=true]{hyperref}
+\urlstyle{same}
 \usepackage{flafter}
 \usepackage{enumitem}
 \usepackage{multirow}
@@ -84,6 +87,7 @@
 
 \captionsetup[figure]{justification=centering,labelsep=dash}
 \captionsetup[table]{labelsep=dash,justification=raggedright,singlelinecheck=false,width=\textwidth}
+\captionsetup[lstlisting]{labelsep=dash,justification=raggedright,singlelinecheck=false,width=\textwidth}
 
 \graphicspath{{images/}}
 

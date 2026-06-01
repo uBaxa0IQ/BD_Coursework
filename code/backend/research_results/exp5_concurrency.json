@@ -12,36 +12,36 @@
   },
   "warm_cache": {
     "c1": {
-      "median_ms": 4.04,
-      "mean_ms": 4.23,
-      "p95_ms": 6.48,
+      "median_ms": 3.72,
+      "mean_ms": 4.05,
+      "p95_ms": 6.41,
       "error_pct": 0.0,
       "concurrency": 1,
       "rounds": 10,
       "total_requests": 10
     },
     "c10": {
-      "median_ms": 19.94,
-      "mean_ms": 22.54,
-      "p95_ms": 46.05,
+      "median_ms": 28.38,
+      "mean_ms": 28.13,
+      "p95_ms": 48.7,
       "error_pct": 0.0,
       "concurrency": 10,
       "rounds": 10,
       "total_requests": 100
     },
     "c50": {
-      "median_ms": 79.28,
-      "mean_ms": 87.35,
-      "p95_ms": 175.75,
+      "median_ms": 78.06,
+      "mean_ms": 79.43,
+      "p95_ms": 132.5,
       "error_pct": 0.0,
       "concurrency": 50,
       "rounds": 10,
       "total_requests": 500
     },
     "c100": {
-      "median_ms": 136.71,
-      "mean_ms": 141.62,
-      "p95_ms": 243.97,
+      "median_ms": 207.07,
+      "mean_ms": 268.03,
+      "p95_ms": 675.67,
       "error_pct": 0.0,
       "concurrency": 100,
       "rounds": 10,

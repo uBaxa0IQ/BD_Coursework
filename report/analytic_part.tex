@@ -1,4 +1,4 @@
-\chapter{Аналитический раздел}
+﻿\chapter{Аналитический раздел}
 
 \section{Анализ предметной области}
 
@@ -338,10 +338,10 @@ $\mathrm{MP}_i > 100$ минут.
 используются базовые атомарные статистические показатели. Их типы данных
 определяются математической природой значений: счётными величинами, долями
 и непрерывными значениями. Перечень показателей, участвующих в расчётных
-алгоритмах, и их логические типы представлены в таблице~\ref{tab:stat-indicator-types}.
+алгоритмах, и их типы данных представлены в таблице~\ref{tab:stat-indicator-types}.
 
 \begin{table}[H]
-\caption{Логические типы статистических показателей}
+\caption{Типы данных статистических показателей}
 \label{tab:stat-indicator-types}
 \centering
 \begin{tabularx}{\textwidth}{|>{\RaggedRight\arraybackslash}p{4.2cm}
@@ -349,7 +349,7 @@ $\mathrm{MP}_i > 100$ минут.
   |>{\RaggedRight\arraybackslash}p{3.5cm}|}
 \hline
 \textbf{Группа показателей} & \textbf{Перечень переменных (атрибутов)}
-& \textbf{Логический тип данных} \\
+& \textbf{Тип данных} \\
 \hline
 Атомарные счётные показатели &
 Очки (PTS), подборы (TRB, REB\_OFF, REB\_DEF), передачи (AST), перехваты (STL),
@@ -392,7 +392,7 @@ $\mathrm{MP}_i > 100$ минут.
 
 Соответствие ролей и допустимых операций задаётся четырьмя вариантами
 использования:
-\begin{itemize}
+\begin{enumerate}
     \item просмотр дашбордов и рейтингов~--- получение сведений о матчах,
           игроках, командах и агрегированных показателях; доступно всем ролям;
     \item выполнение расчётных функций~--- вычисление комплексных показателей
@@ -402,7 +402,7 @@ $\mathrm{MP}_i > 100$ минут.
     \item управление БД и пользователями~--- администрирование хранилища
           (изменение схемы БД) и учётных записей (создание, редактирование,
           удаление и назначение ролей); доступно только администратору.
-\end{itemize}
+\end{enumerate}
 
 Диаграмма вариантов использования системы представлена на рисунке~\ref{fig:usecase}.
 
@@ -446,13 +446,10 @@ JOIN-операций, которые в документной модели н�
 \caption{Сравнительная характеристика логических моделей данных}
 \label{tab:logical-model-compare}
 \centering
-\small
-\renewcommand{\arraystretch}{1.2}
-\setlength{\tabcolsep}{5pt}
-\begin{tabular}{|>{\RaggedRight\arraybackslash}p{0.50\textwidth}
-  |>{\centering\arraybackslash}p{0.14\textwidth}
-  |>{\centering\arraybackslash}p{0.15\textwidth}
-  |>{\centering\arraybackslash}p{0.15\textwidth}|}
+\begin{tabularx}{\textwidth}{|>{\RaggedRight\arraybackslash}p{4.8cm}
+  |>{\centering\arraybackslash}X
+  |>{\centering\arraybackslash}X
+  |>{\centering\arraybackslash}X|}
 \hline
 \textbf{Критерий} & \textbf{Графовая} & \textbf{Документная} & \textbf{Реляционная} \\
 \hline
@@ -466,7 +463,7 @@ JOIN-операций, которые в документной модели н�
 \hline
 Поддержка транзакционности & Нет & Нет & Да \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 По всем пяти критериям реляционная модель получает положительную

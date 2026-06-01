@@ -1,0 +1,45 @@
+@startuml cache_aside_sequence
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam ParticipantPadding 50
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow false
+hide footbox
+
+participant "Клиент" as Client
+participant "API-сервер" as Api
+participant "Кэш" as Cache
+participant "СУБД" as Db
+
+activate Client
+Client -> Api : 1. HTTP GET /stats
+deactivate Client
+activate Api
+
+Api -> Cache : 2. GET cache_key
+deactivate Api
+activate Cache
+Cache --> Api : 3. Промах кэша
+deactivate Cache
+
+activate Api
+Api -> Db : 4. SQL SELECT
+deactivate Api
+activate Db
+Db --> Api : 5. Result Set
+deactivate Db
+
+activate Api
+Api -> Cache : 6. SETEX cache_key
+deactivate Api
+activate Cache
+Cache --> Api : 7. OK
+deactivate Cache
+
+activate Api
+Api --> Client : 8. HTTP 200
+deactivate Api
+activate Client
+deactivate Client
+@enduml

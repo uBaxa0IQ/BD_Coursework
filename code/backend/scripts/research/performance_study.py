@@ -1,5 +1,5 @@
 """
-NBA Stats — нагрузочные эксперименты (asyncpg + httpx).
+NBA Stats — нагрузочные исследования (asyncpg + httpx).
 Результаты: ./research_results/exp*.json и summary.json
 """
 from __future__ import annotations
@@ -25,6 +25,8 @@ API_KEY = os.getenv("SECRET_KEY", "nba-stats-secret-key-2024")
 SEASON_ID = 5
 WARMUP = 10
 ITERATIONS_DEFAULT = 100
+CONCURRENCY_LEVELS = [1, 10, 50, 100]
+CONCURRENCY_ROUNDS = 10
 
 
 def _resolve_results_dir() -> Path:
@@ -50,6 +52,14 @@ LEADERS_QUERY = """
     LIMIT 20
 """
 
+LEADERS_CUMULATIVE_QUERY = """
+    SELECT player_id, season_id, per, avg_pts
+    FROM player_season_stats
+    WHERE season_id = ANY($1::int[])
+    ORDER BY per DESC NULLS LAST
+    LIMIT 20
+"""
+
 # Тяжёлый агрегирующий запрос напрямую по таблице фактов
 HEAVY_AGG_QUERY = """
     SELECT
@@ -60,6 +70,20 @@ HEAVY_AGG_QUERY = """
     FROM game_player_stats gps
     JOIN games g ON g.game_id = gps.game_id
     WHERE g.season_id = $1
+    GROUP BY gps.player_id
+    ORDER BY total_pts DESC
+    LIMIT 20
+"""
+
+HEAVY_AGG_CUMULATIVE_QUERY = """
+    SELECT
+        gps.player_id,
+        SUM(gps.points)         AS total_pts,
+        COUNT(*)                AS games,
+        AVG(gps.points::float)  AS avg_pts
+    FROM game_player_stats gps
+    JOIN games g ON g.game_id = gps.game_id
+    WHERE g.season_id = ANY($1::int[])
     GROUP BY gps.player_id
     ORDER BY total_pts DESC
     LIMIT 20
@@ -161,32 +185,71 @@ async def measure_sql_single_season(
 
 
 # ---------------------------------------------------------------------------
-# Эксперимент 1 — влияние объёма витрины
+# Исследование 1 — объём фактов: прямая агрегация vs витрина
 # ---------------------------------------------------------------------------
+async def measure_query_with_season_list(
+    conn: asyncpg.Connection,
+    season_ids: list[int],
+    query: str,
+    iterations: int = ITERATIONS_DEFAULT,
+) -> list[float]:
+    for _ in range(WARMUP):
+        await conn.fetch(query, season_ids)
+
+    times: list[float] = []
+    for _ in range(iterations):
+        t0 = time.perf_counter()
+        await conn.fetch(query, season_ids)
+        times.append((time.perf_counter() - t0) * 1000)
+    return times
+
+
+async def row_count_facts_many(conn: asyncpg.Connection, season_ids: list[int]) -> int:
+    return await conn.fetchval(
+        """
+        SELECT COUNT(*)
+        FROM game_player_stats gps
+        JOIN games g ON g.game_id = gps.game_id
+        WHERE g.season_id = ANY($1::int[])
+        """,
+        season_ids,
+    )
+
+
 async def experiment_1(conn: asyncpg.Connection) -> dict:
-    print("\n=== Эксперимент 1: объём данных (витрина player_season_stats) ===")
+    print("\n=== Исследование 1: объём фактов, витрина vs агрегация ===")
     out: dict[str, Any] = {}
 
-    scenarios = [
-        ("1season", [1]),
-        ("3seasons", [1, 2, 3]),
-        ("5seasons", [1, 2, 3, 4, 5]),
-    ]
+    scenarios = [(f"1-{last}", list(range(1, last + 1))) for last in range(1, 6)]
 
     for key, season_ids in scenarios:
-        if len(season_ids) == 1:
-            times = await measure_sql_single_season(conn, season_ids[0])
-        else:
-            times = await measure_sql(conn, season_ids)
-        stats = timing_stats(times)
-        count = await row_count(conn, season_ids)
+        direct_times = await measure_query_with_season_list(
+            conn, season_ids, HEAVY_AGG_CUMULATIVE_QUERY
+        )
+        vitrina_times = await measure_query_with_season_list(
+            conn, season_ids, LEADERS_CUMULATIVE_QUERY
+        )
+        facts_count = await row_count_facts_many(conn, season_ids)
+        vitrina_count = await row_count(conn, season_ids)
+
         out[key] = {
-            **stats,
             "season_ids": season_ids,
-            "row_count": count,
-            "iterations": len(times),
+            "facts_row_count": facts_count,
+            "vitrina_row_count": vitrina_count,
+            "direct_aggregation": {
+                **timing_stats(direct_times),
+                "iterations": len(direct_times),
+            },
+            "vitrina": {
+                **timing_stats(vitrina_times),
+                "iterations": len(vitrina_times),
+            },
         }
-        print(f"  {key}: rows={count}, median={stats['median_ms']} ms")
+        print(
+            f"  {key}: facts={facts_count}, "
+            f"agg={out[key]['direct_aggregation']['median_ms']} ms, "
+            f"vitrina={out[key]['vitrina']['median_ms']} ms"
+        )
 
     path = RESULTS_DIR / "exp1_volume.json"
     path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -194,111 +257,11 @@ async def experiment_1(conn: asyncpg.Connection) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Эксперимент 2 — стратегии индексации витрины
+# Исследование 2 — стратегии индексации на таблице фактов
 # ---------------------------------------------------------------------------
 async def experiment_2(conn: asyncpg.Connection) -> dict:
-    print("\n=== Эксперимент 2: индексация (витрина player_season_stats) ===")
+    print("\n=== Исследование 2: индексация на game_player_stats ===")
     configs = [
-        (
-            "no_index",
-            """
-            DROP INDEX IF EXISTS idx_pss_season;
-            DROP INDEX IF EXISTS idx_pss_season_simple;
-            DROP INDEX IF EXISTS idx_pss_season_composite;
-            DROP INDEX IF EXISTS idx_pss_season_partial;
-            SET enable_indexscan = off;
-            SET enable_bitmapscan = off;
-            """,
-            """
-            SET enable_indexscan = on;
-            SET enable_bitmapscan = on;
-            """,
-        ),
-        (
-            "simple",
-            """
-            DROP INDEX IF EXISTS idx_pss_season;
-            DROP INDEX IF EXISTS idx_pss_season_composite;
-            DROP INDEX IF EXISTS idx_pss_season_partial;
-            SET enable_indexscan = on;
-            SET enable_bitmapscan = on;
-            CREATE INDEX IF NOT EXISTS idx_pss_season_simple
-                ON player_season_stats(season_id);
-            """,
-            None,
-        ),
-        (
-            "composite",
-            """
-            DROP INDEX IF EXISTS idx_pss_season_simple;
-            DROP INDEX IF EXISTS idx_pss_season_partial;
-            CREATE INDEX IF NOT EXISTS idx_pss_season_composite
-                ON player_season_stats(season_id, per DESC NULLS LAST);
-            """,
-            None,
-        ),
-        (
-            "partial",
-            """
-            DROP INDEX IF EXISTS idx_pss_season_composite;
-            CREATE INDEX IF NOT EXISTS idx_pss_season_partial
-                ON player_season_stats(season_id, per DESC)
-                WHERE per IS NOT NULL;
-            """,
-            None,
-        ),
-    ]
-
-    out: dict[str, Any] = {}
-    for key, setup_sql, teardown_sql in configs:
-        await conn.execute(setup_sql)
-        await conn.execute("ANALYZE player_season_stats")
-
-        times = await measure_sql_single_season(conn, SEASON_ID)
-        explain = await explain_json(conn, SEASON_ID)
-        out[key] = {
-            **timing_stats(times),
-            "season_id": SEASON_ID,
-            "iterations": len(times),
-            "explain": explain,
-        }
-        print(f"  {key}: median={out[key]['median_ms']} ms")
-
-        if teardown_sql:
-            await conn.execute(teardown_sql)
-
-    # Восстановить рабочий индекс
-    await conn.execute(
-        """
-        DROP INDEX IF EXISTS idx_pss_season_simple;
-        DROP INDEX IF EXISTS idx_pss_season_composite;
-        DROP INDEX IF EXISTS idx_pss_season_partial;
-        CREATE INDEX IF NOT EXISTS idx_pss_season
-            ON player_season_stats(season_id, per DESC NULLS LAST);
-        ANALYZE player_season_stats;
-        """
-    )
-
-    path = RESULTS_DIR / "exp2_indexes.json"
-    path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
-    return out
-
-
-# ---------------------------------------------------------------------------
-# Эксперимент 3 — витрина vs прямая агрегация по таблице фактов
-# ---------------------------------------------------------------------------
-async def experiment_3(conn: asyncpg.Connection) -> dict:
-    print("\n=== Эксперимент 3: витрина vs прямая агрегация по game_player_stats ===")
-    out: dict[str, Any] = {}
-
-    # Число строк фактов для текущего сезона
-    facts_count = await row_count_facts(conn, SEASON_ID)
-    vitrina_count = await row_count(conn, [SEASON_ID])
-    print(f"  game_player_stats (season {SEASON_ID}): {facts_count} строк")
-    print(f"  player_season_stats (season {SEASON_ID}): {vitrina_count} строк")
-
-    # --- Прямая агрегация: 4 конфигурации индексов ---
-    agg_configs = [
         (
             "no_index",
             """
@@ -341,8 +304,13 @@ async def experiment_3(conn: asyncpg.Connection) -> dict:
         ),
     ]
 
-    agg_results: dict[str, Any] = {}
-    for key, setup_sql, teardown_sql in agg_configs:
+    facts_count = await row_count_facts(conn, SEASON_ID)
+    out: dict[str, Any] = {
+        "season_id": SEASON_ID,
+        "facts_row_count": facts_count,
+    }
+
+    for key, setup_sql, teardown_sql in configs:
         await conn.execute(setup_sql)
         await conn.execute("ANALYZE game_player_stats")
         await conn.execute("ANALYZE games")
@@ -351,17 +319,17 @@ async def experiment_3(conn: asyncpg.Connection) -> dict:
             conn, SEASON_ID, query=HEAVY_AGG_QUERY
         )
         explain = await explain_json(conn, SEASON_ID, query=HEAVY_AGG_QUERY)
-        agg_results[key] = {
+        out[key] = {
             **timing_stats(times),
             "iterations": len(times),
             "explain": explain,
         }
-        print(f"  agg/{key}: median={agg_results[key]['median_ms']} ms")
+        print(f"  {key}: median={out[key]['median_ms']} ms")
 
         if teardown_sql:
             await conn.execute(teardown_sql)
 
-    # Восстановить рабочие индексы таблицы фактов
+    # Восстановить рабочие индексы.
     await conn.execute(
         """
         CREATE INDEX IF NOT EXISTS idx_games_season_id ON games(season_id);
@@ -369,31 +337,20 @@ async def experiment_3(conn: asyncpg.Connection) -> dict:
             ON game_player_stats(player_id);
         CREATE INDEX IF NOT EXISTS idx_gps_team_game
             ON game_player_stats(team_id, game_id);
+        CREATE INDEX IF NOT EXISTS idx_pss_season
+            ON player_season_stats(season_id, per DESC NULLS LAST);
         ANALYZE game_player_stats;
         ANALYZE games;
+        ANALYZE player_season_stats;
         """
     )
 
-    # --- Витрина с рабочим индексом (для прямого сравнения) ---
-    vitrina_times = await measure_sql_single_season(conn, SEASON_ID)
-    vitrina_stats = timing_stats(vitrina_times)
-    print(f"  vitrina (composite idx): median={vitrina_stats['median_ms']} ms")
-
-    out = {
-        "facts_row_count": facts_count,
-        "vitrina_row_count": vitrina_count,
-        "season_id": SEASON_ID,
-        "direct_aggregation": agg_results,
-        "vitrina": {**vitrina_stats, "iterations": len(vitrina_times)},
-    }
-
-    path = RESULTS_DIR / "exp3_vitrina_vs_agg.json"
+    path = RESULTS_DIR / "exp2_indexes.json"
     path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
     return out
 
-
 # ---------------------------------------------------------------------------
-# Эксперимент 4 — кэширование
+# Исследование 3 — кэширование
 # ---------------------------------------------------------------------------
 async def clear_leaders_cache(client: httpx.AsyncClient) -> None:
     resp = await client.delete(
@@ -406,7 +363,7 @@ async def clear_leaders_cache(client: httpx.AsyncClient) -> None:
 
 
 async def experiment_4() -> dict:
-    print("\n=== Эксперимент 4: кэширование ===")
+    print("\n=== Исследование 3: кэширование ===")
 
     async with httpx.AsyncClient() as client:
         # Cache Miss — 30 итераций
@@ -465,14 +422,19 @@ async def experiment_4() -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Эксперимент 5 — параллельная нагрузка
+# Исследование 4 — параллельная нагрузка
 # ---------------------------------------------------------------------------
 async def experiment_5() -> dict:
-    print("\n=== Эксперимент 5: параллельная нагрузка ===")
-    levels = [1, 10, 50, 100]
-    rounds = 10
+    print("\n=== Исследование 4: параллельная нагрузка ===")
     timeout_s = 5.0
-    out: dict[str, Any] = {"metadata": {"cache_warmed_before_round": True}}
+    out: dict[str, Any] = {
+        "metadata": {
+            "endpoint": LEADERS_URL,
+            "levels": CONCURRENCY_LEVELS,
+            "rounds": CONCURRENCY_ROUNDS,
+            "warm_cache": "one warm-up GET before every round",
+        }
+    }
 
     async def one_request(client: httpx.AsyncClient) -> tuple[float, bool]:
         t0 = time.perf_counter()
@@ -484,12 +446,14 @@ async def experiment_5() -> dict:
         except Exception:
             return (time.perf_counter() - t0) * 1000, False
 
-    async with httpx.AsyncClient() as client:
-        for n in levels:
+    async def run_scenario(client: httpx.AsyncClient) -> dict[str, Any]:
+        scenario: dict[str, Any] = {}
+
+        for n in CONCURRENCY_LEVELS:
             all_times: list[float] = []
             errors = 0
 
-            for _ in range(rounds):
+            for _ in range(CONCURRENCY_ROUNDS):
                 await client.get(LEADERS_URL, timeout=30.0)
                 tasks = [one_request(client) for _ in range(n)]
                 results = await asyncio.gather(*tasks)
@@ -500,16 +464,21 @@ async def experiment_5() -> dict:
 
             key = f"c{n}"
             stats = timing_stats(all_times, errors)
-            out[key] = {
+            scenario[key] = {
                 **stats,
                 "concurrency": n,
-                "rounds": rounds,
-                "total_requests": n * rounds,
+                "rounds": CONCURRENCY_ROUNDS,
+                "total_requests": n * CONCURRENCY_ROUNDS,
             }
             print(
-                f"  N={n}: median={stats['median_ms']} ms, "
+                f"  warm/N={n}: median={stats['median_ms']} ms, "
                 f"errors={stats['error_pct']}%"
             )
+
+        return scenario
+
+    async with httpx.AsyncClient() as client:
+        out["warm_cache"] = await run_scenario(client)
 
     path = RESULTS_DIR / "exp5_concurrency.json"
     path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -519,7 +488,6 @@ async def experiment_5() -> dict:
 def build_summary(
     exp1: dict,
     exp2: dict,
-    exp3: dict,
     exp4: dict,
     exp5: dict,
 ) -> dict:
@@ -531,55 +499,47 @@ def build_summary(
         }
 
     return {
-        "exp1_volume": {
-            "1season": pick(exp1["1season"]),
-            "3seasons": pick(exp1["3seasons"]),
-            "5seasons": pick(exp1["5seasons"]),
+        "exp1_volume_fact_vs_vitrina": {
+            key: {
+                "facts_row_count": value["facts_row_count"],
+                "vitrina_row_count": value["vitrina_row_count"],
+                "direct_aggregation": pick(value["direct_aggregation"]),
+                "vitrina": pick(value["vitrina"]),
+            }
+            for key, value in exp1.items()
         },
-        "exp2_indexes": {
+        "exp2_fact_indexes": {
             "no_index": pick(exp2["no_index"]),
-            "simple": pick(exp2["simple"]),
-            "composite": pick(exp2["composite"]),
-            "partial": pick(exp2["partial"]),
+            "idx_games_season": pick(exp2["idx_games_season"]),
+            "idx_gps_player": pick(exp2["idx_gps_player"]),
+            "idx_both": pick(exp2["idx_both"]),
         },
-        "exp3_vitrina_vs_agg": {
-            "facts_row_count": exp3["facts_row_count"],
-            "vitrina_row_count": exp3["vitrina_row_count"],
-            "direct_agg_no_index": pick(exp3["direct_aggregation"]["no_index"]),
-            "direct_agg_idx_games": pick(exp3["direct_aggregation"]["idx_games_season"]),
-            "direct_agg_idx_player": pick(exp3["direct_aggregation"]["idx_gps_player"]),
-            "direct_agg_idx_both": pick(exp3["direct_aggregation"]["idx_both"]),
-            "vitrina": pick(exp3["vitrina"]),
-        },
-        "exp4_cache": {
+        "exp3_cache": {
             "cache_miss": pick(exp4["cache_miss"]),
             "cache_hit": pick(exp4["cache_hit"]),
         },
-        "exp5_concurrency": {
-            "c1": pick(exp5["c1"]),
-            "c10": pick(exp5["c10"]),
-            "c50": pick(exp5["c50"]),
-            "c100": pick(exp5["c100"]),
+        "exp4_concurrency": {
+            key: pick(value)
+            for key, value in exp5["warm_cache"].items()
         },
     }
 
 
 async def main() -> None:
-    print("NBA Stats — нагрузочные эксперименты")
+    print("NBA Stats — нагрузочные исследования")
     print(f"Результаты: {RESULTS_DIR}")
 
     conn = await asyncpg.connect(DATABASE_URL)
     try:
         exp1 = await experiment_1(conn)
         exp2 = await experiment_2(conn)
-        exp3 = await experiment_3(conn)
     finally:
         await conn.close()
 
     exp4 = await experiment_4()
     exp5 = await experiment_5()
 
-    summary = build_summary(exp1, exp2, exp3, exp4, exp5)
+    summary = build_summary(exp1, exp2, exp4, exp5)
     summary_path = RESULTS_DIR / "summary.json"
     summary_path.write_text(
         json.dumps(summary, indent=2, ensure_ascii=False),

@@ -1,9 +1,12 @@
 @startuml relational_schema
+top to bottom direction
 hide circle
 skinparam linetype ortho
-skinparam defaultFontSize 14
+skinparam defaultFontSize 12
 skinparam shadowing false
 skinparam roundcorner 5
+skinparam nodesep 35
+skinparam ranksep 45
 
 skinparam class {
   BackgroundColor White
@@ -12,138 +15,154 @@ skinparam class {
 }
 
 entity "positions" {
-  + position_id : Целочисленный (автоинкремент) «ПК»
+  + position_id : Int PK
   --
-  code : Строковый фиксированной длины «уникальный»
-  name : Строковый
+  code : Char UQ
+  name : Str
 }
 
 entity "seasons" {
-  + season_id : Целочисленный (автоинкремент) «ПК»
+  + season_id : Int PK
   --
-  label : Строковый «уникальный»
-  start_date : Дата
-  end_date : Дата
-  season_type : Строковый
+  label : Str UQ
+  start_date : Date
+  end_date : Date
+  season_type : Str
 }
 
 entity "teams" {
-  + team_id : Целочисленный (автоинкремент) «ПК»
+  + team_id : Int PK
   --
-  nba_team_id : Целочисленный «уникальный»
-  name : Строковый «уникальный»
-  abbreviation : Строковый фиксированной длины «уникальный»
-  city : Строковый
-  conference : Строковый
-  arena_name : Строковый
-  founded_year : Целочисленный
-  is_active : Логический
+  nba_team_id : Int UQ
+  name : Str UQ
+  abbreviation : Char UQ
+  city : Str
+  conference : Str
+  arena_name : Str
+  founded_year : Int
+  is_active : Bool
 }
 
 entity "players" {
-  + player_id : Целочисленный (автоинкремент) «ПК»
+  + player_id : Int PK
   --
-  position_id : Целочисленный «ВК»
-  nba_id : Целочисленный «уникальный»
-  first_name : Строковый
-  last_name : Строковый
-  birth_date : Дата
-  nationality : Строковый
-  height_cm : Целочисленный
-  weight_kg : Целочисленный
-  jersey_number : Целочисленный
-  draft_year : Целочисленный
-  draft_round : Целочисленный
-  draft_pick : Целочисленный
-  is_active : Логический
+  position_id : Int FK
+  nba_id : Int UQ
+  first_name : Str
+  last_name : Str
+  birth_date : Date
+  nationality : Str
+  height_cm : Int
+  weight_kg : Int
+  jersey_number : Int
+  draft_year : Int
+  draft_round : Int
+  draft_pick : Int
+  is_active : Bool
 }
 
 entity "games" {
-  + game_id : Целочисленный (автоинкремент) «ПК»
+  + game_id : Int PK
   --
-  season_id : Целочисленный «ВК»
-  home_team_id : Целочисленный «ВК»
-  away_team_id : Целочисленный «ВК»
-  game_date : Дата
-  home_score : Целочисленный
-  away_score : Целочисленный
-  status : Строковый
-  overtime : Целочисленный
+  season_id : Int FK
+  home_team_id : Int FK
+  away_team_id : Int FK
+  game_date : Date
+  home_score : Int
+  away_score : Int
+  status : Str
+  overtime : Int
 }
 
 entity "game_player_stats" {
-  + stat_id : Целочисленный (автоинкремент) «ПК»
+  + stat_id : Int PK
   --
-  game_id : Целочисленный «ВК»
-  player_id : Целочисленный «ВК»
-  team_id : Целочисленный «ВК»
-  minutes_played : Вещественный
-  points : Целочисленный
-  rebounds_off : Целочисленный
-  rebounds_def : Целочисленный
-  assists : Целочисленный
-  steals : Целочисленный
-  blocks : Целочисленный
-  turnovers : Целочисленный
-  fouls : Целочисленный
-  fgm : Целочисленный
-  fga : Целочисленный
-  fg3m : Целочисленный
-  fg3a : Целочисленный
-  ftm : Целочисленный
-  fta : Целочисленный
-  plus_minus : Целочисленный
-  is_starter : Логический
+  game_id : Int FK
+  player_id : Int FK
+  team_id : Int FK
+  minutes_played : Num
+  points : Int
+  rebounds_off : Int
+  rebounds_def : Int
+  assists : Int
+  steals : Int
+  blocks : Int
+  turnovers : Int
+  fouls : Int
+  fgm : Int
+  fga : Int
+  fg3m : Int
+  fg3a : Int
+  ftm : Int
+  fta : Int
+  plus_minus : Int
+  is_starter : Bool
 }
 
 entity "player_season_stats" {
-  + pss_id : Целочисленный (автоинкремент) «ПК»
+  + pss_id : Int PK
   --
-  player_id : Целочисленный «ВК»
-  season_id : Целочисленный «ВК»
-  team_id : Целочисленный «ВК»
-  games_played : Целочисленный
-  avg_pts : Вещественный
-  avg_reb : Вещественный
-  avg_ast : Вещественный
-  avg_stl : Вещественный
-  avg_blk : Вещественный
-  avg_tov : Вещественный
-  avg_min : Вещественный
-  avg_plus_minus : Вещественный
-  fg_pct : Вещественный
-  fg3_pct : Вещественный
-  ft_pct : Вещественный
-  efg_pct : Вещественный
-  ts_pct : Вещественный
-  usg_pct : Вещественный
-  per : Вещественный
-  bpm : Вещественный
+  player_id : Int FK
+  season_id : Int FK
+  team_id : Int FK
+  games_played : Int
+  avg_pts : Num
+  avg_reb : Num
+  avg_ast : Num
+  avg_stl : Num
+  avg_blk : Num
+  avg_tov : Num
+  avg_min : Num
+  avg_plus_minus : Num
+  fg_pct : Num
+  fg3_pct : Num
+  ft_pct : Num
+  efg_pct : Num
+  ts_pct : Num
+  usg_pct : Num
+  per : Num
+  bpm : Num
 }
 
 entity "player_team_history" {
-  + history_id : Целочисленный (автоинкремент) «ПК»
+  + history_id : Int PK
   --
-  player_id : Целочисленный «ВК»
-  team_id : Целочисленный «ВК»
-  season_id : Целочисленный «ВК»
-  start_date : Дата
-  end_date : Дата
-  contract_type : Строковый
+  player_id : Int FK
+  team_id : Int FK
+  season_id : Int FK
+  start_date : Date
+  end_date : Date
+  contract_type : Str
 }
 
-positions ||--o{ players : ""
-players ||--o{ game_player_stats : ""
-players ||--o{ player_season_stats : ""
-players ||--o{ player_team_history : ""
-teams ||--o{ games : "home_team_id"
-teams ||--o{ games : "away_team_id"
-teams ||--o{ game_player_stats : ""
-teams ||--o{ player_season_stats : ""
-teams ||--o{ player_team_history : ""
-seasons ||--o{ games : ""
-seasons ||--o{ player_season_stats : ""
-seasons ||--o{ player_team_history : ""
-games ||--o{ game_player_stats : ""
+' Раскладка: 3 ряда по 3 / 2 сущности (без принудительного left-to-right)
+positions -[hidden]right- seasons
+seasons -[hidden]right- teams
+players -[hidden]right- games
+games -[hidden]right- player_team_history
+game_player_stats -[hidden]right- player_season_stats
+
+positions -[hidden]down- players
+seasons -[hidden]down- games
+teams -[hidden]down- player_team_history
+games -[hidden]down- game_player_stats
+player_team_history -[hidden]down- player_season_stats
+
+positions ||--o{ players
+players ||--o{ player_team_history
+players ||--o{ game_player_stats
+players ||--o{ player_season_stats
+
+teams ||--o{ games : home_team_id
+teams ||--o{ games : away_team_id
+teams ||--o{ game_player_stats
+teams ||--o{ player_season_stats
+teams ||--o{ player_team_history
+
+seasons ||--o{ games
+seasons ||--o{ player_season_stats
+seasons ||--o{ player_team_history
+
+games ||--o{ game_player_stats
 
 @enduml
