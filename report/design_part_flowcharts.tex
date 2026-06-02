@@ -1,26 +1,58 @@
-﻿\newcommand{\flowchartCalculateTs}{%
+﻿% Общие параметры блок-схем (ГОСТ 19.701): единая ширина блоков
+\newcommand{\flowchartBlockWidth}{6.8cm}
+\newcommand{\flowchartBlockHeight}{0.85cm}
+\newcommand{\flowchartRightShift}{6.3cm}      % отступ правой колонки (рис. 2.2--2.8)
+\newcommand{\flowchartRightShiftSmall}{5.0cm} % компактная схема calculate_ts
+\newcommand{\flowchartUpdateVGap}{1.28cm}     % верт. зазор для рис. 2.10
+\newcommand{\flowchartUpdateMidExtra}{-0.4cm}   % pro3→pro4, pro4→pro5 (рис. 2.10)
+\newcommand{\flowchartTinyVExtra}{-0.15cm}    % микро-добавка (рис. 2.3)
+\newcommand{\flowchartDecExpExtra}{-0.45cm}   % dec1 → expected (рис. 2.2)
+
+\tikzset{
+  fc base/.style={font=\footnotesize, inner sep=4pt},
+  fc arrow/.style={thick,->,>=stealth},
+  fc startstop/.style={draw, rectangle, rounded corners=10pt,
+    text width=\flowchartBlockWidth, minimum height=\flowchartBlockHeight,
+    align=center, fill=white},
+  fc process/.style={draw, rectangle,
+    text width=\flowchartBlockWidth, minimum height=\flowchartBlockHeight,
+    align=center, fill=white},
+  fc predefined/.style={draw, rectangle,
+    text width=\flowchartBlockWidth, minimum height=\flowchartBlockHeight,
+    align=center, fill=white,
+    path picture={
+      \draw ([xshift=4pt]path picture bounding box.north west) --
+            ([xshift=4pt]path picture bounding box.south west);
+      \draw ([xshift=-4pt]path picture bounding box.north east) --
+            ([xshift=-4pt]path picture bounding box.south east);
+    }},
+  fc io/.style={draw, trapezium, trapezium left angle=75, trapezium right angle=105,
+    trapezium stretches=true,
+    text width=\flowchartBlockWidth, minimum height=\flowchartBlockHeight,
+    align=center, fill=white},
+  fc decision/.style={draw, diamond, aspect=3.2,
+    text width=5.0cm, inner sep=1pt,
+    minimum height=\flowchartBlockHeight, align=center, fill=white},
+}
+
+\newcommand{\flowchartCalculateTs}{%
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
+    fc base,
     node distance=1.5cm,
-    every node/.style={font=\footnotesize},
-    startstop/.style={draw, rectangle, rounded corners=10pt, minimum width=3.2cm,
-      minimum height=0.8cm, align=center, fill=white},
-    process/.style={draw, rectangle, minimum width=3.2cm, minimum height=0.9cm,
-      align=center, fill=white},
-    io/.style={draw, trapezium, trapezium left angle=75, trapezium right angle=105,
-      trapezium stretches=true, minimum width=3.5cm, minimum height=0.8cm,
-      align=center, fill=white},
-    decision/.style={draw, diamond, aspect=2.5, minimum width=3cm,
-      minimum height=0.8cm, align=center, fill=white},
-    arrow/.style={thick,->,>=stealth}
+    startstop/.style={fc startstop},
+    process/.style={fc process},
+    io/.style={fc io},
+    decision/.style={fc decision},
+    arrow/.style={fc arrow}
 ]
 \node (start)  [startstop] {Начало};
 \node (pro1)   [process,  below of=start] {$PTS, FGA, FTA := \mathrm{SUM}(\ldots)$};
 \node (pro2)   [process,  below of=pro1]
   {$D = 2 \cdot (\mathrm{FGA} + 0{,}44 \cdot \mathrm{FTA})$};
 \node (dec1)   [decision, below of=pro2, yshift=-0.5cm] {$D = 0$?};
-\node (pro3a)  [io,  right of=dec1, xshift=3.5cm] {Вывод:\\ значение не определено};
+\node (pro3a)  [io,  right of=dec1, xshift=\flowchartRightShiftSmall] {Вывод:\\ значение не определено};
 \node (pro3b)  [io,  below of=dec1, yshift=-0.5cm]
   {Возврат $\mathrm{PTS} / D$};
 \node (stop)   [startstop, below of=pro3b] {Конец};
@@ -42,27 +74,21 @@
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
+    fc base,
     node distance=1.8cm,
-    every node/.style={font=\footnotesize},
-    startstop/.style={draw, rectangle, rounded corners=10pt,
-      minimum width=4.5cm, minimum height=0.8cm,
-      align=center, fill=white},
-    process/.style={draw, rectangle,
-      minimum width=4.5cm, minimum height=0.8cm,
-      align=center, fill=white},
-    io/.style={draw, trapezium, trapezium left angle=75, trapezium right angle=105,
-      trapezium stretches=true, minimum width=4.5cm, minimum height=0.8cm,
-      align=center, fill=white},
-    decision/.style={draw, diamond, aspect=3,
-      minimum width=4.5cm, minimum height=0.8cm,
-      align=center, fill=white},
-    arrow/.style={thick,->,>=stealth}
+    startstop/.style={fc startstop},
+    process/.style={fc process},
+    io/.style={fc io},
+    decision/.style={fc decision},
+    arrow/.style={fc arrow}
 ]
 \node (start)  [startstop] {Начало};
-\node (agg)    [process,  below of=start] {$FGM, FG3M, FGA := \mathrm{SUM}(\ldots)$ \\ из \texttt{game\_player\_stats}};
+\node (agg)    [process,  below of=start]
+  {$FGM, FG3M, FGA := \mathrm{SUM}(\ldots)$ \\ из \texttt{game\_player\_stats}};
 \node (dec1)   [decision, below of=agg] {$\mathrm{FGA} = 0$?};
-\node (null1)  [io,  right of=dec1, xshift=4.5cm] {Вывод:\\ значение не определено};
-\node (ret)    [io,  below of=dec1] {Возврат $\displaystyle\frac{\mathrm{FGM}+0{,}5\cdot\mathrm{FG3M}}{\mathrm{FGA}}$};
+\node (null1)  [io,  right of=dec1, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (ret)    [io,  below of=dec1]
+  {Возврат $\displaystyle\frac{\mathrm{FGM}+0{,}5\cdot\mathrm{FG3M}}{\mathrm{FGA}}$};
 \node (stop)   [startstop, below of=ret] {Конец};
 
 \draw [arrow] (start) -- (agg);
@@ -81,34 +107,31 @@
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
+    fc base,
     node distance=1.8cm,
-    every node/.style={font=\footnotesize},
-    startstop/.style={draw, rectangle, rounded corners=10pt,
-      minimum width=4.5cm, minimum height=0.8cm,
-      align=center, fill=white},
-    process/.style={draw, rectangle,
-      minimum width=4.5cm, minimum height=0.8cm,
-      align=center, fill=white},
-    io/.style={draw, trapezium, trapezium left angle=75, trapezium right angle=105,
-      trapezium stretches=true, minimum width=4.5cm, minimum height=0.8cm,
-      align=center, fill=white},
-    decision/.style={draw, diamond, aspect=3,
-      minimum width=4.5cm, minimum height=0.8cm,
-      align=center, fill=white},
-    arrow/.style={thick,->,>=stealth}
+    startstop/.style={fc startstop},
+    process/.style={fc process},
+    io/.style={fc io},
+    decision/.style={fc decision},
+    arrow/.style={fc arrow}
 ]
 \node (start)  [startstop] {Начало};
-\node (tid)    [process,  below of=start] {Определить team\_id \\ (параметр или последняя игра)};
+\node (tid)    [process,  below of=start]
+  {Определить team\_id \\ (параметр или последняя игра)};
 \node (dec0)   [decision, below of=tid, yshift=-0.2cm] {team\_id IS NULL?};
-\node (null0)  [io,  right of=dec0, xshift=4.5cm] {Вывод:\\ значение не определено};
-\node (aggP)   [process,  below of=dec0, yshift=-0.2cm] {$pFGA, pFTA, pTOV, pMP :=$ \\ $\mathrm{SUM}(\ldots)$ игрока};
+\node (null0)  [io,  right of=dec0, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (aggP)   [process,  below of=dec0, yshift=-0.2cm]
+  {$pFGA, pFTA, pTOV, pMP :=$ \\ $\mathrm{SUM}(\ldots)$ игрока};
 \node (dec1)   [decision, below of=aggP, yshift=-0.2cm] {$pMP < 1$?};
-\node (null1)  [io,  right of=dec1, xshift=4.5cm] {Вывод:\\ значение не определено};
-\node (aggT)   [process,  below of=dec1, yshift=-0.2cm] {$tmFGA, tmFTA, tmTOV, tmMP :=$ \\ $\mathrm{SUM}(\ldots)$ команды};
-\node (denom)  [process,  below of=aggT, yshift=-0.2cm] {$denom := pMP \cdot (tmFGA + 0{,}44 \cdot tmFTA + tmTOV)$};
+\node (null1)  [io,  right of=dec1, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (aggT)   [process,  below of=dec1, yshift=-0.2cm]
+  {$tmFGA, tmFTA, tmTOV, tmMP :=$ \\ $\mathrm{SUM}(\ldots)$ команды};
+\node (denom)  [process,  below of=aggT, yshift=-0.2cm]
+  {$denom := pMP \cdot (tmFGA + 0{,}44 \cdot tmFTA + tmTOV)$};
 \node (dec2)   [decision, below of=denom, yshift=-0.2cm] {denom $= 0$?};
-\node (null2)  [io,  right of=dec2, xshift=4.5cm] {Вывод:\\ значение не определено};
-\node (ret)    [io,  below of=dec2, yshift=-0.2cm] {Возврат $\displaystyle\frac{(pFGA+0{,}44\cdot pFTA+pTOV)\cdot\frac{tmMP}{5}}{denom}$};
+\node (null2)  [io,  right of=dec2, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (ret)    [io,  below of=dec2, yshift=-0.2cm]
+  {Возврат $\displaystyle\frac{(pFGA+0{,}44\cdot pFTA+pTOV)\cdot\frac{tmMP}{5}}{denom}$};
 \node (stop)   [startstop, below of=ret] {Конец};
 
 \draw [arrow] (start) -- (tid);
@@ -137,40 +160,28 @@
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
+    fc base,
     node distance=1.8cm,
-    every node/.style={font=\footnotesize},
-    startstop/.style={draw, rectangle, rounded corners=10pt,
-      minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white},
-    process/.style={draw, rectangle,
-      minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white},
-    predefined/.style={draw, rectangle,
-      minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white,
-      path picture={
-        \draw ([xshift=4pt]path picture bounding box.north west) --
-              ([xshift=4pt]path picture bounding box.south west);
-        \draw ([xshift=-4pt]path picture bounding box.north east) --
-              ([xshift=-4pt]path picture bounding box.south east);
-      }},
-    io/.style={draw, trapezium, trapezium left angle=75, trapezium right angle=105,
-      trapezium stretches=true, minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white},
-    decision/.style={draw, diamond, aspect=3.4,
-      minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white},
-    arrow/.style={thick,->,>=stealth}
+    startstop/.style={fc startstop},
+    process/.style={fc process},
+    predefined/.style={fc predefined},
+    io/.style={fc io},
+    decision/.style={fc decision},
+    arrow/.style={fc arrow}
 ]
 \node (start) [startstop] {Начало};
-\node (agg)   [process,  below of=start] {$PTS, TRB, AST, STL, BLK,$ \\ $TOV, PF, FGM/FGA, FTM/FTA, MP := \mathrm{SUM}(\ldots)$};
+\node (agg)   [process,  below of=start]
+  {$PTS, TRB, AST, STL, BLK,$ \\ $TOV, PF, FGM/FGA, FTM/FTA, MP := \mathrm{SUM}(\ldots)$};
 \node (dec1)  [decision, below of=agg] {$\mathrm{MP} < 50$?};
-\node (null1) [io,  right of=dec1, xshift=5cm] {Вывод:\\ значение не определено};
-\node (uper)  [process,  below of=dec1] {$\mathrm{uPER} = (\mathrm{PTS}+\mathrm{TRB}+\ldots - \mathrm{TOV}-\mathrm{PF}-\Delta\mathrm{FG}-0{,}44\cdot\Delta\mathrm{FT}) \cdot \tfrac{48}{\mathrm{MP}}$};
-\node (lg)    [predefined,  below of=uper] {Вычисление lg\_aPER: \\ AVG(uPER) по игрокам с MP $> 100$};
+\node (null1) [io,  right of=dec1, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (uper)  [process,  below of=dec1]
+  {$\mathrm{uPER} = (\mathrm{PTS}+\mathrm{TRB}+\ldots - \mathrm{TOV}-\mathrm{PF}-\Delta\mathrm{FG}-0{,}44\cdot\Delta\mathrm{FT}) \cdot \tfrac{48}{\mathrm{MP}}$};
+\node (lg)    [predefined,  below of=uper]
+  {Вычисление lg\_aPER: \\ AVG(uPER) по игрокам с MP $> 100$};
 \node (dec2)  [decision, below of=lg] {lg\_aPER $= 0$ или NULL?};
-\node (fix)   [process,  right of=dec2, xshift=5cm] {lg\_aPER $= 15{,}0$};
-\node (ret)   [io,  below of=dec2] {Возврат $\mathrm{uPER} \cdot 15\,/\,\mathrm{lg\_aPER}$};
+\node (fix)   [process,  right of=dec2, xshift=\flowchartRightShift] {lg\_aPER $= 15{,}0$};
+\node (ret)   [io,  below of=dec2]
+  {Возврат $\mathrm{uPER} \cdot 15\,/\,\mathrm{lg\_aPER}$};
 \node (stop)  [startstop, below of=ret] {Конец};
 
 \draw [arrow] (start) -- (agg);
@@ -194,38 +205,26 @@
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
+    fc base,
     node distance=1.8cm,
-    every node/.style={font=\footnotesize},
-    startstop/.style={draw, rectangle, rounded corners=10pt,
-      minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white},
-    process/.style={draw, rectangle,
-      minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white},
-    predefined/.style={draw, rectangle,
-      minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white,
-      path picture={
-        \draw ([xshift=4pt]path picture bounding box.north west) --
-              ([xshift=4pt]path picture bounding box.south west);
-        \draw ([xshift=-4pt]path picture bounding box.north east) --
-              ([xshift=-4pt]path picture bounding box.south east);
-      }},
-    io/.style={draw, trapezium, trapezium left angle=75, trapezium right angle=105,
-      trapezium stretches=true, minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white},
-    decision/.style={draw, diamond, aspect=3.4,
-      minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white},
-    arrow/.style={thick,->,>=stealth}
+    startstop/.style={fc startstop},
+    process/.style={fc process},
+    predefined/.style={fc predefined},
+    io/.style={fc io},
+    decision/.style={fc decision},
+    arrow/.style={fc arrow}
 ]
 \node (start) [startstop] {Начало};
-\node (agg)   [process,  below of=start] {$PTS, TRB, AST, STL,$ \\ $BLK, TOV, PF, MP := \mathrm{SUM}(\ldots)$};
+\node (agg)   [process,  below of=start]
+  {$PTS, TRB, AST, STL,$ \\ $BLK, TOV, PF, MP := \mathrm{SUM}(\ldots)$};
 \node (dec1)  [decision, below of=agg] {$\mathrm{MP} < 50$?};
-\node (null1) [io,  right of=dec1, xshift=5cm] {Вывод:\\ значение не определено};
-\node (norm)  [process,  below of=dec1] {Нормировка на 100 мин: $X_{100} = X \cdot 100\,/\,\mathrm{MP}$};
-\node (raw)   [process,  below of=norm, text width=6cm] {raw $= 0{,}123\cdot\mathrm{PTS}_{100}+0{,}234\cdot\mathrm{TRB}_{100}+0{,}689\cdot\mathrm{AST}_{100}$ \\ $+\,0{,}445\cdot\mathrm{STL}_{100}+0{,}407\cdot\mathrm{BLK}_{100}-0{,}605\cdot\mathrm{TOV}_{100}-0{,}086\cdot\mathrm{PF}_{100}$};
-\node (lg)    [predefined,  below of=raw] {Вычисление lg\_avg: \\ AVG(raw) по игрокам с MP $> 100$};
+\node (null1) [io,  right of=dec1, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (norm)  [process,  below of=dec1]
+  {Нормировка на 100 мин: $X_{100} = X \cdot 100\,/\,\mathrm{MP}$};
+\node (raw)   [process,  below of=norm]
+  {raw $= 0{,}123\cdot\mathrm{PTS}_{100}+0{,}234\cdot\mathrm{TRB}_{100}+0{,}689\cdot\mathrm{AST}_{100}$ \\ $+\,0{,}445\cdot\mathrm{STL}_{100}+0{,}407\cdot\mathrm{BLK}_{100}-0{,}605\cdot\mathrm{TOV}_{100}-0{,}086\cdot\mathrm{PF}_{100}$};
+\node (lg)    [predefined,  below of=raw]
+  {Вычисление lg\_avg: \\ AVG(raw) по игрокам с MP $> 100$};
 \node (ret)   [io,  below of=lg] {Возврат raw $-$ lg\_avg};
 \node (stop)  [startstop, below of=ret] {Конец};
 
@@ -248,39 +247,26 @@
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
+    fc base,
     node distance=1.8cm,
-    every node/.style={font=\footnotesize},
-    startstop/.style={draw, rectangle, rounded corners=10pt,
-      minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white},
-    process/.style={draw, rectangle,
-      minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white},
-    predefined/.style={draw, rectangle,
-      minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white,
-      path picture={
-        \draw ([xshift=4pt]path picture bounding box.north west) --
-              ([xshift=4pt]path picture bounding box.south west);
-        \draw ([xshift=-4pt]path picture bounding box.north east) --
-              ([xshift=-4pt]path picture bounding box.south east);
-      }},
-    io/.style={draw, trapezium, trapezium left angle=75, trapezium right angle=105,
-      trapezium stretches=true, minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white},
-    decision/.style={draw, diamond, aspect=3.4,
-      minimum width=5.6cm, minimum height=0.8cm,
-      align=center, fill=white},
-    arrow/.style={thick,->,>=stealth}
+    startstop/.style={fc startstop},
+    process/.style={fc process},
+    predefined/.style={fc predefined},
+    io/.style={fc io},
+    decision/.style={fc decision},
+    arrow/.style={fc arrow}
 ]
 \node (start) [startstop] {Начало};
-\node (get)   [io,  below of=start] {Получить status, home/away\_id, \\ счёт из \texttt{games} по game\_id};
+\node (get)   [io,  below of=start]
+  {Получить status, home/away\_id, \\ счёт из \texttt{games} по game\_id};
 \node (dec1)  [decision, below of=get] {status $\neq$ 'Finished' \\ или счёт NULL?};
-\node (skip)  [io,  right of=dec1, xshift=5cm] {Возврат NEW/OLD};
-\node (exp)   [process,  below of=dec1] {$expected :=$ счёт команды \\ (\texttt{home\_score} или \texttt{away\_score})};
-\node (loop)  [predefined,  below of=exp] {Для каждой команды в матче: \\ $teamPoints := \mathrm{SUM(points)}$};
+\node (skip)  [io,  right of=dec1, xshift=\flowchartRightShift] {Возврат NEW/OLD};
+\node (exp)   [process,  below of=dec1, yshift=\flowchartDecExpExtra]
+  {$expected :=$ счёт команды \\ (\texttt{home\_score} или \texttt{away\_score})};
+\node (loop)  [predefined,  below of=exp]
+  {Для каждой команды в матче: \\ $teamPoints := \mathrm{SUM(points)}$};
 \node (dec2)  [decision, below of=loop] {$teamPoints \neq expected$?};
-\node (exc)   [io,  right of=dec2, xshift=5cm] {RAISE EXCEPTION};
+\node (exc)   [io,  right of=dec2, xshift=\flowchartRightShift] {RAISE EXCEPTION};
 \node (ret)   [io,  below of=dec2] {Возврат NEW/OLD};
 \node (stop)  [startstop, below of=ret] {Конец};
 
@@ -306,37 +292,23 @@
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
+    fc base,
     node distance=1.8cm,
-    every node/.style={font=\footnotesize},
-    startstop/.style={draw, rectangle, rounded corners=10pt,
-      minimum width=5.2cm, minimum height=0.8cm,
-      align=center, fill=white},
-    process/.style={draw, rectangle,
-      minimum width=5.2cm, minimum height=0.8cm,
-      align=center, fill=white},
-    predefined/.style={draw, rectangle,
-      minimum width=5.2cm, minimum height=0.8cm,
-      align=center, fill=white,
-      path picture={
-        \draw ([xshift=4pt]path picture bounding box.north west) --
-              ([xshift=4pt]path picture bounding box.south west);
-        \draw ([xshift=-4pt]path picture bounding box.north east) --
-              ([xshift=-4pt]path picture bounding box.south east);
-      }},
-    io/.style={draw, trapezium, trapezium left angle=75, trapezium right angle=105,
-      trapezium stretches=true, minimum width=5.2cm, minimum height=0.8cm,
-      align=center, fill=white},
-    decision/.style={draw, diamond, aspect=3.2,
-      minimum width=5.2cm, minimum height=0.8cm,
-      align=center, fill=white},
-    arrow/.style={thick,->,>=stealth}
+    startstop/.style={fc startstop},
+    process/.style={fc process},
+    predefined/.style={fc predefined},
+    io/.style={fc io},
+    decision/.style={fc decision},
+    arrow/.style={fc arrow}
 ]
 \node (start) [startstop] {Начало};
-\node (get)   [io,  below of=start] {Получить список уникальных season\_id \\ из новых строк (переходная таблица NEW)};
+\node (get)   [io,  below of=start]
+  {Получить список уникальных season\_id \\ из новых строк};
 \node (dec1)  [decision, below of=get] {Список season\_id пуст?};
-\node (null1) [io,  right of=dec1, xshift=4.5cm] {Вывод:\\ значение не определено};
-\node (call)  [predefined,  below of=dec1] {Для каждого season\_id: \\ \texttt{CALL update\_season\_stats(season\_id)}};
-\node (ret)   [io,  below of=call] {Вывод:\\ значение не определено};
+\node (null1) [io,  right of=dec1, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (call)  [predefined,  below of=dec1, yshift=\flowchartTinyVExtra]
+  {Для каждого season\_id: \\ \texttt{CALL update\_season\_stats(season\_id)}};
+\node (ret)   [io,  below of=call, yshift=\flowchartTinyVExtra] {Вывод:\\ значение не определено};
 \node (stop)  [startstop, below of=ret] {Конец};
 
 \draw [arrow] (start) -- (get);
@@ -356,13 +328,11 @@
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
+    fc base,
     node distance=1.2cm,
-    every node/.style={font=\footnotesize},
-    startstop/.style={draw, rectangle, rounded corners=10pt, minimum width=5.8cm,
-      minimum height=0.75cm, align=center, fill=white},
-    process/.style={draw, rectangle, minimum width=5.8cm, minimum height=0.75cm,
-      align=center, fill=white},
-    arrow/.style={thick,->,>=stealth}
+    startstop/.style={fc startstop},
+    process/.style={fc process},
+    arrow/.style={fc arrow}
 ]
 \node (start) [startstop] {Начало построения представления \texttt{v\_team\_stats}};
 \node (join)  [process, below of=start]
@@ -393,25 +363,24 @@
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-    node distance=1.1cm,
-    every node/.style={font=\footnotesize},
-    startstop/.style={draw, rectangle, rounded corners=10pt, minimum width=6.4cm,
-      minimum height=0.75cm, text centered, fill=white},
-    process/.style={draw, rectangle, minimum width=6.4cm, minimum height=0.75cm,
-      text centered, fill=white},
-    arrow/.style={thick,->,>=stealth}
+    fc base,
+    node distance=\flowchartUpdateVGap,
+    startstop/.style={fc startstop},
+    process/.style={fc process},
+    predefined/.style={fc predefined},
+    arrow/.style={fc arrow}
 ]
 \node (start) [startstop] {Начало транзакции};
 \node (pro1)  [process, below of=start]
-  {GROUP BY player\_id, team\_id: базовые агрегаты};
-\node (pro2)  [process, below of=pro1]
-  {Подзапрос TmFGA/TmFTA/TmTOV по (game\_id, team\_id) для USG};
+  {Группировка по \texttt{player\_id}, \texttt{team\_id}: базовые агрегаты};
+\node (pro2)  [predefined, below of=pro1]
+  {Подзапрос TmFGA/TmFTA/TmTOV по (\texttt{game\_id}, \texttt{team\_id}) для USG};
 \node (pro3)  [process, below of=pro2]
   {Двухпроходный расчёт лигового среднего (PER, BPM)};
-\node (pro4)  [process, below of=pro3]
-  {Вызов calculate\_efg, ts, usg, per, bpm};
-\node (pro5)  [process, below of=pro4]
-  {UPSERT в player\_season\_stats};
+\node (pro4)  [predefined, below of=pro3, yshift=\flowchartUpdateMidExtra]
+  {Вызов \texttt{calculate\_efg}, \texttt{calculate\_ts}, \\ \texttt{calculate\_usg}, \texttt{calculate\_per}, \texttt{calculate\_bpm}};
+\node (pro5)  [process, below of=pro4, yshift=\flowchartUpdateMidExtra]
+  {Вставка с обновлением в таблицу \texttt{player\_season\_stats}};
 \node (stop)  [startstop, below of=pro5] {Конец транзакции};
 
 \draw [arrow] (start) -- (pro1);
