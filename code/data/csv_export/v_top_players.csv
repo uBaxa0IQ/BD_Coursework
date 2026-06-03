@@ -1,0 +1,2814 @@
+full_name,team_name,position,season,avg_pts,avg_reb,avg_ast,per
+Giannis Antetokounmpo,Milwaukee Bucks,SF,2019-20,29.02,13.38,5.53,39.92
+Nikola Jokić,Denver Nuggets,C,2021-22,26.72,13.59,7.79,39.79
+Joel Embiid,Philadelphia 76ers,C,2023-24,31.47,10.00,5.09,37.60
+Nikola Jokić,Denver Nuggets,C,2022-23,24.49,11.84,9.83,37.39
+Giannis Antetokounmpo,Milwaukee Bucks,SF,2021-22,29.44,11.44,5.71,36.96
+Nikola Jokić,Denver Nuggets,C,2023-24,26.39,12.35,8.96,36.41
+Giannis Antetokounmpo,Milwaukee Bucks,SF,2022-23,31.10,11.78,5.70,34.97
+Giannis Antetokounmpo,Milwaukee Bucks,SF,2023-24,30.44,11.52,6.52,34.85
+Joel Embiid,Philadelphia 76ers,C,2021-22,29.70,11.37,4.06,34.79
+Giannis Antetokounmpo,Milwaukee Bucks,SF,2020-21,27.25,10.65,5.67,34.09
+Nikola Jokić,Denver Nuggets,C,2020-21,26.36,10.83,8.32,34.08
+Joel Embiid,Philadelphia 76ers,C,2022-23,31.64,9.71,3.97,34.00
+Joel Embiid,Philadelphia 76ers,C,2020-21,26.38,9.80,2.64,33.13
+Luka Dončić,Dallas Mavericks,SG,2023-24,33.86,9.24,9.80,32.90
+Anthony Davis,Los Angeles Lakers,PF,2022-23,25.46,12.32,2.60,31.95
+Luka Dončić,Dallas Mavericks,SG,2019-20,28.37,9.24,8.68,31.80
+Luka Dončić,Dallas Mavericks,SG,2022-23,32.39,8.62,8.02,31.36
+Anthony Davis,Los Angeles Lakers,PF,2023-24,23.75,12.16,3.37,30.96
+Shai Gilgeous-Alexander,Oklahoma City Thunder,SG,2023-24,30.05,5.53,6.20,30.77
+Leonard Miller,Minnesota Timberwolves,SF,2023-24,0.91,0.63,0.25,30.75
+LeBron James,Los Angeles Lakers,SF,2019-20,25.34,7.84,10.21,30.16
+Bruno Fernando,Houston Rockets,PF,2021-22,2.56,1.48,0.11,30.13
+James Harden,Houston Rockets,SG,2019-20,33.84,6.46,7.42,29.93
+Rudy Gobert,Utah Jazz,C,2021-22,15.10,14.24,1.06,29.85
+Karl-Anthony Towns,Minnesota Timberwolves,C,2019-20,20.13,8.22,3.33,29.83
+Joel Embiid,Philadelphia 76ers,C,2019-20,22.11,11.19,2.87,29.75
+Kristaps Porziņģis,Washington Wizards,PF,2021-22,20.89,8.33,2.78,29.73
+Victor Wembanyama,San Antonio Spurs,PF,2023-24,21.14,10.49,3.81,29.65
+D.J. Wilson,Toronto Raptors,SF,2021-22,6.00,3.20,1.00,29.58
+LeBron James,Los Angeles Lakers,SF,2021-22,28.25,7.65,5.82,29.54
+Anthony Davis,Los Angeles Lakers,PF,2019-20,24.15,8.61,2.99,29.51
+Kevin Durant,Brooklyn Nets,SF,2020-21,22.45,5.88,4.64,29.46
+Domantas Sabonis,Sacramento Kings,PF,2023-24,19.43,13.66,8.21,29.41
+Hassan Whiteside,Portland Trail Blazers,C,2019-20,14.86,12.93,1.11,29.38
+Luka Dončić,Dallas Mavericks,SG,2021-22,28.42,9.12,8.74,29.35
+Boban Marjanovic,Dallas Mavericks,C,2019-20,3.91,2.66,0.27,29.32
+Kevin Durant,Brooklyn Nets,SF,2021-22,29.87,7.40,6.38,29.06
+James Harden,Brooklyn Nets,SG,2020-21,22.69,7.87,10.05,29.06
+LeBron James,Los Angeles Lakers,SF,2023-24,24.96,7.10,8.07,28.98
+Kawhi Leonard,Los Angeles Clippers,SF,2019-20,24.89,6.48,4.52,28.93
+Alize Johnson,Brooklyn Nets,SF,2020-21,3.76,3.60,0.56,28.77
+Kevin Durant,Brooklyn Nets,SF,2022-23,29.69,6.72,5.31,28.75
+Jonas Valančiūnas,Memphis Grizzlies,C,2020-21,15.79,11.58,1.67,28.63
+Domantas Sabonis,Sacramento Kings,PF,2022-23,19.11,12.32,7.25,28.58
+Stephen Curry,Golden State Warriors,SG,2020-21,28.79,4.93,5.19,28.54
+LeBron James,Los Angeles Lakers,SF,2022-23,27.89,8.02,6.58,28.47
+LeBron James,Los Angeles Lakers,SF,2020-21,25.02,7.69,7.78,28.44
+Clint Capela,Atlanta Hawks,C,2020-21,14.71,13.89,0.75,28.36
+Nikola Jokić,Denver Nuggets,C,2019-20,19.95,9.74,7.01,28.35
+Luka Dončić,Dallas Mavericks,SG,2020-21,26.91,7.75,8.34,28.33
+Zion Williamson,New Orleans Pelicans,SF,2020-21,26.56,7.11,3.65,28.24
+Rudy Gobert,Utah Jazz,C,2020-21,14.30,13.52,1.25,28.22
+Jabari Parker,Sacramento Kings,SF,2019-20,3.19,1.44,0.63,28.12
+Boban Marjanovic,Houston Rockets,C,2023-24,0.56,0.40,0.07,28.07
+Jimmy Butler III,Miami Heat,SF,2020-21,17.71,5.70,5.86,27.99
+Jonas Valančiūnas,Memphis Grizzlies,C,2019-20,14.70,11.10,1.85,27.98
+Nikola Vučević,Orlando Magic,C,2020-21,24.55,11.75,3.80,27.80
+Shai Gilgeous-Alexander,Oklahoma City Thunder,SG,2022-23,30.50,4.70,5.30,27.73
+Kevin Durant,Phoenix Suns,SF,2022-23,23.11,5.67,3.11,27.67
+Zion Williamson,New Orleans Pelicans,SF,2022-23,26.00,6.97,4.59,27.66
+Damian Lillard,Portland Trail Blazers,SG,2022-23,27.44,4.07,6.25,27.64
+Jimmy Butler III,Miami Heat,SF,2022-23,22.55,5.77,5.23,27.63
+Andre Drummond,Brooklyn Nets,C,2021-22,10.85,9.50,1.31,27.62
+Ja Morant,Memphis Grizzlies,SG,2021-22,27.44,5.70,6.74,27.57
+Stephen Curry,Golden State Warriors,SG,2022-23,29.43,6.09,6.29,27.54
+Karl-Anthony Towns,Minnesota Timberwolves,C,2021-22,24.24,9.69,3.59,27.31
+Andre Drummond,Detroit Pistons,C,2019-20,16.42,14.62,2.60,27.27
+Dejounte Murray,San Antonio Spurs,SG,2021-22,20.84,8.16,9.09,27.24
+Ja Morant,Memphis Grizzlies,SG,2022-23,26.16,5.85,8.08,27.21
+Daniel Gafford,Dallas Mavericks,PF,2023-24,11.17,6.93,1.59,27.09
+Tyrese Haliburton,Indiana Pacers,SG,2023-24,20.13,3.93,10.90,27.08
+Robert Williams III,Boston Celtics,C,2020-21,7.72,6.63,1.74,27.07
+Anthony Davis,Los Angeles Lakers,PF,2021-22,21.07,8.95,2.77,27.00
+Kyrie Irving,Brooklyn Nets,SG,2019-20,24.91,4.68,5.82,26.98
+Boban Marjanovic,Houston Rockets,C,2022-23,1.26,0.74,0.11,26.94
+Andre Drummond,Chicago Bulls,C,2023-24,8.39,8.96,0.47,26.93
+Trae Young,Atlanta Hawks,SG,2021-22,28.36,3.74,9.70,26.86
+Jayson Tatum,Boston Celtics,SG,2022-23,30.07,8.77,4.62,26.82
+Daniel Gafford,Washington Wizards,PF,2020-21,10.13,5.57,0.52,26.79
+Russell Westbrook,Washington Wizards,SG,2020-21,21.57,11.19,11.39,26.77
+Kawhi Leonard,Los Angeles Clippers,SF,2020-21,22.28,5.81,4.64,26.76
+Damian Lillard,Portland Trail Blazers,SG,2019-20,27.47,3.94,7.36,26.70
+Domantas Sabonis,Indiana Pacers,PF,2021-22,18.89,12.06,5.02,26.64
+Nikola Vučević,Chicago Bulls,C,2020-21,20.70,11.11,3.78,26.52
+Deandre Ayton,Phoenix Suns,C,2021-22,13.47,8.01,1.14,26.43
+Jarrett Allen,Cleveland Cavaliers,C,2021-22,15.86,10.56,1.61,26.41
+Karl-Anthony Towns,Minnesota Timberwolves,C,2020-21,24.78,10.58,4.50,26.39
+DeAndre Jordan,Brooklyn Nets,C,2019-20,8.30,10.02,1.88,26.39
+JaVale McGee,Phoenix Suns,C,2021-22,9.19,6.70,0.57,26.34
+Zion Williamson,New Orleans Pelicans,SF,2019-20,21.60,6.00,2.00,26.32
+Kenneth Lofton Jr.,Utah Jazz,SF,2023-24,7.86,2.86,2.71,26.27
+Domantas Sabonis,Sacramento Kings,PF,2021-22,17.69,11.56,5.44,26.25
+Tyrese Haliburton,Indiana Pacers,SG,2022-23,20.71,3.66,10.45,26.24
+Trae Young,Atlanta Hawks,SG,2019-20,28.68,4.11,9.03,26.21
+Montrezl Harrell,Washington Wizards,PF,2021-22,14.07,6.72,2.09,26.01
+John Collins,Atlanta Hawks,PF,2019-20,19.24,9.04,1.30,26.00
+Nikola Vučević,Orlando Magic,C,2019-20,19.60,10.85,3.58,25.93
+Domantas Sabonis,Indiana Pacers,PF,2020-21,20.00,11.78,6.59,25.90
+Andre Drummond,Cleveland Cavaliers,C,2020-21,15.07,11.62,2.21,25.90
+Willie Cauley-Stein,Dallas Mavericks,C,2019-20,4.19,3.75,0.63,25.85
+Dewayne Dedmon,Miami Heat,C,2020-21,5.38,4.10,0.57,25.80
+Enes Freedom,Boston Celtics,C,2019-20,7.69,7.07,0.92,25.79
+Clint Capela,Atlanta Hawks,C,2021-22,11.08,11.85,1.24,25.78
+Clint Capela,Atlanta Hawks,C,2022-23,11.63,10.70,0.87,25.74
+Jarrett Allen,Cleveland Cavaliers,C,2023-24,16.51,10.53,2.73,25.73
+Jarrett Allen,Brooklyn Nets,C,2020-21,11.17,10.42,1.67,25.68
+Bam Adebayo,Miami Heat,C,2020-21,16.63,7.96,4.81,25.62
+Andre Drummond,Chicago Bulls,C,2022-23,5.25,5.84,0.43,25.58
+Rudy Gobert,Utah Jazz,C,2019-20,14.87,13.28,1.46,25.56
+Moses Brown,Los Angeles Clippers,C,2022-23,3.10,2.78,0.08,25.55
+Boban Marjanovic,Dallas Mavericks,C,2020-21,2.17,1.78,0.14,25.53
+Clint Capela,Houston Rockets,C,2019-20,13.58,13.43,1.20,25.52
+Enes Freedom,Portland Trail Blazers,C,2020-21,11.19,11.04,1.17,25.52
+Damian Lillard,Portland Trail Blazers,SG,2020-21,27.54,4.04,7.21,25.44
+Jonas Valančiūnas,New Orleans Pelicans,C,2021-22,17.52,11.24,2.53,25.39
+Domantas Sabonis,Indiana Pacers,PF,2019-20,18.50,12.44,5.00,25.38
+Jayson Tatum,Boston Celtics,SG,2023-24,26.49,8.01,4.85,25.37
+Chimezie Metu,San Antonio Spurs,PF,2019-20,1.07,0.61,0.19,25.37
+Kawhi Leonard,Los Angeles Clippers,SF,2022-23,23.83,6.50,3.92,25.32
+Adama Sanogo,Chicago Bulls,SF,2023-24,1.64,1.64,0.00,25.31
+Jimmy Butler III,Miami Heat,SF,2019-20,17.53,5.85,5.30,25.28
+Andre Drummond,Cleveland Cavaliers,C,2019-20,12.73,8.09,1.27,25.25
+James Harden,Houston Rockets,SG,2020-21,22.00,4.56,9.22,25.21
+Brandon Clarke,Memphis Grizzlies,SF,2021-22,9.79,5.03,1.26,25.16
+Bam Adebayo,Miami Heat,C,2021-22,19.07,10.07,3.39,25.13
+Christian Wood,Detroit Pistons,SF,2019-20,12.66,6.09,0.94,25.10
+Norman Powell,Los Angeles Clippers,SG,2021-22,17.83,2.33,2.33,25.06
+Hassan Whiteside,Utah Jazz,C,2021-22,7.97,7.37,0.39,25.05
+James Harden,Brooklyn Nets,SG,2021-22,20.20,7.16,9.12,25.00
+Zion Williamson,New Orleans Pelicans,SF,2023-24,20.79,5.27,4.57,24.92
+Alperen Sengun,Houston Rockets,C,2023-24,21.13,9.35,4.95,24.91
+Kelly Olynyk,Houston Rockets,PF,2020-21,18.32,8.14,4.00,24.90
+T.J. McConnell,Indiana Pacers,SG,2023-24,8.98,2.36,4.81,24.90
+Kristaps Porziņģis,Washington Wizards,PF,2022-23,22.13,8.03,2.56,24.89
+Willy Hernangomez,New Orleans Pelicans,C,2021-22,5.81,4.33,0.81,24.81
+Jimmy Butler III,Miami Heat,SF,2021-22,21.39,5.89,5.47,24.79
+James Harden,Philadelphia 76ers,SG,2021-22,21.05,7.10,10.48,24.77
+Ivica Zubac,Los Angeles Clippers,C,2019-20,8.28,7.54,1.14,24.73
+Kyrie Irving,Brooklyn Nets,SG,2020-21,26.38,4.67,5.89,24.69
+Thomas Bryant,Los Angeles Lakers,C,2022-23,11.81,6.64,0.69,24.66
+Lauri Markkanen,Utah Jazz,PF,2022-23,25.62,8.64,1.86,24.64
+Moussa Diabaté,Los Angeles Clippers,SF,2023-24,1.21,1.00,0.17,24.63
+Jakob Poeltl,Toronto Raptors,C,2022-23,13.12,9.12,2.15,24.61
+Montrezl Harrell,Los Angeles Clippers,PF,2019-20,18.62,7.06,1.70,24.58
+Kawhi Leonard,Los Angeles Clippers,SF,2023-24,23.72,6.12,3.59,24.57
+Anthony Davis,Los Angeles Lakers,PF,2020-21,21.83,7.94,3.06,24.56
+Bam Adebayo,Miami Heat,C,2019-20,15.92,10.21,5.11,24.49
+Jusuf Nurkić,Portland Trail Blazers,C,2021-22,14.77,10.86,2.75,24.45
+Stephen Curry,Golden State Warriors,SG,2019-20,14.86,3.71,4.71,24.43
+Kevin Durant,Phoenix Suns,SF,2023-24,26.74,6.51,4.97,24.42
+James Harden,Philadelphia 76ers,SG,2022-23,19.61,5.71,9.97,24.37
+Walker Kessler,Utah Jazz,C,2022-23,9.18,8.38,0.93,24.37
+Kristaps Porziņģis,Boston Celtics,PF,2023-24,19.74,7.05,1.98,24.36
+Jayson Tatum,Boston Celtics,SG,2021-22,26.92,8.01,4.39,24.33
+Robert Williams III,Boston Celtics,C,2019-20,4.41,3.76,0.79,24.33
+Trae Young,Atlanta Hawks,SG,2020-21,24.15,3.71,9.00,24.28
+Jarrett Allen,Brooklyn Nets,C,2019-20,10.92,9.45,1.55,24.27
+Khris Middleton,Milwaukee Bucks,SF,2019-20,20.59,6.06,4.21,24.23
+Ryan Rollins,Washington Wizards,SG,2023-24,2.41,0.65,0.65,24.19
+Moses Brown,Cleveland Cavaliers,C,2021-22,5.29,4.35,0.00,24.19
+Mark Williams,Charlotte Hornets,C,2023-24,12.74,9.68,1.16,24.14
+Andre Drummond,Philadelphia 76ers,C,2021-22,5.96,8.66,1.94,24.13
+Clint Capela,Atlanta Hawks,C,2023-24,11.00,10.21,1.20,24.09
+Pascal Siakam,Indiana Pacers,SF,2023-24,21.27,7.78,3.71,24.07
+DeMar DeRozan,Chicago Bulls,SG,2021-22,27.87,5.16,4.92,24.07
+Robert Williams III,Boston Celtics,C,2021-22,9.79,9.48,1.95,24.04
+Bradley Beal,Washington Wizards,SG,2019-20,28.54,3.97,5.69,24.01
+Christian Wood,Houston Rockets,SF,2021-22,17.65,9.94,2.25,24.00
+Trayce Jackson-Davis,Golden State Warriors,SF,2023-24,6.84,4.32,1.04,23.99
+Marvin Bagley III,Washington Wizards,SF,2023-24,13.25,8.08,1.17,23.97
+Bam Adebayo,Miami Heat,C,2023-24,18.47,9.96,3.76,23.96
+Kevin Love,Cleveland Cavaliers,PF,2021-22,13.61,7.24,2.16,23.92
+Deandre Ayton,Phoenix Suns,C,2019-20,11.90,7.52,1.24,23.92
+Jusuf Nurkić,Portland Trail Blazers,C,2020-21,6.24,4.88,1.84,23.91
+Jusuf Nurkić,Portland Trail Blazers,C,2019-20,4.03,2.34,0.91,23.90
+Lauri Markkanen,Utah Jazz,PF,2023-24,23.24,8.16,2.00,23.88
+Chris Paul,Phoenix Suns,SG,2021-22,14.30,4.22,10.48,23.85
+Jonas Valančiūnas,New Orleans Pelicans,C,2023-24,12.22,8.79,2.11,23.85
+Ja Morant,Memphis Grizzlies,SG,2023-24,15.07,3.33,4.87,23.84
+Brandon Clarke,Memphis Grizzlies,SF,2019-20,11.48,5.66,1.33,23.82
+Trae Young,Atlanta Hawks,SG,2022-23,25.52,2.89,9.88,23.78
+Russell Westbrook,Houston Rockets,SG,2019-20,25.88,7.52,6.68,23.77
+Jonas Valančiūnas,New Orleans Pelicans,C,2022-23,14.11,10.18,1.77,23.76
+Willy Hernangomez,New Orleans Pelicans,C,2022-23,3.20,2.20,0.40,23.76
+Jalen Duren,Detroit Pistons,C,2023-24,11.68,9.85,2.04,23.75
+Thomas Bryant,Washington Wizards,C,2019-20,11.07,6.02,1.51,23.75
+Bradley Beal,Washington Wizards,SG,2020-21,28.89,4.35,4.08,23.73
+Jakob Poeltl,San Antonio Spurs,C,2022-23,12.09,9.04,3.07,23.73
+Evan Mobley,Cleveland Cavaliers,C,2023-24,15.70,9.36,3.20,23.69
+Christian Wood,Houston Rockets,SF,2020-21,15.93,7.31,1.31,23.68
+Jalen Brunson,New York Knicks,SG,2023-24,26.98,3.39,6.33,23.65
+Deandre Ayton,Phoenix Suns,C,2022-23,16.71,9.26,1.60,23.64
+Derrick Favors,New Orleans Pelicans,SF,2019-20,6.75,7.37,1.19,23.63
+Jakob Poeltl,San Antonio Spurs,C,2021-22,13.26,9.19,2.74,23.62
+Stephen Curry,Golden State Warriors,SG,2021-22,25.47,5.23,6.31,23.61
+Donovan Mitchell,Cleveland Cavaliers,SG,2023-24,26.13,5.00,5.95,23.61
+Montrezl Harrell,Los Angeles Lakers,PF,2020-21,12.93,5.94,1.01,23.57
+Mason Plumlee,Charlotte Hornets,PF,2022-23,12.23,9.66,3.66,23.56
+Chet Holmgren,Oklahoma City Thunder,C,2023-24,16.55,7.90,2.44,23.53
+Nikola Vučević,Chicago Bulls,C,2022-23,17.65,11.01,3.23,23.53
+Devontae Cacok,San Antonio Spurs,SF,2021-22,2.19,2.00,0.29,23.52
+Nic Claxton,Brooklyn Nets,C,2022-23,12.48,9.12,1.87,23.52
+De'Aaron Fox,Sacramento Kings,SG,2022-23,25.01,4.19,6.12,23.50
+Jalen Smith,Indiana Pacers,PF,2023-24,8.84,4.96,0.93,23.49
+Kyrie Irving,Dallas Mavericks,SG,2023-24,25.64,5.00,5.16,23.48
+Kyrie Irving,Dallas Mavericks,SG,2022-23,26.95,5.00,6.00,23.46
+Donta Hall,Orlando Magic,C,2020-21,4.87,4.13,0.73,23.46
+Neemias Queta,Boston Celtics,C,2023-24,3.14,2.49,0.41,23.43
+Danilo Gallinari,Detroit Pistons,SF,2023-24,5.20,1.40,1.20,23.37
+Tony Bradley,Oklahoma City Thunder,C,2020-21,7.07,5.00,0.74,23.34
+Steven Adams,Oklahoma City Thunder,C,2019-20,10.69,9.11,2.28,23.32
+CJ McCollum,New Orleans Pelicans,SG,2021-22,24.27,4.46,5.85,23.29
+Wendell Carter Jr.,Orlando Magic,C,2021-22,14.11,9.82,2.59,23.26
+Jayson Tatum,Boston Celtics,SG,2020-21,25.64,7.15,4.18,23.24
+Greg Monroe,Minnesota Timberwolves,PF,2021-22,4.14,3.43,2.29,23.23
+Willy Hernangomez,New Orleans Pelicans,C,2020-21,5.07,4.64,0.69,23.22
+Scottie Barnes,Toronto Raptors,SG,2023-24,19.85,8.23,6.05,23.19
+DeMar DeRozan,San Antonio Spurs,SG,2019-20,21.49,5.36,5.43,23.15
+Montrezl Harrell,Charlotte Hornets,PF,2021-22,10.96,4.69,1.88,23.14
+Shai Gilgeous-Alexander,Oklahoma City Thunder,SG,2020-21,19.76,3.95,4.93,23.14
+Devin Booker,Phoenix Suns,SG,2023-24,27.07,4.53,6.94,23.11
+Isaiah Hartenstein,Los Angeles Clippers,C,2021-22,8.04,4.74,2.29,23.10
+Bobby Portis,Milwaukee Bucks,SF,2020-21,11.09,6.85,1.04,23.08
+Julius Randle,New York Knicks,PF,2022-23,25.14,9.96,4.10,23.07
+Rudy Gobert,Minnesota Timberwolves,C,2022-23,12.86,11.15,1.19,23.06
+Kristaps Porziņģis,Dallas Mavericks,PF,2021-22,18.69,7.46,1.97,23.05
+Rudy Gobert,Minnesota Timberwolves,C,2023-24,13.43,12.43,1.29,23.04
+Tony Bradley,Philadelphia 76ers,C,2020-21,2.48,2.36,0.39,23.03
+Jimmy Butler III,Miami Heat,SF,2023-24,19.17,4.89,4.58,23.00
+Stephen Curry,Golden State Warriors,SG,2023-24,26.43,4.46,5.12,22.98
+Ben Simmons,Philadelphia 76ers,SG,2019-20,16.44,7.79,7.98,22.97
+Jarrett Allen,Cleveland Cavaliers,C,2020-21,13.18,9.92,1.69,22.96
+Bobby Portis,Milwaukee Bucks,SF,2022-23,13.90,9.46,1.48,22.94
+Jalen Smith,Indiana Pacers,PF,2021-22,11.35,6.46,0.69,22.93
+Devin Booker,Phoenix Suns,SG,2022-23,26.27,4.29,5.23,22.93
+Nikola Vučević,Chicago Bulls,C,2021-22,17.64,11.01,3.23,22.93
+Mark Williams,Charlotte Hornets,C,2022-23,6.14,4.83,0.29,22.92
+Jonathan Isaac,Orlando Magic,SF,2022-23,4.58,3.67,0.50,22.86
+Frank Kaminsky,Phoenix Suns,PF,2021-22,7.31,3.15,1.00,22.85
+Robert Williams III,Boston Celtics,C,2022-23,7.97,8.34,1.43,22.83
+Deandre Ayton,Portland Trail Blazers,C,2023-24,16.43,10.88,1.61,22.83
+Chris Paul,Phoenix Suns,SG,2020-21,15.96,4.33,8.64,22.82
+Christian Wood,Dallas Mavericks,SF,2022-23,15.91,7.01,1.73,22.82
+Chris Paul,Oklahoma City Thunder,SG,2019-20,17.60,4.99,6.74,22.80
+Day'Ron Sharpe,Brooklyn Nets,C,2023-24,5.85,5.48,1.20,22.79
+Hassan Whiteside,Sacramento Kings,C,2020-21,5.43,3.98,0.37,22.77
+Kevin Love,Cleveland Cavaliers,PF,2019-20,16.73,9.27,3.02,22.76
+Devin Booker,Phoenix Suns,SG,2021-22,23.36,4.38,4.22,22.76
+Kevin Love,Miami Heat,PF,2023-24,7.82,5.45,1.85,22.75
+Zach LaVine,Chicago Bulls,SG,2020-21,27.43,4.98,4.86,22.72
+Deandre Ayton,Phoenix Suns,C,2020-21,14.45,10.54,1.43,22.70
+Kyle O'Quinn,Philadelphia 76ers,C,2019-20,1.59,1.81,0.80,22.69
+LaMelo Ball,Charlotte Hornets,SG,2021-22,19.84,6.59,7.51,22.68
+DeMar DeRozan,San Antonio Spurs,SG,2020-21,19.35,3.81,6.21,22.68
+Kristaps Porziņģis,Dallas Mavericks,PF,2020-21,16.96,7.47,1.33,22.67
+Paul George,Los Angeles Clippers,SF,2019-20,20.66,5.44,3.70,22.67
+Julius Randle,New York Knicks,PF,2020-21,24.11,10.20,6.01,22.64
+Jamal Murray,Denver Nuggets,SG,2023-24,21.19,4.10,6.51,22.58
+Daniel Gafford,Washington Wizards,PF,2021-22,9.15,5.50,0.92,22.56
+Willy Hernangomez,Charlotte Hornets,C,2019-20,2.92,2.06,0.45,22.51
+Mitchell Robinson,New York Knicks,C,2019-20,9.67,7.02,0.59,22.49
+Isaiah Hartenstein,Cleveland Cavaliers,C,2020-21,5.50,4.00,1.67,22.48
+Kristaps Porziņģis,Dallas Mavericks,PF,2019-20,19.73,9.15,1.73,22.46
+JaVale McGee,Sacramento Kings,C,2023-24,2.28,1.56,0.21,22.41
+Jusuf Nurkić,Phoenix Suns,C,2023-24,10.77,10.87,3.91,22.41
+Chris Boucher,Toronto Raptors,SF,2020-21,12.98,6.41,1.00,22.38
+Bam Adebayo,Miami Heat,C,2022-23,19.35,8.71,3.04,22.36
+Trae Young,Atlanta Hawks,SG,2023-24,22.40,2.40,9.40,22.35
+Jaren Jackson Jr.,Memphis Grizzlies,PF,2022-23,18.62,6.76,0.95,22.34
+Myles Turner,Indiana Pacers,C,2022-23,16.61,6.96,1.33,22.34
+Isaiah Jackson,Indiana Pacers,SF,2023-24,4.85,3.01,0.63,22.32
+Marquese Chriss,Golden State Warriors,SF,2019-20,8.98,5.98,1.87,22.30
+Tyrese Haliburton,Indiana Pacers,SG,2021-22,17.46,4.31,9.58,22.29
+Thaddeus Young,Chicago Bulls,SF,2020-21,11.93,6.13,4.22,22.27
+Kyrie Irving,Brooklyn Nets,SG,2022-23,26.44,4.98,5.15,22.26
+Ivica Zubac,Los Angeles Clippers,C,2023-24,11.18,8.82,1.31,22.23
+Shai Gilgeous-Alexander,Oklahoma City Thunder,SG,2021-22,24.48,4.96,5.91,22.22
+Nic Claxton,Brooklyn Nets,C,2023-24,11.21,9.41,1.96,22.21
+Tony Bradley,Utah Jazz,C,2019-20,4.13,3.87,0.33,22.21
+Day'Ron Sharpe,Brooklyn Nets,C,2021-22,3.47,2.81,0.30,22.19
+Donovan Mitchell,Cleveland Cavaliers,SG,2022-23,27.46,4.13,4.30,22.17
+Ivica Zubac,Los Angeles Clippers,C,2021-22,10.33,8.47,1.58,22.15
+Paul George,Los Angeles Clippers,SF,2020-21,20.98,5.98,4.67,22.14
+Bruno Caboclo,Houston Rockets,SF,2019-20,2.00,1.14,0.14,22.14
+Alperen Sengun,Houston Rockets,C,2022-23,14.59,8.92,3.83,22.09
+Jakob Poeltl,Toronto Raptors,C,2023-24,11.10,8.58,2.54,22.08
+Derrick Rose,Detroit Pistons,SG,2019-20,15.32,2.05,4.71,22.08
+Devin Booker,Phoenix Suns,SG,2019-20,25.52,4.07,6.25,22.07
+Brandon Clarke,Memphis Grizzlies,SF,2022-23,9.98,5.54,1.29,22.05
+Tobias Harris,Philadelphia 76ers,SF,2020-21,19.21,6.65,3.49,22.04
+Daniel Gafford,Washington Wizards,PF,2023-24,10.89,8.02,1.53,22.03
+Anthony Edwards,Minnesota Timberwolves,SG,2023-24,25.94,5.44,5.13,22.01
+Micah Potter,Utah Jazz,C,2022-23,1.00,0.67,0.17,21.98
+Myles Turner,Indiana Pacers,C,2023-24,16.83,6.83,1.28,21.97
+Kyrie Irving,Brooklyn Nets,SG,2021-22,27.45,4.38,5.76,21.96
+Charles Bassey,San Antonio Spurs,C,2022-23,5.38,5.22,1.30,21.96
+Jrue Holiday,Milwaukee Bucks,SG,2022-23,19.25,5.09,7.39,21.95
+Charles Bassey,Philadelphia 76ers,C,2021-22,1.08,0.97,0.11,21.94
+Julius Randle,New York Knicks,PF,2023-24,22.04,8.46,4.58,21.93
+Pascal Siakam,Toronto Raptors,SF,2022-23,24.23,7.83,5.85,21.91
+Omer Yurtseven,Miami Heat,C,2021-22,3.83,3.77,0.63,21.90
+Pascal Siakam,Toronto Raptors,SF,2021-22,22.81,8.53,5.29,21.90
+DeAndre Jordan,Los Angeles Lakers,C,2021-22,2.20,2.87,0.22,21.88
+LaMarcus Aldridge,Brooklyn Nets,C,2021-22,11.45,4.87,0.79,21.86
+Jarrett Allen,Cleveland Cavaliers,C,2022-23,13.65,9.38,1.59,21.86
+LaMelo Ball,Charlotte Hornets,SG,2023-24,22.87,4.91,7.65,21.85
+Luka Garza,Minnesota Timberwolves,C,2022-23,3.62,1.26,0.36,21.84
+Brandon Ingram,New Orleans Pelicans,SF,2022-23,24.71,5.47,5.82,21.83
+Jayson Tatum,Boston Celtics,SG,2019-20,22.42,6.67,2.90,21.82
+Jeremiah Martin,Brooklyn Nets,SG,2019-20,4.00,0.63,1.13,21.81
+Drew Eubanks,Portland Trail Blazers,PF,2021-22,13.83,8.09,1.52,21.80
+Mason Plumlee,Detroit Pistons,PF,2020-21,10.38,9.27,3.61,21.78
+Mikal Bridges,Brooklyn Nets,SG,2022-23,26.15,4.48,2.67,21.76
+Steven Adams,Memphis Grizzlies,C,2022-23,8.60,11.55,2.31,21.74
+Paul George,Los Angeles Clippers,SF,2021-22,23.56,6.66,5.50,21.70
+Jaylen Hoard,Oklahoma City Thunder,SF,2021-22,12.88,10.50,2.13,21.70
+Karl-Anthony Towns,Minnesota Timberwolves,C,2022-23,20.76,8.14,4.83,21.68
+Pascal Siakam,Toronto Raptors,SF,2023-24,21.63,6.15,4.75,21.67
+Dwight Howard,Philadelphia 76ers,C,2020-21,6.79,8.17,0.86,21.64
+Kenneth Lofton Jr.,Memphis Grizzlies,SF,2022-23,2.55,1.09,0.43,21.64
+Mo Bamba,Orlando Magic,C,2020-21,5.40,3.90,0.51,21.63
+Michael Porter Jr.,Denver Nuggets,SF,2020-21,19.05,7.30,1.15,21.63
+Josh Giddey,Oklahoma City Thunder,SG,2022-23,16.58,7.88,6.17,21.61
+Karl-Anthony Towns,Minnesota Timberwolves,C,2023-24,21.76,8.31,3.05,21.58
+Kris Dunn,Utah Jazz,SG,2022-23,13.18,4.55,5.64,21.56
+Damian Lillard,Milwaukee Bucks,SG,2023-24,23.99,4.32,6.86,21.55
+Kevon Looney,Golden State Warriors,SF,2022-23,7.05,9.27,2.52,21.55
+Richaun Holmes,Sacramento Kings,SF,2020-21,13.37,7.75,1.55,21.54
+Jay Huff,Washington Wizards,C,2022-23,4.64,1.91,0.91,21.53
+Steven Adams,Memphis Grizzlies,C,2021-22,6.95,10.00,3.37,21.51
+DeMarcus Cousins,Los Angeles Clippers,C,2020-21,6.25,3.60,0.80,21.49
+Chris Boucher,Toronto Raptors,SF,2019-20,5.79,3.90,0.37,21.48
+Jrue Holiday,Milwaukee Bucks,SG,2021-22,17.50,4.30,6.53,21.47
+Jakob Poeltl,San Antonio Spurs,C,2019-20,5.64,5.68,1.76,21.46
+Brandon Ingram,New Orleans Pelicans,SF,2021-22,20.77,5.33,5.12,21.46
+Thomas Bryant,Miami Heat,C,2023-24,2.65,1.72,0.28,21.43
+Goga Bitadze,Orlando Magic,C,2022-23,4.26,3.83,0.91,21.42
+Donovan Mitchell,Utah Jazz,SG,2021-22,25.87,4.21,5.34,21.42
+Charles Bassey,San Antonio Spurs,C,2023-24,3.00,3.62,1.00,21.42
+Bol Bol,Phoenix Suns,C,2023-24,3.14,1.93,0.24,21.41
+Moritz Wagner,Orlando Magic,PF,2023-24,10.59,4.23,1.17,21.38
+Josh Giddey,Oklahoma City Thunder,SG,2023-24,12.33,6.43,4.83,21.38
+Moses Brown,Oklahoma City Thunder,C,2020-21,6.73,6.96,0.18,21.38
+Donovan Mitchell,Utah Jazz,SG,2020-21,26.43,4.43,5.23,21.37
+Zach LaVine,Chicago Bulls,SG,2021-22,24.40,4.60,4.52,21.36
+DeMar DeRozan,Chicago Bulls,SG,2022-23,24.54,4.64,5.09,21.35
+Javonte Green,Chicago Bulls,SG,2023-24,10.00,6.09,0.45,21.34
+Tacko Fall,Boston Celtics,C,2020-21,0.78,0.87,0.05,21.34
+Jaylen Brown,Boston Celtics,SG,2022-23,26.24,6.75,3.41,21.29
+JaVale McGee,Los Angeles Lakers,C,2019-20,6.56,5.74,0.54,21.29
+Markelle Fultz,Orlando Magic,SG,2021-22,10.83,2.72,5.50,21.28
+De'Aaron Fox,Sacramento Kings,SG,2023-24,26.57,4.59,5.65,21.27
+Mason Plumlee,Los Angeles Clippers,PF,2022-23,7.48,6.91,1.74,21.26
+Caris LeVert,Brooklyn Nets,SG,2020-21,18.50,4.33,6.00,21.24
+Jrue Holiday,Milwaukee Bucks,SG,2020-21,16.60,4.25,5.67,21.24
+Aaron Gordon,Denver Nuggets,SF,2022-23,16.31,6.56,2.99,21.22
+Brandon Ingram,New Orleans Pelicans,SF,2019-20,21.10,5.43,3.70,21.22
+John Collins,Atlanta Hawks,PF,2020-21,17.63,7.41,1.24,21.19
+LaMarcus Aldridge,San Antonio Spurs,C,2019-20,18.54,7.26,2.39,21.18
+Ben Simmons,Brooklyn Nets,SG,2023-24,5.75,7.44,5.38,21.13
+Jalen Brunson,New York Knicks,SG,2022-23,23.00,3.39,5.93,21.12
+Mitchell Robinson,New York Knicks,C,2021-22,8.03,8.12,0.50,21.11
+Michael Porter Jr.,Denver Nuggets,SF,2019-20,7.64,3.87,0.69,21.09
+John Konchar,Memphis Grizzlies,SG,2019-20,1.86,1.62,0.76,21.08
+Khyri Thomas,Houston Rockets,SG,2020-21,16.40,3.60,5.00,21.06
+James Harden,Los Angeles Clippers,SG,2023-24,16.56,5.13,8.53,21.05
+DeAndre Jordan,Philadelphia 76ers,C,2021-22,3.70,4.60,0.40,21.03
+Dwight Howard,Los Angeles Lakers,C,2021-22,4.83,4.62,0.45,21.03
+Paul George,Los Angeles Clippers,SF,2022-23,23.79,6.11,5.14,21.02
+De'Aaron Fox,Sacramento Kings,SG,2019-20,21.12,3.84,6.82,21.00
+DeAndre Jordan,Brooklyn Nets,C,2020-21,6.00,6.01,1.31,21.00
+Nikola Vučević,Chicago Bulls,C,2023-24,17.79,10.40,3.30,21.00
+RJ Barrett,Toronto Raptors,SG,2023-24,19.33,5.67,3.61,20.97
+Ben Simmons,Philadelphia 76ers,SG,2020-21,14.05,7.07,6.80,20.97
+Walker Kessler,Utah Jazz,C,2023-24,7.97,7.40,0.92,20.96
+DeMarcus Cousins,Milwaukee Bucks,C,2021-22,8.56,5.44,1.00,20.96
+De'Aaron Fox,Sacramento Kings,SG,2020-21,24.76,3.44,7.07,20.95
+Josh Hart,Portland Trail Blazers,SG,2021-22,16.19,4.38,3.50,20.95
+Louis King,Sacramento Kings,SF,2020-21,6.29,2.57,1.29,20.93
+Andre Drummond,Los Angeles Lakers,C,2020-21,11.90,10.19,1.43,20.93
+DeMarcus Cousins,Denver Nuggets,C,2021-22,7.89,4.91,1.51,20.93
+Bradley Beal,Washington Wizards,SG,2022-23,21.48,3.63,5.02,20.93
+Mason Plumlee,Denver Nuggets,PF,2019-20,6.43,4.66,2.26,20.92
+Jonathan Isaac,Orlando Magic,SF,2023-24,6.24,4.13,0.48,20.91
+Bobby Portis,Milwaukee Bucks,SF,2021-22,14.41,9.00,1.18,20.86
+Dwight Howard,Los Angeles Lakers,C,2019-20,7.49,7.35,0.65,20.85
+Collin Sexton,Utah Jazz,SG,2023-24,18.69,2.63,4.91,20.80
+Skylar Mays,Portland Trail Blazers,SG,2022-23,15.33,3.17,8.33,20.80
+Udoka Azubuike,Utah Jazz,C,2021-22,2.22,1.97,0.00,20.79
+Thaddeus Young,San Antonio Spurs,SF,2021-22,3.04,1.79,1.13,20.79
+Paul Reed,Philadelphia 76ers,SF,2020-21,1.91,1.33,0.26,20.79
+Frank Kaminsky,Houston Rockets,PF,2022-23,0.69,0.62,0.42,20.77
+Brandon Ingram,New Orleans Pelicans,SF,2020-21,23.39,4.82,4.77,20.74
+Desmond Bane,Memphis Grizzlies,SG,2022-23,21.14,4.93,4.31,20.73
+Miles Bridges,Charlotte Hornets,SF,2021-22,20.16,6.99,3.75,20.71
+Jusuf Nurkić,Portland Trail Blazers,C,2022-23,12.62,8.56,2.71,20.70
+Isaiah Hartenstein,Houston Rockets,C,2019-20,2.49,2.09,0.42,20.69
+D'Angelo Russell,Golden State Warriors,SG,2019-20,17.31,2.71,4.58,20.69
+Alex Len,Sacramento Kings,C,2019-20,5.93,6.07,0.53,20.68
+Daniel Gafford,Washington Wizards,PF,2022-23,8.92,5.48,1.06,20.65
+Derrick Favors,Utah Jazz,SF,2020-21,5.43,5.53,0.65,20.64
+Eric Bledsoe,Milwaukee Bucks,SG,2019-20,14.93,4.62,5.38,20.64
+Jaylen Brown,Boston Celtics,SG,2021-22,23.62,6.12,3.50,20.64
+LaMelo Ball,Charlotte Hornets,SG,2022-23,22.65,6.24,8.22,20.63
+Julius Randle,New York Knicks,PF,2019-20,19.50,9.72,3.09,20.62
+Brandon Ingram,New Orleans Pelicans,SF,2023-24,20.49,4.98,5.58,20.61
+Paolo Banchero,Orlando Magic,SF,2023-24,22.55,6.93,5.39,20.60
+Brandon Clarke,Memphis Grizzlies,SF,2023-24,6.80,3.20,0.90,20.60
+Bobby Portis,Milwaukee Bucks,SF,2023-24,13.78,7.40,1.27,20.59
+Nick Richards,Charlotte Hornets,C,2022-23,6.65,5.20,0.48,20.59
+Gorgui Dieng,Minnesota Timberwolves,C,2019-20,6.82,5.12,1.16,20.59
+Khris Middleton,Milwaukee Bucks,SF,2020-21,19.79,5.80,5.29,20.56
+Serge Ibaka,Toronto Raptors,SF,2019-20,15.36,8.22,1.40,20.55
+Luke Kornet,Boston Celtics,C,2023-24,4.45,3.48,0.89,20.50
+Jeff Dowtin Jr.,Philadelphia 76ers,SG,2023-24,3.47,1.33,1.80,20.50
+John Collins,Atlanta Hawks,PF,2021-22,16.22,7.81,1.81,20.48
+Dejounte Murray,Atlanta Hawks,SG,2023-24,21.38,5.07,6.12,20.47
+Terry Rozier,Charlotte Hornets,SG,2023-24,22.45,3.77,6.39,20.46
+Naz Reid,Minnesota Timberwolves,C,2022-23,10.41,4.44,1.03,20.44
+Gorgui Dieng,Memphis Grizzlies,C,2020-21,4.22,2.39,0.71,20.44
+Damian Lillard,Portland Trail Blazers,SG,2021-22,23.97,4.14,7.31,20.41
+Darius Garland,Cleveland Cavaliers,SG,2021-22,21.66,3.29,8.57,20.41
+John Collins,Utah Jazz,PF,2023-24,14.67,8.21,1.10,20.40
+Onyeka Okongwu,Atlanta Hawks,PF,2022-23,9.89,7.20,1.01,20.39
+Serge Ibaka,Los Angeles Clippers,SF,2020-21,10.81,6.55,1.76,20.37
+Boban Marjanovic,Dallas Mavericks,C,2021-22,1.29,0.51,0.04,20.37
+Amen Thompson,Houston Rockets,SG,2023-24,9.55,6.60,2.63,20.37
+Al Horford,Oklahoma City Thunder,C,2020-21,12.06,5.70,2.85,20.34
+Gordon Hayward,Boston Celtics,SF,2019-20,17.15,6.57,4.00,20.33
+Jalen Williams,Oklahoma City Thunder,SG,2023-24,19.08,3.97,4.54,20.33
+Ja Morant,Memphis Grizzlies,SG,2019-20,17.29,3.75,7.07,20.33
+Russell Westbrook,Los Angeles Clippers,SG,2022-23,15.81,4.86,7.62,20.32
+D'Angelo Russell,Minnesota Timberwolves,SG,2019-20,20.00,4.23,6.08,20.31
+Nathan Knight,Minnesota Timberwolves,PF,2021-22,1.79,1.10,0.29,20.29
+Khris Middleton,Milwaukee Bucks,SF,2021-22,18.93,5.09,5.11,20.29
+Wendell Carter Jr.,Orlando Magic,C,2022-23,14.47,8.28,2.20,20.27
+Pascal Siakam,Toronto Raptors,SF,2019-20,22.85,7.32,3.45,20.26
+Sandro Mamukelashvili,San Antonio Spurs,PF,2023-24,2.32,1.79,0.60,20.26
+Isaiah Hartenstein,New York Knicks,C,2023-24,7.46,8.03,2.41,20.26
+Marvin Bagley III,Detroit Pistons,SF,2023-24,6.79,3.03,0.69,20.26
+DeMar DeRozan,Chicago Bulls,SG,2023-24,23.71,4.25,5.26,20.22
+Tyrese Maxey,Philadelphia 76ers,SG,2023-24,24.88,3.53,5.93,20.21
+Danilo Gallinari,Oklahoma City Thunder,SF,2019-20,18.41,5.11,1.89,20.20
+Jalen Johnson,Atlanta Hawks,SF,2023-24,14.45,7.87,3.27,20.19
+Kemba Walker,Boston Celtics,SG,2019-20,20.45,3.88,4.79,20.19
+Zach LaVine,Chicago Bulls,SG,2019-20,25.50,4.82,4.23,20.18
+Braxton Key,Denver Nuggets,SF,2023-24,0.44,0.36,0.18,20.18
+Jahlil Okafor,New Orleans Pelicans,C,2019-20,3.68,1.92,0.56,20.17
+Jaylen Brown,Boston Celtics,SG,2020-21,24.66,5.98,3.36,20.16
+Cody Zeller,Charlotte Hornets,PF,2020-21,7.91,5.75,1.51,20.16
+Luke Kornet,Boston Celtics,C,2021-22,1.13,1.09,0.35,20.16
+T.J. McConnell,Indiana Pacers,SG,2022-23,8.55,3.08,5.22,20.15
+Nerlens Noel,Oklahoma City Thunder,C,2019-20,7.02,4.69,0.89,20.15
+Kelly Olynyk,Utah Jazz,PF,2023-24,7.96,4.98,4.29,20.14
+Ivica Zubac,Los Angeles Clippers,C,2020-21,9.03,7.21,1.25,20.11
+Nic Claxton,Brooklyn Nets,C,2021-22,7.19,4.63,0.75,20.10
+Richaun Holmes,Sacramento Kings,SF,2021-22,9.18,6.22,0.94,20.09
+Malcolm Brogdon,Indiana Pacers,SG,2019-20,16.54,4.85,7.06,20.09
+Malcolm Brogdon,Indiana Pacers,SG,2021-22,14.93,4.02,4.61,20.09
+CJ McCollum,Portland Trail Blazers,SG,2020-21,15.53,2.64,3.19,20.08
+Evan Mobley,Cleveland Cavaliers,C,2022-23,15.96,8.89,2.80,20.07
+Josh Minott,Minnesota Timberwolves,SF,2023-24,0.78,0.27,0.13,20.04
+Mike Muscala,Oklahoma City Thunder,PF,2021-22,7.32,2.74,0.47,20.04
+Kyle Kuzma,Washington Wizards,SF,2023-24,21.87,6.54,4.17,20.03
+JaVale McGee,Cleveland Cavaliers,C,2020-21,6.16,3.95,0.77,20.02
+LaMelo Ball,Charlotte Hornets,SG,2020-21,15.75,5.92,6.14,20.00
+Paul George,Los Angeles Clippers,SF,2023-24,22.58,5.24,3.54,19.98
+Udoka Azubuike,Utah Jazz,C,2022-23,1.67,1.59,0.15,19.98
+Kevin Love,Cleveland Cavaliers,PF,2020-21,10.52,6.41,2.17,19.98
+Isaiah Jackson,Indiana Pacers,SF,2021-22,5.60,2.81,0.19,19.98
+Malcolm Brogdon,Indiana Pacers,SG,2020-21,19.44,4.82,5.39,19.98
+Chris Paul,Phoenix Suns,SG,2022-23,12.22,3.75,7.82,19.98
+Josh Minott,Minnesota Timberwolves,SF,2022-23,0.81,0.44,0.09,19.97
+Alex Len,Atlanta Hawks,C,2019-20,8.51,5.61,1.02,19.94
+Larry Nance Jr.,Cleveland Cavaliers,PF,2019-20,9.89,7.18,2.16,19.92
+Malcolm Brogdon,Boston Celtics,SG,2022-23,14.49,4.06,3.59,19.92
+Cody Zeller,Charlotte Hornets,PF,2019-20,10.35,6.63,1.42,19.91
+Dereck Lively II,Dallas Mavericks,C,2023-24,8.78,6.87,1.09,19.91
+Richaun Holmes,Sacramento Kings,SF,2019-20,12.25,8.14,0.95,19.90
+Julius Randle,New York Knicks,PF,2021-22,19.82,9.81,5.07,19.89
+Moritz Wagner,Orlando Magic,PF,2021-22,8.55,3.52,1.32,19.88
+LaMarcus Aldridge,Brooklyn Nets,C,2020-21,12.80,4.80,2.60,19.88
+Jaxson Hayes,New Orleans Pelicans,C,2020-21,6.32,3.62,0.49,19.87
+Drew Eubanks,San Antonio Spurs,PF,2021-22,4.22,3.63,0.93,19.86
+Shaquille Harrison,Portland Trail Blazers,SG,2022-23,8.80,4.40,6.00,19.86
+Zach LaVine,Chicago Bulls,SG,2022-23,24.84,4.48,4.25,19.86
+Russell Westbrook,Los Angeles Lakers,SG,2022-23,15.60,6.06,7.38,19.86
+Al Horford,Boston Celtics,C,2021-22,10.01,7.57,3.31,19.85
+Khris Middleton,Milwaukee Bucks,SF,2022-23,15.06,4.24,4.94,19.85
+Robert Covington,Los Angeles Clippers,SF,2021-22,10.39,5.09,1.04,19.84
+Thomas Bryant,Washington Wizards,C,2020-21,14.30,6.10,1.50,19.83
+Jaylen Brown,Boston Celtics,SG,2023-24,22.68,5.45,3.51,19.82
+Anthony Edwards,Minnesota Timberwolves,SG,2022-23,24.33,5.73,4.38,19.81
+Kyle Anderson,Memphis Grizzlies,SG,2020-21,12.03,5.58,3.52,19.80
+Chimezie Metu,Sacramento Kings,PF,2022-23,3.96,2.44,0.49,19.80
+Onyeka Okongwu,Atlanta Hawks,PF,2021-22,8.17,5.90,1.10,19.80
+Cade Cunningham,Detroit Pistons,SG,2023-24,18.99,3.62,6.27,19.80
+Paul Watson,Toronto Raptors,SG,2019-20,2.07,1.00,0.33,19.79
+James Wiseman,Golden State Warriors,C,2022-23,4.03,2.03,0.39,19.79
+Wendell Carter Jr.,Orlando Magic,C,2020-21,9.56,7.15,1.30,19.78
+Drew Eubanks,San Antonio Spurs,PF,2020-21,5.02,3.89,0.68,19.75
+Jalen Duren,Detroit Pistons,C,2022-23,8.27,8.04,1.01,19.73
+Gordon Hayward,Charlotte Hornets,SF,2020-21,17.98,5.38,3.77,19.73
+Jamal Murray,Denver Nuggets,SG,2022-23,19.97,3.95,6.15,19.71
+Brook Lopez,Milwaukee Bucks,C,2022-23,15.88,6.67,1.27,19.68
+Devin Booker,Phoenix Suns,SG,2020-21,23.78,3.90,4.01,19.68
+Tristan Thompson,Cleveland Cavaliers,C,2019-20,11.79,9.95,2.07,19.67
+Ivica Zubac,Los Angeles Clippers,C,2022-23,10.62,9.82,1.00,19.66
+Dejounte Murray,San Antonio Spurs,SG,2020-21,15.01,6.76,5.19,19.60
+Desmond Bane,Memphis Grizzlies,SG,2023-24,23.19,4.30,5.35,19.59
+Alec Burks,Philadelphia 76ers,SG,2019-20,11.58,2.95,2.00,19.57
+Zach Collins,San Antonio Spurs,PF,2021-22,7.52,5.28,2.10,19.56
+Marvin Bagley III,Detroit Pistons,SF,2021-22,14.56,6.83,1.06,19.53
+Gorgui Dieng,San Antonio Spurs,C,2020-21,3.86,1.91,0.86,19.53
+Mo Bamba,Orlando Magic,C,2021-22,10.50,7.94,1.18,19.50
+Mitchell Robinson,New York Knicks,C,2022-23,7.13,9.10,0.87,19.49
+Mason Plumlee,Los Angeles Clippers,PF,2023-24,4.28,4.11,0.96,19.49
+Khris Middleton,Milwaukee Bucks,SF,2023-24,15.05,4.67,5.31,19.47
+Kyle Kuzma,Washington Wizards,SF,2021-22,16.87,8.37,3.48,19.47
+Damian Jones,Sacramento Kings,C,2021-22,5.82,3.15,0.88,19.43
+Omer Yurtseven,Utah Jazz,C,2023-24,2.81,2.63,0.37,19.42
+Gorgui Dieng,Atlanta Hawks,C,2021-22,2.05,1.61,0.45,19.42
+Keldon Johnson,San Antonio Spurs,SG,2019-20,4.81,1.78,0.47,19.40
+DeMarcus Cousins,Houston Rockets,C,2020-21,8.61,6.82,2.14,19.39
+Dejounte Murray,Atlanta Hawks,SG,2022-23,20.47,5.26,6.05,19.38
+Jarred Vanderbilt,Utah Jazz,SF,2022-23,8.31,7.87,2.73,19.38
+Tyus Jones,Washington Wizards,SG,2023-24,11.13,2.52,6.83,19.36
+Obi Toppin,New York Knicks,SF,2021-22,8.76,3.62,1.04,19.36
+Cheick Diallo,Phoenix Suns,PF,2019-20,3.04,1.82,0.31,19.34
+Frank Mason III,Milwaukee Bucks,SG,2019-20,5.17,1.58,2.42,19.33
+Tobias Harris,Philadelphia 76ers,SF,2019-20,19.33,6.78,3.11,19.32
+Mike Conley,Utah Jazz,SG,2020-21,16.22,3.47,5.98,19.30
+DeAndre Jordan,Denver Nuggets,C,2023-24,1.73,1.91,0.32,19.28
+Bismack Biyombo,Phoenix Suns,C,2021-22,4.47,3.55,0.49,19.28
+Immanuel Quickley,Toronto Raptors,SG,2023-24,18.58,4.79,6.76,19.28
+Ja Morant,Memphis Grizzlies,SG,2020-21,19.11,4.00,7.38,19.26
+T.J. McConnell,Indiana Pacers,SG,2020-21,8.28,3.56,6.33,19.26
+Naz Reid,Minnesota Timberwolves,C,2020-21,10.89,4.47,1.00,19.25
+Bradley Beal,Washington Wizards,SG,2021-22,22.63,4.61,6.46,19.25
+Tari Eason,Houston Rockets,SF,2023-24,9.35,6.65,1.17,19.23
+Kelly Olynyk,Toronto Raptors,PF,2023-24,11.87,5.23,4.27,19.23
+Mo Bamba,Orlando Magic,C,2019-20,4.88,4.44,0.62,19.21
+Pascal Siakam,Toronto Raptors,SF,2020-21,20.62,6.98,4.31,19.21
+Goga Bitadze,Orlando Magic,C,2023-24,3.79,3.49,0.96,19.20
+Alex Len,Washington Wizards,C,2020-21,6.67,4.08,0.75,19.20
+Russell Westbrook,Los Angeles Clippers,SG,2023-24,11.09,5.04,4.50,19.19
+Zach Collins,San Antonio Spurs,PF,2022-23,10.91,6.00,2.69,19.18
+Drew Eubanks,San Antonio Spurs,PF,2019-20,3.06,2.43,0.43,19.18
+Jabari Parker,Boston Celtics,SF,2020-21,4.00,2.25,0.63,19.17
+Ricky Rubio,Phoenix Suns,SG,2019-20,12.10,4.34,8.14,19.15
+Terry Taylor,Indiana Pacers,SF,2021-22,7.07,3.82,0.91,19.14
+CJ McCollum,New Orleans Pelicans,SG,2023-24,20.03,4.33,4.62,19.14
+Devontae Cacok,Los Angeles Lakers,SF,2020-21,0.81,0.67,0.02,19.14
+Draymond Green,Golden State Warriors,SF,2021-22,7.52,7.30,6.96,19.13
+Brandon Clarke,Memphis Grizzlies,SF,2020-21,9.24,4.97,1.44,19.12
+Paul Reed,Philadelphia 76ers,SF,2022-23,3.50,3.20,0.33,19.12
+Shai Gilgeous-Alexander,Oklahoma City Thunder,SG,2019-20,19.01,5.89,3.31,19.11
+T.J. McConnell,Indiana Pacers,SG,2019-20,6.54,2.66,5.00,19.09
+Deni Avdija,Washington Wizards,SF,2023-24,13.95,6.84,3.62,19.09
+Jrue Holiday,New Orleans Pelicans,SG,2019-20,17.42,4.37,6.09,19.05
+Myles Turner,Indiana Pacers,C,2021-22,12.86,7.07,1.05,19.05
+Terry Rozier,Charlotte Hornets,SG,2021-22,18.77,4.20,4.35,19.03
+Darius Garland,Cleveland Cavaliers,SG,2022-23,21.59,2.68,7.80,19.02
+Tyus Jones,Memphis Grizzlies,SG,2021-22,8.54,2.38,4.38,19.01
+Marvin Bagley III,Detroit Pistons,SF,2022-23,10.29,5.49,0.73,19.00
+Lou Williams,Los Angeles Clippers,SG,2019-20,17.17,2.91,5.29,19.00
+Evan Mobley,Cleveland Cavaliers,C,2021-22,14.99,8.26,2.52,19.00
+Xavier Tillman,Memphis Grizzlies,SF,2022-23,5.36,3.84,1.20,19.00
+Kyle Lowry,Toronto Raptors,SG,2019-20,19.41,5.03,7.47,18.98
+Paul Reed,Philadelphia 76ers,SF,2021-22,1.87,1.48,0.26,18.96
+D'Angelo Russell,Minnesota Timberwolves,SG,2020-21,18.51,2.58,5.67,18.95
+Caris LeVert,Indiana Pacers,SG,2020-21,20.17,4.50,4.81,18.95
+James Johnson,Minnesota Timberwolves,SF,2019-20,12.00,4.71,3.79,18.94
+D'Angelo Russell,Los Angeles Lakers,SG,2022-23,15.58,2.63,5.42,18.93
+Wendell Carter Jr.,Chicago Bulls,C,2020-21,10.88,7.81,2.16,18.93
+Trey Lyles,Sacramento Kings,SF,2021-22,10.16,5.40,1.20,18.92
+Noah Vonleh,Minnesota Timberwolves,SF,2019-20,2.43,2.37,0.53,18.92
+Jakob Poeltl,San Antonio Spurs,C,2020-21,8.24,7.60,1.86,18.92
+Luka Garza,Minnesota Timberwolves,C,2023-24,1.98,0.62,0.08,18.91
+Franz Wagner,Orlando Magic,SF,2023-24,19.74,5.29,3.74,18.89
+Sandro Mamukelashvili,San Antonio Spurs,PF,2022-23,10.84,6.79,2.42,18.89
+Dejounte Murray,San Antonio Spurs,SG,2019-20,10.91,5.80,4.11,18.89
+Gorgui Dieng,Memphis Grizzlies,C,2019-20,5.86,4.67,0.71,18.88
+Jonathan Kuminga,Golden State Warriors,SF,2023-24,15.84,4.73,2.17,18.86
+Spencer Dinwiddie,Dallas Mavericks,SG,2021-22,15.78,3.13,3.91,18.86
+JaVale McGee,Dallas Mavericks,C,2022-23,2.42,1.39,0.14,18.85
+Tyrese Haliburton,Sacramento Kings,SG,2021-22,14.25,3.90,7.43,18.83
+Russell Westbrook,Los Angeles Lakers,SG,2021-22,18.24,7.34,6.96,18.83
+David Duke Jr.,San Antonio Spurs,SG,2023-24,2.89,1.11,0.56,18.82
+Spencer Dinwiddie,Brooklyn Nets,SG,2019-20,20.59,3.45,6.75,18.82
+Nick Richards,Charlotte Hornets,C,2023-24,9.31,7.70,0.77,18.81
+Derrick Rose,New York Knicks,SG,2020-21,14.89,2.89,4.17,18.79
+Harry Giles III,Brooklyn Nets,PF,2023-24,1.08,0.52,0.12,18.79
+Nate Hinton,Houston Rockets,SG,2023-24,1.06,0.71,0.32,18.75
+Draymond Green,Golden State Warriors,SF,2023-24,6.33,5.31,4.43,18.74
+Jarred Vanderbilt,Minnesota Timberwolves,SF,2020-21,4.78,5.11,1.06,18.72
+Trey Lyles,Detroit Pistons,SF,2021-22,10.43,4.78,1.14,18.70
+Donovan Mitchell,Utah Jazz,SG,2019-20,23.99,4.41,4.26,18.70
+Kevon Looney,Golden State Warriors,SF,2021-22,5.99,7.27,2.01,18.68
+Otto Porter Jr.,Golden State Warriors,SF,2021-22,7.46,5.25,1.36,18.67
+Tobias Harris,Philadelphia 76ers,SF,2023-24,15.84,5.96,2.86,18.67
+Tyler Herro,Miami Heat,SG,2021-22,19.25,4.63,3.70,18.65
+Ricky Council IV,Philadelphia 76ers,SG,2023-24,3.93,1.05,0.36,18.64
+Jaxson Hayes,New Orleans Pelicans,C,2021-22,7.98,3.84,0.52,18.61
+DeAndre Jordan,Denver Nuggets,C,2022-23,2.43,2.46,0.41,18.61
+Robert Williams III,Portland Trail Blazers,C,2023-24,6.83,6.33,0.83,18.61
+Malcolm Brogdon,Portland Trail Blazers,SG,2023-24,13.93,3.36,4.86,18.60
+Cody Zeller,Portland Trail Blazers,PF,2021-22,4.83,4.31,0.76,18.60
+Aaron Gordon,Denver Nuggets,SF,2023-24,13.88,6.45,3.55,18.59
+Isaiah Roby,Oklahoma City Thunder,SF,2021-22,6.78,3.24,1.06,18.56
+Jabari Parker,Atlanta Hawks,SF,2019-20,15.00,5.97,1.81,18.56
+Daniel Gafford,Chicago Bulls,PF,2020-21,3.42,2.40,0.40,18.53
+De'Aaron Fox,Sacramento Kings,SG,2021-22,21.36,3.61,5.16,18.53
+Day'Ron Sharpe,Brooklyn Nets,C,2022-23,3.24,2.86,0.53,18.52
+Trevelin Queen,Houston Rockets,SG,2021-22,2.69,1.00,0.25,18.51
+Josh Hart,New York Knicks,SG,2022-23,10.24,7.04,3.60,18.51
+Tre Mann,Oklahoma City Thunder,SG,2023-24,1.07,0.52,0.43,18.50
+Oshae Brissett,Indiana Pacers,SG,2020-21,8.81,4.42,0.69,18.50
+Kemba Walker,Boston Celtics,SG,2020-21,19.28,3.95,4.93,18.49
+Jalen Smith,Indiana Pacers,PF,2022-23,8.13,4.99,0.84,18.48
+Chris Boucher,Toronto Raptors,SF,2023-24,4.67,3.00,0.33,18.48
+Paul Reed,Philadelphia 76ers,SF,2023-24,7.32,5.95,1.33,18.47
+Ersan Ilyasova,Milwaukee Bucks,SF,2019-20,5.91,4.31,0.70,18.47
+Nic Claxton,Brooklyn Nets,C,2020-21,4.82,3.77,0.64,18.47
+Thomas Bryant,Washington Wizards,C,2021-22,5.15,2.77,0.59,18.46
+Jamal Murray,Denver Nuggets,SG,2019-20,18.49,4.00,4.81,18.44
+Devin Vassell,San Antonio Spurs,SG,2023-24,19.17,3.78,4.01,18.40
+Chris Boucher,Toronto Raptors,SF,2022-23,9.13,5.40,0.37,18.40
+Jonathan Isaac,Orlando Magic,SF,2019-20,11.88,6.79,1.41,18.40
+Tre Jones,San Antonio Spurs,SG,2022-23,12.50,3.50,6.40,18.39
+Rudy Gay,San Antonio Spurs,SG,2019-20,10.68,5.32,1.68,18.38
+Rajon Rondo,Los Angeles Clippers,SG,2020-21,6.18,2.50,4.73,18.38
+Marvin Bagley III,Sacramento Kings,SF,2020-21,13.51,7.07,0.96,18.38
+Jamal Murray,Denver Nuggets,SG,2020-21,20.78,3.96,4.71,18.37
+Dewayne Dedmon,Miami Heat,C,2021-22,6.12,5.59,0.68,18.35
+Jarred Vanderbilt,Minnesota Timberwolves,SF,2021-22,6.83,8.32,1.25,18.33
+Bol Bol,Orlando Magic,C,2022-23,8.13,5.19,0.88,18.32
+Precious Achiuwa,Toronto Raptors,SF,2023-24,7.72,5.44,1.76,18.31
+Cameron Oliver,Houston Rockets,SF,2020-21,10.75,5.25,1.25,18.29
+Jordan Bell,Minnesota Timberwolves,SF,2019-20,1.69,1.59,0.29,18.29
+Craig Porter Jr.,Cleveland Cavaliers,SG,2023-24,4.01,1.54,1.66,18.28
+D'Angelo Russell,Minnesota Timberwolves,SG,2021-22,18.09,3.32,7.08,18.28
+John Henson,Cleveland Cavaliers,PF,2019-20,4.39,3.45,1.30,18.27
+Isaiah Jackson,Indiana Pacers,SF,2022-23,5.62,3.48,0.63,18.27
+Chris Boucher,Toronto Raptors,SF,2021-22,9.31,6.10,0.31,18.27
+Tyus Jones,Memphis Grizzlies,SG,2022-23,10.15,2.47,5.15,18.26
+Kevon Looney,Golden State Warriors,SF,2023-24,4.07,5.11,1.62,18.24
+Daniel Theis,Boston Celtics,PF,2019-20,9.25,6.55,1.71,18.23
+Tyler Herro,Miami Heat,SG,2023-24,19.02,4.83,4.09,18.23
+Marques Bolden,Charlotte Hornets,C,2023-24,2.18,1.88,0.24,18.23
+John Henson,Detroit Pistons,PF,2019-20,6.91,4.36,1.00,18.23
+Desmond Bane,Memphis Grizzlies,SG,2021-22,17.74,4.28,2.67,18.22
+Willie Cauley-Stein,Golden State Warriors,C,2019-20,7.69,6.07,1.43,18.21
+Gary Payton II,Golden State Warriors,SG,2022-23,5.71,4.29,1.14,18.20
+Derrick Rose,New York Knicks,SG,2021-22,11.52,2.89,3.81,18.20
+Kevin Love,Cleveland Cavaliers,PF,2022-23,6.94,5.60,1.52,18.19
+Moritz Wagner,Orlando Magic,PF,2022-23,9.68,4.18,1.35,18.19
+Obi Toppin,Indiana Pacers,SF,2023-24,10.28,3.90,1.56,18.17
+Devon Dotson,Chicago Bulls,SG,2020-21,0.74,0.16,0.23,18.16
+Miles Bridges,Charlotte Hornets,SF,2023-24,19.58,6.82,3.12,18.16
+Victor Oladipo,Miami Heat,SG,2021-22,7.62,1.77,2.15,18.16
+Josh Giddey,Oklahoma City Thunder,SG,2021-22,12.48,7.80,6.39,18.16
+Al Horford,Philadelphia 76ers,C,2019-20,11.57,6.61,3.91,18.16
+Michael Porter Jr.,Denver Nuggets,SF,2022-23,17.14,5.41,1.03,18.16
+Klay Thompson,Golden State Warriors,SG,2021-22,19.18,3.68,2.59,18.15
+Andrew Wiggins,Golden State Warriors,SF,2019-20,17.92,4.23,3.31,18.14
+Frank Kaminsky,Phoenix Suns,PF,2020-21,4.63,2.81,1.18,18.12
+Thon Maker,Cleveland Cavaliers,PF,2020-21,2.50,1.50,0.33,18.12
+Tobias Harris,Philadelphia 76ers,SF,2021-22,16.54,6.53,3.32,18.11
+Jaren Jackson Jr.,Memphis Grizzlies,PF,2023-24,21.85,5.37,2.26,18.11
+Onyeka Okongwu,Atlanta Hawks,PF,2023-24,8.77,5.88,1.16,18.10
+Mason Plumlee,Charlotte Hornets,PF,2021-22,6.53,7.74,3.10,18.10
+Naz Reid,Minnesota Timberwolves,C,2021-22,8.06,3.81,0.90,18.10
+Jalen Smith,Phoenix Suns,PF,2021-22,3.37,2.67,0.12,18.09
+Elfrid Payton,New York Knicks,SG,2019-20,9.76,4.61,7.02,18.08
+Jordan Nwora,Milwaukee Bucks,SF,2020-21,3.11,1.09,0.13,18.08
+Jaxson Hayes,New Orleans Pelicans,C,2019-20,6.56,3.60,0.78,18.08
+Malik Monk,Sacramento Kings,SG,2022-23,13.18,2.57,3.77,18.08
+Maozinha Pereira,Memphis Grizzlies,SF,2023-24,5.33,4.11,0.22,18.07
+Enes Freedom,Boston Celtics,C,2021-22,2.51,3.14,0.16,18.06
+Cory Joseph,Detroit Pistons,SG,2020-21,9.12,2.40,4.20,18.04
+Jaylen Nowell,Detroit Pistons,SG,2023-24,4.29,1.43,0.43,18.03
+Terry Rozier,Charlotte Hornets,SG,2020-21,19.82,4.25,4.13,18.03
+George Hill,Milwaukee Bucks,SG,2019-20,9.39,3.00,3.05,18.02
+Kyle Anderson,Memphis Grizzlies,SG,2021-22,7.55,5.33,2.65,18.02
+Ante Zizic,Cleveland Cavaliers,C,2019-20,2.46,1.69,0.15,18.01
+Josh Hart,New Orleans Pelicans,SG,2021-22,13.05,7.57,4.00,18.00
+Anthony Edwards,Minnesota Timberwolves,SG,2021-22,21.00,4.70,3.77,17.99
+Wendell Carter Jr.,Orlando Magic,C,2023-24,9.89,6.25,1.56,17.97
+Bojan Bogdanovic,Detroit Pistons,SF,2022-23,21.58,3.78,2.58,17.97
+Cameron Payne,Phoenix Suns,SG,2020-21,7.32,2.09,3.14,17.97
+Kyle Lowry,Toronto Raptors,SG,2020-21,16.14,5.04,6.90,17.95
+Cam Whitmore,Houston Rockets,SF,2023-24,10.16,3.16,0.58,17.95
+Tre Jones,San Antonio Spurs,SG,2023-24,9.88,3.71,6.13,17.94
+Gary Payton II,Golden State Warriors,SG,2021-22,6.88,3.38,0.88,17.93
+James Wiseman,Detroit Pistons,C,2022-23,12.71,8.08,0.67,17.92
+Michael Porter Jr.,Denver Nuggets,SF,2023-24,16.54,6.89,1.49,17.92
+Dewayne Dedmon,Philadelphia 76ers,C,2022-23,1.33,1.19,0.48,17.92
+Kelly Olynyk,Detroit Pistons,PF,2021-22,7.45,3.61,2.27,17.92
+Jaylen Nowell,Minnesota Timberwolves,SG,2021-22,6.59,1.54,1.63,17.91
+Daniel Theis,Boston Celtics,PF,2021-22,6.92,4.08,0.88,17.90
+Austin Reaves,Los Angeles Lakers,SG,2023-24,15.85,4.29,5.49,17.90
+Jalen Brunson,Dallas Mavericks,SG,2021-22,16.27,3.91,4.77,17.90
+Aaron Gordon,Orlando Magic,SF,2019-20,14.42,7.66,3.68,17.90
+Delon Wright,Detroit Pistons,SG,2020-21,10.39,4.56,5.03,17.89
+Markelle Fultz,Orlando Magic,SG,2022-23,13.95,3.90,5.68,17.89
+Khem Birch,Toronto Raptors,C,2020-21,11.95,7.58,1.89,17.88
+Jordan Clarkson,Cleveland Cavaliers,SG,2019-20,14.10,2.30,2.33,17.86
+Derrick White,Boston Celtics,SG,2023-24,14.57,4.08,4.96,17.85
+John Wall,Houston Rockets,SG,2020-21,15.53,2.43,5.19,17.84
+Victor Oladipo,Indiana Pacers,SG,2020-21,18.00,5.10,3.80,17.83
+Moses Brown,Dallas Mavericks,C,2021-22,1.47,1.11,0.02,17.82
+Bradley Beal,Phoenix Suns,SG,2023-24,18.19,4.38,5.00,17.82
+Jeff Green,Houston Rockets,SF,2019-20,12.22,2.89,1.67,17.81
+Bol Bol,Denver Nuggets,C,2021-22,1.10,0.67,0.17,17.80
+Alperen Sengun,Houston Rockets,C,2021-22,9.61,5.46,2.57,17.80
+Jordan Nwora,Toronto Raptors,SF,2023-24,6.59,2.83,1.07,17.80
+Shake Milton,Detroit Pistons,SG,2023-24,3.38,2.25,0.75,17.79
+Draymond Green,Golden State Warriors,SF,2020-21,6.63,6.69,8.33,17.78
+Spencer Dinwiddie,Brooklyn Nets,SG,2022-23,15.89,3.96,8.74,17.77
+Paolo Banchero,Orlando Magic,SF,2022-23,19.68,6.81,3.68,17.77
+Drew Eubanks,Portland Trail Blazers,PF,2022-23,6.40,5.16,1.27,17.77
+Jalen Brunson,Dallas Mavericks,SG,2020-21,12.60,3.40,3.51,17.76
+Montrezl Harrell,Philadelphia 76ers,PF,2022-23,3.90,1.94,0.40,17.75
+Marvin Bagley III,Sacramento Kings,SF,2021-22,6.32,4.89,0.39,17.75
+Larry Nance Jr.,New Orleans Pelicans,PF,2022-23,6.68,5.36,1.80,17.74
+Al Horford,Boston Celtics,C,2023-24,8.39,6.16,2.51,17.74
+Aaron Gordon,Orlando Magic,SF,2020-21,12.55,5.72,3.62,17.74
+Naz Reid,Minnesota Timberwolves,C,2023-24,13.46,5.22,1.31,17.73
+D'Angelo Russell,Los Angeles Lakers,SG,2023-24,17.11,2.95,6.03,17.73
+Harrison Barnes,Sacramento Kings,SF,2020-21,15.81,6.53,3.41,17.72
+Goga Bitadze,Indiana Pacers,C,2021-22,4.99,2.53,0.79,17.72
+Otto Porter Jr.,Chicago Bulls,SF,2020-21,9.88,5.52,2.00,17.71
+Fred VanVleet,Houston Rockets,SG,2023-24,17.40,3.81,8.07,17.71
+Steven Adams,New Orleans Pelicans,C,2020-21,7.18,8.43,1.82,17.71
+Evan Fournier,Orlando Magic,SG,2020-21,13.10,1.92,2.44,17.71
+Harrison Barnes,Sacramento Kings,SF,2021-22,16.43,5.61,2.42,17.68
+Jaylen Brown,Boston Celtics,SG,2019-20,19.98,6.28,2.03,17.67
+Derrick Rose,Detroit Pistons,SG,2020-21,13.31,1.81,3.94,17.67
+Mason Jones,Los Angeles Lakers,SG,2021-22,3.38,1.25,0.50,17.66
+Tony Bradley,Chicago Bulls,C,2021-22,2.14,2.45,0.36,17.65
+Jock Landale,Phoenix Suns,C,2022-23,5.70,3.50,0.85,17.64
+Caris LeVert,Brooklyn Nets,SG,2019-20,17.91,4.02,4.23,17.63
+Malik Monk,Sacramento Kings,SG,2023-24,15.42,2.94,5.14,17.63
+Kyle Kuzma,Washington Wizards,SF,2022-23,21.20,7.23,3.73,17.63
+Jordan Clarkson,Utah Jazz,SG,2020-21,18.40,4.03,2.47,17.61
+Andrew Wiggins,Minnesota Timberwolves,SF,2019-20,21.91,5.09,3.60,17.61
+Jaren Jackson Jr.,Memphis Grizzlies,PF,2020-21,14.36,5.64,1.09,17.60
+Tyus Jones,Memphis Grizzlies,SG,2019-20,7.45,1.58,4.38,17.60
+Cole Anthony,Orlando Magic,SG,2022-23,12.20,4.50,3.67,17.59
+Trey Murphy III,New Orleans Pelicans,SF,2023-24,14.27,4.75,2.10,17.59
+Mo Bamba,Orlando Magic,C,2022-23,5.58,3.54,0.81,17.59
+Harry Giles III,Sacramento Kings,PF,2019-20,4.94,2.94,0.94,17.58
+Kevin Porter Jr.,Houston Rockets,SG,2022-23,19.15,5.32,5.73,17.57
+Malik Beasley,Minnesota Timberwolves,SG,2019-20,20.71,5.07,1.93,17.57
+Johnathan Williams,Washington Wizards,SF,2019-20,2.05,2.91,0.36,17.57
+Keldon Johnson,San Antonio Spurs,SG,2022-23,19.79,4.54,2.61,17.56
+Keldon Johnson,San Antonio Spurs,SG,2021-22,17.04,6.09,2.11,17.56
+Kyle Anderson,Minnesota Timberwolves,SG,2022-23,8.99,5.11,4.65,17.53
+T.J. Warren,Indiana Pacers,SF,2019-20,19.79,4.18,1.48,17.53
+Chris Paul,Golden State Warriors,SG,2023-24,9.03,3.81,6.66,17.52
+Isaiah Stewart,Detroit Pistons,PF,2020-21,7.56,6.38,0.83,17.51
+Cameron Johnson,Phoenix Suns,SF,2022-23,12.42,3.42,1.37,17.50
+Jaren Jackson Jr.,Memphis Grizzlies,PF,2021-22,16.31,5.82,1.10,17.49
+Fred VanVleet,Toronto Raptors,SG,2021-22,19.70,4.31,6.48,17.49
+Serge Ibaka,Los Angeles Clippers,SF,2021-22,5.80,3.75,0.90,17.48
+Devin Vassell,San Antonio Spurs,SG,2022-23,16.35,3.44,3.16,17.46
+Tyler Herro,Miami Heat,SG,2022-23,18.97,5.07,3.94,17.45
+Luke Kornet,Boston Celtics,C,2022-23,3.26,2.46,0.66,17.44
+Monte Morris,Denver Nuggets,SG,2021-22,3.56,0.80,1.20,17.44
+Tristan Thompson,Sacramento Kings,C,2021-22,3.56,3.10,0.35,17.43
+Jerami Grant,Detroit Pistons,SF,2020-21,20.42,4.24,2.58,17.43
+Jalen Green,Houston Rockets,SG,2023-24,19.63,5.16,3.55,17.40
+Alize Johnson,Indiana Pacers,SF,2019-20,0.71,1.00,0.15,17.39
+Scottie Barnes,Toronto Raptors,SG,2021-22,14.92,7.33,3.37,17.37
+Alec Burks,Golden State Warriors,SG,2019-20,15.78,4.61,3.08,17.36
+Donta Hall,Brooklyn Nets,C,2019-20,4.13,2.88,0.25,17.36
+Robin Lopez,Washington Wizards,C,2020-21,9.04,3.83,0.77,17.36
+James Wiseman,Detroit Pistons,C,2023-24,5.44,4.10,0.66,17.34
+Jock Landale,San Antonio Spurs,C,2021-22,3.84,2.00,0.65,17.34
+David Nwaba,Houston Rockets,SG,2021-22,2.84,1.84,0.43,17.34
+D'Angelo Russell,Minnesota Timberwolves,SG,2022-23,17.91,3.06,6.19,17.34
+CJ McCollum,New Orleans Pelicans,SG,2022-23,20.91,4.37,5.72,17.33
+Bismack Biyombo,Charlotte Hornets,C,2019-20,6.05,4.74,0.77,17.32
+Cameron Johnson,Brooklyn Nets,SF,2022-23,16.56,4.80,2.08,17.32
+Collin Sexton,Cleveland Cavaliers,SG,2020-21,21.47,2.75,3.85,17.31
+Nemanja Bjelica,Golden State Warriors,SF,2021-22,5.62,3.82,2.06,17.31
+Jordan McLaughlin,Minnesota Timberwolves,SG,2019-20,7.16,1.53,3.91,17.30
+Richaun Holmes,Washington Wizards,SF,2023-24,4.32,3.71,0.36,17.29
+Aaron Gordon,Denver Nuggets,SF,2021-22,15.01,5.85,2.51,17.28
+Moses Brown,Portland Trail Blazers,C,2023-24,1.29,1.48,0.12,17.28
+Goran Dragic,Miami Heat,SG,2019-20,15.62,3.07,4.93,17.27
+Dwight Powell,Dallas Mavericks,PF,2021-22,8.74,4.93,1.18,17.27
+Darius Bazley,Utah Jazz,SF,2023-24,8.00,4.50,0.83,17.26
+Caris LeVert,Indiana Pacers,SG,2021-22,18.67,3.85,4.44,17.26
+Mitchell Robinson,New York Knicks,C,2020-21,8.26,8.13,0.55,17.25
+Fred VanVleet,Toronto Raptors,SG,2020-21,19.23,4.15,6.19,17.24
+Thaddeus Young,Toronto Raptors,SF,2023-24,2.43,1.60,1.06,17.23
+De'Anthony Melton,Memphis Grizzlies,SG,2021-22,10.84,4.49,2.66,17.23
+Will Barton,Denver Nuggets,SG,2019-20,14.57,6.08,3.53,17.23
+Gabriel Deck,Oklahoma City Thunder,SF,2020-21,8.40,4.00,2.40,17.23
+Mike Conley,Utah Jazz,SG,2021-22,13.69,3.01,5.35,17.21
+Fred VanVleet,Toronto Raptors,SG,2022-23,18.80,3.94,6.97,17.21
+Wendell Carter Jr.,Chicago Bulls,C,2019-20,10.76,9.00,1.13,17.21
+Bones Hyland,Los Angeles Clippers,SG,2022-23,6.57,2.13,2.04,17.20
+Shaquille Harrison,Chicago Bulls,SG,2019-20,3.22,1.32,0.75,17.19
+Precious Achiuwa,Toronto Raptors,SF,2022-23,7.94,5.13,0.78,17.19
+Aleksej Pokusevski,Charlotte Hornets,SF,2023-24,6.70,3.95,1.50,17.19
+Derrick White,San Antonio Spurs,SG,2021-22,14.41,3.53,5.59,17.17
+Jeff Teague,Minnesota Timberwolves,SG,2019-20,11.79,2.32,5.47,17.17
+Bruce Brown,Brooklyn Nets,SG,2020-21,8.30,5.06,1.51,17.16
+Blake Griffin,Brooklyn Nets,SF,2020-21,9.29,4.32,2.25,17.16
+Tre Jones,San Antonio Spurs,SG,2021-22,5.66,2.12,3.19,17.16
+Buddy Hield,Indiana Pacers,SG,2022-23,16.80,5.00,2.81,17.14
+Ish Smith,Washington Wizards,SG,2021-22,8.64,2.96,5.21,17.14
+Tacko Fall,Cleveland Cavaliers,C,2021-22,0.50,0.96,0.08,17.12
+Dennis Schröder,Oklahoma City Thunder,SG,2019-20,18.91,3.63,4.03,17.11
+Lauri Markkanen,Chicago Bulls,PF,2020-21,13.37,5.15,0.87,17.11
+JaMychal Green,Golden State Warriors,PF,2022-23,5.38,3.01,0.75,17.10
+Damian Jones,Cleveland Cavaliers,C,2023-24,1.30,0.76,0.18,17.08
+Gordon Hayward,Charlotte Hornets,SF,2021-22,15.56,4.48,3.54,17.08
+Chimezie Metu,Sacramento Kings,PF,2021-22,6.94,4.35,0.78,17.08
+Immanuel Quickley,New York Knicks,SG,2023-24,14.52,2.48,2.39,17.08
+Lonzo Ball,New Orleans Pelicans,SG,2020-21,12.94,4.24,5.10,17.07
+Trendon Watford,Brooklyn Nets,SG,2023-24,5.27,2.37,0.99,17.07
+Bogdan Bogdanović,Atlanta Hawks,SG,2020-21,15.65,3.48,3.20,17.06
+Fred VanVleet,Toronto Raptors,SG,2019-20,17.00,3.63,6.38,17.05
+Marvin Bagley III,Sacramento Kings,SF,2019-20,14.23,7.46,0.77,17.05
+Mo Bamba,Philadelphia 76ers,C,2023-24,3.51,3.31,0.57,17.04
+Tyus Jones,Memphis Grizzlies,SG,2020-21,6.14,1.94,3.60,17.04
+Anfernee Simons,Portland Trail Blazers,SG,2023-24,20.37,3.27,5.00,17.03
+Damian Jones,Sacramento Kings,C,2020-21,5.62,3.67,1.14,17.03
+Delon Wright,Sacramento Kings,SG,2020-21,10.04,3.89,3.59,17.02
+Paul Millsap,Denver Nuggets,SF,2020-21,8.23,4.30,1.61,17.02
+Delon Wright,Dallas Mavericks,SG,2019-20,6.90,3.84,3.34,17.01
+Paul Millsap,Denver Nuggets,SF,2019-20,11.37,5.63,1.60,17.00
+Cade Cunningham,Detroit Pistons,SG,2022-23,19.92,6.17,6.00,17.00
+Scottie Barnes,Toronto Raptors,SG,2022-23,15.12,6.56,4.76,17.00
+Zach Collins,San Antonio Spurs,PF,2023-24,11.25,5.36,2.81,17.00
+Norman Powell,Toronto Raptors,SG,2019-20,15.96,3.65,1.75,16.99
+Darius Bazley,Phoenix Suns,SF,2022-23,1.22,0.70,0.26,16.95
+Cody Zeller,Miami Heat,PF,2022-23,5.76,3.76,0.59,16.93
+Delon Wright,Washington Wizards,SG,2022-23,7.24,3.53,3.80,16.93
+Ben Simmons,Brooklyn Nets,SG,2022-23,6.61,5.98,5.82,16.92
+Jordan Nwora,Indiana Pacers,SF,2022-23,13.04,4.67,2.08,16.92
+Xavier Moon,Los Angeles Clippers,SG,2021-22,3.05,0.74,1.26,16.91
+Cameron Payne,Phoenix Suns,SG,2019-20,10.88,3.88,3.00,16.91
+Lonzo Ball,New Orleans Pelicans,SG,2019-20,11.29,5.80,6.64,16.91
+Jordan Poole,Golden State Warriors,SG,2021-22,18.49,3.42,4.00,16.90
+Bruno Fernando,Houston Rockets,PF,2022-23,3.32,3.21,0.79,16.86
+Keita Bates-Diop,San Antonio Spurs,SF,2022-23,8.63,3.29,1.37,16.85
+Mfiondu Kabengele,Los Angeles Clippers,C,2019-20,1.56,0.41,0.07,16.85
+Jamal Cain,Miami Heat,SF,2022-23,2.39,1.27,0.29,16.84
+Victor Oladipo,Houston Rockets,SG,2020-21,16.31,3.65,3.81,16.84
+Joe Ingles,Utah Jazz,SG,2020-21,12.07,3.64,4.75,16.84
+Mitchell Robinson,New York Knicks,C,2023-24,5.24,7.97,0.55,16.83
+Jontay Porter,Toronto Raptors,C,2023-24,3.97,2.83,2.07,16.83
+Larry Nance Jr.,New Orleans Pelicans,PF,2023-24,5.65,4.95,1.82,16.83
+KJ Martin,Houston Rockets,SF,2022-23,12.67,5.51,1.50,16.83
+Olivier Sarr,Oklahoma City Thunder,C,2023-24,0.85,0.90,0.05,16.83
+Scotty Pippen Jr.,Memphis Grizzlies,SG,2023-24,12.90,3.19,4.67,16.81
+Caris LeVert,Cleveland Cavaliers,SG,2023-24,12.69,3.73,4.61,16.80
+Draymond Green,Golden State Warriors,SF,2022-23,8.23,7.00,6.67,16.80
+Derrick White,San Antonio Spurs,SG,2019-20,11.09,3.23,3.49,16.80
+Nemanja Bjelica,Sacramento Kings,SF,2019-20,11.54,6.36,2.82,16.79
+Jalen Johnson,Atlanta Hawks,SF,2022-23,5.41,3.86,1.14,16.79
+Gui Santos,Golden State Warriors,SF,2023-24,1.95,1.17,0.33,16.79
+Alec Burks,Detroit Pistons,SG,2022-23,12.78,3.10,2.24,16.78
+Norman Powell,Toronto Raptors,SG,2020-21,19.60,3.00,1.83,16.78
+Rui Hachimura,Los Angeles Lakers,SF,2023-24,13.19,4.20,1.16,16.78
+Greg Monroe,Milwaukee Bucks,PF,2021-22,5.40,4.20,0.40,16.77
+John Konchar,Memphis Grizzlies,SG,2021-22,4.65,4.39,1.45,16.77
+Nic Claxton,Brooklyn Nets,C,2019-20,2.00,1.33,0.48,16.77
+Christian Wood,Los Angeles Lakers,SF,2023-24,6.20,4.54,0.88,16.76
+CJ McCollum,Portland Trail Blazers,SG,2019-20,21.03,4.01,4.19,16.76
+Norman Powell,Los Angeles Clippers,SG,2022-23,16.98,2.92,1.82,16.75
+Trendon Watford,Portland Trail Blazers,SG,2021-22,6.74,3.69,1.50,16.74
+Isaiah Stewart,Detroit Pistons,PF,2021-22,8.07,8.45,1.12,16.73
+Hamidou Diallo,Detroit Pistons,SG,2021-22,9.22,4.01,1.06,16.73
+Tyrese Haliburton,Sacramento Kings,SG,2020-21,12.98,2.98,5.33,16.73
+Frank Kaminsky,Phoenix Suns,PF,2019-20,9.22,4.29,1.83,16.72
+Bruno Fernando,Atlanta Hawks,PF,2023-24,3.66,2.51,0.60,16.72
+Luke Kennard,Memphis Grizzlies,SG,2022-23,10.88,3.00,2.16,16.71
+Keldon Johnson,San Antonio Spurs,SG,2023-24,15.71,5.46,2.83,16.69
+Drew Eubanks,Phoenix Suns,PF,2023-24,4.74,4.03,0.79,16.69
+Frank Kaminsky,Atlanta Hawks,PF,2022-23,1.29,0.65,0.38,16.69
+Daniel Theis,Chicago Bulls,PF,2020-21,10.00,5.91,1.78,16.67
+Daniel Theis,Indiana Pacers,PF,2022-23,1.75,0.79,0.32,16.67
+Mike Conley,Minnesota Timberwolves,SG,2022-23,14.04,3.13,5.00,16.67
+Tristan Thompson,Boston Celtics,C,2020-21,7.57,8.13,1.24,16.66
+Zach LaVine,Chicago Bulls,SG,2023-24,18.73,4.96,3.77,16.66
+Tyrese Maxey,Philadelphia 76ers,SG,2022-23,20.30,2.93,3.53,16.66
+Terry Rozier,Miami Heat,SG,2023-24,16.42,4.19,4.65,16.66
+Lamar Stevens,Memphis Grizzlies,SF,2023-24,7.82,3.43,0.71,16.65
+Cam Thomas,Brooklyn Nets,SG,2023-24,19.76,2.85,2.56,16.65
+D.J. Augustin,Houston Rockets,SG,2020-21,7.54,1.57,2.79,16.63
+Immanuel Quickley,New York Knicks,SG,2022-23,14.74,4.11,3.40,16.62
+Dewayne Dedmon,Miami Heat,C,2022-23,3.98,2.53,0.37,16.62
+Danilo Gallinari,Atlanta Hawks,SF,2020-21,11.46,3.58,1.29,16.62
+Franz Wagner,Orlando Magic,SF,2022-23,18.33,4.06,3.49,16.62
+CJ McCollum,Portland Trail Blazers,SG,2021-22,20.53,4.25,4.53,16.61
+Trey Lyles,Sacramento Kings,SF,2022-23,7.11,3.80,0.84,16.61
+Mike Conley,Minnesota Timberwolves,SG,2023-24,11.43,2.87,5.91,16.61
+Thaddeus Young,Toronto Raptors,SF,2021-22,6.07,4.26,1.67,16.60
+Jerami Grant,Detroit Pistons,SF,2021-22,18.08,3.82,2.22,16.60
+Miles Bridges,Charlotte Hornets,SF,2020-21,12.73,6.02,2.23,16.59
+Nick Richards,Charlotte Hornets,C,2021-22,1.85,1.06,0.16,16.59
+Jermaine Samuels Jr.,Houston Rockets,SF,2023-24,0.59,0.38,0.09,16.58
+Jae Crowder,Miami Heat,SF,2019-20,10.77,4.86,1.64,16.58
+Kelly Olynyk,Utah Jazz,PF,2022-23,12.46,6.18,3.71,16.57
+Dario Saric,Golden State Warriors,PF,2023-24,0.43,0.32,0.20,16.57
+Draymond Green,Golden State Warriors,SF,2019-20,5.95,4.59,4.59,16.57
+J.J. Barea,Dallas Mavericks,SG,2019-20,3.04,0.73,1.53,16.57
+Kyle Lowry,Miami Heat,SG,2021-22,13.19,4.41,7.41,16.57
+Damian Jones,Los Angeles Lakers,C,2022-23,1.00,1.00,0.07,16.57
+Donte DiVincenzo,Milwaukee Bucks,SG,2019-20,8.71,4.54,2.20,16.56
+Bobby Portis,New York Knicks,SF,2019-20,10.12,5.12,1.48,16.55
+Jordan McRae,Washington Wizards,SG,2019-20,9.49,2.67,2.10,16.52
+Jrue Holiday,Boston Celtics,SG,2023-24,12.46,5.41,4.83,16.52
+Usman Garuba,Houston Rockets,SF,2021-22,1.09,1.89,0.39,16.51
+Dario Saric,Phoenix Suns,PF,2019-20,2.59,1.50,0.46,16.51
+Torrey Craig,Phoenix Suns,SF,2020-21,6.94,4.67,1.00,16.51
+T.J. McConnell,Indiana Pacers,SG,2021-22,8.18,3.21,4.68,16.50
+Tristan Thompson,Chicago Bulls,C,2021-22,5.65,4.74,0.61,16.50
+Bismack Biyombo,Phoenix Suns,C,2022-23,3.21,3.17,0.68,16.50
+Hamidou Diallo,Oklahoma City Thunder,SG,2020-21,11.55,5.00,2.33,16.49
+Rudy Gay,San Antonio Spurs,SG,2020-21,11.02,4.66,1.35,16.48
+Aaron Holiday,Phoenix Suns,SG,2021-22,5.73,2.12,2.88,16.48
+Rondae Hollis-Jefferson,Toronto Raptors,SF,2019-20,6.33,4.29,1.61,16.48
+Juancho Hernangomez,Minnesota Timberwolves,SF,2019-20,12.93,7.29,1.29,16.46
+Larry Nance Jr.,Portland Trail Blazers,PF,2021-22,6.71,5.50,1.92,16.46
+Dominick Barlow,San Antonio Spurs,SF,2023-24,3.06,2.40,0.77,16.46
+Alex Len,Sacramento Kings,C,2023-24,1.90,2.03,0.79,16.44
+Tristan Thompson,Cleveland Cavaliers,C,2023-24,2.60,2.81,0.82,16.43
+James Bouknight,Charlotte Hornets,SG,2023-24,1.35,0.24,0.16,16.41
+Jabari Parker,Boston Celtics,SF,2021-22,1.61,0.85,0.18,16.41
+Payton Pritchard,Boston Celtics,SG,2023-24,9.60,3.23,3.43,16.40
+Chris Silva,Miami Heat,SF,2019-20,1.96,1.85,0.34,16.40
+Dwight Powell,Dallas Mavericks,PF,2019-20,9.40,5.68,1.48,16.40
+Jalen Williams,Oklahoma City Thunder,SG,2022-23,13.89,4.43,3.26,16.40
+Jordan Clarkson,Utah Jazz,SG,2022-23,20.50,3.97,4.35,16.39
+Reggie Perry,Portland Trail Blazers,PF,2021-22,8.18,4.18,1.09,16.39
+Klay Thompson,Golden State Warriors,SG,2022-23,20.67,3.92,2.23,16.38
+Tomas Satoransky,Washington Wizards,SG,2021-22,4.86,2.77,4.91,16.38
+Talen Horton-Tucker,Utah Jazz,SG,2022-23,8.95,2.69,3.15,16.36
+John Konchar,Memphis Grizzlies,SG,2020-21,2.56,1.78,0.65,16.36
+Jerami Grant,Portland Trail Blazers,SF,2022-23,20.48,4.49,2.38,16.35
+Rui Hachimura,Washington Wizards,SF,2021-22,10.56,3.56,1.07,16.35
+Cole Anthony,Orlando Magic,SG,2021-22,14.75,4.83,5.13,16.35
+Jose Alvarado,New Orleans Pelicans,SG,2021-22,4.34,1.32,2.00,16.34
+Justise Winslow,Portland Trail Blazers,SG,2021-22,4.72,2.76,1.28,16.34
+Lance Stephenson,Indiana Pacers,SF,2021-22,8.29,2.49,3.42,16.34
+Rajon Rondo,Cleveland Cavaliers,SG,2021-22,5.95,2.68,4.68,16.34
+Mikal Bridges,Brooklyn Nets,SG,2023-24,19.59,4.54,3.65,16.33
+Andrew Wiggins,Golden State Warriors,SF,2020-21,18.33,4.82,2.32,16.33
+Cristiano Felicio,Chicago Bulls,PF,2020-21,0.33,0.37,0.13,16.33
+Skylar Mays,Atlanta Hawks,SG,2020-21,1.94,0.55,0.47,16.33
+Buddy Hield,Sacramento Kings,SG,2019-20,19.19,4.56,2.96,16.32
+Omari Spellman,Golden State Warriors,SF,2019-20,7.25,4.29,0.92,16.32
+Sam Hauser,Boston Celtics,SF,2021-22,1.51,0.67,0.23,16.31
+Jalen Brunson,Dallas Mavericks,SG,2019-20,8.18,2.35,3.30,16.31
+Devonte' Graham,Charlotte Hornets,SG,2019-20,17.89,3.31,7.36,16.29
+Aron Baynes,Phoenix Suns,C,2019-20,7.29,3.59,1.02,16.29
+Jonathan Kuminga,Golden State Warriors,SF,2021-22,9.06,3.25,0.89,16.28
+Tobias Harris,Philadelphia 76ers,SF,2022-23,13.91,5.44,2.38,16.27
+Taj Gibson,New York Knicks,SF,2019-20,5.74,4.05,0.79,16.25
+LaMarcus Aldridge,San Antonio Spurs,C,2020-21,12.52,4.09,1.57,16.23
+Tyrese Maxey,Philadelphia 76ers,SG,2021-22,17.03,3.12,4.17,16.23
+Danilo Gallinari,Washington Wizards,SF,2023-24,5.66,2.38,0.97,16.20
+Myles Turner,Indiana Pacers,C,2020-21,12.60,6.51,1.02,16.20
+Myles Turner,Indiana Pacers,C,2019-20,11.70,6.36,1.13,16.20
+Terry Rozier,Charlotte Hornets,SG,2022-23,20.14,3.92,4.83,16.19
+Ricky Rubio,Cleveland Cavaliers,SG,2021-22,13.09,4.15,6.62,16.17
+Xavier Tillman,Memphis Grizzlies,SF,2021-22,3.45,2.21,0.85,16.17
+Troy Brown Jr.,Washington Wizards,SG,2019-20,10.38,5.55,2.58,16.16
+Chimezie Metu,Phoenix Suns,PF,2023-24,3.63,2.16,0.37,16.16
+Cameron Johnson,Phoenix Suns,SF,2021-22,11.91,3.96,1.43,16.15
+Dalano Banton,Portland Trail Blazers,SF,2023-24,16.70,4.77,3.60,16.15
+Jabari Smith Jr.,Houston Rockets,SF,2023-24,13.22,7.80,1.53,16.14
+Tari Eason,Houston Rockets,SF,2022-23,9.27,6.05,1.07,16.13
+Brook Lopez,Milwaukee Bucks,C,2019-20,11.78,4.52,1.43,16.13
+Mikal Bridges,Phoenix Suns,SG,2020-21,13.47,4.29,2.11,16.13
+Danilo Gallinari,Atlanta Hawks,SF,2021-22,11.51,4.60,1.51,16.12
+Jordan Poole,Golden State Warriors,SG,2022-23,20.43,2.74,4.50,16.12
+Derrick White,Boston Celtics,SG,2022-23,12.40,3.57,3.91,16.11
+Jeremy Lamb,Indiana Pacers,SG,2020-21,9.55,3.45,1.39,16.11
+Kevin Love,Miami Heat,PF,2022-23,7.71,5.67,1.90,16.11
+Monte Morris,Washington Wizards,SG,2022-23,0.59,0.19,0.34,16.10
+Malachi Flynn,Detroit Pistons,SG,2023-24,6.40,1.43,1.70,16.10
+Dwight Powell,Dallas Mavericks,PF,2020-21,5.43,3.71,1.00,16.10
+Jordan Goodwin,Washington Wizards,SG,2022-23,5.50,2.77,2.27,16.10
+Goga Bitadze,Indiana Pacers,C,2020-21,4.28,2.78,0.69,16.09
+Sam Merrill,Cleveland Cavaliers,SG,2022-23,2.08,0.75,0.42,16.08
+Jordan McLaughlin,Minnesota Timberwolves,SG,2023-24,2.91,1.07,1.64,16.06
+De'Anthony Melton,Memphis Grizzlies,SG,2020-21,7.87,2.68,2.20,16.06
+Gordon Hayward,Charlotte Hornets,SF,2023-24,14.48,4.68,4.64,16.05
+Hamidou Diallo,Detroit Pistons,SG,2022-23,7.46,2.77,0.79,16.05
+Lou Williams,Los Angeles Clippers,SG,2020-21,11.33,1.96,3.20,16.05
+Darius Garland,Cleveland Cavaliers,SG,2023-24,18.04,2.67,6.54,16.04
+Doug McDermott,Indiana Pacers,SF,2020-21,13.42,3.30,1.27,16.04
+Precious Achiuwa,New York Knicks,SF,2023-24,7.44,7.02,1.06,16.04
+Xavier Tillman,Memphis Grizzlies,SF,2020-21,5.57,3.66,1.07,16.03
+Bojan Bogdanovic,Utah Jazz,SF,2021-22,18.09,4.29,1.74,16.02
+Aaron Wiggins,Oklahoma City Thunder,SG,2023-24,6.61,2.27,1.05,16.01
+Saddiq Bey,Atlanta Hawks,SG,2022-23,11.64,4.80,1.36,16.01
+Lauri Markkanen,Chicago Bulls,PF,2019-20,14.74,6.26,1.48,16.01
+Cameron Payne,Phoenix Suns,SG,2021-22,9.07,2.54,4.09,16.00
+Justise Winslow,Los Angeles Clippers,SG,2021-22,3.32,2.83,1.11,16.00
+Eugene Omoruyi,Washington Wizards,SF,2023-24,3.39,1.39,0.57,15.99
+Darius Bazley,Oklahoma City Thunder,SF,2021-22,10.80,6.32,1.41,15.99
+Spencer Dinwiddie,Dallas Mavericks,SG,2022-23,17.74,3.08,5.26,15.99
+Dean Wade,Cleveland Cavaliers,PF,2019-20,0.69,0.66,0.07,15.99
+Skal Labissiere,Portland Trail Blazers,PF,2019-20,5.59,4.97,1.24,15.99
+Serge Ibaka,Milwaukee Bucks,SF,2021-22,5.78,4.35,0.57,15.98
+Ish Smith,Washington Wizards,SG,2019-20,10.57,3.13,4.77,15.98
+KJ Martin,Houston Rockets,SF,2021-22,8.70,3.71,1.26,15.98
+Marcus Morris Sr.,New York Knicks,SF,2019-20,18.69,5.18,1.31,15.97
+Kelly Olynyk,Miami Heat,PF,2019-20,7.52,4.18,1.59,15.97
+Moritz Wagner,Washington Wizards,PF,2019-20,8.19,4.56,1.17,15.96
+Monte Morris,Denver Nuggets,SG,2019-20,1.67,0.44,0.53,15.96
+Franz Wagner,Orlando Magic,SF,2021-22,15.15,4.51,2.92,15.96
+Justin Champagnie,Washington Wizards,SG,2023-24,4.94,2.94,1.06,15.96
+Jock Landale,Houston Rockets,C,2023-24,3.51,2.21,0.83,15.95
+Tyler Herro,Miami Heat,SG,2020-21,11.81,3.88,2.67,15.95
+KJ Martin,Houston Rockets,SF,2020-21,8.38,4.84,0.96,15.95
+Norvel Pelle,New York Knicks,C,2020-21,0.48,0.48,0.04,15.95
+Gordon Hayward,Charlotte Hornets,SF,2022-23,14.66,4.30,4.12,15.95
+Xavier Cooks,Washington Wizards,SF,2022-23,3.17,3.17,0.50,15.94
+Onyeka Okongwu,Atlanta Hawks,PF,2020-21,3.93,2.81,0.31,15.94
+Bogdan Bogdanović,Atlanta Hawks,SG,2021-22,14.62,3.85,2.98,15.94
+Kelly Oubre Jr.,Phoenix Suns,SG,2019-20,17.73,6.12,1.44,15.93
+Santi Aldama,Memphis Grizzlies,PF,2023-24,8.84,4.76,1.86,15.93
+Stanley Johnson,San Antonio Spurs,SG,2022-23,5.80,3.17,2.23,15.93
+Orlando Robinson,Miami Heat,C,2023-24,1.46,1.24,0.50,15.93
+Shabazz Napier,Minnesota Timberwolves,SG,2019-20,7.54,2.39,4.07,15.93
+Jarrell Brantley,Utah Jazz,SF,2020-21,1.19,0.50,0.28,15.93
+Mike Muscala,Oklahoma City Thunder,PF,2020-21,5.75,2.24,0.47,15.93
+Brandin Podziemski,Golden State Warriors,SG,2023-24,8.63,5.41,3.46,15.91
+Jordan Goodwin,Memphis Grizzlies,SG,2023-24,9.44,7.56,4.28,15.90
+De'Andre Hunter,Atlanta Hawks,SG,2020-21,14.33,4.58,1.83,15.89
+Austin Reaves,Los Angeles Lakers,SG,2022-23,12.82,2.97,3.31,15.89
+Al Horford,Boston Celtics,C,2022-23,9.33,5.91,2.86,15.88
+Trey Lyles,San Antonio Spurs,SF,2019-20,6.41,5.73,1.10,15.88
+Cole Anthony,Orlando Magic,SG,2023-24,11.57,3.84,2.91,15.87
+Jaren Jackson Jr.,Memphis Grizzlies,PF,2019-20,17.07,4.52,1.34,15.85
+JJ Redick,New Orleans Pelicans,SG,2019-20,13.10,2.16,1.70,15.84
+Darius Miller,Oklahoma City Thunder,SF,2020-21,1.43,0.47,0.41,15.83
+Jae Crowder,Milwaukee Bucks,SF,2022-23,6.89,3.83,1.50,15.83
+Harry Giles III,Portland Trail Blazers,PF,2020-21,1.83,2.25,0.49,15.82
+Buddy Hield,Indiana Pacers,SG,2021-22,18.19,5.08,4.77,15.82
+Andrew Wiggins,Golden State Warriors,SF,2021-22,16.97,4.39,2.18,15.82
+Luke Kornet,Boston Celtics,C,2020-21,2.86,1.86,0.71,15.81
+Brook Lopez,Milwaukee Bucks,C,2020-21,11.93,4.82,0.69,15.80
+Delon Wright,Washington Wizards,SG,2023-24,4.06,1.79,2.48,15.80
+Kevin Porter Jr.,Houston Rockets,SG,2021-22,15.31,4.31,6.06,15.79
+Malik Beasley,Minnesota Timberwolves,SG,2020-21,15.08,3.38,1.83,15.79
+Eric Paschall,Golden State Warriors,SF,2019-20,13.29,4.37,2.02,15.79
+George Hill,Oklahoma City Thunder,SG,2020-21,5.32,0.94,1.39,15.78
+Bruce Brown,Brooklyn Nets,SG,2021-22,8.19,4.37,1.87,15.78
+Isaiah Thomas,Charlotte Hornets,SG,2021-22,7.42,1.11,1.26,15.78
+Blake Griffin,Brooklyn Nets,SF,2021-22,4.43,2.81,1.30,15.78
+Lauri Markkanen,Cleveland Cavaliers,PF,2021-22,14.75,5.66,1.33,15.77
+Rui Hachimura,Washington Wizards,SF,2022-23,13.00,4.27,1.17,15.77
+Bojan Bogdanovic,Utah Jazz,SF,2019-20,20.24,4.11,2.08,15.77
+Davis Bertans,Washington Wizards,SF,2019-20,15.16,4.45,1.67,15.77
+Santi Aldama,Memphis Grizzlies,PF,2022-23,9.04,4.82,1.26,15.77
+Jared Butler,Washington Wizards,SG,2023-24,4.56,1.05,2.29,15.77
+Josh Hart,New Orleans Pelicans,SG,2020-21,9.23,8.02,2.32,15.77
+Collin Sexton,Utah Jazz,SG,2022-23,13.43,2.06,2.71,15.76
+Jarred Vanderbilt,Los Angeles Lakers,SF,2022-23,7.19,6.65,1.62,15.76
+Lindy Waters III,Oklahoma City Thunder,SF,2023-24,2.49,0.73,0.44,15.74
+Noah Clowney,Brooklyn Nets,PF,2023-24,4.16,2.53,0.56,15.74
+Richaun Holmes,Dallas Mavericks,SF,2023-24,1.63,1.63,0.31,15.74
+Omer Yurtseven,Miami Heat,C,2022-23,2.35,1.35,0.12,15.73
+Lonzo Ball,Chicago Bulls,SG,2021-22,12.64,5.28,4.94,15.73
+Will Barton,Denver Nuggets,SG,2021-22,14.29,4.66,3.78,15.73
+Tre Mann,Charlotte Hornets,SG,2023-24,10.74,4.03,4.68,15.73
+Taj Gibson,New York Knicks,SF,2020-21,4.16,4.31,0.62,15.72
+Goran Dragic,Toronto Raptors,SG,2021-22,1.82,0.64,0.41,15.72
+Davis Bertans,Oklahoma City Thunder,SF,2023-24,0.94,0.21,0.19,15.71
+James Wiseman,Golden State Warriors,C,2020-21,8.96,4.52,0.52,15.70
+Kelan Martin,Indiana Pacers,SF,2020-21,2.18,1.08,0.24,15.68
+Derrick Rose,Memphis Grizzlies,SG,2023-24,4.78,1.13,1.95,15.68
+John Wall,Los Angeles Clippers,SG,2022-23,11.03,2.63,5.09,15.68
+OG Anunoby,Toronto Raptors,SG,2020-21,15.16,5.27,2.09,15.68
+Anthony Edwards,Minnesota Timberwolves,SG,2020-21,19.33,4.67,2.93,15.66
+Jeff Teague,Milwaukee Bucks,SG,2020-21,5.75,1.29,2.46,15.66
+Jeremy Lamb,Sacramento Kings,SG,2021-22,6.70,3.00,1.50,15.65
+Collin Sexton,Cleveland Cavaliers,SG,2019-20,20.75,3.14,2.95,15.64
+Aleksej Pokusevski,Oklahoma City Thunder,SF,2022-23,7.26,4.18,1.68,15.64
+Patrick Beverley,Minnesota Timberwolves,SG,2021-22,8.88,4.00,4.47,15.64
+Jaylin Williams,Oklahoma City Thunder,SF,2023-24,3.73,3.16,1.49,15.62
+Trey Burke,Dallas Mavericks,SG,2019-20,12.00,1.88,3.75,15.62
+Jerami Grant,Portland Trail Blazers,SF,2023-24,19.52,3.29,2.62,15.61
+Naz Reid,Minnesota Timberwolves,C,2019-20,7.08,3.26,0.92,15.61
+Coby White,Chicago Bulls,SG,2023-24,19.10,4.53,5.13,15.61
+Aleksej Pokusevski,Oklahoma City Thunder,SF,2021-22,6.63,4.54,1.87,15.61
+Payton Pritchard,Boston Celtics,SG,2021-22,5.67,1.72,1.78,15.59
+Derrick Favors,Oklahoma City Thunder,SF,2021-22,3.17,2.83,0.38,15.59
+Josh Hart,Portland Trail Blazers,SG,2022-23,9.19,7.87,3.77,15.58
+Trendon Watford,Portland Trail Blazers,SG,2022-23,6.20,3.22,1.76,15.58
+Brook Lopez,Milwaukee Bucks,C,2023-24,12.53,5.18,1.61,15.57
+Andrew Wiggins,Golden State Warriors,SF,2022-23,15.83,4.65,2.13,15.56
+Cade Cunningham,Detroit Pistons,SG,2021-22,15.47,4.92,4.94,15.56
+Nate Williams,Houston Rockets,SG,2023-24,1.26,0.46,0.14,15.55
+Juancho Hernangomez,Utah Jazz,SF,2021-22,3.89,2.22,0.52,15.55
+Alen Smailagic,Golden State Warriors,SF,2019-20,3.11,1.42,0.68,15.55
+De'Anthony Melton,Memphis Grizzlies,SG,2019-20,6.32,3.06,2.43,15.55
+Donte DiVincenzo,New York Knicks,SG,2023-24,15.35,3.62,2.63,15.55
+Isaiah Stewart,Detroit Pistons,PF,2022-23,10.50,7.46,1.30,15.54
+Precious Achiuwa,Miami Heat,SF,2020-21,4.22,2.89,0.40,15.54
+Damian Jones,Los Angeles Lakers,C,2020-21,4.78,2.89,0.11,15.54
+Markelle Fultz,Orlando Magic,SG,2019-20,12.08,3.31,5.13,15.54
+Mikal Bridges,Phoenix Suns,SG,2022-23,17.23,4.34,3.59,15.53
+Chimezie Metu,Sacramento Kings,PF,2020-21,4.91,2.43,0.61,15.53
+Anfernee Simons,Portland Trail Blazers,SG,2021-22,17.03,2.60,3.81,15.53
+Jalen Green,Houston Rockets,SG,2022-23,22.14,3.74,3.70,15.52
+Cam Thomas,Brooklyn Nets,SG,2022-23,7.37,1.16,0.95,15.50
+Evan Fournier,Orlando Magic,SG,2019-20,18.22,2.55,3.12,15.49
+Jordan Clarkson,Utah Jazz,SG,2019-20,15.60,2.81,1.57,15.48
+Simone Fontecchio,Detroit Pistons,SF,2023-24,14.53,4.12,1.65,15.48
+Lamar Stevens,Boston Celtics,SF,2023-24,1.08,0.63,0.16,15.47
+Kevin Huerter,Sacramento Kings,SG,2022-23,15.00,3.30,2.91,15.47
+Saddiq Bey,Detroit Pistons,SG,2021-22,16.11,5.38,2.84,15.46
+RJ Barrett,New York Knicks,SG,2023-24,16.34,3.83,2.17,15.46
+Juan Toscano-Anderson,Golden State Warriors,SF,2020-21,5.02,3.92,2.50,15.46
+Bol Bol,Denver Nuggets,C,2019-20,5.00,2.38,0.75,15.46
+Keldon Johnson,San Antonio Spurs,SG,2020-21,12.77,5.97,1.75,15.45
+Keita Bates-Diop,San Antonio Spurs,SF,2021-22,5.00,3.45,0.61,15.45
+Alec Burks,New York Knicks,SG,2020-21,12.22,4.45,2.10,15.44
+Isaiah Hartenstein,New York Knicks,C,2022-23,4.95,6.54,1.24,15.43
+Daniel Theis,Boston Celtics,PF,2020-21,9.45,5.24,1.60,15.43
+Rajon Rondo,Los Angeles Lakers,SG,2019-20,6.84,2.84,4.80,15.43
+Michael Carter-Williams,Orlando Magic,SG,2019-20,7.02,3.20,2.37,15.42
+Mo Bamba,Los Angeles Lakers,C,2022-23,2.75,3.42,0.33,15.42
+Rui Hachimura,Washington Wizards,SF,2019-20,12.98,5.88,1.74,15.42
+Sandro Mamukelashvili,Milwaukee Bucks,PF,2021-22,2.61,1.39,0.37,15.41
+Eric Paschall,Golden State Warriors,SF,2020-21,6.57,2.21,0.88,15.41
+Trey Burke,Philadelphia 76ers,SG,2019-20,3.00,0.71,1.08,15.40
+Moritz Wagner,Washington Wizards,PF,2020-21,4.24,1.74,0.76,15.40
+Josh Jackson,Memphis Grizzlies,SG,2019-20,7.33,2.44,1.30,15.40
+Alec Burks,Detroit Pistons,SG,2023-24,12.00,2.44,1.51,15.40
+Rui Hachimura,Los Angeles Lakers,SF,2022-23,9.32,4.56,0.68,15.39
+Rodney McGruder,Detroit Pistons,SG,2020-21,2.02,0.49,0.36,15.39
+Jaylen Hoard,Portland Trail Blazers,SF,2019-20,1.27,1.07,0.13,15.39
+Cameron Johnson,Brooklyn Nets,SF,2023-24,11.94,3.86,2.12,15.39
+Kyle Anderson,Memphis Grizzlies,SG,2019-20,5.42,3.96,2.25,15.39
+Dennis Schröder,Toronto Raptors,SG,2023-24,13.69,2.75,6.14,15.38
+Reggie Jackson,Detroit Pistons,SG,2019-20,12.29,2.41,4.24,15.38
+Bones Hyland,Denver Nuggets,SG,2022-23,10.37,1.76,2.55,15.37
+Jevon Carter,Milwaukee Bucks,SG,2021-22,5.09,1.95,2.27,15.37
+Terry Rozier,Charlotte Hornets,SG,2019-20,18.00,4.38,4.11,15.37
+RJ Barrett,New York Knicks,SG,2021-22,19.75,5.75,2.93,15.36
+Donte DiVincenzo,Milwaukee Bucks,SG,2020-21,9.97,5.51,2.94,15.36
+D.J. Wilson,Houston Rockets,SF,2020-21,5.00,3.11,0.71,15.35
+Malik Monk,Los Angeles Lakers,SG,2021-22,13.61,3.32,2.83,15.34
+Ricky Rubio,Minnesota Timberwolves,SG,2020-21,8.31,3.19,6.19,15.33
+Julian Champagnie,San Antonio Spurs,SF,2022-23,10.31,3.75,0.63,15.33
+Kenrich Williams,Oklahoma City Thunder,SG,2022-23,7.73,4.75,1.91,15.32
+Rayjon Tucker,Philadelphia 76ers,SG,2020-21,1.42,0.46,0.25,15.32
+T.J. Leaf,Indiana Pacers,SF,2019-20,1.17,0.99,0.13,15.31
+Saben Lee,Detroit Pistons,SG,2021-22,4.00,1.67,2.06,15.31
+Tyler Johnson,Brooklyn Nets,SG,2019-20,12.00,3.00,3.00,15.30
+Devonte' Graham,Charlotte Hornets,SG,2020-21,12.36,2.24,4.47,15.28
+Tim Hardaway Jr.,Dallas Mavericks,SG,2020-21,16.38,3.23,1.77,15.28
+Ian Mahinmi,Washington Wizards,C,2019-20,4.80,3.69,0.83,15.28
+P.J. Washington,Charlotte Hornets,SF,2020-21,11.94,6.06,2.33,15.26
+John Collins,Atlanta Hawks,PF,2022-23,13.11,6.51,1.20,15.25
+Tremont Waters,Boston Celtics,SG,2020-21,1.43,0.30,0.90,15.25
+Tristan Vukcevic,Washington Wizards,SF,2023-24,7.08,3.00,1.08,15.25
+Braxton Key,Detroit Pistons,SF,2021-22,8.56,5.33,1.11,15.24
+Brook Lopez,Milwaukee Bucks,C,2021-22,11.50,3.79,0.43,15.24
+Dario Saric,Phoenix Suns,PF,2020-21,5.79,2.44,0.83,15.23
+P.J. Washington,Charlotte Hornets,SF,2021-22,9.82,4.96,2.16,15.23
+Nassir Little,Portland Trail Blazers,SG,2021-22,9.76,5.62,1.29,15.23
+Saben Lee,Phoenix Suns,SG,2023-24,1.42,0.62,0.60,15.22
+Delon Wright,Atlanta Hawks,SG,2021-22,4.33,2.78,2.38,15.20
+Wenyen Gabriel,Los Angeles Lakers,SF,2022-23,4.89,3.76,0.47,15.20
+Bones Hyland,Denver Nuggets,SG,2021-22,9.31,2.51,2.55,15.20
+Daniel Theis,Los Angeles Clippers,PF,2023-24,5.34,3.49,0.87,15.20
+Terence Davis,Toronto Raptors,SG,2019-20,7.54,3.29,1.60,15.19
+Mike James,Brooklyn Nets,SG,2020-21,7.69,2.46,4.15,15.18
+Ryan Broekhoff,Dallas Mavericks,SG,2019-20,3.09,1.87,0.48,15.18
+Jabari Walker,Portland Trail Blazers,SF,2023-24,8.74,6.96,0.97,15.17
+Mikal Bridges,Phoenix Suns,SG,2021-22,14.17,4.23,2.26,15.17
+Harrison Barnes,Sacramento Kings,SF,2022-23,15.00,4.46,1.56,15.17
+Bogdan Bogdanović,Sacramento Kings,SG,2019-20,14.67,3.29,3.29,15.16
+Mike Conley,Utah Jazz,SG,2022-23,10.72,2.49,7.67,15.16
+Mfiondu Kabengele,Cleveland Cavaliers,C,2020-21,3.24,2.19,0.57,15.16
+Darius Bazley,Oklahoma City Thunder,SF,2022-23,4.17,2.60,0.68,15.15
+Larry Nance Jr.,New Orleans Pelicans,PF,2021-22,7.33,4.33,0.89,15.15
+Aaron Gordon,Denver Nuggets,SF,2020-21,10.16,4.72,2.24,15.13
+Kelly Oubre Jr.,Golden State Warriors,SG,2020-21,12.49,4.84,1.07,15.13
+Robert Covington,Houston Rockets,SF,2019-20,11.59,8.00,1.45,15.13
+Jae'Sean Tate,Houston Rockets,SF,2021-22,11.78,5.38,2.85,15.13
+Nicolas Batum,Los Angeles Clippers,SG,2021-22,7.79,4.03,1.59,15.13
+Alex Len,Sacramento Kings,C,2022-23,0.56,0.78,0.16,15.11
+JaMychal Green,Denver Nuggets,PF,2021-22,6.08,3.96,0.83,15.10
+Tomas Satoransky,Chicago Bulls,SG,2020-21,7.58,2.41,4.59,15.10
+R.J. Hampton,Orlando Magic,SG,2020-21,10.74,4.78,2.70,15.09
+Jordan Poole,Golden State Warriors,SG,2020-21,10.74,1.61,1.74,15.09
+Kemba Walker,New York Knicks,SG,2021-22,9.17,2.36,2.79,15.09
+Thaddeus Young,Phoenix Suns,SF,2023-24,0.85,1.04,0.26,15.09
+Spencer Dinwiddie,Washington Wizards,SG,2021-22,12.64,4.70,5.82,15.08
+Klay Thompson,Golden State Warriors,SG,2023-24,17.41,3.22,2.23,15.07
+Damian Jones,Atlanta Hawks,C,2019-20,4.57,3.07,0.52,15.07
+Kendrick Nunn,Washington Wizards,SG,2022-23,6.50,1.50,1.56,15.07
+Kelly Oubre Jr.,Charlotte Hornets,SG,2022-23,17.05,4.37,0.95,15.06
+Pat Connaughton,Milwaukee Bucks,SG,2019-20,5.14,4.06,1.53,15.05
+Bogdan Bogdanović,Atlanta Hawks,SG,2023-24,16.26,3.32,3.01,15.05
+GG Jackson,Memphis Grizzlies,SF,2023-24,12.71,3.56,1.07,15.05
+Otto Porter Jr.,Chicago Bulls,SF,2019-20,11.93,3.43,1.79,15.05
+Josh Hart,New York Knicks,SG,2023-24,9.40,8.33,4.09,15.05
+Jaylen Hoard,Oklahoma City Thunder,SF,2020-21,5.04,2.83,1.04,15.03
+Peyton Watson,Denver Nuggets,SG,2022-23,1.70,0.84,0.25,15.02
+Saddiq Bey,Detroit Pistons,SG,2022-23,14.83,4.65,1.62,15.01
+Bojan Bogdanovic,Detroit Pistons,SF,2023-24,18.83,3.13,2.37,15.01
+Jaxson Hayes,Los Angeles Lakers,C,2023-24,3.84,2.67,0.42,14.99
+Jordan Clarkson,Utah Jazz,SG,2023-24,16.82,3.36,4.95,14.99
+Larry Nance Jr.,Cleveland Cavaliers,PF,2020-21,7.43,5.34,2.43,14.99
+Immanuel Quickley,New York Knicks,SG,2021-22,11.31,3.17,3.53,14.95
+Kelly Oubre Jr.,Charlotte Hornets,SG,2021-22,14.58,3.87,1.08,14.95
+Mike Muscala,Oklahoma City Thunder,PF,2022-23,5.41,2.76,0.78,14.95
+Nikola Jović,Miami Heat,SF,2023-24,4.89,2.67,1.25,14.95
+Norman Powell,Portland Trail Blazers,SG,2021-22,18.65,3.28,2.05,14.93
+Xavier Tillman,Boston Celtics,SF,2023-24,3.20,2.16,0.80,14.92
+Trey Lyles,San Antonio Spurs,SF,2020-21,2.56,1.91,0.31,14.92
+Marcus Morris Sr.,Los Angeles Clippers,SF,2021-22,14.31,4.12,1.95,14.92
+Robert Covington,Los Angeles Clippers,SF,2022-23,3.79,2.18,0.75,14.91
+Dwight Powell,Dallas Mavericks,PF,2023-24,2.63,2.71,1.06,14.91
+Caleb Martin,Miami Heat,SF,2021-22,8.61,3.59,1.00,14.91
+Dalano Banton,Toronto Raptors,SF,2022-23,3.02,0.96,0.77,14.91
+Cameron Payne,Phoenix Suns,SG,2022-23,9.48,2.04,4.12,14.90
+Tyler Cook,Detroit Pistons,SF,2020-21,4.81,2.91,0.47,14.90
+Terence Davis,Sacramento Kings,SG,2021-22,7.78,2.35,1.00,14.88
+Andre Iguodala,Golden State Warriors,SG,2021-22,3.10,2.50,2.85,14.88
+Dru Smith,Brooklyn Nets,SG,2022-23,2.36,1.07,1.21,14.87
+Isaiah Mobley,Cleveland Cavaliers,SF,2022-23,1.24,0.80,0.12,14.87
+Yogi Ferrell,Los Angeles Clippers,SG,2020-21,2.85,0.92,1.31,14.86
+Jalen Harris,Toronto Raptors,SG,2020-21,2.82,0.53,0.50,14.86
+Luke Kennard,Memphis Grizzlies,SG,2023-24,8.58,2.26,2.72,14.86
+Vince Williams Jr.,Memphis Grizzlies,SG,2023-24,7.24,4.03,2.43,14.85
+Dillon Brooks,Memphis Grizzlies,SG,2021-22,18.44,3.19,2.75,14.85
+Donte DiVincenzo,Golden State Warriors,SG,2022-23,9.42,4.51,3.50,14.85
+Alfonzo McKinnie,Los Angeles Lakers,SF,2020-21,1.72,0.76,0.08,14.85
+Kemba Walker,Dallas Mavericks,SG,2022-23,4.80,1.07,1.27,14.85
+Marc Gasol,Toronto Raptors,C,2019-20,7.52,6.25,3.34,14.84
+Jaylen Nowell,Minnesota Timberwolves,SG,2022-23,10.35,2.50,1.94,14.84
+Josh Hart,New Orleans Pelicans,SG,2019-20,9.11,5.90,1.50,14.84
+Dennis Smith Jr.,Detroit Pistons,SG,2020-21,5.58,2.04,2.85,14.84
+Jordan Clarkson,Utah Jazz,SG,2021-22,15.63,3.37,2.40,14.83
+Nathan Knight,Atlanta Hawks,PF,2020-21,2.00,1.16,0.13,14.83
+Terance Mann,Los Angeles Clippers,SG,2021-22,10.77,5.25,2.58,14.82
+Cody Zeller,New Orleans Pelicans,PF,2023-24,0.96,1.42,0.49,14.82
+Terrence Ross,Phoenix Suns,SG,2022-23,8.95,3.29,1.95,14.82
+Tyrese Maxey,Philadelphia 76ers,SG,2020-21,6.78,1.44,1.67,14.81
+Keita Bates-Diop,Brooklyn Nets,SF,2023-24,1.15,0.45,0.20,14.81
+Jaxson Hayes,New Orleans Pelicans,C,2022-23,2.84,1.61,0.41,14.81
+Josh Richardson,San Antonio Spurs,SG,2022-23,11.19,2.77,3.19,14.81
+Kobi Simmons,Toronto Raptors,SG,2023-24,5.00,1.75,3.00,14.81
+Carmelo Anthony,Los Angeles Lakers,SF,2021-22,13.13,4.11,0.97,14.80
+Marquese Chriss,Dallas Mavericks,SF,2021-22,3.85,2.58,0.43,14.79
+Bennedict Mathurin,Indiana Pacers,SG,2023-24,14.27,3.90,1.98,14.78
+Anfernee Simons,Portland Trail Blazers,SG,2022-23,21.06,2.60,4.08,14.78
+Robert Franks,Orlando Magic,SF,2020-21,5.38,1.75,0.63,14.78
+Kyle Kuzma,Los Angeles Lakers,SF,2020-21,12.49,5.96,1.81,14.77
+Trey Murphy III,New Orleans Pelicans,SF,2022-23,14.53,3.56,1.42,14.77
+Tristan Thompson,Indiana Pacers,C,2021-22,7.25,4.50,0.50,14.77
+Nerlens Noel,New York Knicks,C,2020-21,4.76,5.99,0.68,14.76
+T.J. Warren,Brooklyn Nets,SF,2022-23,9.15,2.67,1.07,14.76
+Dennis Smith Jr.,Portland Trail Blazers,SG,2021-22,3.89,1.66,2.49,14.76
+Ausar Thompson,Detroit Pistons,SG,2023-24,8.55,6.18,1.85,14.75
+Bogdan Bogdanović,Atlanta Hawks,SG,2022-23,13.75,3.00,2.73,14.74
+Saben Lee,Detroit Pistons,SG,2020-21,4.53,1.64,2.95,14.74
+Spencer Dinwiddie,Brooklyn Nets,SG,2023-24,12.58,3.29,6.00,14.73
+Hamidou Diallo,Detroit Pistons,SG,2020-21,9.29,4.46,1.00,14.73
+Kenrich Williams,Oklahoma City Thunder,SG,2020-21,7.31,3.79,2.11,14.73
+Blake Griffin,Boston Celtics,SF,2022-23,2.10,1.91,0.75,14.73
+Grant Williams,Charlotte Hornets,SF,2023-24,13.40,4.97,3.10,14.72
+Obi Toppin,New York Knicks,SF,2022-23,7.20,2.71,0.96,14.72
+Kenrich Williams,Oklahoma City Thunder,SG,2021-22,5.76,3.49,1.71,14.72
+Nemanja Bjelica,Sacramento Kings,SF,2020-21,4.56,2.44,1.20,14.71
+Juancho Hernangomez,San Antonio Spurs,SF,2021-22,0.78,1.67,0.33,14.71
+Robert Covington,Minnesota Timberwolves,SF,2019-20,12.81,5.98,1.17,14.71
+Precious Achiuwa,Toronto Raptors,SF,2021-22,8.97,6.39,1.11,14.71
+Jeremy Lamb,Indiana Pacers,SG,2019-20,12.54,4.35,2.09,14.71
+Marcus Smart,Boston Celtics,SG,2021-22,12.13,3.80,5.87,14.69
+Royce O'Neale,Phoenix Suns,SF,2023-24,8.13,5.20,2.73,14.68
+Jordan McLaughlin,Minnesota Timberwolves,SG,2021-22,2.99,1.21,2.31,14.68
+Glenn Robinson III,Philadelphia 76ers,SF,2019-20,7.20,2.93,0.73,14.68
+Devin Vassell,San Antonio Spurs,SG,2021-22,12.11,4.25,1.89,14.67
+Dennis Schröder,Los Angeles Lakers,SG,2020-21,15.43,3.46,5.75,14.67
+Kira Lewis Jr.,New Orleans Pelicans,SG,2022-23,2.04,0.59,0.41,14.67
+Talen Horton-Tucker,Utah Jazz,SG,2023-24,6.45,1.51,2.21,14.66
+Kyle Anderson,Minnesota Timberwolves,SG,2023-24,6.33,3.41,4.14,14.66
+Donte DiVincenzo,Sacramento Kings,SG,2021-22,10.32,4.40,3.56,14.65
+Naji Marshall,New Orleans Pelicans,SF,2023-24,6.75,3.48,1.86,14.65
+Juancho Hernangomez,Minnesota Timberwolves,SF,2020-21,5.86,3.20,0.55,14.65
+Jonathan Kuminga,Golden State Warriors,SF,2022-23,9.38,3.25,1.76,14.64
+Chimezie Metu,Detroit Pistons,PF,2023-24,10.50,6.00,1.93,14.63
+Darius Garland,Cleveland Cavaliers,SG,2020-21,15.18,2.08,5.31,14.63
+Devonte' Graham,San Antonio Spurs,SG,2022-23,11.77,2.27,3.64,14.63
+Malik Monk,Charlotte Hornets,SG,2020-21,8.60,1.77,1.53,14.63
+Seth Curry,Dallas Mavericks,SG,2019-20,12.39,2.27,1.94,14.62
+D.J. Augustin,Orlando Magic,SG,2019-20,10.33,2.10,4.52,14.62
+Dylan Windler,Atlanta Hawks,SG,2023-24,2.33,1.00,0.25,14.62
+Terence Davis,Sacramento Kings,SG,2020-21,11.07,3.26,1.70,14.62
+Jeremy Sochan,San Antonio Spurs,SF,2023-24,11.64,6.43,3.36,14.61
+Luka Garza,Detroit Pistons,C,2021-22,3.38,1.82,0.36,14.61
+George Hill,Indiana Pacers,SG,2022-23,2.38,0.75,0.88,14.60
+Ish Smith,Washington Wizards,SG,2020-21,6.70,3.41,3.91,14.59
+Jericho Sims,New York Knicks,C,2022-23,2.17,2.95,0.30,14.58
+Willie Cauley-Stein,Dallas Mavericks,C,2020-21,4.67,3.93,0.58,14.58
+Khem Birch,Orlando Magic,C,2020-21,5.00,4.76,1.04,14.57
+Derrick Jones Jr.,Miami Heat,SF,2019-20,7.35,3.43,0.91,14.57
+Pat Connaughton,Milwaukee Bucks,SG,2021-22,9.77,4.14,1.24,14.56
+OG Anunoby,Toronto Raptors,SG,2021-22,17.13,5.50,2.60,14.56
+Chris Chiozza,Brooklyn Nets,SG,2019-20,4.26,1.41,2.04,14.56
+Jason Preston,Utah Jazz,SG,2023-24,0.80,1.13,1.07,14.55
+Duop Reath,Portland Trail Blazers,C,2023-24,8.69,3.52,0.94,14.55
+Luke Kennard,Detroit Pistons,SG,2019-20,15.24,3.38,3.97,14.54
+Jaden Springer,Philadelphia 76ers,SG,2022-23,0.89,0.30,0.17,14.54
+Kevin Porter Jr.,Houston Rockets,SG,2020-21,12.31,2.83,4.69,14.54
+Svi Mykhailiuk,Charlotte Hornets,SG,2022-23,8.38,1.92,2.17,14.53
+Tomas Satoransky,Chicago Bulls,SG,2019-20,9.91,3.91,5.45,14.52
+Rudy Gay,Utah Jazz,SG,2021-22,7.56,4.10,0.95,14.52
+Dewayne Dedmon,Atlanta Hawks,C,2019-20,8.10,8.20,0.70,14.52
+Jaden Hardy,Dallas Mavericks,SG,2022-23,6.00,1.27,0.93,14.52
+Chris Chiozza,Brooklyn Nets,SG,2020-21,1.91,0.52,1.41,14.51
+Monte Morris,Denver Nuggets,SG,2020-21,8.00,1.56,2.48,14.50
+Eric Bledsoe,Los Angeles Clippers,SG,2021-22,9.89,3.37,4.17,14.49
+Oshae Brissett,Indiana Pacers,SG,2021-22,7.48,4.37,0.88,14.49
+Josh Richardson,San Antonio Spurs,SG,2021-22,10.39,2.61,2.13,14.48
+Bruce Brown,Denver Nuggets,SG,2022-23,11.54,4.10,3.35,14.46
+Jalen Johnson,Atlanta Hawks,SF,2021-22,1.08,0.54,0.06,14.46
+Saddiq Bey,Atlanta Hawks,SG,2023-24,13.70,6.52,1.46,14.46
+Bojan Bogdanovic,Utah Jazz,SF,2020-21,17.01,3.90,1.89,14.45
+Robin Lopez,Orlando Magic,C,2021-22,3.34,1.66,0.71,14.45
+Quinn Cook,Los Angeles Lakers,SG,2020-21,1.03,0.16,0.16,14.45
+Orlando Robinson,Miami Heat,C,2022-23,3.14,3.41,0.68,14.44
+Dragan Bender,Golden State Warriors,SF,2019-20,9.00,5.89,2.11,14.43
+Kendrick Nunn,Miami Heat,SG,2020-21,11.66,2.56,2.11,14.43
+Tyler Herro,Miami Heat,SG,2019-20,11.79,3.56,1.92,14.43
+Eric Gordon,Houston Rockets,SG,2020-21,13.36,1.61,1.97,14.43
+Derrick White,San Antonio Spurs,SG,2020-21,14.18,2.74,3.26,14.43
+Shake Milton,Philadelphia 76ers,SG,2020-21,12.38,2.24,2.92,14.42
+Jason Preston,Los Angeles Clippers,SG,2022-23,1.24,0.67,0.82,14.41
+Moses Moody,Golden State Warriors,SG,2023-24,7.30,2.68,0.78,14.41
+Anthony Gill,Washington Wizards,SF,2020-21,1.13,0.72,0.15,14.41
+Jordan Goodwin,Phoenix Suns,SG,2023-24,3.88,2.29,1.53,14.40
+Emmanuel Mudiay,Utah Jazz,SG,2019-20,5.98,1.91,1.76,14.40
+DeJon Jarreau,Memphis Grizzlies,SG,2023-24,4.78,4.89,2.89,14.39
+Alec Burks,New York Knicks,SG,2021-22,11.65,4.90,2.95,14.39
+Kevin Knox II,Portland Trail Blazers,SF,2022-23,6.85,2.65,0.69,14.39
+Marcus Morris Sr.,Los Angeles Clippers,SF,2020-21,11.77,3.60,0.89,14.38
+Grayson Allen,Phoenix Suns,SG,2023-24,13.52,3.93,3.03,14.37
+Chuma Okeke,Orlando Magic,SF,2021-22,8.64,4.96,1.69,14.36
+Olivier Sarr,Oklahoma City Thunder,C,2021-22,5.46,3.32,0.68,14.35
+Isaiah Joe,Oklahoma City Thunder,SG,2022-23,8.53,2.16,1.09,14.35
+Harrison Barnes,Sacramento Kings,SF,2019-20,14.53,4.93,2.21,14.33
+Tim Hardaway Jr.,Dallas Mavericks,SG,2019-20,15.79,3.27,1.93,14.32
+David Nwaba,Houston Rockets,SG,2020-21,7.46,3.19,0.84,14.32
+Goran Dragic,Milwaukee Bucks,SG,2022-23,3.90,1.20,1.20,14.31
+Bennedict Mathurin,Indiana Pacers,SG,2022-23,16.69,4.08,1.49,14.30
+Nathan Knight,Minnesota Timberwolves,PF,2022-23,1.70,0.68,0.16,14.30
+Reggie Jackson,Los Angeles Clippers,SG,2020-21,10.07,2.70,2.89,14.29
+Goran Dragic,Miami Heat,SG,2020-21,9.74,2.45,3.17,14.29
+Dennis Schröder,Boston Celtics,SG,2021-22,14.37,3.35,4.24,14.28
+Cole Anthony,Orlando Magic,SG,2020-21,11.86,4.33,3.76,14.28
+Naji Marshall,New Orleans Pelicans,SF,2020-21,4.73,2.85,1.69,14.27
+Terance Mann,Los Angeles Clippers,SG,2020-21,6.65,3.41,1.46,14.27
+Damion Lee,Golden State Warriors,SG,2019-20,12.67,4.88,2.71,14.27
+Alex Caruso,Chicago Bulls,SG,2023-24,9.17,3.50,3.17,14.26
+Alex Len,Sacramento Kings,C,2021-22,3.22,2.21,0.62,14.26
+Jeremy Lamb,Indiana Pacers,SG,2021-22,6.13,2.09,1.13,14.24
+Shabazz Napier,Washington Wizards,SG,2019-20,11.55,2.40,3.75,14.24
+Immanuel Quickley,New York Knicks,SG,2020-21,11.42,2.14,1.98,14.23
+JaVale McGee,Denver Nuggets,C,2020-21,2.67,2.56,0.22,14.22
+Thaddeus Young,Chicago Bulls,SF,2019-20,10.30,4.92,1.83,14.21
+Otto Porter Jr.,Orlando Magic,SF,2020-21,4.80,2.80,1.00,14.21
+Javonte Green,Chicago Bulls,SG,2022-23,4.23,2.26,0.59,14.20
+Abdel Nader,Phoenix Suns,SF,2020-21,4.32,1.68,0.51,14.20
+Ed Davis,Minnesota Timberwolves,C,2020-21,0.67,1.60,0.29,14.19
+Ty Jerome,Oklahoma City Thunder,SG,2020-21,9.54,2.46,3.24,14.19
+Dwight Powell,Dallas Mavericks,PF,2022-23,6.17,3.83,0.84,14.18
+Jordan Nwora,Indiana Pacers,SF,2023-24,2.35,0.83,0.45,14.18
+RJ Barrett,New York Knicks,SG,2020-21,17.56,5.75,3.01,14.18
+Kris Dunn,Portland Trail Blazers,SG,2021-22,7.07,3.27,5.27,14.16
+Mike Conley,Utah Jazz,SG,2019-20,14.36,3.21,4.43,14.16
+Ty Jerome,Golden State Warriors,SG,2022-23,6.44,1.63,2.81,14.15
+Spencer Dinwiddie,Brooklyn Nets,SG,2020-21,5.00,3.25,2.25,14.15
+Maxi Kleber,Dallas Mavericks,SF,2019-20,9.08,5.24,1.19,14.15
+Jules Bernard,Washington Wizards,SG,2023-24,2.06,0.72,0.44,14.14
+Dennis Schröder,Brooklyn Nets,SG,2023-24,13.68,3.29,5.65,14.14
+Buddy Hield,Indiana Pacers,SG,2023-24,11.98,3.21,2.67,14.14
+Oshae Brissett,Boston Celtics,SG,2023-24,2.51,2.00,0.55,14.14
+P.J. Washington,Charlotte Hornets,SF,2023-24,13.33,5.16,2.16,14.14
+OG Anunoby,Toronto Raptors,SG,2019-20,10.62,5.28,1.57,14.13
+Isaiah Hartenstein,Denver Nuggets,C,2020-21,2.36,1.93,0.34,14.13
+Doug McDermott,Indiana Pacers,SF,2019-20,10.14,2.49,1.11,14.12
+Kris Dunn,Utah Jazz,SG,2023-24,4.89,2.59,3.48,14.12
+Bruce Brown,Indiana Pacers,SG,2023-24,11.71,4.53,2.94,14.11
+Seth Curry,Brooklyn Nets,SG,2021-22,10.92,1.88,1.88,14.11
+Bruno Fernando,Boston Celtics,PF,2021-22,0.44,0.35,0.09,14.11
+Anthony Gill,Washington Wizards,SF,2021-22,2.57,1.21,0.39,14.10
+Trey Lyles,Sacramento Kings,SF,2023-24,7.10,4.36,1.22,14.08
+Patrick Baldwin Jr.,Golden State Warriors,SF,2022-23,2.03,0.67,0.18,14.08
+Corey Kispert,Washington Wizards,SF,2023-24,13.21,2.78,1.94,14.07
+Jeremiah Robinson-Earl,Oklahoma City Thunder,SF,2021-22,6.78,5.07,0.91,14.07
+Vincent Poirier,Boston Celtics,C,2019-20,0.91,0.96,0.18,14.06
+Glenn Robinson III,Golden State Warriors,SF,2019-20,12.14,4.43,1.67,14.06
+Daniel Gafford,Chicago Bulls,PF,2019-20,4.07,1.96,0.39,14.06
+Jalen McDaniels,Charlotte Hornets,SF,2021-22,5.40,2.70,0.92,14.06
+Seth Curry,Charlotte Hornets,SG,2023-24,8.00,1.78,1.56,14.04
+Kevon Looney,Golden State Warriors,SF,2020-21,3.54,4.54,1.68,14.04
+Deni Avdija,Washington Wizards,SF,2022-23,9.17,6.41,2.78,14.03
+Keita Bates-Diop,Minnesota Timberwolves,SF,2019-20,6.78,2.97,0.81,14.03
+Jae'Sean Tate,Houston Rockets,SF,2020-21,11.03,5.19,2.47,14.02
+Keita Bates-Diop,San Antonio Spurs,SF,2020-21,1.65,1.02,0.25,14.02
+Andrew Wiggins,Golden State Warriors,SF,2023-24,13.04,4.46,1.65,14.01
+Brandon Knight,Dallas Mavericks,SG,2021-22,5.33,1.33,1.33,14.01
+OG Anunoby,Toronto Raptors,SG,2022-23,16.53,4.88,1.93,14.00
+Rondae Hollis-Jefferson,Portland Trail Blazers,SF,2020-21,1.29,1.24,0.62,14.00
+Mouhamed Gueye,Atlanta Hawks,SF,2023-24,2.00,1.83,0.33,14.00
+McKinley Wright IV,Dallas Mavericks,SG,2022-23,2.59,1.07,1.32,14.00
+Moussa Diabaté,Los Angeles Clippers,SF,2022-23,1.59,1.35,0.11,13.99
+Theo Maledon,Charlotte Hornets,SG,2022-23,6.41,2.67,3.30,13.99
+Joe Harris,Brooklyn Nets,SG,2019-20,14.06,4.20,2.03,13.99
+Dennis Smith Jr.,Brooklyn Nets,SG,2023-24,5.27,2.34,2.90,13.99
+P.J. Washington,Charlotte Hornets,SF,2022-23,15.25,4.77,2.33,13.99
+RJ Barrett,New York Knicks,SG,2022-23,19.08,4.91,2.68,13.98
+Kadeem Allen,New York Knicks,SG,2019-20,3.85,0.69,1.62,13.98
+Jae Crowder,Memphis Grizzlies,SF,2019-20,9.31,5.77,2.60,13.97
+Keegan Murray,Sacramento Kings,SF,2023-24,15.22,5.45,1.68,13.97
+Usman Garuba,Houston Rockets,SF,2022-23,2.74,3.74,0.78,13.96
+Jordan McLaughlin,Minnesota Timberwolves,SG,2020-21,4.74,2.00,3.57,13.95
+Luke Kennard,Los Angeles Clippers,SG,2021-22,11.73,3.23,2.06,13.95
+Nate Williams,Portland Trail Blazers,SG,2022-23,10.60,3.00,2.00,13.95
+Joe Harris,Brooklyn Nets,SG,2020-21,14.12,3.59,1.88,13.94
+Jarace Walker,Indiana Pacers,SF,2023-24,1.67,0.88,0.56,13.94
+Blake Griffin,Detroit Pistons,SF,2019-20,12.13,3.65,2.57,13.94
+JaMychal Green,Denver Nuggets,PF,2020-21,7.48,4.40,0.84,13.94
+Javonte Green,Chicago Bulls,SG,2021-22,7.20,4.25,0.92,13.94
+Mason Jones,Houston Rockets,SG,2020-21,4.34,1.46,1.11,13.93
+Cody Martin,Charlotte Hornets,SF,2021-22,7.45,3.90,2.45,13.93
+Danny Green,Cleveland Cavaliers,SG,2022-23,2.60,0.50,0.20,13.93
+Thomas Bryant,Denver Nuggets,C,2022-23,3.19,2.31,0.08,13.93
+Chandler Hutchison,Chicago Bulls,SG,2019-20,6.61,3.27,0.79,13.93
+Nicolas Batum,Los Angeles Clippers,SG,2020-21,7.83,4.58,2.14,13.92
+Kira Lewis Jr.,Utah Jazz,SG,2023-24,1.55,0.41,0.66,13.92
+Joe Ingles,Utah Jazz,SG,2019-20,9.82,3.86,5.18,13.92
+Vlatko Čančar,Denver Nuggets,SF,2021-22,3.26,1.63,0.89,13.91
+Isaiah Joe,Oklahoma City Thunder,SG,2023-24,8.15,2.31,1.27,13.91
+Lindell Wigginton,Milwaukee Bucks,SG,2022-23,5.00,0.70,1.40,13.91
+Gary Trent Jr.,Toronto Raptors,SG,2022-23,15.94,2.40,1.47,13.90
+Darius Bazley,Oklahoma City Thunder,SF,2020-21,12.36,6.49,1.62,13.90
+Garrison Mathews,Atlanta Hawks,SG,2022-23,1.65,0.42,0.12,13.89
+Thaddeus Young,Toronto Raptors,SF,2022-23,2.93,2.02,0.91,13.88
+Eric Paschall,Utah Jazz,SF,2021-22,4.28,1.36,0.46,13.88
+Terrence Ross,Orlando Magic,SG,2019-20,14.72,3.22,1.19,13.88
+Olivier-Maxence Prosper,Dallas Mavericks,SF,2023-24,1.89,1.23,0.34,13.88
+Terance Mann,Los Angeles Clippers,SG,2022-23,8.80,3.41,2.27,13.87
+Saben Lee,Phoenix Suns,SG,2022-23,5.00,1.55,2.24,13.87
+Semi Ojeleye,Los Angeles Clippers,SF,2021-22,2.41,0.94,0.24,13.86
+Deni Avdija,Washington Wizards,SF,2021-22,8.35,5.18,2.04,13.86
+Jarred Vanderbilt,Los Angeles Lakers,SF,2023-24,4.55,4.18,1.09,13.86
+Jerami Grant,Denver Nuggets,SF,2019-20,11.82,3.44,1.22,13.86
+Jeremiah Robinson-Earl,New Orleans Pelicans,SF,2023-24,1.69,1.12,0.31,13.85
+Dalen Terry,Chicago Bulls,SF,2022-23,1.08,0.47,0.28,13.85
+Javonte Green,Boston Celtics,SG,2019-20,2.43,1.39,0.39,13.84
+Lonnie Walker IV,Brooklyn Nets,SG,2023-24,8.31,1.87,1.09,13.84
+Tyler Cook,Chicago Bulls,SF,2021-22,1.52,1.20,0.07,13.83
+Amir Coffey,Los Angeles Clippers,SG,2021-22,8.25,2.63,1.65,13.83
+Shake Milton,Philadelphia 76ers,SG,2019-20,6.39,1.49,1.76,13.83
+Reggie Jackson,Los Angeles Clippers,SG,2019-20,9.47,3.00,3.18,13.82
+Dante Exum,Dallas Mavericks,SG,2023-24,1.44,0.63,0.65,13.82
+Sasha Vezenkov,Sacramento Kings,SF,2023-24,4.25,1.81,0.36,13.80
+Buddy Hield,Sacramento Kings,SG,2020-21,16.56,4.70,3.62,13.80
+Jeff Green,Brooklyn Nets,SF,2020-21,10.71,3.76,1.54,13.79
+Shake Milton,Philadelphia 76ers,SG,2022-23,7.77,2.33,2.93,13.79
+Joakim Noah,Los Angeles Clippers,PF,2019-20,1.75,2.00,0.88,13.78
+Jalen Green,Houston Rockets,SG,2021-22,17.01,3.32,2.59,13.78
+David Nwaba,Brooklyn Nets,SG,2019-20,3.71,1.61,0.29,13.76
+Isaiah Roby,Oklahoma City Thunder,SF,2020-21,7.72,4.94,1.55,13.75
+Sam Hauser,Boston Celtics,SF,2023-24,9.01,3.49,1.04,13.75
+Patrick Beverley,Los Angeles Clippers,SG,2019-20,7.94,5.22,3.59,13.75
+Seth Curry,Philadelphia 76ers,SG,2021-22,13.52,3.02,3.62,13.74
+Carmelo Anthony,Portland Trail Blazers,SF,2020-21,13.39,3.10,1.51,13.74
+Lindy Waters III,Oklahoma City Thunder,SF,2021-22,7.11,2.61,0.86,13.74
+Marc Gasol,Los Angeles Lakers,C,2020-21,4.09,3.36,1.70,13.74
+DeMarre Carroll,Houston Rockets,SF,2019-20,3.00,1.33,0.78,13.74
+Buddy Hield,Philadelphia 76ers,SG,2023-24,12.19,3.19,3.03,13.73
+Kelly Olynyk,Miami Heat,PF,2020-21,9.60,5.80,2.02,13.73
+Kelly Oubre Jr.,Philadelphia 76ers,SG,2023-24,14.77,4.80,1.42,13.71
+Isaiah Stewart,Detroit Pistons,PF,2023-24,8.98,5.45,1.30,13.71
+Jeff Teague,Atlanta Hawks,SG,2019-20,7.72,2.16,4.00,13.70
+Yuta Watanabe,Toronto Raptors,SG,2020-21,3.21,2.34,0.59,13.70
+Gary Payton II,Golden State Warriors,SG,2023-24,4.71,2.22,0.94,13.70
+Markus Howard,Denver Nuggets,SG,2021-22,1.85,0.18,0.10,13.69
+Kyle Kuzma,Los Angeles Lakers,SF,2019-20,12.82,4.48,1.31,13.68
+Marcus Smart,Boston Celtics,SG,2020-21,12.54,3.34,5.46,13.68
+Jeremiah Robinson-Earl,Oklahoma City Thunder,SF,2022-23,5.41,3.33,0.80,13.68
+Lonnie Walker IV,San Antonio Spurs,SG,2021-22,11.79,2.51,2.11,13.67
+Jaylin Williams,Oklahoma City Thunder,SF,2022-23,4.36,3.65,1.15,13.67
+Talen Horton-Tucker,Los Angeles Lakers,SG,2020-21,8.36,2.41,2.59,13.67
+Chris Silva,Miami Heat,SF,2021-22,2.17,2.92,0.58,13.66
+Gary Clark,New Orleans Pelicans,SF,2021-22,1.74,1.55,0.31,13.66
+Malik Monk,Charlotte Hornets,SG,2019-20,8.95,2.49,1.81,13.65
+Udoka Azubuike,Phoenix Suns,C,2023-24,0.74,0.68,0.06,13.64
+Norman Powell,Los Angeles Clippers,SG,2023-24,13.37,2.47,1.04,13.64
+Saddiq Bey,Detroit Pistons,SG,2020-21,11.90,4.42,1.32,13.64
+Vasilije Micic,Charlotte Hornets,SG,2023-24,10.42,2.06,6.00,13.63
+Nickeil Alexander-Walker,New Orleans Pelicans,SG,2020-21,9.24,2.62,1.85,13.63
+Chris Silva,Miami Heat,SF,2020-21,1.00,0.83,0.20,13.63
+Obi Toppin,New York Knicks,SF,2020-21,4.08,2.23,0.47,13.62
+Derrick White,Boston Celtics,SG,2021-22,11.00,3.38,3.54,13.61
+Brandon Miller,Charlotte Hornets,SF,2023-24,16.40,4.04,2.24,13.61
+Coby White,Chicago Bulls,SG,2020-21,15.09,4.12,4.75,13.60
+Thon Maker,Detroit Pistons,PF,2019-20,4.26,2.53,0.65,13.60
+Jalen Suggs,Orlando Magic,SG,2023-24,12.41,3.01,2.70,13.60
+Chris Duarte,Indiana Pacers,SG,2021-22,11.61,3.65,1.84,13.59
+Reggie Jackson,Los Angeles Clippers,SG,2021-22,16.40,3.52,4.66,13.59
+Dennis Schröder,Houston Rockets,SG,2021-22,10.19,3.13,5.50,13.59
+Nickeil Alexander-Walker,Utah Jazz,SG,2022-23,4.15,1.07,1.38,13.59
+Josh Christopher,Houston Rockets,SG,2021-22,7.34,2.33,1.88,13.59
+Bruno Fernando,Atlanta Hawks,PF,2019-20,3.93,3.25,0.80,13.58
+Grayson Allen,Memphis Grizzlies,SG,2020-21,9.67,2.91,1.96,13.58
+Evan Fournier,Boston Celtics,SG,2020-21,12.24,3.12,2.88,13.58
+Markelle Fultz,Orlando Magic,SG,2023-24,7.44,3.07,2.67,13.58
+Marcus Smart,Boston Celtics,SG,2019-20,12.72,3.69,4.77,13.58
+Allonzo Trier,New York Knicks,SG,2019-20,2.72,0.51,0.49,13.57
+Meyers Leonard,Miami Heat,PF,2019-20,5.42,4.56,0.96,13.57
+De'Anthony Melton,Philadelphia 76ers,SG,2023-24,10.27,3.44,2.78,13.55
+Patrick Williams,Chicago Bulls,SF,2021-22,9.00,4.06,0.88,13.55
+Jeremy Sochan,San Antonio Spurs,SF,2022-23,10.41,5.00,2.41,13.52
+John Konchar,Memphis Grizzlies,SG,2023-24,3.51,3.84,1.64,13.52
+Josh Okogie,Phoenix Suns,SG,2022-23,6.61,3.14,1.31,13.51
+Luka Samanic,Utah Jazz,SF,2022-23,9.86,4.29,2.14,13.51
+Markieff Morris,Detroit Pistons,SF,2019-20,9.72,3.46,1.38,13.51
+Goga Bitadze,Indiana Pacers,C,2022-23,1.23,0.88,0.32,13.51
+Zeke Nnaji,Denver Nuggets,PF,2021-22,5.09,2.77,0.32,13.51
+Naji Marshall,New Orleans Pelicans,SF,2021-22,3.96,1.80,0.78,13.51
+Stanley Johnson,Toronto Raptors,SG,2019-20,1.07,0.66,0.36,13.49
+Terrence Ross,Orlando Magic,SG,2020-21,10.86,2.39,1.64,13.49
+OG Anunoby,Toronto Raptors,SG,2023-24,14.57,3.79,2.57,13.49
+BJ Johnson,Orlando Magic,SF,2021-22,6.50,3.75,0.00,13.47
+Rui Hachimura,Washington Wizards,SF,2020-21,13.84,5.47,1.44,13.47
+Vernon Carey Jr.,Charlotte Hornets,C,2020-21,0.85,0.50,0.04,13.46
+Edmond Sumner,Brooklyn Nets,SG,2022-23,5.04,1.05,0.91,13.46
+Matt Thomas,Toronto Raptors,SG,2019-20,3.21,0.97,0.35,13.46
+Freddie Gillespie,Toronto Raptors,C,2020-21,5.55,4.85,0.45,13.45
+Anthony Gill,Washington Wizards,SF,2023-24,2.33,1.16,0.42,13.45
+JaMychal Green,Los Angeles Clippers,PF,2019-20,6.62,5.97,0.75,13.44
+Troy Brown Jr.,Minnesota Timberwolves,SG,2023-24,3.02,1.41,0.69,13.43
+De'Andre Hunter,Atlanta Hawks,SG,2023-24,15.36,3.83,1.50,13.43
+Kevin Huerter,Sacramento Kings,SG,2023-24,10.23,3.50,2.59,13.42
+Cam Thomas,Brooklyn Nets,SG,2021-22,7.31,2.06,1.00,13.42
+Jordan McLaughlin,Minnesota Timberwolves,SG,2022-23,3.58,1.38,3.29,13.41
+Christian Braun,Denver Nuggets,SG,2023-24,7.32,3.73,1.61,13.40
+Jahlil Okafor,Detroit Pistons,C,2020-21,3.37,1.53,0.30,13.40
+T.J. Warren,Phoenix Suns,SF,2022-23,3.19,2.33,0.52,13.40
+Robert Covington,Philadelphia 76ers,SF,2023-24,3.81,2.87,0.55,13.39
+P.J. Washington,Charlotte Hornets,SF,2019-20,11.83,5.27,2.05,13.39
+Richaun Holmes,Sacramento Kings,SF,2022-23,1.69,1.04,0.12,13.38
+Mikal Bridges,Phoenix Suns,SG,2019-20,9.14,4.00,1.77,13.37
+Kent Bazemore,Sacramento Kings,SG,2019-20,10.28,4.88,1.28,13.37
+Jaden Ivey,Detroit Pistons,SG,2023-24,14.81,3.30,3.70,13.36
+Otto Porter Jr.,Toronto Raptors,SF,2022-23,4.89,2.11,0.89,13.35
+Jaime Jaquez Jr.,Miami Heat,SG,2023-24,11.70,3.75,2.57,13.35
+Jericho Sims,New York Knicks,C,2021-22,1.29,2.41,0.30,13.34
+Caris LeVert,Cleveland Cavaliers,SG,2021-22,13.58,3.37,3.95,13.33
+Miles Bridges,Charlotte Hornets,SF,2019-20,12.97,5.57,1.75,13.33
+Gorgui Dieng,San Antonio Spurs,C,2022-23,1.61,1.43,0.71,13.33
+Naji Marshall,New Orleans Pelicans,SF,2022-23,9.06,3.62,2.45,13.32
+Patty Mills,San Antonio Spurs,SG,2019-20,10.96,1.54,1.69,13.32
+Kyle Lowry,Miami Heat,SG,2022-23,10.79,3.95,4.93,13.32
+Cameron Johnson,Phoenix Suns,SF,2019-20,7.41,2.75,1.01,13.32
+Terence Davis,Sacramento Kings,SG,2022-23,5.39,1.74,0.84,13.31
+Coby White,Chicago Bulls,SG,2022-23,9.66,2.86,2.76,13.31
+Raul Neto,Washington Wizards,SG,2020-21,8.44,2.36,2.21,13.31
+Bismack Biyombo,Charlotte Hornets,C,2020-21,4.60,4.82,1.13,13.30
+Cristiano Felicio,Chicago Bulls,PF,2019-20,2.69,3.19,0.50,13.30
+Brandon Goodwin,Atlanta Hawks,SG,2019-20,5.02,1.76,1.24,13.29
+Skylar Mays,Portland Trail Blazers,SG,2023-24,4.03,1.12,2.27,13.29
+Raul Neto,Washington Wizards,SG,2021-22,6.92,1.76,2.86,13.29
+Dyson Daniels,New Orleans Pelicans,SG,2023-24,5.80,3.87,2.69,13.29
+Pat Connaughton,Milwaukee Bucks,SG,2020-21,6.78,4.81,1.17,13.29
+Nemanja Bjelica,Miami Heat,SF,2020-21,2.04,1.00,0.74,13.27
+Grayson Allen,Milwaukee Bucks,SG,2021-22,10.47,3.17,1.43,13.27
+Brandon Goodwin,Cleveland Cavaliers,SG,2021-22,3.72,1.46,1.98,13.26
+Sam Hauser,Boston Celtics,SF,2022-23,6.24,2.49,0.87,13.25
+Xavier Tillman,Memphis Grizzlies,SF,2023-24,5.23,4.03,1.46,13.25
+Carmelo Anthony,Portland Trail Blazers,SF,2019-20,14.92,6.13,1.42,13.24
+Kennedy Chandler,Memphis Grizzlies,SG,2022-23,1.01,0.49,0.75,13.24
+Ayo Dosunmu,Chicago Bulls,SG,2023-24,12.16,2.84,3.18,13.23
+Taylor Hendricks,Utah Jazz,SF,2023-24,5.62,3.56,0.62,13.22
+A.J. Lawson,Dallas Mavericks,SG,2022-23,2.16,0.80,0.08,13.21
+Brandon Boston,Los Angeles Clippers,SG,2022-23,3.33,0.70,0.47,13.21
+Malachi Flynn,New York Knicks,SG,2023-24,1.82,0.35,0.35,13.20
+Sam Merrill,Cleveland Cavaliers,SG,2023-24,6.30,1.56,1.40,13.20
+Markelle Fultz,Orlando Magic,SG,2020-21,11.44,2.78,4.78,13.19
+Micah Potter,Utah Jazz,C,2023-24,2.12,1.72,0.24,13.17
+Tim Hardaway Jr.,Dallas Mavericks,SG,2023-24,14.42,3.22,1.76,13.17
+Taurean Prince,Cleveland Cavaliers,SF,2020-21,8.11,3.00,1.92,13.16
+Gary Trent Jr.,Toronto Raptors,SG,2021-22,18.07,2.69,1.99,13.16
+Patrick Beverley,Philadelphia 76ers,SG,2023-24,6.13,3.02,3.00,13.16
+Damion Lee,Golden State Warriors,SG,2020-21,6.22,3.00,1.22,13.15
+Al-Farouq Aminu,Orlando Magic,SF,2020-21,4.65,4.55,1.45,13.14
+Javon Freeman-Liberty,Toronto Raptors,SG,2023-24,4.94,2.26,1.29,13.14
+Keyonte George,Utah Jazz,SG,2023-24,12.65,2.74,4.31,13.13
+Denzel Valentine,Chicago Bulls,SG,2019-20,4.10,1.23,0.72,13.13
+Goga Bitadze,Indiana Pacers,C,2019-20,2.49,1.54,0.33,13.13
+Derrick Jones Jr.,Chicago Bulls,SF,2022-23,4.25,2.04,0.45,13.13
+Max Strus,Cleveland Cavaliers,SG,2023-24,12.19,4.83,4.04,13.12
+Neemias Queta,Sacramento Kings,C,2021-22,1.15,0.79,0.15,13.12
+Trevor Ariza,Portland Trail Blazers,SF,2019-20,11.00,4.76,1.95,13.12
+Davon Reed,Denver Nuggets,SG,2021-22,3.54,1.83,0.90,13.11
+Marcus Sasser,Detroit Pistons,SG,2023-24,7.51,1.60,3.03,13.10
+Mike Muscala,Boston Celtics,PF,2022-23,4.54,2.62,0.46,13.09
+Tim Hardaway Jr.,Dallas Mavericks,SG,2021-22,14.24,3.71,2.19,13.09
+Jaden Ivey,Detroit Pistons,SG,2022-23,15.84,3.79,5.09,13.09
+Frank Jackson,Detroit Pistons,SG,2020-21,7.96,1.76,0.73,13.08
+Jabari Smith Jr.,Houston Rockets,SF,2022-23,12.78,7.20,1.28,13.08
+Kendrick Nunn,Miami Heat,SG,2019-20,15.06,2.65,3.24,13.08
+Mamadi Diakite,Milwaukee Bucks,SF,2020-21,1.19,0.92,0.22,13.07
+Terquavion Smith,Philadelphia 76ers,SG,2023-24,1.79,0.14,0.41,13.07
+Meyers Leonard,Milwaukee Bucks,PF,2022-23,2.53,2.00,0.06,13.06
+Mike Muscala,Oklahoma City Thunder,PF,2019-20,3.23,1.54,0.57,13.05
+Dennis Smith Jr.,Charlotte Hornets,SG,2022-23,8.03,2.83,4.42,13.05
+Keegan Murray,Sacramento Kings,SF,2022-23,12.20,4.64,1.23,13.04
+Victor Oladipo,Indiana Pacers,SG,2019-20,14.47,3.95,2.95,13.04
+Kenrich Williams,Oklahoma City Thunder,SG,2023-24,4.51,2.90,1.29,13.04
+Chuma Okeke,Orlando Magic,SF,2020-21,6.98,3.62,2.02,13.03
+Bruce Brown,Detroit Pistons,SG,2019-20,8.34,4.42,3.71,13.03
+Luke Kennard,Los Angeles Clippers,SG,2020-21,7.32,2.27,1.46,13.03
+Jeff Green,Denver Nuggets,SF,2021-22,10.29,3.08,1.28,13.03
+Jack White,Denver Nuggets,SF,2022-23,0.51,0.41,0.10,13.02
+Taurean Prince,Minnesota Timberwolves,SF,2021-22,6.61,2.29,0.89,13.02
+Gabriel Deck,Oklahoma City Thunder,SF,2021-22,0.51,0.17,0.14,13.02
+P.J. Washington,Dallas Mavericks,SF,2023-24,11.69,6.17,1.52,13.00
+Coby White,Chicago Bulls,SG,2019-20,13.22,3.54,2.69,13.00
+Sterling Brown,Milwaukee Bucks,SG,2019-20,3.86,2.65,0.74,13.00
+Eric Bledsoe,New Orleans Pelicans,SG,2020-21,12.24,3.44,3.77,13.00
+Delon Wright,Miami Heat,SG,2023-24,2.81,1.00,1.37,12.99
+Damian Jones,Utah Jazz,C,2022-23,3.48,2.68,0.44,12.99
+Paul Millsap,Brooklyn Nets,SF,2021-22,2.48,2.70,0.73,12.99
+Eric Gordon,Houston Rockets,SG,2021-22,12.14,1.79,2.44,12.98
+Caris LeVert,Cleveland Cavaliers,SG,2022-23,11.80,3.71,3.78,12.98
+Raul Neto,Philadelphia 76ers,SG,2019-20,3.77,0.84,1.30,12.98
+Jordan Poole,Washington Wizards,SG,2023-24,16.54,2.59,4.18,12.97
+Lou Williams,Atlanta Hawks,SG,2021-22,5.53,1.36,1.64,12.97
+Patrick Beverley,Milwaukee Bucks,SG,2023-24,6.04,3.62,2.62,12.96
+Bryn Forbes,San Antonio Spurs,SG,2021-22,8.25,1.43,0.93,12.95
+Khem Birch,Toronto Raptors,C,2021-22,4.33,4.19,0.98,12.94
+Patrick Patterson,Los Angeles Clippers,SF,2019-20,4.06,2.10,0.57,12.93
+Dominick Barlow,San Antonio Spurs,SF,2022-23,3.44,3.19,0.75,12.93
+Jalen McDaniels,Charlotte Hornets,SF,2022-23,10.63,4.82,1.98,12.92
+Max Strus,Miami Heat,SG,2021-22,9.88,2.77,1.26,12.91
+Grayson Allen,Memphis Grizzlies,SG,2019-20,7.02,1.81,1.11,12.91
+Will Barton,Denver Nuggets,SG,2020-21,12.70,4.04,3.23,12.90
+Justin Champagnie,Toronto Raptors,SG,2021-22,1.33,1.18,0.18,12.89
+Jae Crowder,Phoenix Suns,SF,2021-22,8.32,4.66,1.63,12.89
+Cameron Payne,Philadelphia 76ers,SG,2023-24,8.97,1.72,3.00,12.88
+Mamadi Diakite,Oklahoma City Thunder,SF,2021-22,4.00,4.21,0.14,12.88
+Jae Crowder,Phoenix Suns,SF,2020-21,8.38,3.92,1.76,12.87
+Torrey Craig,Phoenix Suns,SF,2021-22,6.93,4.26,1.22,12.86
+Cedi Osman,San Antonio Spurs,SF,2023-24,6.79,2.50,1.65,12.86
+Leaky Black,Charlotte Hornets,SF,2023-24,1.41,0.98,0.49,12.84
+Norman Powell,Portland Trail Blazers,SG,2020-21,16.43,3.18,1.86,12.83
+Desmond Bane,Memphis Grizzlies,SG,2020-21,9.06,3.04,1.71,12.83
+R.J. Hampton,Orlando Magic,SG,2022-23,3.39,0.89,0.77,12.81
+Trevor Ariza,Miami Heat,SF,2020-21,9.10,4.65,1.77,12.80
+Coby White,Chicago Bulls,SG,2021-22,12.06,2.84,2.75,12.80
+Jake LaRavia,Memphis Grizzlies,SF,2023-24,7.29,2.46,1.12,12.79
+Chris Clemons,Houston Rockets,SG,2019-20,2.56,0.48,0.43,12.79
+Aaron Wiggins,Oklahoma City Thunder,SG,2022-23,5.84,2.57,0.98,12.79
+Dylan Windler,Cleveland Cavaliers,SG,2020-21,4.47,2.97,0.92,12.79
+Torrey Craig,Phoenix Suns,SF,2022-23,7.44,5.39,1.48,12.78
+Rajon Rondo,Atlanta Hawks,SG,2020-21,3.53,1.83,3.17,12.78
+Maxi Kleber,Dallas Mavericks,SF,2021-22,6.63,5.65,1.10,12.78
+Kentavious Caldwell-Pope,Washington Wizards,SG,2021-22,13.22,3.39,1.88,12.77
+Bruce Brown,Toronto Raptors,SG,2023-24,8.86,3.51,2.49,12.77
+Malik Beasley,Minnesota Timberwolves,SG,2021-22,11.91,2.84,1.45,12.77
+Daniel Oturu,Los Angeles Clippers,C,2020-21,1.02,0.91,0.19,12.76
+Skylar Mays,Atlanta Hawks,SG,2021-22,1.19,0.37,0.25,12.76
+Peyton Watson,Denver Nuggets,SG,2023-24,6.49,3.15,1.05,12.76
+Josh Jackson,Detroit Pistons,SG,2020-21,12.74,3.91,2.20,12.75
+Yuta Watanabe,Toronto Raptors,SG,2021-22,2.91,1.64,0.38,12.75
+Grayson Allen,Milwaukee Bucks,SG,2022-23,10.27,3.25,2.23,12.74
+Juan Toscano-Anderson,Golden State Warriors,SF,2021-22,3.68,2.17,1.57,12.74
+Wenyen Gabriel,Los Angeles Lakers,SF,2021-22,6.05,3.90,0.57,12.72
+Cedi Osman,Cleveland Cavaliers,SF,2021-22,9.99,2.06,1.90,12.72
+Aaron Nesmith,Indiana Pacers,SG,2023-24,12.18,3.82,1.50,12.72
+Cameron Payne,Milwaukee Bucks,SG,2023-24,5.82,1.24,2.18,12.72
+Seth Curry,Philadelphia 76ers,SG,2020-21,12.05,2.31,2.63,12.72
+Malik Beasley,Utah Jazz,SG,2022-23,13.38,3.58,1.69,12.70
+OG Anunoby,New York Knicks,SG,2023-24,12.04,3.78,1.30,12.69
+Marcus Smart,Boston Celtics,SG,2022-23,11.52,3.13,6.26,12.69
+De'Anthony Melton,Philadelphia 76ers,SG,2022-23,9.87,3.95,2.49,12.68
+Herbert Jones,New Orleans Pelicans,SF,2023-24,10.87,3.53,2.58,12.68
+Trey Murphy III,New Orleans Pelicans,SF,2021-22,4.39,1.93,0.50,12.67
+Lou Williams,Atlanta Hawks,SG,2020-21,9.96,2.08,3.38,12.67
+Dorian Finney-Smith,Dallas Mavericks,SF,2019-20,9.55,5.70,1.61,12.66
+P.J. Tucker,Miami Heat,SF,2021-22,7.19,5.16,1.99,12.66
+James Ennis III,Orlando Magic,SF,2020-21,6.76,3.25,1.22,12.66
+John Konchar,Memphis Grizzlies,SG,2022-23,4.92,4.19,1.35,12.65
+Killian Hayes,Detroit Pistons,SG,2023-24,5.78,2.38,4.10,12.64
+Jaden Hardy,Dallas Mavericks,SG,2023-24,6.46,1.60,1.33,12.63
+Kevin Huerter,Atlanta Hawks,SG,2019-20,12.21,4.07,3.80,12.62
+Jose Alvarado,New Orleans Pelicans,SG,2023-24,6.11,1.97,1.80,12.62
+Gary Trent Jr.,Toronto Raptors,SG,2023-24,12.49,2.41,1.53,12.61
+Kevin Knox II,New York Knicks,SF,2021-22,1.27,0.59,0.08,12.60
+Keita Bates-Diop,Denver Nuggets,SF,2019-20,3.36,1.55,0.00,12.60
+Brandon Boston,Los Angeles Clippers,SG,2021-22,5.20,1.68,0.77,12.59
+DeAndre' Bembry,Brooklyn Nets,SG,2021-22,5.25,2.87,1.13,12.58
+Darius Bazley,Oklahoma City Thunder,SF,2019-20,5.61,4.03,0.67,12.58
+Jaylen Nowell,Minnesota Timberwolves,SG,2020-21,6.42,1.61,1.05,12.57
+Thanasis Antetokounmpo,Milwaukee Bucks,SF,2019-20,1.31,0.57,0.36,12.56
+Derrick Jones Jr.,Chicago Bulls,SF,2021-22,4.69,2.77,0.49,12.56
+Cam Reddish,Atlanta Hawks,SG,2021-22,11.60,2.40,1.09,12.56
+Denzel Valentine,Chicago Bulls,SG,2020-21,5.64,2.74,1.46,12.56
+Cory Joseph,Detroit Pistons,SG,2022-23,5.85,1.45,2.97,12.55
+Devonte' Graham,New Orleans Pelicans,SG,2021-22,11.56,2.27,4.05,12.55
+Andre Iguodala,Miami Heat,SG,2019-20,4.36,3.55,2.32,12.55
+Jalen Suggs,Orlando Magic,SG,2022-23,9.70,2.98,2.87,12.54
+Furkan Korkmaz,Philadelphia 76ers,SG,2020-21,8.21,1.85,1.34,12.54
+Bruno Caboclo,Memphis Grizzlies,SF,2019-20,1.55,1.10,0.25,12.54
+Buddy Hield,Sacramento Kings,SG,2021-22,14.40,4.02,1.91,12.53
+JaKarr Sampson,Indiana Pacers,SF,2019-20,2.64,1.49,0.36,12.53
+Daniel Theis,Houston Rockets,PF,2021-22,4.27,2.55,0.39,12.53
+Trent Forrest,Utah Jazz,SG,2020-21,1.66,0.83,0.85,12.52
+AJ Griffin,Atlanta Hawks,SF,2022-23,7.79,1.87,0.89,12.52
+Luka Samanic,Utah Jazz,SF,2023-24,2.21,1.28,0.24,12.51
+Reggie Jackson,Denver Nuggets,SG,2023-24,10.16,1.89,3.76,12.50
+Quinn Cook,Cleveland Cavaliers,SG,2020-21,3.91,1.09,1.18,12.49
+James Johnson,Dallas Mavericks,SF,2020-21,4.49,2.32,1.35,12.48
+Austin Reaves,Los Angeles Lakers,SG,2021-22,5.92,2.57,1.47,12.48
+Dean Wade,Cleveland Cavaliers,PF,2020-21,5.22,2.99,1.03,12.48
+A.J. Lawson,Dallas Mavericks,SG,2023-24,2.31,0.85,0.34,12.47
+Theo Pinson,Dallas Mavericks,SG,2021-22,1.60,0.70,0.57,12.47
+Brad Wanamaker,Boston Celtics,SG,2019-20,6.76,2.00,2.49,12.46
+Khem Birch,Orlando Magic,C,2019-20,2.94,3.06,0.69,12.46
+Bismack Biyombo,Memphis Grizzlies,C,2023-24,4.88,5.97,1.59,12.46
+Eric Gordon,Los Angeles Clippers,SG,2022-23,10.95,1.68,2.14,12.46
+Patrick Baldwin Jr.,Washington Wizards,SF,2023-24,2.80,2.05,0.48,12.44
+Marcus Smart,Memphis Grizzlies,SG,2023-24,14.45,2.65,4.30,12.44
+Danuel House Jr.,Utah Jazz,SG,2021-22,5.90,2.34,0.86,12.44
+Elfrid Payton,New York Knicks,SG,2020-21,9.98,3.38,3.17,12.43
+Sterling Brown,Houston Rockets,SG,2020-21,7.85,4.23,1.36,12.43
+Thanasis Antetokounmpo,Milwaukee Bucks,SF,2021-22,2.14,1.26,0.28,12.43
+Trey Jemison III,Memphis Grizzlies,C,2023-24,7.13,5.54,1.13,12.42
+Reggie Perry,Brooklyn Nets,PF,2020-21,1.39,1.30,0.25,12.41
+Jahmi'us Ramsey,Toronto Raptors,SG,2023-24,5.22,2.44,0.89,12.41
+Nassir Little,Portland Trail Blazers,SG,2020-21,3.86,2.25,0.40,12.41
+Edmond Sumner,Indiana Pacers,SG,2020-21,6.05,1.42,0.74,12.41
+Harrison Barnes,Sacramento Kings,SF,2023-24,12.20,3.04,1.21,12.40
+Luke Kornet,Chicago Bulls,C,2019-20,4.13,1.62,0.62,12.40
+Matt Thomas,Utah Jazz,SG,2020-21,2.43,0.82,0.36,12.40
+Duncan Robinson,Miami Heat,SF,2019-20,13.47,3.18,1.40,12.40
+Keita Bates-Diop,Phoenix Suns,SF,2023-24,3.41,1.98,0.67,12.39
+Mike Scott,Philadelphia 76ers,SF,2019-20,5.83,3.54,0.80,12.38
+Trent Forrest,Utah Jazz,SG,2021-22,2.79,1.41,1.51,12.37
+Robert Covington,Portland Trail Blazers,SF,2020-21,8.47,6.66,1.67,12.36
+Lonnie Walker IV,Los Angeles Lakers,SG,2022-23,9.21,1.54,0.90,12.36
+James Ennis III,Philadelphia 76ers,SF,2019-20,5.70,3.00,0.82,12.36
+Luke Kornet,Chicago Bulls,C,2020-21,0.65,0.38,0.10,12.35
+Jordan Nwora,Milwaukee Bucks,SF,2022-23,4.24,2.17,0.70,12.35
+Sam Merrill,Milwaukee Bucks,SG,2020-21,1.48,0.50,0.35,12.35
+Jericho Sims,New York Knicks,C,2023-24,1.21,1.93,0.33,12.35
+Will Barton,Washington Wizards,SG,2022-23,5.90,2.13,1.83,12.34
+Pat Connaughton,Milwaukee Bucks,SG,2022-23,7.52,4.56,1.24,12.33
+Olivier Sarr,Oklahoma City Thunder,C,2022-23,2.12,1.82,0.24,12.32
+Jared Butler,Oklahoma City Thunder,SG,2022-23,3.36,0.36,0.73,12.32
+Svi Mykhailiuk,Boston Celtics,SG,2023-24,2.05,0.65,0.44,12.32
+Bryn Forbes,Milwaukee Bucks,SG,2020-21,9.87,1.58,0.63,12.32
+Taurean Prince,Brooklyn Nets,SF,2020-21,8.08,2.83,0.58,12.32
+Yogi Ferrell,Sacramento Kings,SG,2019-20,3.03,0.68,0.96,12.31
+Nerlens Noel,New York Knicks,C,2021-22,2.74,4.55,0.74,12.31
+Yuta Watanabe,Brooklyn Nets,SG,2022-23,4.74,2.07,0.71,12.31
+Damion Lee,Golden State Warriors,SG,2021-22,6.49,2.82,0.88,12.30
+Julian Champagnie,San Antonio Spurs,SF,2023-24,6.22,2.54,1.27,12.30
+Andrew Nembhard,Indiana Pacers,SG,2023-24,8.94,2.01,4.00,12.30
+Dennis Schröder,Los Angeles Lakers,SG,2022-23,12.21,2.43,4.38,12.30
+Cody Martin,Charlotte Hornets,SF,2020-21,3.23,2.52,1.34,12.29
+Jalen McDaniels,Philadelphia 76ers,SF,2022-23,6.15,2.92,0.73,12.27
+Shaedon Sharpe,Portland Trail Blazers,SG,2023-24,10.00,3.14,1.84,12.27
+Tre Jones,San Antonio Spurs,SG,2020-21,1.45,0.32,0.60,12.26
+Jared Butler,Utah Jazz,SG,2021-22,2.30,0.64,0.90,12.26
+Tim Hardaway Jr.,Dallas Mavericks,SG,2022-23,14.35,3.54,1.82,12.26
+Brandon Knight,Detroit Pistons,SG,2019-20,8.67,1.75,3.17,12.25
+D.J. Wilson,Milwaukee Bucks,SF,2019-20,1.99,1.37,0.37,12.25
+Svi Mykhailiuk,Oklahoma City Thunder,SG,2020-21,9.39,2.70,1.61,12.24
+Aron Baynes,Toronto Raptors,C,2020-21,4.50,3.79,0.65,12.24
+Blake Griffin,Detroit Pistons,SF,2020-21,11.67,4.95,3.67,12.24
+Gary Clark,Houston Rockets,SF,2019-20,2.41,1.38,0.41,12.24
+Josh Okogie,Minnesota Timberwolves,SG,2019-20,8.33,4.19,1.55,12.23
+Cameron Johnson,Phoenix Suns,SF,2020-21,9.55,3.32,1.43,12.22
+Jalen McDaniels,Charlotte Hornets,SF,2020-21,5.58,2.73,0.85,12.22
+Shake Milton,Philadelphia 76ers,SG,2021-22,7.89,2.49,2.44,12.21
+Troy Brown Jr.,Chicago Bulls,SG,2020-21,5.07,3.14,0.71,12.21
+Oshae Brissett,Indiana Pacers,SG,2022-23,4.85,2.66,0.54,12.21
+DeAndre' Bembry,Toronto Raptors,SG,2020-21,4.51,2.25,1.65,12.20
+Kris Dunn,Chicago Bulls,SG,2019-20,7.31,3.65,3.39,12.20
+Dorian Finney-Smith,Dallas Mavericks,SF,2021-22,10.86,4.63,1.85,12.20
+Theo Maledon,Oklahoma City Thunder,SG,2021-22,5.01,1.82,1.54,12.19
+Jacob Gilyard,Memphis Grizzlies,SG,2023-24,3.53,0.88,2.67,12.19
+Tosan Evbuomwan,Detroit Pistons,SF,2023-24,5.06,2.56,0.56,12.19
+Brodric Thomas,Boston Celtics,SG,2021-22,0.70,0.33,0.37,12.18
+Elie Okobo,Phoenix Suns,SG,2019-20,3.13,1.29,1.64,12.18
+PJ Dozier,Denver Nuggets,SG,2019-20,4.10,1.34,1.54,12.17
+Simone Fontecchio,Utah Jazz,SF,2023-24,8.56,3.38,1.40,12.17
+Payton Pritchard,Boston Celtics,SG,2020-21,7.73,2.39,1.82,12.17
+RJ Barrett,New York Knicks,SG,2019-20,14.09,4.89,2.51,12.16
+Joe Ingles,Milwaukee Bucks,SG,2022-23,6.60,2.67,3.13,12.16
+James Johnson,Miami Heat,SF,2019-20,2.27,1.16,0.47,12.15
+Kevin Huerter,Atlanta Hawks,SG,2021-22,11.89,3.39,2.71,12.15
+Malachi Flynn,Toronto Raptors,SG,2020-21,5.79,1.90,2.25,12.15
+Gordon Hayward,Oklahoma City Thunder,SF,2023-24,5.31,2.46,1.62,12.15
+Keon Johnson,Brooklyn Nets,SG,2023-24,2.07,0.47,0.20,12.13
+Raul Neto,Cleveland Cavaliers,SG,2022-23,2.01,0.59,1.01,12.13
+Luguentz Dort,Oklahoma City Thunder,SG,2021-22,16.87,4.08,1.69,12.13
+Derrick Jones Jr.,Dallas Mavericks,SF,2023-24,8.53,3.25,0.97,12.12
+Nicolo Melli,New Orleans Pelicans,SF,2019-20,5.49,2.50,1.14,12.11
+Troy Brown Jr.,Chicago Bulls,SG,2021-22,3.54,2.54,0.83,12.10
+Duncan Robinson,Miami Heat,SF,2023-24,12.68,2.51,2.78,12.10
+Isaiah Thomas,Washington Wizards,SG,2019-20,10.61,1.48,3.17,12.09
+E'Twaun Moore,New Orleans Pelicans,SG,2019-20,6.47,1.82,1.08,12.09
+Jose Alvarado,New Orleans Pelicans,SG,2022-23,9.02,2.31,3.05,12.08
+Anthony Lamb,Golden State Warriors,SF,2022-23,6.69,3.47,1.55,12.08
+Jordan Nwora,Milwaukee Bucks,SF,2021-22,6.01,2.73,0.73,12.06
+Devonte' Graham,New Orleans Pelicans,SG,2022-23,5.00,1.29,2.07,12.06
+Skylar Mays,Los Angeles Lakers,SG,2023-24,0.79,0.21,0.36,12.06
+Caleb Martin,Miami Heat,SF,2022-23,9.36,4.71,1.60,12.06
+Furkan Korkmaz,Philadelphia 76ers,SG,2019-20,9.78,2.33,1.10,12.05
+Anfernee Simons,Portland Trail Blazers,SG,2020-21,7.17,2.00,1.27,12.05
+Jarrett Culver,Atlanta Hawks,SG,2022-23,2.00,1.73,0.27,12.05
+Kai Jones,Charlotte Hornets,C,2022-23,2.31,1.81,0.22,12.05
+Jevon Carter,Phoenix Suns,SG,2020-21,3.44,1.28,0.99,12.05
+Santi Aldama,Memphis Grizzlies,PF,2021-22,2.24,1.47,0.36,12.05
+Tyson Chandler,Houston Rockets,C,2019-20,0.50,0.97,0.09,12.04
+Cory Joseph,Detroit Pistons,SG,2021-22,7.04,2.35,3.20,12.02
+JD Davison,Boston Celtics,SG,2022-23,0.66,0.31,0.38,12.02
+Danny Green,Philadelphia 76ers,SG,2020-21,9.34,3.71,1.69,12.01
+Eric Gordon,Houston Rockets,SG,2022-23,13.09,2.06,2.89,12.01
+Kevin Huerter,Atlanta Hawks,SG,2020-21,11.74,3.30,3.44,12.00
+Javonte Green,Chicago Bulls,SG,2020-21,1.41,0.66,0.21,12.00
+Jalen Wilson,Brooklyn Nets,SF,2023-24,3.96,2.43,0.83,12.00
+Kyle Korver,Milwaukee Bucks,SG,2019-20,6.54,2.07,1.15,12.00
+Yuta Watanabe,Memphis Grizzlies,SG,2019-20,1.13,0.63,0.16,12.00
+Marvin Williams,Milwaukee Bucks,SF,2019-20,3.40,3.70,0.95,12.00
+Dorian Finney-Smith,Dallas Mavericks,SF,2020-21,9.67,5.34,1.67,12.00
+Jae'Sean Tate,Houston Rockets,SF,2022-23,8.84,3.69,2.63,11.98
+Jordan Bell,Washington Wizards,SF,2020-21,1.56,2.11,0.56,11.98
+Aaron Holiday,Indiana Pacers,SG,2019-20,8.59,2.14,3.08,11.98
+Patrick Williams,Chicago Bulls,SF,2020-21,9.23,4.61,1.39,11.98
+Alex Caruso,Chicago Bulls,SG,2021-22,7.24,3.52,3.93,11.98
+Terance Mann,Los Angeles Clippers,SG,2023-24,8.77,3.39,1.59,11.97
+Caleb Martin,Miami Heat,SF,2023-24,9.85,4.32,2.20,11.96
+Josh Richardson,Miami Heat,SG,2023-24,9.24,2.63,2.28,11.96
+Brandon Williams,Portland Trail Blazers,SG,2021-22,12.36,2.96,3.76,11.95
+Josh Richardson,Boston Celtics,SG,2021-22,9.70,2.84,1.50,11.95
+Josh Richardson,Philadelphia 76ers,SG,2019-20,13.73,3.16,2.95,11.95
+Royce O'Neale,Utah Jazz,SF,2020-21,6.99,6.83,2.55,11.93
+Justin Holiday,Indiana Pacers,SG,2019-20,8.26,3.26,1.27,11.93
+Alize Johnson,Chicago Bulls,SF,2021-22,1.04,1.33,0.30,11.93
+Justin Anderson,Indiana Pacers,SG,2021-22,6.85,3.08,2.08,11.92
+Zeke Nnaji,Denver Nuggets,PF,2023-24,2.51,1.69,0.43,11.92
+Isaiah Roby,San Antonio Spurs,SF,2022-23,3.07,1.93,0.68,11.92
+Seth Curry,Brooklyn Nets,SG,2022-23,9.05,1.61,1.60,11.91
+Shaedon Sharpe,Portland Trail Blazers,SG,2022-23,9.74,2.91,1.16,11.91
+Josh Okogie,Phoenix Suns,SG,2023-24,4.07,2.26,0.94,11.91
+Joe Ingles,Orlando Magic,SG,2023-24,4.17,2.00,2.86,11.90
+Rodney McGruder,Detroit Pistons,SG,2021-22,3.69,1.50,0.65,11.90
+Kent Bazemore,Golden State Warriors,SG,2020-21,6.97,3.32,1.57,11.90
+Ish Smith,Charlotte Hornets,SG,2021-22,3.29,1.12,1.92,11.90
+Damion Lee,Phoenix Suns,SG,2022-23,7.37,2.74,1.21,11.88
+Gabe York,Indiana Pacers,SG,2022-23,8.00,2.00,1.67,11.88
+Justin Jackson,Oklahoma City Thunder,SF,2020-21,4.82,1.45,1.04,11.88
+Cam Reddish,New York Knicks,SG,2021-22,4.79,1.11,0.53,11.87
+Cedi Osman,Cleveland Cavaliers,SF,2022-23,8.26,2.17,1.42,11.87
+Devonte' Graham,San Antonio Spurs,SG,2023-24,1.43,0.45,0.61,11.86
+Markieff Morris,Brooklyn Nets,SF,2022-23,2.00,1.23,0.52,11.86
+Lindy Waters III,Oklahoma City Thunder,SF,2022-23,4.28,1.50,0.56,11.85
+Alex Caruso,Los Angeles Lakers,SG,2020-21,5.78,2.66,2.50,11.83
+Solomon Hill,Memphis Grizzlies,SF,2019-20,5.37,2.82,1.84,11.83
+Rodney Hood,Portland Trail Blazers,SG,2019-20,6.97,2.18,0.97,11.83
+Ousmane Dieng,Oklahoma City Thunder,SF,2023-24,3.59,1.38,1.00,11.82
+Quinndary Weatherspoon,Golden State Warriors,SG,2021-22,1.58,0.74,0.26,11.82
+Doug McDermott,San Antonio Spurs,SF,2021-22,11.33,2.25,1.25,11.81
+De'Andre Hunter,Atlanta Hawks,SG,2022-23,14.70,4.06,1.34,11.81
+Jeff Green,Houston Rockets,SF,2023-24,6.44,2.25,0.89,11.79
+Cason Wallace,Oklahoma City Thunder,SG,2023-24,6.84,2.28,1.46,11.79
+Patrick Williams,Chicago Bulls,SF,2022-23,10.16,3.99,1.22,11.78
+Royce O'Neale,Brooklyn Nets,SF,2023-24,7.28,4.42,2.74,11.76
+Vlatko Čančar,Denver Nuggets,SF,2022-23,3.86,1.66,1.04,11.76
+Davis Bertans,Dallas Mavericks,SF,2021-22,5.32,2.55,0.68,11.74
+Langston Galloway,Phoenix Suns,SG,2020-21,2.71,0.60,0.37,11.73
+Brandon Williams,Dallas Mavericks,SG,2023-24,1.74,0.42,0.55,11.72
+Justin James,Sacramento Kings,SG,2019-20,1.37,0.49,0.28,11.72
+Corey Kispert,Washington Wizards,SF,2022-23,11.08,2.80,1.18,11.72
+Jaden McDaniels,Minnesota Timberwolves,SF,2022-23,11.91,3.84,1.85,11.71
+Blake Wesley,San Antonio Spurs,SG,2023-24,3.57,1.25,2.21,11.71
+Torrey Craig,Indiana Pacers,SF,2021-22,6.09,3.61,1.07,11.71
+Georges Niang,Utah Jazz,SF,2019-20,5.44,1.76,0.61,11.69
+Malachi Flynn,Toronto Raptors,SG,2023-24,5.06,2.10,2.35,11.68
+Kira Lewis Jr.,New Orleans Pelicans,SG,2021-22,5.22,1.44,1.81,11.68
+Theo Pinson,Dallas Mavericks,SG,2022-23,1.16,0.77,0.56,11.67
+Ayo Dosunmu,Chicago Bulls,SG,2021-22,8.71,2.74,3.28,11.67
+Sidy Cissoko,San Antonio Spurs,SG,2023-24,2.14,1.05,0.48,11.67
+Colin Castleton,Los Angeles Lakers,C,2023-24,1.00,0.50,0.13,11.67
+Malachi Flynn,Toronto Raptors,SG,2021-22,2.82,0.94,1.04,11.67
+Bones Hyland,Los Angeles Clippers,SG,2023-24,3.28,0.71,1.19,11.66
+PJ Dozier,Denver Nuggets,SG,2020-21,7.70,3.64,1.84,11.66
+Wayne Ellington,Detroit Pistons,SG,2020-21,7.25,1.39,1.10,11.66
+Josh Christopher,Houston Rockets,SG,2022-23,4.71,0.90,0.92,11.65
+Carlik Jones,Chicago Bulls,SG,2022-23,0.95,0.24,0.29,11.64
+AJ Green,Milwaukee Bucks,SG,2022-23,3.08,0.90,0.44,11.64
+Aaron Holiday,Washington Wizards,SG,2021-22,5.34,1.43,1.66,11.63
+Quenton Jackson,Washington Wizards,SG,2022-23,4.31,0.62,1.15,11.63
+Elijah Hughes,Utah Jazz,SG,2021-22,1.19,0.47,0.17,11.63
+Taurean Prince,Brooklyn Nets,SF,2019-20,12.08,5.95,1.81,11.63
+Payton Pritchard,Boston Celtics,SG,2022-23,3.91,1.28,0.93,11.63
+Cassius Winston,Washington Wizards,SG,2020-21,0.91,0.20,0.27,11.63
+Collin Sexton,Cleveland Cavaliers,SG,2021-22,16.00,3.27,2.09,11.63
+Nicolas Batum,Los Angeles Clippers,SG,2022-23,6.05,3.78,1.53,11.63
+Gary Trent Jr.,Toronto Raptors,SG,2020-21,13.75,3.05,1.10,11.62
+Taj Gibson,New York Knicks,SF,2021-22,3.05,3.05,0.43,11.62
+Kyle Lowry,Philadelphia 76ers,SG,2023-24,8.00,2.83,4.61,11.61
+Dzanan Musa,Brooklyn Nets,SG,2019-20,3.37,1.51,0.75,11.61
+Maxi Kleber,Dallas Mavericks,SF,2020-21,5.88,4.33,1.13,11.61
+Zeke Nnaji,Denver Nuggets,PF,2020-21,2.00,0.96,0.15,11.60
+Nickeil Alexander-Walker,New Orleans Pelicans,SG,2021-22,12.78,3.28,2.78,11.60
+Ed Davis,Cleveland Cavaliers,C,2021-22,0.35,0.81,0.09,11.59
+Cody Martin,Charlotte Hornets,SF,2019-20,4.18,2.77,1.67,11.58
+Danuel House Jr.,Houston Rockets,SG,2019-20,10.18,4.11,1.31,11.58
+Dru Smith,Miami Heat,SG,2023-24,2.60,0.93,0.93,11.58
+Marco Belinelli,San Antonio Spurs,SG,2019-20,5.47,1.50,1.05,11.58
+Furkan Korkmaz,Philadelphia 76ers,SG,2021-22,6.70,2.30,1.67,11.58
+Markieff Morris,Los Angeles Lakers,SF,2020-21,5.73,3.75,1.03,11.57
+Zeke Nnaji,Denver Nuggets,PF,2022-23,4.47,2.23,0.29,11.57
+Marvin Williams,Charlotte Hornets,SF,2019-20,6.11,2.42,0.91,11.56
+Ousmane Dieng,Oklahoma City Thunder,SF,2022-23,4.71,2.56,1.12,11.56
+Herbert Jones,New Orleans Pelicans,SF,2022-23,9.69,4.01,2.42,11.56
+Duane Washington Jr.,Phoenix Suns,SG,2022-23,5.81,0.86,1.50,11.56
+Moritz Wagner,Orlando Magic,PF,2020-21,11.00,4.91,1.09,11.55
+Talen Horton-Tucker,Los Angeles Lakers,SG,2021-22,9.18,2.97,2.45,11.55
+Hassani Gravett,Orlando Magic,SG,2021-22,5.56,2.33,2.22,11.55
+Doug McDermott,San Antonio Spurs,SF,2022-23,9.76,2.06,1.36,11.54
+Terrence Ross,Orlando Magic,SG,2021-22,8.28,2.12,1.53,11.53
+Herbert Jones,New Orleans Pelicans,SF,2021-22,9.28,3.70,2.09,11.53
+James Johnson,New Orleans Pelicans,SF,2020-21,8.08,3.64,1.92,11.53
+Davion Mitchell,Sacramento Kings,SG,2021-22,11.48,2.21,4.17,11.52
+Derrick Rose,New York Knicks,SG,2022-23,2.03,0.53,0.61,11.52
+Garrett Temple,Brooklyn Nets,SG,2019-20,10.17,3.46,2.48,11.51
+Jarrell Brantley,Utah Jazz,SF,2019-20,1.04,0.87,0.48,11.51
+Jake Layman,Minnesota Timberwolves,SF,2020-21,3.25,0.94,0.39,11.50
+Miles McBride,New York Knicks,SG,2023-24,6.85,1.22,1.39,11.50
+Moses Moody,Golden State Warriors,SG,2022-23,3.82,1.33,0.65,11.49
+D.J. Augustin,Houston Rockets,SG,2021-22,3.79,0.85,1.54,11.49
+Gary Payton II,Washington Wizards,SG,2019-20,3.14,2.22,1.33,11.49
+Jeff Green,Denver Nuggets,SF,2022-23,7.28,2.40,1.15,11.48
+Lindell Wigginton,Milwaukee Bucks,SG,2021-22,3.20,1.00,0.92,11.47
+Ricky Rubio,Cleveland Cavaliers,SG,2022-23,5.03,2.06,3.38,11.46
+Langston Galloway,Detroit Pistons,SG,2019-20,10.26,2.26,1.53,11.45
+Caleb Swanigan,Portland Trail Blazers,SF,2019-20,2.86,4.43,1.38,11.45
+Trent Forrest,Atlanta Hawks,SG,2023-24,1.12,0.69,1.24,11.44
+Lamar Stevens,Cleveland Cavaliers,SF,2021-22,5.39,2.31,0.62,11.43
+Kyle Lowry,Miami Heat,SG,2023-24,8.19,3.49,3.97,11.43
+Jalen McDaniels,Charlotte Hornets,SF,2019-20,5.24,3.82,0.76,11.43
+Nico Mannion,Golden State Warriors,SG,2020-21,2.73,1.02,1.56,11.43
+Brad Wanamaker,Charlotte Hornets,SG,2020-21,5.21,1.34,2.59,11.43
+Patty Mills,San Antonio Spurs,SG,2020-21,10.37,1.63,2.28,11.42
+Kentavious Caldwell-Pope,Denver Nuggets,SG,2022-23,10.82,2.74,2.41,11.42
+Josh Jackson,Detroit Pistons,SG,2021-22,6.13,2.73,1.09,11.42
+Bismack Biyombo,Oklahoma City Thunder,C,2023-24,0.64,0.64,0.07,11.40
+Stanley Umude,Detroit Pistons,SG,2023-24,2.82,1.13,0.24,11.40
+Evan Fournier,New York Knicks,SG,2021-22,13.89,2.59,2.11,11.40
+Josh Green,Dallas Mavericks,SG,2021-22,4.09,2.06,1.01,11.39
+Anžejs Pasečņiks,Washington Wizards,C,2019-20,3.55,2.43,0.41,11.38
+T.J. Warren,Indiana Pacers,SF,2020-21,15.50,3.50,1.25,11.37
+Dean Wade,Cleveland Cavaliers,PF,2023-24,5.11,3.82,0.75,11.37
+Terence Davis,Toronto Raptors,SG,2020-21,5.32,1.50,0.84,11.37
+Greg Brown III,Portland Trail Blazers,SF,2021-22,2.85,1.71,0.44,11.36
+Josh Richardson,Dallas Mavericks,SG,2020-21,11.92,3.25,2.55,11.36
+Lester Quinones,Golden State Warriors,SG,2023-24,2.88,1.26,0.63,11.36
+Killian Hayes,Detroit Pistons,SG,2022-23,9.59,2.70,5.73,11.35
+JaKarr Sampson,Indiana Pacers,SF,2020-21,2.13,1.22,0.06,11.35
+Dalano Banton,Toronto Raptors,SF,2021-22,2.66,1.61,1.29,11.35
+Marcus Morris Sr.,Los Angeles Clippers,SF,2022-23,11.03,3.91,1.73,11.35
+Jeff Teague,Boston Celtics,SG,2020-21,5.55,1.36,1.74,11.34
+Brice Sensabaugh,Utah Jazz,SF,2023-24,5.24,2.22,1.20,11.34
+Nickeil Alexander-Walker,Utah Jazz,SG,2021-22,1.96,0.85,0.63,11.32
+Keon Ellis,Sacramento Kings,SG,2023-24,3.92,1.57,1.08,11.31
+Udonis Haslem,Miami Heat,SF,2021-22,0.42,0.33,0.05,11.31
+Marcus Morris Sr.,Philadelphia 76ers,SF,2023-24,5.74,2.53,0.60,11.30
+Bruno Fernando,Atlanta Hawks,PF,2020-21,0.71,1.08,0.14,11.30
+Georges Niang,Utah Jazz,SF,2020-21,6.94,2.44,0.82,11.30
+Terance Mann,Los Angeles Clippers,SG,2019-20,1.90,1.06,1.02,11.30
+Isaac Okoro,Cleveland Cavaliers,SG,2023-24,9.11,2.90,1.86,11.29
+Rudy Gay,Utah Jazz,SG,2022-23,5.23,2.91,1.02,11.29
+Grant Williams,Boston Celtics,SF,2022-23,7.82,4.43,1.60,11.28
+Justin Patton,Houston Rockets,C,2020-21,3.50,2.45,0.70,11.28
+Patrick Williams,Chicago Bulls,SF,2023-24,8.94,3.46,1.38,11.27
+Alex Caruso,Chicago Bulls,SG,2022-23,5.58,2.93,2.88,11.27
+Elijah Hughes,Utah Jazz,SG,2020-21,0.72,0.21,0.14,11.26
+Lonnie Walker IV,San Antonio Spurs,SG,2019-20,5.48,1.96,0.96,11.26
+Aaron Holiday,Houston Rockets,SG,2023-24,6.27,1.50,1.71,11.24
+Facundo Campazzo,Denver Nuggets,SG,2021-22,4.10,1.44,2.72,11.23
+Norvel Pelle,Philadelphia 76ers,C,2019-20,1.24,1.57,0.17,11.23
+Corey Kispert,Washington Wizards,SF,2021-22,7.73,2.55,1.04,11.23
+Devin Vassell,San Antonio Spurs,SG,2020-21,5.17,2.64,0.85,11.22
+Robert Covington,Portland Trail Blazers,SF,2021-22,7.60,5.71,1.42,11.22
+Malik Beasley,Los Angeles Lakers,SG,2022-23,11.12,3.31,1.19,11.21
+Lamar Stevens,Cleveland Cavaliers,SF,2020-21,2.89,1.68,0.44,11.21
+Royce O'Neale,Utah Jazz,SF,2019-20,6.34,5.48,2.54,11.20
+Nassir Little,Portland Trail Blazers,SG,2022-23,6.65,2.61,0.93,11.20
+Amile Jefferson,Orlando Magic,SF,2019-20,0.35,0.53,0.09,11.20
+Juan Toscano-Anderson,Golden State Warriors,SF,2019-20,5.31,4.00,2.00,11.19
+James Ennis III,Orlando Magic,SF,2019-20,8.45,4.75,1.10,11.19
+Markieff Morris,Los Angeles Lakers,SF,2019-20,4.63,2.81,0.50,11.19
+Victor Oladipo,Miami Heat,SG,2022-23,8.80,2.51,2.86,11.18
+Torrey Craig,Chicago Bulls,SF,2023-24,3.94,2.82,0.75,11.18
+Robin Lopez,Milwaukee Bucks,C,2019-20,5.17,2.33,0.65,11.18
+Michael Carter-Williams,Orlando Magic,SG,2020-21,6.37,3.23,3.00,11.18
+George Hill,Milwaukee Bucks,SG,2021-22,6.07,2.82,2.18,11.18
+Jevon Carter,Milwaukee Bucks,SG,2022-23,8.04,2.49,2.43,11.17
+Dillon Brooks,Memphis Grizzlies,SG,2020-21,16.93,2.88,2.31,11.17
+Vlatko Čančar,Denver Nuggets,SF,2020-21,1.18,0.69,0.19,11.16
+Goran Dragic,Chicago Bulls,SG,2022-23,6.39,1.35,2.73,11.16
+Keon Ellis,Sacramento Kings,SG,2022-23,0.73,0.24,0.18,11.16
+Chaundee Brown Jr.,Atlanta Hawks,SF,2021-22,5.80,2.80,0.80,11.15
+Armoni Brooks,Houston Rockets,SG,2020-21,10.62,3.24,1.43,11.15
+Jevon Carter,Phoenix Suns,SG,2019-20,3.93,1.62,1.15,11.15
+Ziaire Williams,Memphis Grizzlies,SF,2023-24,5.60,2.40,1.00,11.14
+Cody Martin,Charlotte Hornets,SF,2023-24,7.03,3.63,3.47,11.14
+Robin Lopez,Cleveland Cavaliers,C,2022-23,1.38,0.63,0.23,11.14
+Bol Bol,Denver Nuggets,C,2020-21,0.96,0.33,0.10,11.13
+Andrew Nembhard,Indiana Pacers,SG,2022-23,8.86,2.49,4.26,11.13
+Royce O'Neale,Utah Jazz,SF,2021-22,7.22,4.66,2.42,11.12
+Ignas Brazdeikis,Orlando Magic,SF,2020-21,11.13,5.13,2.00,11.12
+Quentin Grimes,New York Knicks,SG,2022-23,10.80,3.09,2.03,11.12
+JJ Redick,New Orleans Pelicans,SG,2020-21,7.50,1.44,1.11,11.12
+Patrick Beverley,Chicago Bulls,SG,2022-23,5.77,4.86,3.45,11.12
+Jake Layman,Minnesota Timberwolves,SF,2021-22,0.99,0.44,0.11,11.11
+Kobe Bufkin,Atlanta Hawks,SG,2023-24,3.00,1.22,1.00,11.11
+Michael Porter Jr.,Denver Nuggets,SF,2021-22,9.89,6.56,1.89,11.09
+Justin James,Sacramento Kings,SG,2020-21,1.93,0.42,0.31,11.09
+Justise Winslow,Miami Heat,SG,2019-20,7.29,4.29,2.59,11.09
+Damyean Dotson,New York Knicks,SG,2019-20,4.94,1.40,0.88,11.09
+Serge Ibaka,Milwaukee Bucks,SF,2022-23,2.06,1.38,0.13,11.09
+Nicolas Batum,Philadelphia 76ers,SG,2023-24,4.88,3.77,1.92,11.08
+James Johnson,Brooklyn Nets,SF,2021-22,4.66,2.95,1.78,11.08
+Nickeil Alexander-Walker,New Orleans Pelicans,SG,2019-20,3.87,1.22,1.29,11.07
+Gary Payton II,Portland Trail Blazers,SG,2022-23,2.77,1.77,1.00,11.07
+Facundo Campazzo,Denver Nuggets,SG,2020-21,5.91,2.00,3.46,11.06
+Chandler Hutchison,Washington Wizards,SG,2020-21,3.24,2.00,0.45,11.06
+Isaiah Livers,Detroit Pistons,SF,2021-22,5.76,2.71,1.00,11.06
+Moses Moody,Golden State Warriors,SG,2021-22,3.21,1.13,0.32,11.05
+Freddie Gillespie,Orlando Magic,C,2021-22,2.10,3.60,0.50,11.05
+Pat Connaughton,Milwaukee Bucks,SG,2023-24,5.63,3.14,2.12,11.04
+Gary Trent Jr.,Portland Trail Blazers,SG,2019-20,7.62,1.41,0.86,11.04
+Joe Ingles,Utah Jazz,SG,2021-22,7.07,2.85,3.43,11.03
+Nassir Little,Phoenix Suns,SG,2023-24,2.27,1.12,0.31,11.03
+Ty Jerome,Oklahoma City Thunder,SG,2021-22,5.76,1.32,1.85,11.03
+Trey Burke,Dallas Mavericks,SG,2020-21,5.87,0.77,1.16,11.03
+Duncan Robinson,Miami Heat,SF,2020-21,13.08,3.47,1.76,11.02
+Cedi Osman,Cleveland Cavaliers,SF,2020-21,8.51,2.79,2.42,11.02
+Eric Gordon,Phoenix Suns,SG,2023-24,11.01,1.79,2.04,11.01
+Kevin Porter Jr.,Cleveland Cavaliers,SG,2019-20,9.96,3.24,2.18,11.01
+Grant Williams,Boston Celtics,SF,2021-22,7.82,3.56,1.01,11.01
+Kelan Martin,Minnesota Timberwolves,SF,2019-20,5.97,2.91,0.70,11.01
+Nicolas Batum,Charlotte Hornets,SG,2019-20,1.58,2.00,1.32,11.00
+Svi Mykhailiuk,Detroit Pistons,SG,2020-21,6.73,2.00,1.54,11.00
+Gary Trent Jr.,Portland Trail Blazers,SG,2020-21,14.95,2.22,1.41,11.00
+DeAndre' Bembry,Atlanta Hawks,SG,2019-20,5.41,3.30,1.76,11.00
+Sandro Mamukelashvili,Milwaukee Bucks,PF,2022-23,1.36,1.33,0.38,10.99
+Wendell Moore Jr.,Minnesota Timberwolves,SG,2023-24,0.31,0.20,0.10,10.99
+Dragan Bender,Milwaukee Bucks,SF,2019-20,2.17,1.67,0.75,10.99
+Markieff Morris,Miami Heat,SF,2021-22,5.38,1.88,0.96,10.99
+Haywood Highsmith,Miami Heat,SF,2023-24,5.87,3.04,1.01,10.99
+Tre Mann,Oklahoma City Thunder,SG,2022-23,6.71,2.01,1.56,10.98
+Luguentz Dort,Oklahoma City Thunder,SG,2022-23,13.51,4.59,2.05,10.97
+Elfrid Payton,Phoenix Suns,SG,2021-22,1.83,1.07,1.21,10.96
+Quinn Cook,Los Angeles Lakers,SG,2019-20,3.20,0.73,0.70,10.95
+Reggie Jackson,Los Angeles Clippers,SG,2022-23,10.29,2.11,3.33,10.95
+Davis Bertans,Washington Wizards,SF,2020-21,11.10,2.85,0.83,10.94
+Dalano Banton,Boston Celtics,SF,2023-24,1.14,0.71,0.39,10.94
+Caleb Martin,Charlotte Hornets,SF,2020-21,3.67,1.96,0.93,10.94
+Jordan Hawkins,New Orleans Pelicans,SG,2023-24,6.47,1.83,0.86,10.94
+Thabo Sefolosha,Houston Rockets,SG,2019-20,1.48,1.50,0.40,10.94
+Troy Brown Jr.,Los Angeles Lakers,SG,2022-23,7.03,4.00,1.23,10.94
+Justin Holiday,Indiana Pacers,SG,2020-21,10.50,3.56,1.65,10.93
+Chris Chiozza,Washington Wizards,SG,2019-20,2.08,1.15,2.15,10.92
+David Roddy,Memphis Grizzlies,SF,2023-24,7.90,3.92,1.49,10.92
+Jalen Pickett,Denver Nuggets,SG,2023-24,0.76,0.25,0.38,10.91
+Collin Gillespie,Denver Nuggets,SG,2023-24,1.78,0.43,0.55,10.90
+Aaron Wiggins,Oklahoma City Thunder,SG,2021-22,6.71,2.87,1.10,10.90
+Luke Kennard,Los Angeles Clippers,SG,2022-23,6.52,1.98,0.88,10.90
+Patty Mills,Brooklyn Nets,SG,2022-23,3.08,0.55,0.70,10.89
+Torrey Craig,Milwaukee Bucks,SF,2020-21,1.45,1.39,0.52,10.89
+Jamal Cain,Miami Heat,SF,2023-24,1.94,0.74,0.20,10.88
+Max Strus,Miami Heat,SG,2020-21,3.63,0.63,0.37,10.88
+Caleb Martin,Charlotte Hornets,SF,2019-20,3.70,1.27,0.77,10.88
+Nickeil Alexander-Walker,Minnesota Timberwolves,SG,2023-24,7.99,2.04,2.49,10.87
+Sterling Brown,Dallas Mavericks,SG,2021-22,2.91,2.71,0.62,10.87
+Ryan Arcidiacono,Chicago Bulls,SG,2020-21,2.09,1.03,0.86,10.87
+Malaki Branham,San Antonio Spurs,SF,2022-23,9.35,2.51,1.76,10.87
+Marko Guduric,Memphis Grizzlies,SG,2019-20,2.40,1.01,0.63,10.86
+Derrick Jones Jr.,Portland Trail Blazers,SF,2020-21,5.82,3.01,0.69,10.86
+Malik Beasley,Milwaukee Bucks,SG,2023-24,11.25,3.67,1.37,10.86
+Georges Niang,Cleveland Cavaliers,SF,2023-24,9.37,3.39,1.20,10.85
+Kai Jones,Charlotte Hornets,C,2021-22,0.41,0.20,0.07,10.85
+MarJon Beauchamp,Milwaukee Bucks,SF,2023-24,3.10,1.46,0.46,10.84
+Toumani Camara,Portland Trail Blazers,SF,2023-24,7.22,4.70,1.19,10.83
+Landry Shamet,Phoenix Suns,SG,2022-23,7.52,1.46,2.02,10.83
+Andre Iguodala,Miami Heat,SG,2020-21,3.82,3.07,1.97,10.83
+Paul Watson,Toronto Raptors,SG,2020-21,2.09,0.85,0.32,10.82
+Thanasis Antetokounmpo,Milwaukee Bucks,SF,2020-21,2.31,1.72,0.64,10.82
+Tre Mann,Oklahoma City Thunder,SG,2021-22,9.19,2.51,1.34,10.82
+Malcolm Hill,Chicago Bulls,SF,2021-22,1.77,0.94,0.23,10.81
+George Hill,Milwaukee Bucks,SG,2022-23,3.50,1.34,1.78,10.81
+Patrick Beverley,Los Angeles Clippers,SG,2020-21,6.62,2.83,1.81,10.81
+Javonte Green,Boston Celtics,SG,2020-21,2.69,1.33,0.28,10.81
+Christian Braun,Denver Nuggets,SG,2022-23,4.39,2.21,0.72,10.80
+Alex Caruso,Los Angeles Lakers,SG,2019-20,5.21,1.84,1.85,10.80
+Anthony Gill,Washington Wizards,SF,2022-23,2.50,1.27,0.44,10.79
+Jared Rhoden,Detroit Pistons,SG,2023-24,3.19,1.27,0.54,10.78
+KZ Okpala,Miami Heat,SG,2021-22,2.20,1.17,0.40,10.78
+Abdel Nader,Oklahoma City Thunder,SF,2019-20,5.39,1.56,0.59,10.78
+Trevor Ariza,Sacramento Kings,SF,2019-20,5.82,4.42,1.52,10.77
+Garrison Mathews,Washington Wizards,SG,2019-20,4.90,1.20,0.50,10.76
+Cam Reddish,Portland Trail Blazers,SG,2022-23,8.11,2.11,1.37,10.75
+Dion Waiters,Los Angeles Lakers,SG,2019-20,10.38,1.63,2.13,10.75
+Max Strus,Miami Heat,SG,2022-23,11.54,3.23,2.14,10.75
+Josh Green,Dallas Mavericks,SG,2023-24,8.09,3.17,2.24,10.75
+Stanley Johnson,Los Angeles Lakers,SG,2021-22,6.67,3.23,1.67,10.74
+James Bouknight,Charlotte Hornets,SG,2021-22,2.41,0.88,0.44,10.73
+D.J. Augustin,Milwaukee Bucks,SG,2020-21,5.82,1.28,2.82,10.72
+Duane Washington Jr.,Indiana Pacers,SG,2021-22,7.39,1.30,1.33,10.71
+Dyson Daniels,New Orleans Pelicans,SG,2022-23,3.34,2.76,1.97,10.71
+Kevin Knox II,Detroit Pistons,SF,2022-23,4.23,1.93,0.27,10.71
+Luka Samanic,San Antonio Spurs,SF,2020-21,2.07,1.15,0.25,10.71
+Cedi Osman,Cleveland Cavaliers,SF,2019-20,11.05,3.55,2.37,10.71
+JT Thor,Charlotte Hornets,SF,2021-22,1.14,0.73,0.32,10.71
+Georges Niang,Philadelphia 76ers,SF,2022-23,7.96,2.31,0.96,10.67
+T.J. Warren,Minnesota Timberwolves,SF,2023-24,2.05,1.10,0.45,10.67
+Rodney McGruder,Detroit Pistons,SG,2022-23,2.26,0.91,0.35,10.67
+Danny Green,Los Angeles Lakers,SG,2019-20,8.04,3.31,1.34,10.67
+Jaylen Nowell,Minnesota Timberwolves,SG,2019-20,2.38,0.54,0.79,10.66
+Taj Gibson,Washington Wizards,SF,2022-23,2.18,1.21,0.44,10.66
+Scoot Henderson,Portland Trail Blazers,SG,2023-24,13.15,2.94,5.09,10.66
+Matt Thomas,Chicago Bulls,SG,2021-22,2.15,0.67,0.27,10.65
+Dalen Terry,Chicago Bulls,SF,2023-24,2.43,1.53,1.09,10.64
+Luguentz Dort,Oklahoma City Thunder,SG,2023-24,10.89,3.59,1.43,10.63
+Lamar Stevens,Cleveland Cavaliers,SF,2022-23,4.26,2.69,0.43,10.63
+Ben McLemore,Houston Rockets,SG,2019-20,9.93,2.18,0.81,10.63
+Ben McLemore,Portland Trail Blazers,SG,2021-22,8.19,1.29,0.74,10.62
+Zach Collins,Portland Trail Blazers,PF,2019-20,5.92,5.31,1.23,10.62
+Furkan Korkmaz,Philadelphia 76ers,SG,2022-23,1.84,0.55,0.29,10.62
+Gary Clark,Orlando Magic,SF,2019-20,2.87,2.33,0.17,10.61
+Mario Hezonja,Portland Trail Blazers,SG,2019-20,3.56,2.56,0.69,10.60
+Kessler Edwards,Sacramento Kings,SF,2023-24,1.16,0.53,0.19,10.58
+Wes Iwundu,Orlando Magic,SF,2019-20,4.17,1.82,0.83,10.58
+D.J. Wilson,Milwaukee Bucks,SF,2020-21,1.08,0.63,0.08,10.57
+Jalen Smith,Phoenix Suns,PF,2020-21,0.91,0.64,0.07,10.57
+Romeo Langford,San Antonio Spurs,SG,2022-23,5.94,2.28,1.00,10.56
+Dwayne Bacon,Orlando Magic,SG,2020-21,10.94,3.11,1.29,10.55
+Reggie Bullock Jr.,New York Knicks,SG,2020-21,10.91,3.43,1.52,10.55
+Ish Smith,Denver Nuggets,SG,2022-23,1.50,0.75,1.39,10.54
+Cory Joseph,Sacramento Kings,SG,2019-20,6.36,2.61,3.49,10.54
+Royce O'Neale,Brooklyn Nets,SF,2022-23,8.60,4.92,3.63,10.53
+Kentavious Caldwell-Pope,Los Angeles Lakers,SG,2020-21,9.60,2.63,1.87,10.53
+Max Christie,Los Angeles Lakers,SG,2023-24,3.55,1.78,0.75,10.53
+Brandon Goodwin,Atlanta Hawks,SG,2020-21,3.26,0.99,1.36,10.53
+R.J. Hampton,Orlando Magic,SG,2021-22,7.64,3.03,2.47,10.52
+Eugene Omoruyi,Detroit Pistons,SF,2022-23,8.68,3.11,0.89,10.51
+Nikola Jović,Miami Heat,SF,2022-23,2.48,0.94,0.30,10.51
+Nerlens Noel,Detroit Pistons,C,2022-23,0.58,0.67,0.13,10.51
+Bryn Forbes,San Antonio Spurs,SG,2019-20,11.22,2.00,1.71,10.50
+Jabari Walker,Portland Trail Blazers,SF,2022-23,2.63,1.60,0.41,10.49
+Dillon Brooks,Memphis Grizzlies,SG,2019-20,16.18,3.33,2.05,10.48
+Ignas Brazdeikis,Orlando Magic,SF,2021-22,2.80,0.96,0.49,10.48
+Svi Mykhailiuk,Detroit Pistons,SG,2019-20,7.75,1.60,1.63,10.47
+Dorian Finney-Smith,Brooklyn Nets,SF,2023-24,7.53,4.12,1.39,10.46
+Malaki Branham,San Antonio Spurs,SF,2023-24,8.52,1.83,1.93,10.46
+Bojan Bogdanovic,New York Knicks,SF,2023-24,10.10,1.93,0.87,10.46
+Jaden McDaniels,Minnesota Timberwolves,SF,2021-22,9.24,4.19,1.13,10.46
+Josh Green,Dallas Mavericks,SG,2022-23,9.10,3.03,1.72,10.46
+E'Twaun Moore,Phoenix Suns,SG,2020-21,1.85,0.63,0.56,10.46
+Aaron Nesmith,Indiana Pacers,SG,2022-23,9.58,3.60,1.27,10.45
+Matisse Thybulle,Portland Trail Blazers,SG,2022-23,7.41,3.50,1.36,10.44
+Timothe Luwawu-Cabarrot,Brooklyn Nets,SG,2019-20,6.76,2.35,0.54,10.43
+Austin Rivers,Houston Rockets,SG,2019-20,8.64,2.54,1.64,10.43
+Malik Beasley,Denver Nuggets,SG,2019-20,6.37,1.51,0.94,10.42
+Amari Bailey,Charlotte Hornets,SG,2023-24,0.77,0.30,0.23,10.42
+Danuel House Jr.,Houston Rockets,SG,2020-21,5.63,2.36,1.23,10.41
+David Roddy,Phoenix Suns,SF,2023-24,0.73,0.37,0.13,10.41
+Joe Harris,Brooklyn Nets,SG,2021-22,11.29,4.00,1.00,10.41
+Bilal Coulibaly,Washington Wizards,SG,2023-24,8.31,4.00,1.72,10.41
+CJ Elleby,Portland Trail Blazers,SG,2021-22,4.35,2.91,1.12,10.40
+Terry Taylor,Chicago Bulls,SF,2023-24,0.61,0.49,0.13,10.39
+Kentavious Caldwell-Pope,Denver Nuggets,SG,2023-24,10.08,2.41,2.41,10.39
+Ayo Dosunmu,Chicago Bulls,SG,2022-23,8.59,2.75,2.58,10.38
+Dean Wade,Cleveland Cavaliers,PF,2021-22,4.48,2.50,0.87,10.37
+Ed Davis,Utah Jazz,C,2019-20,0.91,1.88,0.21,10.37
+Isaac Bonga,Washington Wizards,SG,2019-20,4.65,3.13,1.07,10.37
+Patrick Patterson,Los Angeles Clippers,SF,2020-21,2.94,1.12,0.43,10.36
+Landry Shamet,Phoenix Suns,SG,2021-22,8.19,1.80,1.54,10.36
+Rayjon Tucker,Utah Jazz,SG,2019-20,1.59,0.51,0.13,10.36
+Justin Jackson,Dallas Mavericks,SF,2019-20,4.80,2.05,0.69,10.34
+Kevin Knox II,Detroit Pistons,SF,2023-24,5.58,1.88,0.58,10.34
+AJ Green,Milwaukee Bucks,SG,2023-24,3.23,0.82,0.38,10.34
+Frank Ntilikina,Dallas Mavericks,SG,2021-22,3.29,1.08,0.95,10.34
+Patty Mills,Brooklyn Nets,SG,2021-22,11.40,1.93,2.26,10.34
+Goran Dragic,Brooklyn Nets,SG,2021-22,6.88,3.00,4.53,10.33
+Jay Scrubb,Los Angeles Clippers,SG,2021-22,1.69,0.55,0.28,10.33
+Kevon Looney,Golden State Warriors,SF,2019-20,2.06,2.00,0.61,10.33
+Taurean Prince,Minnesota Timberwolves,SF,2022-23,9.13,2.44,1.56,10.32
+Mychal Mulder,Golden State Warriors,SG,2020-21,4.68,0.83,0.36,10.31
+Killian Hayes,Detroit Pistons,SG,2021-22,6.57,3.04,4.01,10.30
+Chuma Okeke,Orlando Magic,SF,2022-23,2.91,2.18,0.84,10.30
+Dewayne Dedmon,Sacramento Kings,C,2019-20,3.80,3.63,0.33,10.30
+Reggie Jackson,Denver Nuggets,SG,2022-23,5.52,1.22,2.17,10.29
+Kevin Knox II,Atlanta Hawks,SF,2021-22,1.12,0.54,0.17,10.29
+Talen Horton-Tucker,Los Angeles Lakers,SG,2019-20,3.09,0.64,0.55,10.29
+Devon Dotson,Chicago Bulls,SG,2021-22,1.38,0.43,0.71,10.29
+Tim Frazier,Detroit Pistons,SG,2019-20,2.02,0.69,1.94,10.28
+De'Andre Hunter,Atlanta Hawks,SG,2021-22,12.89,3.20,1.24,10.28
+Jalen Suggs,Orlando Magic,SG,2021-22,11.75,3.56,4.35,10.27
+Joe Harris,Brooklyn Nets,SG,2022-23,7.39,2.16,1.33,10.27
+Jeff Green,Utah Jazz,SF,2019-20,7.77,2.70,0.67,10.25
+Maurice Harkless,Los Angeles Clippers,SG,2019-20,5.50,4.00,0.96,10.25
+Kentavious Caldwell-Pope,Los Angeles Lakers,SG,2019-20,9.35,2.06,1.61,10.24
+Justise Winslow,Portland Trail Blazers,SG,2022-23,6.13,4.53,3.06,10.23
+Jerome Robinson,Washington Wizards,SG,2019-20,8.95,3.14,1.86,10.22
+Lonnie Walker IV,San Antonio Spurs,SG,2020-21,10.45,2.42,1.58,10.22
+Davis Bertans,Dallas Mavericks,SF,2022-23,3.61,0.93,0.37,10.22
+George Hill,Philadelphia 76ers,SG,2020-21,6.00,2.00,1.88,10.21
+Rodions Kurucs,Brooklyn Nets,SF,2019-20,3.31,2.11,0.78,10.21
+Garrison Mathews,Houston Rockets,SG,2021-22,10.00,2.92,0.98,10.21
+Jarrett Culver,Minnesota Timberwolves,SG,2019-20,9.06,3.31,1.72,10.20
+Jeff Dowtin Jr.,Toronto Raptors,SG,2022-23,1.22,0.46,0.62,10.20
+Wendell Moore Jr.,Minnesota Timberwolves,SG,2022-23,0.66,0.28,0.28,10.19
+Nicolas Batum,Los Angeles Clippers,SG,2023-24,2.67,2.33,1.67,10.18
+PJ Dozier,Denver Nuggets,SG,2021-22,5.39,3.50,1.61,10.17
+Gary Harris,Orlando Magic,SG,2021-22,8.59,1.54,1.37,10.16
+JT Thor,Charlotte Hornets,SF,2023-24,2.43,1.78,0.35,10.16
+Nickeil Alexander-Walker,Minnesota Timberwolves,SG,2022-23,5.63,1.75,1.33,10.15
+Kyle Guy,Sacramento Kings,SG,2020-21,1.53,0.61,0.56,10.15
+Danuel House Jr.,Houston Rockets,SG,2021-22,4.28,2.39,1.06,10.14
+KJ Martin,Philadelphia 76ers,SF,2023-24,2.82,1.68,0.66,10.13
+Luguentz Dort,Oklahoma City Thunder,SG,2020-21,13.02,3.38,1.57,10.13
+Ruben Nembhard Jr.,Cleveland Cavaliers,SG,2021-22,0.34,0.16,0.27,10.12
+Juwan Morgan,Utah Jazz,SF,2019-20,0.88,0.71,0.15,10.11
+Nicolo Melli,Dallas Mavericks,SF,2020-21,3.14,2.24,0.66,10.11
+Justin Holiday,Indiana Pacers,SG,2021-22,11.04,2.76,1.84,10.10
+Justise Winslow,Memphis Grizzlies,SG,2020-21,5.39,3.58,1.52,10.10
+Mike Muscala,Washington Wizards,PF,2023-24,2.50,1.97,0.61,10.09
+Landry Shamet,Washington Wizards,SG,2023-24,6.67,1.27,1.10,10.09
+Rajon Rondo,Los Angeles Lakers,SG,2021-22,1.67,1.48,2.03,10.08
+Torrey Craig,Denver Nuggets,SF,2019-20,4.32,2.59,0.64,10.08
+Gabe Vincent,Miami Heat,SG,2021-22,8.21,1.75,2.92,10.06
+Edmond Sumner,Indiana Pacers,SG,2019-20,3.30,1.00,1.20,10.06
+Landry Shamet,Brooklyn Nets,SG,2020-21,8.59,1.70,1.50,10.05
+Maurice Harkless,New York Knicks,SG,2019-20,6.31,3.08,1.54,10.01
+Maxi Kleber,Dallas Mavericks,SF,2023-24,4.24,3.18,1.51,10.00
+Dorian Finney-Smith,Dallas Mavericks,SF,2022-23,9.13,4.70,1.48,9.99
+Jahmi'us Ramsey,Sacramento Kings,SG,2020-21,1.03,0.26,0.15,9.99
+Georges Niang,Philadelphia 76ers,SF,2021-22,9.09,2.64,1.32,9.98
+Davion Mitchell,Sacramento Kings,SG,2023-24,4.68,1.17,1.65,9.95
+Daishen Nix,Houston Rockets,SG,2021-22,2.33,1.00,1.21,9.95
+Wenyen Gabriel,New Orleans Pelicans,SF,2020-21,1.13,0.84,0.17,9.94
+Matt Ryan,Minnesota Timberwolves,SF,2022-23,2.08,0.33,0.33,9.94
+Ky Bowman,Golden State Warriors,SG,2019-20,6.84,2.47,2.67,9.94
+Garrett Temple,Toronto Raptors,SG,2023-24,1.10,0.56,0.35,9.94
+Vasilije Micic,Oklahoma City Thunder,SG,2023-24,1.94,0.47,1.49,9.91
+R.J. Hampton,Detroit Pistons,SG,2022-23,6.95,2.18,0.91,9.90
+David Duke Jr.,Brooklyn Nets,SG,2021-22,2.81,1.81,0.46,9.90
+DaQuan Jeffries,Sacramento Kings,SG,2019-20,2.78,1.00,0.39,9.89
+Wayne Ellington,Los Angeles Lakers,SG,2021-22,3.78,1.01,0.39,9.88
+Chris Duarte,Indiana Pacers,SG,2022-23,7.39,2.35,1.31,9.88
+Cam Reddish,Atlanta Hawks,SG,2019-20,10.34,3.66,1.47,9.87
+Aleksej Pokusevski,Oklahoma City Thunder,SF,2020-21,8.16,4.71,2.16,9.87
+Jarrett Culver,Minnesota Timberwolves,SG,2020-21,3.83,2.21,0.51,9.87
+R.J. Hampton,Denver Nuggets,SG,2020-21,1.73,1.35,0.38,9.85
+Udoka Azubuike,Utah Jazz,C,2020-21,0.64,0.52,0.00,9.85
+Johnny Juzang,Utah Jazz,SG,2023-24,5.54,1.38,0.88,9.85
+Christian Koloko,Toronto Raptors,C,2022-23,2.46,2.31,0.42,9.85
+Amir Coffey,Los Angeles Clippers,SG,2023-24,5.65,1.80,0.93,9.83
+Dylan Windler,Cleveland Cavaliers,SG,2021-22,1.69,1.37,0.52,9.83
+Brad Wanamaker,Golden State Warriors,SG,2020-21,4.20,1.50,2.25,9.82
+Jordan Bone,Orlando Magic,SG,2020-21,2.55,1.09,0.82,9.82
+Jaden Springer,Philadelphia 76ers,SG,2023-24,3.12,1.41,0.85,9.82
+Kira Lewis Jr.,New Orleans Pelicans,SG,2020-21,4.97,1.03,1.80,9.81
+Jae Crowder,Milwaukee Bucks,SF,2023-24,6.12,3.16,1.29,9.81
+Andre Iguodala,Golden State Warriors,SG,2022-23,1.70,1.70,1.90,9.80
+Doug McDermott,San Antonio Spurs,SF,2023-24,5.75,1.00,1.19,9.80
+Kendrick Nunn,Los Angeles Lakers,SG,2022-23,5.57,1.17,0.72,9.80
+Deni Avdija,Washington Wizards,SF,2020-21,6.33,4.85,1.17,9.80
+Armoni Brooks,Brooklyn Nets,SG,2023-24,2.33,1.00,0.28,9.79
+Austin Rivers,Denver Nuggets,SG,2020-21,8.73,2.33,2.60,9.79
+Kyle Guy,Miami Heat,SG,2021-22,2.39,0.55,0.55,9.78
+Quentin Grimes,New York Knicks,SG,2021-22,4.44,1.52,0.71,9.78
+Al-Farouq Aminu,Orlando Magic,SF,2019-20,4.33,4.83,1.17,9.77
+Frank Jackson,Detroit Pistons,SG,2021-22,8.89,1.38,0.87,9.77
+Jake Layman,Minnesota Timberwolves,SF,2019-20,7.78,2.11,0.56,9.77
+Davis Bertans,Charlotte Hornets,SF,2023-24,7.69,1.59,0.81,9.76
+Rodney Hood,Los Angeles Clippers,SG,2021-22,1.36,0.40,0.32,9.76
+Davion Mitchell,Sacramento Kings,SG,2022-23,5.56,1.30,2.28,9.75
+Dereon Seabron,New Orleans Pelicans,SG,2023-24,1.56,0.78,0.56,9.75
+Trey Burke,Dallas Mavericks,SG,2021-22,3.29,0.51,0.88,9.74
+Duncan Robinson,Miami Heat,SF,2021-22,10.92,2.57,1.63,9.74
+David Roddy,Memphis Grizzlies,SF,2022-23,5.97,2.47,0.76,9.74
+Jaden Springer,Boston Celtics,SG,2023-24,1.52,0.87,0.39,9.73
+Ersan Ilyasova,Utah Jazz,SF,2020-21,1.86,0.83,0.11,9.73
+Isaac Okoro,Cleveland Cavaliers,SG,2022-23,6.36,2.43,1.13,9.72
+Theo Maledon,Oklahoma City Thunder,SG,2020-21,9.27,2.97,3.20,9.71
+Hamidou Diallo,Oklahoma City Thunder,SG,2019-20,5.58,2.93,0.63,9.70
+Taurean Prince,Los Angeles Lakers,SF,2023-24,8.82,2.91,1.51,9.70
+D.J. Augustin,Los Angeles Lakers,SG,2021-22,5.33,1.29,1.57,9.69
+Furkan Korkmaz,Philadelphia 76ers,SG,2023-24,1.87,0.64,0.53,9.69
+Xavier Moon,Los Angeles Clippers,SG,2023-24,0.97,0.53,0.62,9.68
+Austin Rivers,New York Knicks,SG,2020-21,5.13,1.57,1.40,9.68
+Trevor Ariza,Los Angeles Lakers,SF,2021-22,2.09,1.78,0.59,9.67
+Danuel House Jr.,Philadelphia 76ers,SG,2022-23,3.35,1.18,0.55,9.66
+Reggie Bullock Jr.,Dallas Mavericks,SG,2021-22,8.57,3.54,1.22,9.66
+Kris Murray,Portland Trail Blazers,SF,2023-24,4.64,2.77,0.99,9.66
+Nate Hinton,Dallas Mavericks,SG,2020-21,0.89,0.20,0.17,9.65
+Georgios Kalaitzakis,Oklahoma City Thunder,SF,2021-22,17.50,3.25,3.00,9.65
+Svi Mykhailiuk,Toronto Raptors,SG,2021-22,3.19,1.15,0.56,9.65
+Romeo Langford,Boston Celtics,SG,2021-22,4.06,2.04,0.37,9.64
+Isaac Okoro,Cleveland Cavaliers,SG,2021-22,8.78,3.00,1.81,9.62
+Matisse Thybulle,Portland Trail Blazers,SG,2023-24,4.60,1.77,1.17,9.62
+Denzel Valentine,Cleveland Cavaliers,SG,2021-22,1.83,1.09,0.31,9.61
+Damyean Dotson,Cleveland Cavaliers,SG,2020-21,4.67,1.41,1.38,9.60
+Garrett Temple,New Orleans Pelicans,SG,2022-23,0.63,0.21,0.16,9.60
+Amir Coffey,Los Angeles Clippers,SG,2020-21,2.75,0.86,0.43,9.60
+Will Barton,Toronto Raptors,SG,2022-23,4.24,1.53,1.00,9.59
+Tyrese Martin,Atlanta Hawks,SF,2022-23,0.50,0.29,0.05,9.59
+De'Andre Hunter,Atlanta Hawks,SG,2019-20,12.16,4.47,1.75,9.59
+Donte DiVincenzo,Milwaukee Bucks,SG,2021-22,7.18,3.53,1.71,9.58
+Glenn Robinson III,Sacramento Kings,SF,2020-21,4.32,1.61,0.71,9.58
+Bryce McGowens,Charlotte Hornets,SG,2023-24,3.87,1.31,0.65,9.57
+Zavier Simpson,Oklahoma City Thunder,SG,2021-22,11.00,5.25,7.50,9.57
+Marcus Morris Sr.,Los Angeles Clippers,SF,2019-20,9.60,3.90,1.35,9.57
+Cody Martin,Charlotte Hornets,SF,2022-23,1.84,1.26,0.58,9.57
+Cory Joseph,Sacramento Kings,SG,2020-21,6.57,2.25,2.45,9.57
+Kelan Martin,Indiana Pacers,SF,2021-22,6.11,1.89,0.75,9.56
+Wilson Chandler,Brooklyn Nets,SF,2019-20,5.13,3.63,0.98,9.55
+Josh Richardson,New Orleans Pelicans,SG,2022-23,7.21,2.33,1.54,9.55
+Keon Johnson,Portland Trail Blazers,SG,2022-23,2.91,0.68,0.91,9.54
+Jamorko Pickett,Detroit Pistons,SF,2021-22,1.79,1.14,0.25,9.54
+P.J. Tucker,Houston Rockets,SF,2019-20,6.94,6.61,1.60,9.53
+Juancho Hernangomez,Denver Nuggets,SF,2019-20,2.10,1.86,0.43,9.52
+Gradey Dick,Toronto Raptors,SG,2023-24,7.08,1.83,0.94,9.52
+Ty Jerome,Phoenix Suns,SG,2019-20,1.89,0.85,0.81,9.52
+Evan Turner,Atlanta Hawks,SG,2019-20,2.38,1.46,1.46,9.51
+Willie Cauley-Stein,Dallas Mavericks,C,2021-22,1.79,2.00,0.47,9.51
+Marcus Morris Sr.,Cleveland Cavaliers,SF,2023-24,4.60,1.67,0.67,9.51
+Dillon Brooks,Memphis Grizzlies,SG,2022-23,13.78,3.21,2.49,9.50
+Gary Harris,Denver Nuggets,SG,2019-20,10.19,2.86,2.07,9.50
+Mike Muscala,Detroit Pistons,PF,2023-24,2.65,1.71,0.59,9.49
+Markieff Morris,Dallas Mavericks,SF,2023-24,0.83,0.49,0.20,9.48
+Haywood Highsmith,Miami Heat,SF,2022-23,2.88,2.29,0.52,9.48
+Miye Oni,Utah Jazz,SG,2019-20,1.30,0.63,0.15,9.47
+Matisse Thybulle,Philadelphia 76ers,SG,2021-22,5.66,2.25,1.12,9.45
+Eric Gordon,Houston Rockets,SG,2019-20,14.05,1.92,1.46,9.44
+Jae'Sean Tate,Houston Rockets,SF,2023-24,3.63,2.70,0.88,9.44
+Dakota Mathias,Philadelphia 76ers,SG,2020-21,3.43,0.50,0.93,9.42
+Gary Harris,Orlando Magic,SG,2022-23,7.63,1.88,1.13,9.42
+Kessler Edwards,Sacramento Kings,SF,2022-23,2.93,1.62,0.72,9.42
+Nassir Little,Portland Trail Blazers,SG,2019-20,2.36,1.48,0.30,9.42
+Cam Reddish,New York Knicks,SG,2022-23,3.17,0.58,0.38,9.42
+Kenneth Lofton Jr.,Memphis Grizzlies,SF,2023-24,1.63,0.63,0.58,9.41
+Reggie Bullock Jr.,Houston Rockets,SG,2023-24,1.30,0.99,0.20,9.41
+Carsen Edwards,Boston Celtics,SG,2020-21,1.81,0.38,0.21,9.41
+Ziaire Williams,Memphis Grizzlies,SF,2021-22,7.83,2.02,1.02,9.40
+Deividas Sirvydis,Detroit Pistons,SG,2020-21,0.60,0.43,0.07,9.40
+Jett Howard,Orlando Magic,SG,2023-24,0.88,0.21,0.18,9.39
+Joshua Primo,San Antonio Spurs,SG,2022-23,7.00,3.25,4.50,9.39
+CJ Miles,Washington Wizards,SG,2019-20,6.40,1.20,1.20,9.39
+Aaron Nesmith,Boston Celtics,SG,2020-21,3.07,1.79,0.32,9.39
+Juancho Hernangomez,Toronto Raptors,SF,2022-23,2.10,2.12,0.43,9.38
+Ashton Hagans,Portland Trail Blazers,SG,2023-24,4.21,2.37,2.84,9.37
+Eugene Omoruyi,Oklahoma City Thunder,SF,2022-23,3.53,1.63,0.34,9.37
+Tony Snell,Atlanta Hawks,SG,2020-21,4.98,2.24,1.18,9.35
+Kessler Edwards,Brooklyn Nets,SF,2021-22,4.81,2.92,0.53,9.34
+Aaron Holiday,Indiana Pacers,SG,2020-21,6.69,1.25,1.73,9.33
+Josh Green,Dallas Mavericks,SG,2020-21,1.53,1.18,0.42,9.33
+Anthony Lamb,Houston Rockets,SF,2020-21,3.50,1.84,0.61,9.33
+Jordan Walsh,Boston Celtics,SG,2023-24,0.60,0.80,0.20,9.33
+Vít Krejčí,Oklahoma City Thunder,SG,2021-22,4.56,2.46,1.39,9.32
+Frank Mason III,Orlando Magic,SG,2020-21,6.25,3.00,3.00,9.32
+Colby Jones,Sacramento Kings,SG,2023-24,1.08,0.68,0.34,9.32
+Bryn Forbes,Denver Nuggets,SG,2021-22,7.69,0.77,0.87,9.30
+Alen Smailagic,Golden State Warriors,SF,2020-21,0.82,0.47,0.12,9.29
+Evan Fournier,Detroit Pistons,SG,2023-24,6.93,1.80,1.50,9.29
+Frank Jackson,New Orleans Pelicans,SG,2019-20,5.15,1.15,0.85,9.29
+Kenrich Williams,New Orleans Pelicans,SG,2019-20,2.67,3.65,1.12,9.28
+Courtney Lee,Dallas Mavericks,SG,2019-20,1.70,0.51,0.19,9.27
+Anthony Tolliver,Memphis Grizzlies,SF,2019-20,4.77,2.54,0.77,9.27
+Robert Covington,Los Angeles Clippers,SF,2023-24,3.00,2.67,2.33,9.23
+Ochai Agbaji,Utah Jazz,SG,2022-23,6.14,1.59,0.88,9.21
+Juan Toscano-Anderson,Utah Jazz,SF,2022-23,2.96,2.52,1.60,9.21
+Cam Reddish,Atlanta Hawks,SG,2020-21,9.73,3.47,1.17,9.21
+Garrett Temple,New Orleans Pelicans,SG,2021-22,3.96,1.83,0.95,9.21
+Frank Ntilikina,New York Knicks,SG,2019-20,6.05,2.05,2.92,9.19
+Jontay Porter,Memphis Grizzlies,C,2020-21,0.52,0.33,0.02,9.17
+Chuma Okeke,Orlando Magic,SF,2023-24,1.30,0.98,0.24,9.16
+Jaden McDaniels,Minnesota Timberwolves,SF,2020-21,6.10,3.31,1.01,9.15
+Tony Snell,Detroit Pistons,SG,2019-20,7.65,1.79,2.05,9.15
+Semi Ojeleye,Boston Celtics,SF,2020-21,3.94,2.23,0.56,9.15
+Shaquille Harrison,Utah Jazz,SG,2020-21,0.55,0.29,0.29,9.12
+DaQuan Jeffries,Houston Rockets,SG,2020-21,3.20,2.10,0.80,9.11
+Otto Porter Jr.,Toronto Raptors,SF,2023-24,0.93,0.69,0.19,9.11
+Wenyen Gabriel,Portland Trail Blazers,SF,2019-20,1.52,1.45,0.17,9.10
+Justin Holiday,Denver Nuggets,SG,2023-24,2.85,0.87,0.82,9.10
+Buddy Boeheim,Detroit Pistons,SF,2023-24,2.43,0.71,0.21,9.08
+Danny Green,Philadelphia 76ers,SG,2021-22,5.63,2.42,0.98,9.06
+Stanley Johnson,Toronto Raptors,SG,2020-21,3.71,2.13,1.24,9.05
+Kevin Knox II,New York Knicks,SF,2019-20,6.35,2.79,0.92,9.05
+Shake Milton,Minnesota Timberwolves,SG,2023-24,3.49,1.00,0.98,9.03
+Troy Brown Jr.,Washington Wizards,SG,2020-21,2.37,1.61,0.50,9.01
+Terrence Ross,Orlando Magic,SG,2022-23,6.19,1.57,1.00,9.01
+Maxi Kleber,Dallas Mavericks,SF,2022-23,5.95,3.65,1.41,9.01
+Jaden McDaniels,Minnesota Timberwolves,SF,2023-24,10.51,3.11,1.40,9.01
+Avery Bradley,Miami Heat,SG,2020-21,3.27,0.69,0.54,8.99
+Tyler Johnson,Brooklyn Nets,SG,2020-21,3.44,1.26,0.77,8.99
+Admiral Schofield,Orlando Magic,SF,2022-23,2.31,0.93,0.46,8.98
+Trevelin Queen,Indiana Pacers,SG,2022-23,1.50,1.21,0.43,8.97
+Matt Ryan,New Orleans Pelicans,SF,2023-24,3.38,0.89,0.40,8.96
+Ish Smith,Charlotte Hornets,SG,2023-24,3.02,1.65,3.15,8.96
+Trevelin Queen,Orlando Magic,SG,2023-24,1.90,0.95,0.86,8.95
+Dean Wade,Cleveland Cavaliers,PF,2022-23,4.12,3.00,0.74,8.94
+Quentin Grimes,New York Knicks,SG,2023-24,7.27,1.96,1.16,8.93
+Max Christie,Los Angeles Lakers,SG,2022-23,1.75,1.03,0.29,8.92
+Victor Oladipo,Miami Heat,SG,2020-21,6.86,2.00,2.00,8.92
+Ryan Arcidiacono,Chicago Bulls,SG,2019-20,4.02,1.69,1.48,8.91
+Dillon Brooks,Houston Rockets,SG,2023-24,12.53,3.37,1.63,8.91
+Kevin Knox II,New York Knicks,SF,2020-21,2.26,0.85,0.26,8.91
+Matthew Dellavedova,Cleveland Cavaliers,SG,2019-20,2.81,1.19,2.86,8.90
+Isaiah Mobley,Cleveland Cavaliers,SF,2023-24,0.96,0.42,0.25,8.90
+Darius Garland,Cleveland Cavaliers,SG,2019-20,11.93,1.82,3.75,8.89
+Ochai Agbaji,Utah Jazz,SG,2023-24,5.37,2.47,0.92,8.86
+Matt Thomas,Toronto Raptors,SG,2020-21,1.61,0.48,0.20,8.84
+Sam Merrill,Memphis Grizzlies,SG,2021-22,1.67,0.47,0.27,8.83
+Aaron Holiday,Atlanta Hawks,SG,2022-23,3.05,0.91,1.10,8.83
+Wayne Ellington,New York Knicks,SG,2019-20,3.27,1.16,0.79,8.82
+Keon Johnson,Portland Trail Blazers,SG,2021-22,8.56,2.40,2.52,8.82
+Jarrett Culver,Memphis Grizzlies,SG,2021-22,1.76,0.65,0.45,8.79
+MarJon Beauchamp,Milwaukee Bucks,SF,2022-23,3.45,1.49,0.45,8.79
+Seth Curry,Dallas Mavericks,SG,2023-24,3.28,1.11,0.64,8.77
+Admiral Schofield,Orlando Magic,SF,2021-22,3.04,1.85,0.52,8.77
+Terry Taylor,Indiana Pacers,SF,2022-23,1.28,0.72,0.19,8.75
+Mamadi Diakite,Cleveland Cavaliers,SF,2022-23,1.24,0.65,0.17,8.73
+Julian Strawther,Denver Nuggets,SG,2023-24,3.39,0.91,0.70,8.72
+Anthony Tolliver,Portland Trail Blazers,SF,2019-20,2.87,2.44,0.64,8.71
+Tyler Johnson,Phoenix Suns,SG,2019-20,3.71,1.08,1.04,8.67
+Brandon Boston,Los Angeles Clippers,SG,2023-24,2.78,0.87,0.22,8.65
+James Johnson,Indiana Pacers,SF,2022-23,0.65,0.38,0.19,8.65
+Wesley Matthews,Milwaukee Bucks,SG,2019-20,7.37,2.48,1.37,8.65
+Thanasis Antetokounmpo,Milwaukee Bucks,SF,2022-23,0.64,0.55,0.19,8.65
+Armoni Brooks,Houston Rockets,SG,2021-22,5.18,1.65,1.00,8.64
+Trent Forrest,Atlanta Hawks,SG,2022-23,1.13,0.80,0.83,8.64
+Lance Stephenson,Atlanta Hawks,SF,2021-22,1.83,2.50,1.83,8.63
+Axel Toupane,Milwaukee Bucks,SG,2020-21,1.17,0.50,0.33,8.62
+Paul Millsap,Philadelphia 76ers,SF,2021-22,1.38,1.04,0.21,8.61
+Anthony Black,Orlando Magic,SG,2023-24,3.85,1.70,1.11,8.60
+Timothe Luwawu-Cabarrot,Atlanta Hawks,SG,2021-22,2.99,1.08,0.53,8.58
+Chris Livingston,Milwaukee Bucks,SF,2023-24,0.52,0.42,0.10,8.58
+Gary Harris,Denver Nuggets,SG,2020-21,9.20,2.35,1.60,8.58
+Vít Krejčí,Atlanta Hawks,SG,2023-24,5.87,2.26,2.17,8.57
+Vít Krejčí,Atlanta Hawks,SG,2022-23,0.44,0.32,0.21,8.56
+Keon Johnson,Los Angeles Clippers,SG,2021-22,2.52,1.00,0.62,8.54
+Gabe Vincent,Miami Heat,SG,2022-23,8.66,1.96,2.26,8.54
+Alfonzo McKinnie,Cleveland Cavaliers,SF,2019-20,3.43,2.13,0.26,8.54
+Reggie Bullock Jr.,New York Knicks,SG,2019-20,7.80,2.27,1.40,8.53
+Khem Birch,Toronto Raptors,C,2022-23,0.86,0.50,0.14,8.53
+Patrick Beverley,Los Angeles Lakers,SG,2022-23,5.65,2.75,2.31,8.53
+Bryce McGowens,Charlotte Hornets,SG,2022-23,3.51,1.33,0.77,8.52
+Troy Daniels,Los Angeles Lakers,SG,2019-20,3.00,0.79,0.24,8.52
+Gary Harris,Orlando Magic,SG,2023-24,6.89,1.69,1.61,8.51
+Malachi Flynn,Toronto Raptors,SG,2022-23,3.00,0.93,0.85,8.51
+TyTy Washington Jr.,Houston Rockets,SG,2022-23,3.09,0.96,1.00,8.51
+Markieff Morris,Dallas Mavericks,SF,2022-23,1.50,0.50,0.25,8.51
+JT Thor,Charlotte Hornets,SF,2022-23,3.32,1.92,0.46,8.49
+Josh Okogie,Minnesota Timberwolves,SG,2021-22,1.87,0.99,0.35,8.49
+Chris Duarte,Sacramento Kings,SG,2023-24,2.91,1.34,0.56,8.48
+Nick Smith Jr.,Charlotte Hornets,SG,2023-24,4.19,1.00,0.82,8.47
+Anfernee Simons,Portland Trail Blazers,SG,2019-20,7.82,2.05,1.31,8.47
+Avery Bradley,Los Angeles Lakers,SG,2019-20,8.46,2.30,1.26,8.46
+Matisse Thybulle,Philadelphia 76ers,SG,2020-21,3.75,1.82,0.93,8.46
+Dennis Smith Jr.,New York Knicks,SG,2019-20,4.56,1.90,2.39,8.45
+Troy Brown Jr.,Detroit Pistons,SG,2023-24,3.00,2.32,0.81,8.45
+Gary Harris,Orlando Magic,SG,2020-21,10.20,1.60,2.30,8.45
+Kevon Harris,Orlando Magic,SG,2022-23,3.00,1.49,0.34,8.44
+Garrett Temple,Chicago Bulls,SG,2020-21,7.29,2.76,2.14,8.44
+Isaiah Joe,Philadelphia 76ers,SG,2020-21,2.25,0.53,0.29,8.44
+Matthew Dellavedova,Cleveland Cavaliers,SG,2020-21,2.77,1.85,4.46,8.43
+Brodric Thomas,Cleveland Cavaliers,SG,2020-21,3.19,1.36,0.72,8.43
+Josh Okogie,Minnesota Timberwolves,SG,2020-21,5.10,2.52,1.02,8.42
+Ziaire Williams,Memphis Grizzlies,SF,2022-23,5.12,1.93,0.85,8.40
+Andre Jackson Jr.,Milwaukee Bucks,SG,2023-24,1.58,1.43,0.63,8.36
+Grant Williams,Dallas Mavericks,SF,2023-24,8.13,3.60,1.72,8.35
+Ben McLemore,Houston Rockets,SG,2020-21,5.41,1.50,0.64,8.35
+Ish Wainright,Phoenix Suns,SF,2022-23,3.49,1.93,0.74,8.34
+Danuel House Jr.,Philadelphia 76ers,SG,2023-24,3.20,1.29,0.62,8.34
+Dorian Finney-Smith,Brooklyn Nets,SF,2022-23,7.15,4.92,1.58,8.33
+Cole Swider,Miami Heat,SF,2023-24,0.98,0.16,0.12,8.33
+Kevin Hervey,Oklahoma City Thunder,SF,2019-20,1.00,0.71,0.29,8.32
+Jay Scrubb,Los Angeles Clippers,SG,2020-21,7.00,2.80,0.20,8.30
+Spencer Dinwiddie,Los Angeles Lakers,SG,2023-24,6.82,1.68,2.43,8.30
+Maurice Harkless,Sacramento Kings,SG,2020-21,6.63,2.81,1.37,8.29
+Johnny Juzang,Utah Jazz,SG,2022-23,3.11,1.39,0.29,8.28
+Devin Cannady,Orlando Magic,SG,2020-21,3.78,0.56,0.11,8.27
+Juan Toscano-Anderson,Los Angeles Lakers,SF,2022-23,1.93,1.45,0.60,8.25
+Zavier Simpson,Memphis Grizzlies,SG,2023-24,4.67,2.22,2.78,8.24
+Tomas Satoransky,New Orleans Pelicans,SG,2021-22,1.80,1.31,1.55,8.23
+Admiral Schofield,Orlando Magic,SF,2023-24,0.55,0.36,0.15,8.23
+Jordan McRae,Detroit Pistons,SG,2019-20,11.75,3.75,1.75,8.22
+Isaiah Livers,Detroit Pistons,SF,2022-23,5.77,2.38,0.68,8.21
+Maurice Harkless,Sacramento Kings,SG,2021-22,2.86,1.47,0.30,8.20
+Rodney Hood,Toronto Raptors,SG,2020-21,2.64,1.20,0.24,8.17
+Garrison Mathews,Washington Wizards,SG,2020-21,5.13,1.26,0.38,8.16
+Solomon Hill,Miami Heat,SF,2019-20,2.33,1.00,0.48,8.15
+Juwan Morgan,Utah Jazz,SF,2020-21,0.66,0.53,0.17,8.14
+BJ Johnson,Orlando Magic,SF,2019-20,1.20,0.60,0.12,8.13
+Garrison Mathews,Houston Rockets,SG,2022-23,4.28,1.24,0.46,8.13
+Semi Ojeleye,Boston Celtics,SF,2019-20,3.28,2.01,0.51,8.13
+Jordan Poole,Golden State Warriors,SG,2019-20,8.11,1.90,2.16,8.13
+Johnny Davis,Washington Wizards,SG,2022-23,3.54,1.41,0.61,8.11
+Kent Bazemore,Portland Trail Blazers,SG,2019-20,7.56,3.82,1.36,8.11
+Tony Snell,New Orleans Pelicans,SG,2021-22,3.14,1.11,0.29,8.11
+Alec Burks,New York Knicks,SG,2023-24,5.14,1.38,0.69,8.10
+David Duke Jr.,Brooklyn Nets,SG,2022-23,2.13,0.73,0.53,8.09
+Jahmi'us Ramsey,Sacramento Kings,SG,2021-22,1.33,0.29,0.16,8.07
+Melvin Frazier Jr.,Orlando Magic,SG,2019-20,0.80,0.20,0.06,8.07
+Rodney McGruder,Los Angeles Clippers,SG,2019-20,3.02,2.44,0.58,8.07
+Vince Carter,Atlanta Hawks,SG,2019-20,4.81,2.00,0.77,8.07
+Jordan Hall,San Antonio Spurs,SG,2022-23,1.87,0.80,0.73,8.06
+Jared Dudley,Los Angeles Lakers,SF,2019-20,0.96,0.73,0.39,8.06
+Simone Fontecchio,Utah Jazz,SF,2022-23,4.56,1.19,0.58,8.06
+Nicolo Melli,New Orleans Pelicans,SF,2020-21,1.00,1.33,0.58,8.06
+CJ Elleby,Portland Trail Blazers,SG,2020-21,0.96,0.45,0.14,8.05
+Wesley Matthews,Atlanta Hawks,SG,2023-24,1.86,0.90,0.39,8.04
+Paul Watson,Oklahoma City Thunder,SG,2021-22,1.03,0.90,0.27,8.01
+Armoni Brooks,Toronto Raptors,SG,2021-22,1.79,1.16,0.68,8.01
+Joshua Primo,San Antonio Spurs,SG,2021-22,5.14,2.02,1.45,8.00
+Tyler Bey,Dallas Mavericks,SF,2020-21,0.40,0.42,0.07,7.97
+Justin Jackson,Boston Celtics,SF,2022-23,0.36,0.31,0.16,7.97
+Michael Kidd-Gilchrist,Charlotte Hornets,SF,2019-20,0.96,0.70,0.20,7.96
+Matisse Thybulle,Philadelphia 76ers,SG,2022-23,2.55,1.24,0.45,7.95
+Allen Crabbe,Atlanta Hawks,SG,2019-20,4.61,2.10,0.90,7.95
+Chasson Randle,Orlando Magic,SG,2020-21,6.19,1.91,1.72,7.93
+Killian Tillie,Memphis Grizzlies,PF,2020-21,1.27,0.53,0.18,7.92
+Matt Hurt,Memphis Grizzlies,SF,2023-24,2.91,1.45,0.36,7.91
+PJ Dozier,Sacramento Kings,SG,2022-23,0.67,0.42,0.30,7.90
+Ben McLemore,Los Angeles Lakers,SG,2020-21,8.00,1.62,0.52,7.88
+Reggie Bullock Jr.,Dallas Mavericks,SG,2022-23,7.19,3.63,1.38,7.88
+Ben Sheppard,Indiana Pacers,SG,2023-24,3.27,1.16,0.69,7.86
+Jevon Carter,Chicago Bulls,SG,2023-24,4.35,0.73,1.15,7.86
+Cam Reddish,Los Angeles Lakers,SG,2023-24,4.41,1.68,0.81,7.86
+Timothe Luwawu-Cabarrot,Brooklyn Nets,SG,2020-21,5.36,1.87,1.00,7.85
+Derrick Walton Jr.,Los Angeles Clippers,SG,2019-20,1.47,0.44,0.65,7.84
+Matisse Thybulle,Philadelphia 76ers,SG,2019-20,4.62,1.62,1.20,7.84
+Jared Dudley,Los Angeles Lakers,SF,2020-21,0.26,0.91,0.22,7.82
+Danilo Gallinari,Milwaukee Bucks,SF,2023-24,1.81,0.69,0.46,7.82
+Sean McDermott,Memphis Grizzlies,SF,2020-21,0.98,0.48,0.10,7.77
+Killian Hayes,Detroit Pistons,SG,2020-21,6.77,2.65,5.31,7.76
+Mychal Mulder,Golden State Warriors,SG,2019-20,11.00,3.29,1.14,7.75
+Davis Bertans,Washington Wizards,SF,2021-22,4.97,1.56,0.41,7.74
+Andre Roberson,Oklahoma City Thunder,SG,2019-20,2.86,3.86,0.57,7.72
+Ochai Agbaji,Toronto Raptors,SG,2023-24,6.46,3.21,1.29,7.72
+Garrison Mathews,Atlanta Hawks,SG,2023-24,4.01,1.14,0.46,7.70
+Quinndary Weatherspoon,San Antonio Spurs,SG,2020-21,1.18,0.28,0.21,7.70
+Amir Coffey,Los Angeles Clippers,SG,2019-20,2.42,0.67,0.58,7.69
+James Bouknight,Charlotte Hornets,SG,2022-23,3.47,1.31,0.75,7.69
+Ish Wainright,Phoenix Suns,SF,2021-22,1.48,0.74,0.21,7.65
+Dwayne Bacon,Charlotte Hornets,SG,2019-20,4.15,1.85,0.96,7.64
+Rodney Hood,Milwaukee Bucks,SG,2021-22,2.48,1.29,0.58,7.64
+Patrick McCaw,Toronto Raptors,SG,2019-20,4.59,2.32,2.14,7.64
+Caleb Houstan,Orlando Magic,SG,2023-24,3.24,1.08,0.37,7.60
+Louis King,Sacramento Kings,SF,2021-22,1.96,0.52,0.39,7.58
+Austin Rivers,Minnesota Timberwolves,SG,2022-23,3.59,1.17,1.06,7.56
+Devin Cannady,Orlando Magic,SG,2021-22,10.00,1.20,2.00,7.55
+Ibou Badji,Portland Trail Blazers,C,2023-24,0.83,1.24,0.32,7.55
+Treveon Graham,Atlanta Hawks,SG,2019-20,2.88,2.00,0.60,7.55
+Gary Clark,Orlando Magic,SF,2020-21,2.70,2.55,0.68,7.54
+Tyrell Terry,Dallas Mavericks,SG,2020-21,0.46,0.25,0.25,7.54
+Monte Morris,Minnesota Timberwolves,SG,2023-24,0.44,0.30,0.26,7.54
+Mike Scott,Philadelphia 76ers,SF,2020-21,3.67,2.07,0.69,7.53
+Sekou Doumbouya,Detroit Pistons,SF,2020-21,4.45,2.23,0.73,7.52
+Aaron Nesmith,Boston Celtics,SG,2021-22,2.88,1.31,0.32,7.49
+Cassius Stanley,Detroit Pistons,SG,2021-22,4.73,1.73,0.36,7.47
+Greg Brown III,Portland Trail Blazers,SF,2022-23,0.68,0.46,0.07,7.47
+Landry Shamet,Los Angeles Clippers,SG,2019-20,9.28,1.89,1.87,7.46
+Jevon Carter,Brooklyn Nets,SG,2021-22,2.84,1.16,0.79,7.45
+Justin Holiday,Sacramento Kings,SG,2021-22,8.32,2.20,1.52,7.44
+Patty Mills,Miami Heat,SG,2023-24,3.62,0.71,0.95,7.42
+Isaiah Joe,Philadelphia 76ers,SG,2021-22,2.57,0.73,0.45,7.38
+Derrick Walton Jr.,Detroit Pistons,SG,2021-22,6.33,3.33,7.00,7.36
+Sindarius Thornwell,Orlando Magic,SG,2020-21,3.43,1.86,2.43,7.34
+Miles McBride,New York Knicks,SG,2022-23,2.71,0.61,0.88,7.34
+Kevin Pangos,Cleveland Cavaliers,SG,2021-22,0.71,0.20,0.55,7.33
+Cory Joseph,Golden State Warriors,SG,2023-24,1.31,0.63,0.88,7.31
+Jaylen Nowell,Memphis Grizzlies,SG,2023-24,5.67,1.56,1.78,7.29
+Wes Iwundu,Atlanta Hawks,SF,2021-22,7.33,4.33,0.00,7.29
+Jamaree Bouyea,Miami Heat,SG,2022-23,3.00,1.00,0.80,7.28
+Isaac Okoro,Cleveland Cavaliers,SG,2020-21,9.64,3.07,1.91,7.28
+Carsen Edwards,Boston Celtics,SG,2019-20,2.20,0.85,0.44,7.27
+Haywood Highsmith,Miami Heat,SF,2021-22,1.43,0.87,0.20,7.25
+Solomon Hill,Atlanta Hawks,SF,2020-21,4.40,2.97,1.04,7.24
+Kobe Brown,Los Angeles Clippers,SF,2023-24,1.39,0.97,0.39,7.22
+Nigel Williams-Goss,Utah Jazz,SG,2019-20,0.56,0.24,0.24,7.22
+Wenyen Gabriel,Sacramento Kings,SF,2019-20,0.59,0.31,0.09,7.22
+Avery Bradley,Los Angeles Lakers,SG,2021-22,5.32,1.84,0.64,7.21
+Brad Wanamaker,Indiana Pacers,SG,2021-22,2.24,1.03,1.41,7.19
+Doug McDermott,Indiana Pacers,SF,2023-24,3.95,0.58,0.68,7.19
+Theo Pinson,Brooklyn Nets,SG,2019-20,2.11,0.95,0.98,7.18
+Matthew Dellavedova,Sacramento Kings,SG,2022-23,0.63,0.17,0.55,7.17
+Duncan Robinson,Miami Heat,SF,2022-23,4.70,1.21,0.81,7.16
+Daishen Nix,Houston Rockets,SG,2022-23,2.79,1.21,1.63,7.16
+Malik Williams,Toronto Raptors,C,2023-24,2.71,5.43,0.29,7.16
+Ryan Arcidiacono,New York Knicks,SG,2021-22,0.64,0.32,0.16,7.14
+Grant Williams,Boston Celtics,SF,2019-20,3.29,2.47,0.94,7.12
+Kira Lewis Jr.,New Orleans Pelicans,SG,2023-24,1.38,0.44,0.56,7.10
+Wesley Matthews,Milwaukee Bucks,SG,2022-23,2.67,1.69,0.51,7.07
+Facundo Campazzo,Dallas Mavericks,SG,2022-23,0.59,0.12,0.53,7.06
+Shaquille Harrison,Denver Nuggets,SG,2020-21,3.29,2.29,0.94,7.05
+Al-Farouq Aminu,Chicago Bulls,SF,2020-21,0.31,0.66,0.07,7.04
+Markus Howard,Denver Nuggets,SG,2020-21,1.62,0.32,0.28,7.03
+Jeff Dowtin Jr.,Orlando Magic,SG,2021-22,2.60,2.20,1.40,7.02
+Oshae Brissett,Toronto Raptors,SG,2019-20,1.09,0.76,0.21,7.00
+Grant Williams,Boston Celtics,SF,2020-21,4.14,2.51,0.90,6.98
+Rayan Rupert,Portland Trail Blazers,SG,2023-24,2.46,1.46,0.98,6.93
+Amir Coffey,Los Angeles Clippers,SG,2022-23,2.10,0.65,0.65,6.91
+Josh Jackson,Sacramento Kings,SG,2021-22,2.17,0.75,0.21,6.89
+Gabe Vincent,Miami Heat,SG,2020-21,3.67,0.85,1.02,6.88
+Carsen Edwards,Detroit Pistons,SG,2021-22,5.75,1.50,3.50,6.86
+Sekou Doumbouya,Detroit Pistons,SF,2019-20,5.93,2.88,0.46,6.84
+Austin Rivers,Denver Nuggets,SG,2021-22,5.60,1.58,1.25,6.84
+DeMarre Carroll,San Antonio Spurs,SF,2019-20,0.83,0.78,0.28,6.83
+Justin Holiday,Dallas Mavericks,SG,2022-23,3.43,1.39,0.70,6.82
+Evan Fournier,New York Knicks,SG,2022-23,2.09,0.62,0.46,6.82
+DaQuan Jeffries,Sacramento Kings,SG,2020-21,2.52,1.16,0.24,6.73
+Jared Rhoden,Detroit Pistons,SG,2022-23,2.14,1.76,0.19,6.70
+Chandler Parsons,Atlanta Hawks,SF,2019-20,0.64,0.32,0.14,6.68
+Dante Exum,Cleveland Cavaliers,SG,2020-21,2.83,2.17,1.17,6.66
+Jake LaRavia,Memphis Grizzlies,SF,2022-23,2.02,1.21,0.40,6.66
+Mike Muscala,Oklahoma City Thunder,PF,2023-24,0.74,0.91,0.17,6.63
+Johnny Davis,Washington Wizards,SG,2023-24,2.34,1.11,0.49,6.61
+Tosan Evbuomwan,Memphis Grizzlies,SF,2023-24,2.00,2.80,1.20,6.52
+Davon Reed,Denver Nuggets,SG,2022-23,1.50,1.02,0.35,6.52
+Didi Louzada,Portland Trail Blazers,SG,2021-22,2.92,1.25,0.33,6.51
+Jerome Robinson,Golden State Warriors,SG,2023-24,0.72,0.14,0.12,6.50
+Patty Mills,Atlanta Hawks,SG,2023-24,0.89,0.35,0.25,6.49
+Wesley Matthews,Los Angeles Lakers,SG,2020-21,3.99,1.33,0.77,6.49
+Leandro Bolmaro,Minnesota Timberwolves,SF,2021-22,0.82,0.70,0.34,6.47
+Isaiah Todd,Washington Wizards,SF,2021-22,0.51,0.31,0.10,6.46
+Kendall Brown,Indiana Pacers,SG,2023-24,0.51,0.12,0.12,6.44
+Killian Tillie,Memphis Grizzlies,PF,2021-22,2.03,1.03,0.38,6.42
+Treveon Graham,Minnesota Timberwolves,SG,2019-20,4.38,2.56,0.77,6.42
+Joe Wieskamp,San Antonio Spurs,SG,2021-22,1.22,0.28,0.18,6.41
+Jalen McDaniels,Toronto Raptors,SF,2023-24,2.06,0.96,0.45,6.39
+Charlie Brown Jr.,Philadelphia 76ers,SG,2021-22,0.78,0.86,0.14,6.38
+Miye Oni,Utah Jazz,SG,2020-21,1.46,1.17,0.39,6.38
+Zylan Cheatham,New Orleans Pelicans,SF,2019-20,1.50,1.13,0.38,6.37
+Juancho Hernangomez,Boston Celtics,SF,2021-22,0.46,0.61,0.07,6.30
+Nick Richards,Charlotte Hornets,C,2020-21,0.24,0.18,0.03,6.30
+Noah Vonleh,Boston Celtics,SF,2022-23,0.66,1.26,0.18,6.30
+Wenyen Gabriel,Memphis Grizzlies,SF,2023-24,3.40,5.00,0.60,6.29
+P.J. Tucker,Houston Rockets,SF,2020-21,4.03,4.23,1.29,6.27
+Dru Smith,Miami Heat,SG,2022-23,0.58,0.47,0.26,6.26
+Louis King,Detroit Pistons,SF,2019-20,1.05,0.53,0.26,6.22
+Keifer Sykes,Indiana Pacers,SG,2021-22,3.91,0.98,1.35,6.21
+Malcolm Miller,Toronto Raptors,SG,2019-20,0.56,0.26,0.18,6.21
+Yves Pons,Memphis Grizzlies,SF,2021-22,0.42,0.39,0.03,6.17
+TyTy Washington Jr.,Milwaukee Bucks,SG,2023-24,0.48,0.17,0.17,6.15
+Caleb Houstan,Orlando Magic,SG,2022-23,2.61,1.34,0.41,6.13
+Tyler Johnson,San Antonio Spurs,SG,2021-22,1.00,1.00,0.83,6.12
+Chandler Hutchison,Chicago Bulls,SG,2020-21,0.59,0.91,0.18,6.07
+Wesley Matthews,Milwaukee Bucks,SG,2021-22,4.79,1.77,0.69,6.05
+Abdel Nader,Phoenix Suns,SF,2021-22,1.42,1.13,0.29,6.04
+Tony Snell,Portland Trail Blazers,SG,2021-22,2.11,1.53,0.43,5.97
+Jacob Evans,Golden State Warriors,SG,2019-20,2.84,0.91,0.69,5.88
+Andre Roberson,Brooklyn Nets,SG,2020-21,0.86,2.14,0.57,5.88
+Alex Len,Toronto Raptors,C,2020-21,1.60,1.10,0.30,5.86
+JJ Redick,Dallas Mavericks,SG,2020-21,3.56,0.75,0.69,5.86
+Brandon Knight,Cleveland Cavaliers,SG,2019-20,1.88,0.48,0.74,5.85
+P.J. Tucker,Milwaukee Bucks,SF,2020-21,2.48,2.67,0.76,5.84
+P.J. Tucker,Los Angeles Clippers,SF,2023-24,0.61,0.93,0.21,5.83
+Deonte Burton,Oklahoma City Thunder,SG,2019-20,1.68,0.92,0.27,5.82
+P.J. Tucker,Philadelphia 76ers,SF,2022-23,3.50,3.88,0.79,5.82
+Iman Shumpert,Brooklyn Nets,SG,2019-20,3.86,2.43,0.86,5.82
+Julian Phillips,Chicago Bulls,SF,2023-24,1.48,0.60,0.22,5.81
+Chris Chiozza,Golden State Warriors,SG,2021-22,1.34,0.72,1.30,5.80
+Luguentz Dort,Oklahoma City Thunder,SG,2019-20,6.42,2.13,0.71,5.79
+Justin Anderson,Brooklyn Nets,SG,2019-20,2.00,1.50,0.57,5.77
+Miles McBride,New York Knicks,SG,2021-22,1.19,0.56,0.55,5.76
+Wes Iwundu,Dallas Mavericks,SF,2020-21,1.17,1.05,0.24,5.73
+P.J. Tucker,Philadelphia 76ers,SF,2023-24,2.00,4.67,0.00,5.71
+Dante Exum,Cleveland Cavaliers,SG,2019-20,0.58,0.46,0.25,5.69
+Jerome Robinson,Los Angeles Clippers,SG,2019-20,2.39,1.18,0.90,5.66
+Wes Iwundu,New Orleans Pelicans,SF,2020-21,1.79,1.64,0.29,5.66
+Blake Wesley,San Antonio Spurs,SG,2022-23,4.28,1.91,2.28,5.64
+Bryn Forbes,Minnesota Timberwolves,SG,2022-23,1.62,0.27,0.31,5.61
+Kostas Antetokounmpo,Los Angeles Lakers,SF,2020-21,0.39,0.61,0.03,5.60
+Onuralp Bitim,Chicago Bulls,SF,2023-24,2.22,0.89,0.36,5.60
+Admiral Schofield,Washington Wizards,SF,2019-20,2.25,1.07,0.34,5.58
+Damian Jones,Phoenix Suns,C,2020-21,0.92,0.75,0.17,5.54
+Frank Ntilikina,New York Knicks,SG,2020-21,1.62,0.56,0.35,5.50
+Yuta Watanabe,Phoenix Suns,SG,2023-24,2.21,0.96,0.21,5.49
+Frank Ntilikina,Dallas Mavericks,SG,2022-23,1.88,0.86,0.81,5.47
+Jerian Grant,Washington Wizards,SG,2019-20,3.38,0.75,1.13,5.47
+Kent Bazemore,Los Angeles Lakers,SG,2021-22,1.74,0.91,0.45,5.47
+Theo Maledon,Charlotte Hornets,SG,2023-24,2.45,1.05,1.27,5.44
+KZ Okpala,Sacramento Kings,SG,2022-23,0.92,0.68,0.26,5.42
+Mouhamadou Gueye,Toronto Raptors,SF,2023-24,2.17,1.92,0.42,5.40
+Vic Law,Orlando Magic,SF,2019-20,0.83,0.61,0.17,5.39
+Semi Ojeleye,Milwaukee Bucks,SF,2021-22,1.73,1.76,0.15,5.38
+Justin Minaya,Portland Trail Blazers,SF,2023-24,1.36,1.24,0.47,5.36
+Justin Holiday,Atlanta Hawks,SG,2022-23,2.38,0.43,0.47,5.35
+Justin Minaya,Portland Trail Blazers,SF,2022-23,4.25,3.75,1.00,5.33
+Robin Lopez,Milwaukee Bucks,C,2023-24,0.35,0.10,0.08,5.33
+Cassius Stanley,Indiana Pacers,SG,2020-21,0.67,0.37,0.02,5.30
+Quentin Grimes,Detroit Pistons,SG,2023-24,3.56,1.33,1.56,5.25
+Justin Robinson,Oklahoma City Thunder,SG,2020-21,1.91,0.64,0.82,5.23
+Jerome Robinson,Washington Wizards,SG,2020-21,1.66,0.76,0.50,5.19
+Tremont Waters,Boston Celtics,SG,2019-20,3.08,0.92,1.23,5.19
+Romeo Langford,Boston Celtics,SG,2020-21,2.55,1.59,0.59,5.16
+Alfonzo McKinnie,Chicago Bulls,SF,2021-22,2.11,1.18,0.18,5.15
+Emoni Bates,Cleveland Cavaliers,SF,2023-24,1.28,0.44,0.31,5.11
+Isaac Bonga,Toronto Raptors,SG,2021-22,0.35,0.21,0.12,5.09
+Rodney Hood,Portland Trail Blazers,SG,2020-21,4.62,1.87,1.21,5.04
+Keljin Blevins,Portland Trail Blazers,SG,2021-22,2.07,0.98,0.41,4.96
+Isaiah Livers,Detroit Pistons,SF,2023-24,4.07,1.71,0.89,4.95
+KZ Okpala,Miami Heat,SG,2020-21,1.51,1.11,0.31,4.93
+Avery Bradley,Houston Rockets,SG,2020-21,4.19,1.86,1.52,4.88
+Romeo Langford,Boston Celtics,SG,2019-20,1.72,0.89,0.28,4.88
+Justin Robinson,Detroit Pistons,SG,2021-22,5.60,1.40,1.80,4.87
+Sindarius Thornwell,New Orleans Pelicans,SG,2020-21,0.45,0.13,0.11,4.83
+Tyrone Wallace,Atlanta Hawks,SG,2019-20,1.90,1.05,0.62,4.82
+Troy Daniels,Denver Nuggets,SG,2019-20,2.60,0.60,0.30,4.76
+DeAndre' Bembry,Milwaukee Bucks,SG,2021-22,0.67,1.22,0.67,4.70
+John Butler Jr.,Portland Trail Blazers,SF,2022-23,1.13,0.43,0.28,4.67
+Michael Kidd-Gilchrist,Dallas Mavericks,SF,2019-20,0.75,2.00,0.25,4.65
+Aleksej Pokusevski,Oklahoma City Thunder,SF,2023-24,0.32,0.26,0.13,4.63
+Udonis Haslem,Miami Heat,SF,2022-23,0.35,0.14,0.00,4.61
+Adam Mokoka,Chicago Bulls,SG,2019-20,1.78,0.56,0.22,4.59
+Thanasis Antetokounmpo,Milwaukee Bucks,SF,2023-24,0.39,0.16,0.21,4.46
+Marcus Garrett,Miami Heat,SG,2021-22,0.93,1.64,0.50,4.43
+Tim Frazier,Orlando Magic,SG,2021-22,3.70,1.90,3.30,4.40
+Langston Galloway,Brooklyn Nets,SG,2021-22,2.40,1.60,1.00,4.36
+Moritz Wagner,Boston Celtics,PF,2020-21,0.92,1.58,0.50,4.35
+Maurice Harkless,Miami Heat,SG,2020-21,0.36,0.31,0.17,4.29
+Elijah Hughes,Portland Trail Blazers,SG,2021-22,3.32,1.64,0.64,4.28
+Justin Robinson,Milwaukee Bucks,SG,2021-22,2.40,0.65,1.05,4.21
+Matt Ryan,Los Angeles Lakers,SF,2022-23,2.35,0.70,0.20,4.21
+Kessler Edwards,Brooklyn Nets,SF,2022-23,0.47,0.44,0.06,4.20
+Lance Thomas,Brooklyn Nets,SF,2019-20,3.00,1.63,0.75,4.07
+Isaac Bonga,Washington Wizards,SG,2020-21,1.08,0.92,0.32,4.03
+Vince Williams Jr.,Memphis Grizzlies,SG,2022-23,0.73,0.37,0.10,4.01
+Quinndary Weatherspoon,San Antonio Spurs,SG,2019-20,0.80,0.47,0.73,3.98
+Javonte Smart,Milwaukee Bucks,SG,2021-22,1.63,1.00,0.74,3.97
+Solomon Hill,Atlanta Hawks,SF,2021-22,0.33,0.96,0.50,3.90
+Josh Hall,Oklahoma City Thunder,SF,2020-21,2.69,1.84,0.88,3.89
+Charlie Brown Jr.,Oklahoma City Thunder,SG,2020-21,3.33,1.42,0.75,3.82
+Ignas Brazdeikis,New York Knicks,SF,2019-20,0.61,0.18,0.14,3.77
+Joe Harris,Detroit Pistons,SG,2023-24,1.03,0.34,0.26,3.76
+Anthony Tolliver,Philadelphia 76ers,SF,2020-21,0.94,0.56,0.11,3.74
+Devon Hall,Oklahoma City Thunder,SG,2019-20,0.83,0.29,0.54,3.69
+Nathan Mensah,Charlotte Hornets,C,2023-24,1.10,2.17,0.30,3.56
+Adam Mokoka,Chicago Bulls,SG,2020-21,0.41,0.14,0.14,3.47
+Aleem Ford,Orlando Magic,SF,2021-22,2.80,3.00,0.40,3.44
+Yuta Watanabe,Memphis Grizzlies,SG,2023-24,1.18,0.82,0.45,3.40
+Jeremiah Martin,Cleveland Cavaliers,SG,2020-21,2.00,0.64,0.36,3.37
+Ryan Arcidiacono,Portland Trail Blazers,SG,2022-23,1.77,0.85,1.62,3.34
+Devon Dotson,Washington Wizards,SG,2022-23,0.21,0.71,0.57,3.29
+Juan Toscano-Anderson,Sacramento Kings,SF,2023-24,0.41,0.82,0.24,3.28
+AJ Griffin,Atlanta Hawks,SF,2023-24,1.04,0.39,0.11,3.24
+Mychal Mulder,Orlando Magic,SG,2021-22,1.90,0.72,0.10,3.15
+Keyontae Johnson,Oklahoma City Thunder,SF,2023-24,0.85,0.77,0.31,3.12
+Tyrone Wallace,New Orleans Pelicans,SG,2021-22,1.89,0.89,0.11,3.02
+Karim Mane,Orlando Magic,SG,2020-21,0.35,0.45,0.13,3.00
+Tim Frazier,Memphis Grizzlies,SG,2020-21,0.44,0.44,0.89,2.96
+Isaiah Thomas,Los Angeles Lakers,SG,2021-22,7.40,1.60,1.20,2.75
+Jack White,Memphis Grizzlies,SF,2023-24,1.50,3.00,0.25,2.71
+Rodions Kurucs,Houston Rockets,SF,2020-21,0.54,0.46,0.17,2.59
+Taj Gibson,New York Knicks,SF,2023-24,0.76,1.33,0.43,2.50
+Gabe Vincent,Los Angeles Lakers,SG,2023-24,2.62,0.69,1.62,2.31
+Isaiah Todd,Washington Wizards,SF,2022-23,0.47,0.63,0.21,2.27
+Ryan Rollins,Golden State Warriors,SG,2022-23,0.58,0.30,0.15,2.24
+Allen Crabbe,Minnesota Timberwolves,SG,2019-20,3.22,1.33,0.56,1.81
+Terrance Ferguson,Oklahoma City Thunder,SG,2019-20,3.79,1.28,0.88,1.69
+Anthony Tolliver,Sacramento Kings,SF,2019-20,0.56,0.69,0.19,1.58
+Jordan Bone,Detroit Pistons,SG,2019-20,0.50,0.17,0.33,1.36
+Mfiondu Kabengele,Los Angeles Clippers,C,2020-21,0.63,0.33,0.12,1.33
+R.J. Hampton,Miami Heat,SG,2023-24,0.59,0.35,0.47,1.16
+JR Smith,Los Angeles Lakers,SG,2019-20,2.13,0.63,0.38,0.92
+Gabe Vincent,Miami Heat,SG,2019-20,1.16,0.26,0.32,0.87
+Jamaree Bouyea,Portland Trail Blazers,SG,2023-24,1.67,1.67,1.33,0.60
+Timmy Allen,Memphis Grizzlies,SF,2023-24,2.60,3.40,1.00,0.43
+Seth Lundy,Atlanta Hawks,SG,2023-24,0.58,0.29,0.00,0.37
+Melvin Frazier Jr.,Oklahoma City Thunder,SG,2021-22,10.67,4.33,0.33,0.04
+Keljin Blevins,Portland Trail Blazers,SG,2020-21,0.26,0.21,0.09,0.00
+Myles Powell,Philadelphia 76ers,SG,2021-22,0.57,0.26,0.13,0.00
+Buddy Boeheim,Detroit Pistons,SF,2022-23,0.73,0.27,0.18,0.00
+Jalen Hood-Schifino,Los Angeles Lakers,SG,2023-24,0.76,0.29,0.18,-0.16
+Khyri Thomas,Detroit Pistons,SG,2019-20,0.89,0.05,0.16,-0.52
+Didi Louzada,New Orleans Pelicans,SG,2020-21,1.33,0.50,0.50,-1.24
+Michael Frazier II,Houston Rockets,SG,2019-20,0.93,0.34,0.07,-2.55
+Maxwell Lewis,Los Angeles Lakers,SF,2023-24,0.18,0.06,0.10,-2.83
+Leandro Bolmaro,Utah Jazz,SF,2022-23,0.14,0.16,0.16,-5.10

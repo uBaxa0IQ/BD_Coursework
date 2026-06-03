@@ -1,0 +1,51 @@
+% Standalone export: рис. 4.3 — API / параллельная нагрузка
+\documentclass[tikz,border=8pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{patterns}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+    width=14cm,
+    height=6.8cm,
+    xlabel={Число параллельных запросов},
+    ylabel={Время ответа API (мс)},
+    xmode=log,
+    log basis x=10,
+    xtick={1,10,50,100},
+    xticklabels={1,10,50,100},
+    ymin=0, ymax=720,
+    ymajorgrids=true,
+    grid style=dashed,
+    legend style={
+      at={(0.5,1.14)},
+      anchor=south,
+      legend columns=3,
+      font=\small,
+      draw=none
+    },
+    mark size=3pt,
+]
+\addplot+[mark=*, thick, color=black] coordinates {
+    (1, 4.05)
+    (10, 28.13)
+    (50, 79.43)
+    (100, 268.03)
+};
+\addplot+[mark=square*, thick, color=black, dashed] coordinates {
+    (1, 6.41)
+    (10, 48.70)
+    (50, 132.50)
+    (100, 675.67)
+};
+\addplot+[mark=none, thick, color=black, dotted] coordinates {
+    (1, 100) (100, 100)
+};
+\legend{Среднее время, P95, Требование 100\,мс}
+\end{axis}
+\end{tikzpicture}
+\end{document}

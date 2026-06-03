@@ -1,15 +1,23 @@
 \input{preambula}
 
 \begin{document}
-	% Титульный лист: раскомментируйте при наличии title.pdf
-	%\includepdf[pages={1}]{title.pdf}
+	\includepdf[pages=-]{title.pdf}
 	\setcounter{page}{4}
 
 	% Остальные разделы курсовой (введение, конструкторский, технологический,
 	% исследовательский, заключение, список литературы, приложения) --- по мере подготовки.
 
 	\include{abstract}
+
+	\clearpage
+	\begin{center}
+		\LARGE\bfseries\MakeUppercase{СОДЕРЖАНИЕ}
+	\end{center}
+	\vspace*{-31mm}
+	\begingroup
+	\let\contentsname\relax
 	\tableofcontents
+	\endgroup
 
 	\include{socr}
 	\include{intro}

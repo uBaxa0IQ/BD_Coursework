@@ -56,11 +56,11 @@ COMMENT ON COLUMN seasons.end_date IS 'Дата окончания сезона'
 COMMENT ON COLUMN seasons.season_type IS 'Тип сезона: Regular (регулярный), Playoff (плей-офф), Preseason (предсезонный)';
 
 INSERT INTO seasons (label, start_date, end_date, season_type) VALUES
-    ('2019-20', '2019-10-22', '2020-10-11', 'Regular'),
-    ('2020-21', '2020-12-22', '2021-07-20', 'Regular'),
     ('2021-22', '2021-10-19', '2022-06-16', 'Regular'),
     ('2022-23', '2022-10-18', '2023-06-12', 'Regular'),
-    ('2023-24', '2023-10-24', '2024-06-17', 'Regular')
+    ('2023-24', '2023-10-24', '2024-06-17', 'Regular'),
+    ('2024-25', '2024-10-22', '2025-06-22', 'Regular'),
+    ('2025-26', '2025-10-21', '2026-06-21', 'Regular')
 ON CONFLICT (label) DO NOTHING;
 
 -- ============================================================

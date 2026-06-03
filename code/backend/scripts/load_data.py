@@ -1,35 +1,41 @@
 """
-Скрипт загрузки данных NBA в PostgreSQL.
-Источник: nba_api (stats.nba.com)
-Порядок загрузки критичен из-за FK зависимостей.
+Загрузка данных NBA в PostgreSQL из nba_api (stats.nba.com).
 
-Включено (раньше было в repair_after_load.py / fix_positions.py):
-  - PlayerCareerStats с league_id_nullable='00' (корректная лига в NBA API)
-  - дозаполнение пропусков player_team_history по матчам
-  - правка calculate_usg (доля 0–1, как ts_pct; UI ×100) и восстановление вьюх
-  - позиции: CommonTeamRoster (30 команд × сезон, поле POSITION в API)
-  - опционально: --refine-positions (CommonPlayerInfo только для оставшихся без позиции)
-  - опционально: --enrich-profiles (рост, вес, гражданство, драфт, номер через CommonPlayerInfo)
+После запуска БД полностью заполнена и посчитана:
+  • teams / seasons / positions          — справочники (positions/teams засеяны схемой)
+  • players                              — список + биометрия (рост, вес, гражданство,
+                                           дата рождения, номер, драфт) и позиция
+  • games + home_score/away_score        — матчи и счёт (из box score)
+  • game_player_stats                    — статистика по матчам (~200k строк)
+  • player_team_history                  — история команд за наши сезоны
+  • player_season_stats                  — агрегаты + продвинутые метрики
+                                           (PER, BPM, TS%, eFG%, USG%) через CALL update_season_stats
+
+Параллелизм: запросы к API идут с ограничением скорости (rate limiter, как раньше
+~0.65с между стартами), но до `--concurrency` запросов «в полёте» одновременно —
+ожидания ответов перекрываются. Запись в БД идёт последовательно по мере готовности.
+
+DDL (функции метрик, вьюхи, фиксы) — ответственность db/*.sql (накатываются при init БД),
+здесь не дублируется.
 
 Примеры:
-  python scripts/load_data.py
-  python scripts/load_data.py --sleep 0.65 --timeout 30
-  python scripts/load_data.py --sleep 0.5 --cooldown-every 400   # агрессивнее
-  python scripts/load_data.py --positions-only
-  python scripts/load_data.py --positions-only --refine-positions
-  python scripts/load_data.py --profiles-only                    # только профили (~970 игроков с матчами)
-  python scripts/load_data.py --profiles-only --profiles-all     # все игроки в БД (~5000+, долго)
-  python scripts/load_data.py --enrich-profiles                  # полная загрузка + профили
-  python scripts/load_data.py --skip-repair-history --skip-usg-fix
+  python scripts/load_data.py                       # полная загрузка с биометрией
+  python scripts/load_data.py --skip-profiles       # быстрее, без биометрии (поля игроков пустые)
+  python scripts/load_data.py --concurrency 10 --sleep 0.6   # агрессивнее
+  python scripts/load_data.py --positions-only      # только пересчёт позиций
+  python scripts/load_data.py --profiles-only       # только биометрия/позиции игроков с матчами
+  python scripts/load_data.py --profiles-only --profiles-all  # биометрия для всех игроков в БД
 """
+from __future__ import annotations
+
 import argparse
 import asyncio
 import logging
 import math
 import os
-from collections import defaultdict
+import sys
 from datetime import date
-from typing import Any, DefaultDict, Dict, Optional, Set
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Sequence, Tuple
 
 import asyncpg
 from nba_api.stats.endpoints import (
@@ -43,155 +49,96 @@ from nba_api.stats.endpoints import (
 from nba_api.stats.static import teams as nba_teams_static
 from tqdm import tqdm
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s %(levelname)s %(message)s",
-)
+# Чтобы работал `from app.sql...` при запуске из каталога backend/
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from app.sql.backfill_game_scores import BACKFILL_GAME_SCORES_SQL  # noqa: E402
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
-SEASONS = ["2019-20", "2020-21", "2021-22", "2022-23", "2023-24"]
-# Паузы: официального лимита нет; nba_api community ~0.6s OK, <0.5s throttling;
-# с 2026 часто отсечка ~500–600 запросов → cooldown_every.
+# ---------------------------------------------------------------------------
+# Конфигурация
+# ---------------------------------------------------------------------------
+
+SEASONS = ["2021-22", "2022-23", "2023-24", "2024-25", "2025-26"]
+
+SEASON_DATES: Dict[str, Tuple[str, str]] = {
+    "2021-22": ("2021-10-19", "2022-06-16"),
+    "2022-23": ("2022-10-18", "2023-06-12"),
+    "2023-24": ("2023-10-24", "2024-06-17"),
+    "2024-25": ("2024-10-22", "2025-06-22"),
+    "2025-26": ("2025-10-21", "2026-06-21"),
+}
+
+# Паузы: официального лимита нет; nba_api community ~0.6с OK, <0.5с → throttling Akamai;
+# периодическая отсечка ~500–600 запросов → cooldown_every.
 DEFAULT_SLEEP = 0.65
+DEFAULT_CONCURRENCY = 8
 DEFAULT_REQUEST_TIMEOUT = 30
 DEFAULT_COOLDOWN_EVERY = 500
 DEFAULT_COOLDOWN_SEC = 45.0
 RETRY_BACKOFF_SEC = (5.0, 15.0, 45.0)
 MAX_RETRIES = 3
+
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
     "postgresql://nba_admin:nba_secure_pass_2024@localhost:5432/nba_stats",
 ).replace("postgresql+asyncpg://", "postgresql://")
 
-SEASON_DATES = {
-    "2019-20": ("2019-10-22", "2020-10-11"),
-    "2020-21": ("2020-12-22", "2021-07-20"),
-    "2021-22": ("2021-10-19", "2022-06-16"),
-    "2022-23": ("2022-10-18", "2023-06-12"),
-    "2023-24": ("2023-10-24", "2024-06-17"),
-}
-
 # nba_api.stats.static.teams не содержит conference (только id, name, abbr, city)
 TEAM_CONFERENCE: Dict[str, str] = {
-    "ATL": "East",
-    "BOS": "East",
-    "BKN": "East",
-    "CHA": "East",
-    "CHI": "East",
-    "CLE": "East",
-    "DAL": "West",
-    "DEN": "West",
-    "DET": "East",
-    "GSW": "West",
-    "HOU": "West",
-    "IND": "East",
-    "LAC": "West",
-    "LAL": "West",
-    "MEM": "West",
-    "MIA": "East",
-    "MIL": "East",
-    "MIN": "West",
-    "NOP": "West",
-    "NYK": "East",
-    "OKC": "West",
-    "ORL": "East",
-    "PHI": "East",
-    "PHX": "West",
-    "POR": "West",
-    "SAC": "West",
-    "SAS": "West",
-    "TOR": "East",
-    "UTA": "West",
-    "WAS": "East",
+    "ATL": "East", "BOS": "East", "BKN": "East", "CHA": "East", "CHI": "East",
+    "CLE": "East", "DET": "East", "IND": "East", "MIA": "East", "MIL": "East",
+    "NYK": "East", "ORL": "East", "PHI": "East", "TOR": "East", "WAS": "East",
+    "DAL": "West", "DEN": "West", "GSW": "West", "HOU": "West", "LAC": "West",
+    "LAL": "West", "MEM": "West", "MIN": "West", "NOP": "West", "OKC": "West",
+    "PHX": "West", "POR": "West", "SAC": "West", "SAS": "West", "UTA": "West",
 }
 
-# CommonAllPlayers / CommonPlayerInfo — максимально полный маппинг к PG/SG/SF/PF/C
+# CommonTeamRoster / CommonPlayerInfo — маппинг к PG/SG/SF/PF/C
 POSITION_MAP = {
     "PG": "PG", "SG": "SG", "SF": "SF", "PF": "PF", "C": "C",
-    "Guard": "SG",
-    "Forward": "SF",
-    "Center": "C",
-    "Forward-Guard": "SG",
-    "Guard-Forward": "SG",
-    "Forward-Center": "PF",
-    "Center-Forward": "C",
+    "Guard": "SG", "Forward": "SF", "Center": "C",
+    "Forward-Guard": "SG", "Guard-Forward": "SG",
+    "Forward-Center": "PF", "Center-Forward": "C",
     "G": "SG", "F": "SF",
     "G-F": "SF", "F-G": "SG", "F-C": "PF", "C-F": "C",
-    "PG-SG": "PG", "SG-PG": "SG",
-    "SG-SF": "SG", "SF-SG": "SF",
-    "SF-PF": "SF", "PF-SF": "PF",
-    "PF-C": "PF", "C-PF": "C",
+    "PG-SG": "PG", "SG-PG": "SG", "SG-SF": "SG", "SF-SG": "SF",
+    "SF-PF": "SF", "PF-SF": "PF", "PF-C": "PF", "C-PF": "C",
+}
+
+# Имитация браузера — обход блокировок NBA/Akamai
+CUSTOM_HEADERS = {
+    "Host": "stats.nba.com",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+    "Referer": "https://www.nba.com/",
+    "Origin": "https://www.nba.com",
+    "Sec-Ch-Ua": '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
+    "Sec-Ch-Ua-Mobile": "?0",
+    "Sec-Ch-Ua-Platform": '"Windows"',
+    "Sec-Fetch-Dest": "empty",
+    "Sec-Fetch-Mode": "cors",
+    "Sec-Fetch-Site": "same-site",
 }
 
 
+# ---------------------------------------------------------------------------
+# Парсинг полей NBA API
+# ---------------------------------------------------------------------------
+
 def normalize_position(pos_str: str) -> Optional[str]:
-    """Код PG/SG/... или None (CommonAllPlayers поля POSITION не отдаёт)."""
+    """Код PG/SG/SF/PF/C или None."""
     if not pos_str:
         return None
     return POSITION_MAP.get(pos_str.strip())
 
 
-# Имитация реального браузера для обхода блокировок NBA
-CUSTOM_HEADERS = {
-    'Host': 'stats.nba.com',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-    'Accept': 'application/json, text/plain, */*',
-    'Accept-Language': 'en-US,en;q=0.9',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Connection': 'keep-alive',
-    'Referer': 'https://www.nba.com/',
-    'Origin': 'https://www.nba.com',
-    'Sec-Ch-Ua': '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
-    'Sec-Ch-Ua-Mobile': '?0',
-    'Sec-Ch-Ua-Platform': '"Windows"',
-    'Sec-Fetch-Dest': 'empty',
-    'Sec-Fetch-Mode': 'cors',
-    'Sec-Fetch-Site': 'same-site',
-}
-
-
-class LoadSettings:
-    """Параметры паузы API (задаются из CLI в main)."""
-
-    def __init__(
-        self,
-        sleep: float = DEFAULT_SLEEP,
-        request_timeout: int = DEFAULT_REQUEST_TIMEOUT,
-        cooldown_every: int = DEFAULT_COOLDOWN_EVERY,
-        cooldown_sec: float = DEFAULT_COOLDOWN_SEC,
-    ):
-        self.sleep = sleep
-        self.request_timeout = request_timeout
-        self.cooldown_every = cooldown_every
-        self.cooldown_sec = cooldown_sec
-
-
-_load_settings = LoadSettings()
-_api_call_count = 0
-
-
-async def _pace_api() -> None:
-    """Пауза перед запросом + периодический cooldown под лимит NBA/Akamai."""
-    global _api_call_count
-    await asyncio.sleep(_load_settings.sleep)
-    _api_call_count += 1
-    n = _load_settings.cooldown_every
-    if n > 0 and _api_call_count % n == 0:
-        logger.info(
-            "Cooldown %ds после %d запросов к stats.nba.com",
-            _load_settings.cooldown_sec,
-            _api_call_count,
-        )
-        await asyncio.sleep(_load_settings.cooldown_sec)
-
-
-def _retry_sleep(attempt: int) -> float:
-    idx = min(attempt, len(RETRY_BACKOFF_SEC) - 1)
-    return RETRY_BACKOFF_SEC[idx]
-
-
 def _iso_date(s: str) -> Optional[date]:
-    """Безопасный парсинг даты для asyncpg."""
     if not s:
         return None
     try:
@@ -201,17 +148,15 @@ def _iso_date(s: str) -> Optional[date]:
 
 
 def _parse_height_cm(height_str: str) -> Optional[int]:
-    """NBA API HEIGHT: '6-10' → см."""
+    """NBA API HEIGHT '6-10' → см."""
     if not height_str:
         return None
     s = str(height_str).strip()
     if "-" not in s:
         return None
-    parts = s.split("-", 1)
+    feet_str, inch_str = s.split("-", 1)
     try:
-        feet = int(parts[0])
-        inches = int(float(parts[1]))
-        cm = round((feet * 12 + inches) * 2.54)
+        cm = round((int(feet_str) * 12 + int(float(inch_str))) * 2.54)
         if 150 <= cm <= 250:
             return cm
     except (ValueError, IndexError):
@@ -224,8 +169,7 @@ def _parse_weight_kg(weight_str: str) -> Optional[int]:
     if not weight_str:
         return None
     try:
-        lbs = int(str(weight_str).strip())
-        kg = round(lbs * 0.453592)
+        kg = round(int(str(weight_str).strip()) * 0.453592)
         if 60 <= kg <= 200:
             return kg
     except ValueError:
@@ -248,21 +192,36 @@ def _parse_small_int(value: Any, lo: int, hi: int) -> Optional[int]:
     return None
 
 
-def _parse_nationality(country: Any) -> Optional[str]:
-    if country is None:
-        return None
-    s = str(country).strip()
-    return s if s else None
+def _parse_minutes(raw_min: Any) -> float:
+    """NBA API MIN: 'MM:SS', 'MM' или NaN (DNP) → минуты (float, >= 0)."""
+    if raw_min is None or (isinstance(raw_min, float) and math.isnan(raw_min)):
+        return 0.0
+    s = str(raw_min).strip()
+    if not s or s.lower() in ("nan", "none"):
+        return 0.0
+    try:
+        if ":" in s:
+            mm, ss = s.split(":")[:2]
+            minutes = float(mm) + float(ss) / 60
+        else:
+            minutes = float(s)
+        return minutes if math.isfinite(minutes) and minutes >= 0 else 0.0
+    except (ValueError, IndexError):
+        return 0.0
+
+
+def _safe_int(v: Any, default: int = 0) -> int:
+    try:
+        return int(v) if v is not None and str(v) != "None" else default
+    except (ValueError, TypeError):
+        return default
 
 
 def _player_info_to_fields(row: Any, pos_map: Dict[str, int]) -> Dict[str, Any]:
     """Поля players из строки CommonPlayerInfo."""
-    pos_str = str(row.get("POSITION", "")).strip()
-    pos_code = normalize_position(pos_str)
-    position_id = pos_map.get(pos_code) if pos_code else None
-
+    pos_code = normalize_position(str(row.get("POSITION", "")).strip())
     return {
-        "nationality": _parse_nationality(row.get("COUNTRY")),
+        "nationality": (str(row.get("COUNTRY")).strip() or None) if row.get("COUNTRY") else None,
         "birth_date": _iso_date(str(row.get("BIRTHDATE", "") or "")),
         "height_cm": _parse_height_cm(str(row.get("HEIGHT", "") or "")),
         "weight_kg": _parse_weight_kg(str(row.get("WEIGHT", "") or "")),
@@ -270,72 +229,171 @@ def _player_info_to_fields(row: Any, pos_map: Dict[str, int]) -> Dict[str, Any]:
         "draft_year": _parse_small_int(row.get("DRAFT_YEAR"), 1946, 2030),
         "draft_round": _parse_small_int(row.get("DRAFT_ROUND"), 1, 2),
         "draft_pick": _parse_small_int(row.get("DRAFT_NUMBER"), 1, 60),
-        "position_id": position_id,
+        "position_id": pos_map.get(pos_code) if pos_code else None,
     }
 
 
-async def _fetch_common_player_info_row(nba_id: int) -> Optional[Any]:
-    """Одна строка CommonPlayerInfo или None при ошибке/пустом ответе."""
-    for attempt in range(MAX_RETRIES):
+# ---------------------------------------------------------------------------
+# Клиент NBA API: rate limiting + ограниченный параллелизм + ретраи
+# ---------------------------------------------------------------------------
+
+class RateLimiter:
+    """Резервирует тайм-слоты так, чтобы старты запросов шли не чаще min_interval.
+
+    Параллельные задачи ждут свой слот, но ожидание HTTP-ответа НЕ блокирует
+    выдачу следующего слота — поэтому ответы перекрываются. Каждые cooldown_every
+    запросов вставляется длинная пауза (под отсечку NBA/Akamai).
+    """
+
+    def __init__(self, min_interval: float, cooldown_every: int, cooldown_sec: float):
+        self._min_interval = max(0.0, min_interval)
+        self._cooldown_every = max(0, cooldown_every)
+        self._cooldown_sec = max(0.0, cooldown_sec)
+        self._lock = asyncio.Lock()
+        self._next = 0.0
+        self._count = 0
+
+    async def acquire(self) -> None:
+        async with self._lock:
+            loop = asyncio.get_running_loop()
+            scheduled = max(loop.time(), self._next)
+            self._next = scheduled + self._min_interval
+            self._count += 1
+            if self._cooldown_every and self._count % self._cooldown_every == 0:
+                logger.info(
+                    "Cooldown %.0fс после %d запросов к stats.nba.com",
+                    self._cooldown_sec, self._count,
+                )
+                self._next += self._cooldown_sec
+            delay = scheduled - loop.time()
+        if delay > 0:
+            await asyncio.sleep(delay)
+
+
+class NBAClient:
+    """Обёртка над nba_api: ограничение скорости, параллелизм, ретраи, без блокировки loop."""
+
+    def __init__(self, settings: "LoadSettings"):
+        self.settings = settings
+        self.limiter = RateLimiter(
+            settings.sleep, settings.cooldown_every, settings.cooldown_sec
+        )
+        self.semaphore = asyncio.Semaphore(settings.concurrency)
+
+    async def fetch(self, endpoint_class: Any, **kwargs) -> Any:
+        """Один запрос к API с ретраями. Бросает исключение после MAX_RETRIES."""
+        kwargs["headers"] = CUSTOM_HEADERS
+        kwargs.setdefault("timeout", self.settings.request_timeout)
+        for attempt in range(MAX_RETRIES):
+            await self.limiter.acquire()
+            try:
+                return await asyncio.to_thread(endpoint_class, **kwargs)
+            except Exception as e:
+                backoff = RETRY_BACKOFF_SEC[min(attempt, len(RETRY_BACKOFF_SEC) - 1)]
+                logger.warning(
+                    "Ошибка API %s (попытка %d/%d, пауза %.0fс): %s",
+                    endpoint_class.__name__, attempt + 1, MAX_RETRIES, backoff, e,
+                )
+                if attempt < MAX_RETRIES - 1:
+                    await asyncio.sleep(backoff)
+        raise RuntimeError(
+            f"Не удалось получить {endpoint_class.__name__} после {MAX_RETRIES} попыток"
+        )
+
+    async def fetch_df(self, endpoint_class: Any, index: int = 0, **kwargs) -> Optional[Any]:
+        """Запрос → DataFrame[index] или None при ошибке/пустом ответе (не бросает)."""
         try:
-            resp = await fetch_nba_api_data(CommonPlayerInfo, player_id=nba_id)
-            df = resp.get_data_frames()[0]
-            if df.empty:
-                return None
-            return df.iloc[0]
+            resp = await self.fetch(endpoint_class, **kwargs)
+            df = resp.get_data_frames()[index]
+            return None if df.empty else df
         except Exception as e:
-            logger.debug("nba_id=%s попытка %d/%d: %s", nba_id, attempt + 1, MAX_RETRIES, e)
-            await asyncio.sleep(_retry_sleep(attempt))
-    return None
+            logger.debug("%s: %s", endpoint_class.__name__, e)
+            return None
 
-
-async def fetch_nba_api_data(endpoint_class: Any, **kwargs) -> Any:
-    """Обертка для выполнения запросов к nba_api с ретраями, заголовками и без блокировки event loop."""
-    kwargs['headers'] = CUSTOM_HEADERS
-    if 'timeout' not in kwargs:
-        kwargs['timeout'] = _load_settings.request_timeout
-
-    for attempt in range(MAX_RETRIES):
+    async def fetch_df_boxscore(self, game_id: str) -> Optional[Any]:
+        """BoxScoreTraditionalV2 → player_stats DataFrame (именованный набор)."""
         try:
-            await _pace_api()
-            resp = await asyncio.to_thread(endpoint_class, **kwargs)
-            return resp
+            resp = await self.fetch(BoxScoreTraditionalV2, game_id=game_id)
+            df = resp.player_stats.get_data_frame()
+            return None if df.empty else df
         except Exception as e:
-            backoff = _retry_sleep(attempt)
-            logger.warning(
-                "Ошибка API %s (попытка %d/%d, пауза %.0fs): %s",
-                endpoint_class.__name__, attempt + 1, MAX_RETRIES, backoff, e,
-            )
-            await asyncio.sleep(backoff)
+            logger.debug("BoxScore %s: %s", game_id, e)
+            return None
 
-    raise Exception(f"Не удалось получить данные {endpoint_class.__name__} после {MAX_RETRIES} попыток.")
+    async def fetch_df_roster(self, team_id: int, season: str) -> Optional[Any]:
+        """CommonTeamRoster → common_team_roster DataFrame (именованный набор)."""
+        try:
+            resp = await self.fetch(CommonTeamRoster, team_id=team_id, season=season)
+            df = resp.common_team_roster.get_data_frame()
+            return None if df is None or df.empty else df
+        except Exception as e:
+            logger.debug("Roster %s %s: %s", team_id, season, e)
+            return None
 
+
+class LoadSettings:
+    def __init__(
+        self,
+        sleep: float = DEFAULT_SLEEP,
+        concurrency: int = DEFAULT_CONCURRENCY,
+        request_timeout: int = DEFAULT_REQUEST_TIMEOUT,
+        cooldown_every: int = DEFAULT_COOLDOWN_EVERY,
+        cooldown_sec: float = DEFAULT_COOLDOWN_SEC,
+    ):
+        self.sleep = max(0.0, sleep)
+        self.concurrency = max(1, concurrency)
+        self.request_timeout = max(5, request_timeout)
+        self.cooldown_every = max(0, cooldown_every)
+        self.cooldown_sec = max(0.0, cooldown_sec)
+
+
+# ---------------------------------------------------------------------------
+# Параллельная карта: fetch (concurrent) → handle (serial, для записи в БД)
+# ---------------------------------------------------------------------------
+
+async def run_concurrent(
+    items: Sequence[Any],
+    fetch_fn: Callable[[Any], Awaitable[Any]],
+    handle_fn: Optional[Callable[[Any], Awaitable[None]]],
+    *,
+    concurrency: int,
+    desc: str,
+) -> None:
+    """fetch_fn(item) выполняется параллельно (ограничено rate limiter'ом),
+    handle_fn(result) — последовательно в основном цикле (безопасно для одного conn).
+    fetch_fn должна сама ловить свои ошибки и возвращать None, чтобы один сбой
+    не ронял весь прогон."""
+    sem = asyncio.Semaphore(concurrency)
+
+    async def worker(item: Any) -> Any:
+        async with sem:
+            return await fetch_fn(item)
+
+    tasks = [asyncio.create_task(worker(it)) for it in items]
+    for fut in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc=desc):
+        result = await fut
+        if handle_fn is not None and result is not None:
+            await handle_fn(result)
+
+
+# ---------------------------------------------------------------------------
+# Загрузка справочников
+# ---------------------------------------------------------------------------
 
 async def load_teams(conn: asyncpg.Connection) -> Dict[int, int]:
-    """Загрузка команд из статических данных NBA API. Возвращает {nba_team_id: team_id}."""
+    """Команды из статики NBA API. Возвращает {nba_team_id: team_id}."""
     logger.info("Загрузка команд...")
-    all_teams = nba_teams_static.get_teams()
-    mapping = {}
-
-    for t in all_teams:
-        abbr = t["abbreviation"]
-        conference = TEAM_CONFERENCE.get(abbr)
-        if not conference:
-            conference = "East"
-            logger.warning(
-                "Команда %s (%s): нет в TEAM_CONFERENCE, conference=%s",
-                t["full_name"], abbr, conference,
-            )
+    mapping: Dict[int, int] = {}
+    for t in nba_teams_static.get_teams():
+        conference = TEAM_CONFERENCE.get(t["abbreviation"], "East")
         try:
             team_id = await conn.fetchval(
                 """
                 INSERT INTO teams (nba_team_id, name, abbreviation, city, conference)
                 VALUES ($1, $2, $3, $4, $5)
                 ON CONFLICT (nba_team_id) DO UPDATE
-                    SET name         = EXCLUDED.name,
-                        abbreviation = EXCLUDED.abbreviation,
-                        city         = EXCLUDED.city,
-                        conference   = EXCLUDED.conference
+                    SET name = EXCLUDED.name, abbreviation = EXCLUDED.abbreviation,
+                        city = EXCLUDED.city, conference = EXCLUDED.conference
                 RETURNING team_id
                 """,
                 t["id"], t["full_name"], t["abbreviation"], t["city"], conference,
@@ -343,24 +401,22 @@ async def load_teams(conn: asyncpg.Connection) -> Dict[int, int]:
             if team_id:
                 mapping[t["id"]] = team_id
         except Exception as e:
-            logger.warning("Ошибка при загрузке команды %s: %s", t["full_name"], e)
-
+            logger.warning("Команда %s: %s", t["full_name"], e)
     logger.info("Загружено команд: %d", len(mapping))
     return mapping
 
 
 async def load_seasons(conn: asyncpg.Connection) -> Dict[str, int]:
-    """Загрузка сезонов. Возвращает {label: season_id}."""
+    """Сезоны. Возвращает {label: season_id}."""
     logger.info("Загрузка сезонов...")
-    mapping = {}
+    mapping: Dict[str, int] = {}
     for label, (start, end) in SEASON_DATES.items():
         season_id = await conn.fetchval(
             """
             INSERT INTO seasons (label, start_date, end_date, season_type)
             VALUES ($1, $2, $3, 'Regular')
-            ON CONFLICT (label) DO UPDATE SET
-                start_date = EXCLUDED.start_date,
-                end_date   = EXCLUDED.end_date
+            ON CONFLICT (label) DO UPDATE
+                SET start_date = EXCLUDED.start_date, end_date = EXCLUDED.end_date
             RETURNING season_id
             """,
             label, _iso_date(start), _iso_date(end),
@@ -371,93 +427,71 @@ async def load_seasons(conn: asyncpg.Connection) -> Dict[str, int]:
     return mapping
 
 
-async def load_players(conn: asyncpg.Connection) -> Dict[int, int]:
-    """Загрузка игроков. Возвращает {nba_id: player_id}."""
-    logger.info("Загрузка игроков через CommonAllPlayers...")
-    try:
-        resp = await fetch_nba_api_data(CommonAllPlayers, is_only_current_season=0)
-        df = resp.get_data_frames()[0]
-    except Exception as e:
-        logger.error("Критическая ошибка при получении списка игроков: %s", e)
+async def load_players(conn: asyncpg.Connection, client: NBAClient) -> Dict[int, int]:
+    """Список игроков (CommonAllPlayers). Возвращает {nba_id: player_id}.
+    Биометрия/позиция заполняются позже (enrich_profiles / load_positions)."""
+    logger.info("Загрузка игроков (CommonAllPlayers)...")
+    df = await client.fetch_df(CommonAllPlayers, is_only_current_season=0)
+    if df is None:
+        logger.error("Не удалось получить список игроков")
         return {}
 
-    mapping = {}
+    mapping: Dict[int, int] = {}
     for _, row in tqdm(df.iterrows(), total=len(df), desc="Игроки"):
         try:
             nba_id = int(row["PERSON_ID"])
             full = str(row.get("DISPLAY_FIRST_LAST", "")).strip()
-            parts = full.split(" ", 1)
-            first = parts[0] if len(parts) > 0 else ""
-            last = parts[1] if len(parts) > 1 else ""
-            is_active = bool(row.get("ROSTERSTATUS", 0))
-
-            # CommonAllPlayers не содержит POSITION — заполняется load_positions_from_rosters
+            first, _, last = full.partition(" ")
             player_id = await conn.fetchval(
                 """
                 INSERT INTO players (nba_id, first_name, last_name, is_active, position_id)
                 VALUES ($1, $2, $3, $4, NULL)
-                ON CONFLICT (nba_id) DO UPDATE SET
-                    first_name  = EXCLUDED.first_name,
-                    last_name   = EXCLUDED.last_name,
-                    is_active   = EXCLUDED.is_active
+                ON CONFLICT (nba_id) DO UPDATE
+                    SET first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name,
+                        is_active = EXCLUDED.is_active
                 RETURNING player_id
                 """,
-                nba_id, first, last, is_active,
+                nba_id, first, last, bool(row.get("ROSTERSTATUS", 0)),
             )
             if player_id:
                 mapping[nba_id] = player_id
         except Exception as e:
-            logger.debug("Ошибка загрузки игрока %s: %s", row.get("PERSON_ID"), e)
-
+            logger.debug("Игрок %s: %s", row.get("PERSON_ID"), e)
     logger.info("Загружено игроков: %d", len(mapping))
     return mapping
 
 
+# ---------------------------------------------------------------------------
+# Матчи и статистика
+# ---------------------------------------------------------------------------
+
 async def load_games(
-    conn: asyncpg.Connection, season_label: str, season_id: int, team_map: Dict[int, int]
+    conn: asyncpg.Connection, client: NBAClient,
+    season_label: str, season_id: int, team_map: Dict[int, int],
 ) -> Dict[str, int]:
-    """Загрузка матчей. Возвращает {nba_game_id: game_id}."""
-    logger.info("Загрузка матчей для сезона %s...", season_label)
-    try:
-        resp = await fetch_nba_api_data(LeagueGameLog, season=season_label)
-        df = resp.get_data_frames()[0]
-    except Exception as e:
-        logger.error("Ошибка загрузки матчей %s: %s", season_label, e)
+    """Матчи сезона (LeagueGameLog). Возвращает {nba_game_id: game_id}."""
+    df = await client.fetch_df(LeagueGameLog, season=season_label)
+    if df is None:
+        logger.error("Не удалось загрузить матчи %s", season_label)
         return {}
 
-    games_data = {}
-    
-    # Собираем данные по матчу из двух строк (home и away)
+    # Матч в логе — две строки (home + away), собираем в одну запись
+    games: Dict[str, Dict[str, Any]] = {}
     for _, row in df.iterrows():
         gid = str(row["GAME_ID"])
-        if gid not in games_data:
-            games_data[gid] = {
-                "game_date": _iso_date(str(row.get("GAME_DATE", ""))),
-                "season_id": season_id,
-            }
-
+        g = games.setdefault(gid, {"game_date": _iso_date(str(row.get("GAME_DATE", "")))})
         matchup = str(row.get("MATCHUP", ""))
-        nba_team_id = int(row["TEAM_ID"])
-        
-        if "vs." in matchup:  # home
-            games_data[gid]["home_nba"] = nba_team_id
-        elif "@" in matchup:  # away
-            games_data[gid]["away_nba"] = nba_team_id
+        if "vs." in matchup:
+            g["home_nba"] = int(row["TEAM_ID"])
+        elif "@" in matchup:
+            g["away_nba"] = int(row["TEAM_ID"])
 
-    mapping = {}
-    for gid, g in tqdm(games_data.items(), desc=f"Матчи {season_label}"):
-        home_nba = g.get("home_nba")
-        away_nba = g.get("away_nba")
-        
-        if not home_nba or not away_nba:
-            continue
-            
-        home_id = team_map.get(home_nba)
-        away_id = team_map.get(away_nba)
-        
+    mapping: Dict[str, int] = {}
+    for gid, g in games.items():
+        home_id = team_map.get(g.get("home_nba"))
+        away_id = team_map.get(g.get("away_nba"))
         if not home_id or not away_id:
             continue
-            
         try:
             game_id = await conn.fetchval(
                 """
@@ -466,535 +500,185 @@ async def load_games(
                 ON CONFLICT DO NOTHING
                 RETURNING game_id
                 """,
-                g["season_id"], home_id, away_id, g["game_date"],
+                season_id, home_id, away_id, g["game_date"],
             )
             if game_id:
                 mapping[gid] = game_id
         except Exception as e:
-            logger.debug("Ошибка вставки матча %s: %s", gid, e)
-
-    logger.info("Загружено новых матчей для %s: %d", season_label, len(mapping))
+            logger.debug("Матч %s: %s", gid, e)
+    logger.info("Сезон %s: новых матчей %d", season_label, len(mapping))
     return mapping
 
 
+def _boxscore_to_records(
+    df: Any, local_game_id: int,
+    player_map: Dict[int, int], team_map: Dict[int, int],
+) -> List[Tuple]:
+    records: List[Tuple] = []
+    for _, row in df.iterrows():
+        player_id = player_map.get(_safe_int(row.get("PLAYER_ID")))
+        team_id = team_map.get(_safe_int(row.get("TEAM_ID")))
+        if not player_id or not team_id:
+            continue
+        records.append((
+            local_game_id, player_id, team_id, round(_parse_minutes(row.get("MIN")), 1),
+            _safe_int(row.get("PTS")), _safe_int(row.get("OREB")), _safe_int(row.get("DREB")),
+            _safe_int(row.get("AST")), _safe_int(row.get("STL")), _safe_int(row.get("BLK")),
+            _safe_int(row.get("TO")), _safe_int(row.get("PF")),
+            _safe_int(row.get("FGM")), _safe_int(row.get("FGA")),
+            _safe_int(row.get("FG3M")), _safe_int(row.get("FG3A")),
+            _safe_int(row.get("FTM")), _safe_int(row.get("FTA")),
+            _safe_int(row.get("PLUS_MINUS")), bool(row.get("START_POSITION", "")),
+        ))
+    return records
+
+
 async def load_game_stats(
-    conn: asyncpg.Connection, game_ids: Dict[str, int], player_map: Dict[int, int], team_map: Dict[int, int]
+    conn: asyncpg.Connection, client: NBAClient,
+    game_ids: Dict[str, int], player_map: Dict[int, int], team_map: Dict[int, int],
 ) -> None:
-    """Загрузка статистики игроков по матчам через BoxScore."""
-    logger.info("Загрузка статистики по матчам (%d матчей)...", len(game_ids))
+    """Box scores по всем матчам — параллельно по сети, запись последовательно."""
+    logger.info("Загрузка box scores (%d матчей, параллелизм %d)...",
+                len(game_ids), client.settings.concurrency)
     errors = 0
 
-    for nba_game_id, local_game_id in tqdm(game_ids.items(), desc="BoxScores"):
-        try:
-            resp = await fetch_nba_api_data(BoxScoreTraditionalV2, game_id=nba_game_id)
-            df = resp.player_stats.get_data_frame()
-        except Exception as e:
-            logger.debug("Пропуск BoxScore %s: %s", nba_game_id, e)
+    async def fetch(item: Tuple[str, int]) -> Optional[List[Tuple]]:
+        nonlocal errors
+        nba_game_id, local_game_id = item
+        df = await client.fetch_df_boxscore(nba_game_id)
+        if df is None:
             errors += 1
-            continue
+            return None
+        return _boxscore_to_records(df, local_game_id, player_map, team_map)
 
-        records = []
-        for _, row in df.iterrows():
-            nba_pid = int(row.get("PLAYER_ID", 0))
-            nba_tid = int(row.get("TEAM_ID", 0))
-            player_id = player_map.get(nba_pid)
-            team_id = team_map.get(nba_tid)
-            if not player_id or not team_id:
-                continue
+    async def write(records: List[Tuple]) -> None:
+        if not records:
+            return
+        try:
+            await conn.executemany(
+                """
+                INSERT INTO game_player_stats
+                    (game_id, player_id, team_id, minutes_played, points,
+                     rebounds_off, rebounds_def, assists, steals, blocks,
+                     turnovers, fouls, fgm, fga, fg3m, fg3a, ftm, fta,
+                     plus_minus, is_starter)
+                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
+                ON CONFLICT (game_id, player_id) DO NOTHING
+                """,
+                records,
+            )
+        except Exception as e:
+            logger.debug("Вставка box score: %s", e)
 
-            raw_min = row.get("MIN", "")
-            if raw_min is None or (isinstance(raw_min, float) and math.isnan(raw_min)):
-                minutes = 0.0
-            else:
-                min_str = str(raw_min).strip()
-                if not min_str or min_str.lower() in ("nan", "none"):
-                    minutes = 0.0
-                else:
-                    try:
-                        if ":" in min_str:
-                            parts = min_str.split(":")
-                            minutes = float(parts[0]) + float(parts[1]) / 60
-                        else:
-                            minutes = float(min_str)
-                        if not math.isfinite(minutes) or minutes < 0:
-                            minutes = 0.0
-                    except Exception:
-                        minutes = 0.0
+    await run_concurrent(
+        list(game_ids.items()), fetch, write,
+        concurrency=client.settings.concurrency, desc="BoxScores",
+    )
+    logger.info("Box scores загружены. Ошибок скачивания: %d", errors)
 
-            def safe_int(v, default=0):
-                try:
-                    return int(v) if v is not None and str(v) != "None" else default
-                except Exception:
-                    return default
 
-            records.append((
-                local_game_id, player_id, team_id, round(minutes, 1),
-                safe_int(row.get("PTS")), safe_int(row.get("OREB")),
-                safe_int(row.get("DREB")), safe_int(row.get("AST")),
-                safe_int(row.get("STL")), safe_int(row.get("BLK")),
-                safe_int(row.get("TO")), safe_int(row.get("PF")),
-                safe_int(row.get("FGM")), safe_int(row.get("FGA")),
-                safe_int(row.get("FG3M")), safe_int(row.get("FG3A")),
-                safe_int(row.get("FTM")), safe_int(row.get("FTA")),
-                safe_int(row.get("PLUS_MINUS")), bool(row.get("START_POSITION", "")),
-            ))
-
-        if records:
-            try:
-                await conn.executemany(
-                    """
-                    INSERT INTO game_player_stats
-                        (game_id, player_id, team_id, minutes_played,
-                         points, rebounds_off, rebounds_def, assists,
-                         steals, blocks, turnovers, fouls,
-                         fgm, fga, fg3m, fg3a, ftm, fta,
-                         plus_minus, is_starter)
-                    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
-                    ON CONFLICT (game_id, player_id) DO NOTHING
-                    """,
-                    records,
-                )
-            except Exception as e:
-                logger.debug("Ошибка вставки stats %s: %s", nba_game_id, e)
-
-    logger.info("BoxScores загружены. Ошибок скачивания: %d", errors)
+async def players_with_games(conn: asyncpg.Connection) -> List[asyncpg.Record]:
+    """Игроки, реально сыгравшие в наших сезонах (а не весь исторический список API)."""
+    return await conn.fetch(
+        """
+        SELECT p.player_id, p.nba_id
+        FROM players p
+        WHERE EXISTS (SELECT 1 FROM game_player_stats gps WHERE gps.player_id = p.player_id)
+        ORDER BY p.nba_id
+        """
+    )
 
 
 async def load_player_history(
-    conn: asyncpg.Connection, player_map: Dict[int, int], team_map: Dict[int, int], season_map: Dict[str, int]
+    conn: asyncpg.Connection, client: NBAClient,
+    team_map: Dict[int, int], season_map: Dict[str, int],
 ) -> None:
-    """Загрузка истории команд игроков."""
-    logger.info("Загрузка истории команд игроков...")
-    nba_ids = list(player_map.keys())  # Обрабатываем всех игроков
+    """История команд (player_team_history) по карьере (PlayerCareerStats).
 
-    for nba_id in tqdm(nba_ids, desc="История команд"):
-        player_id = player_map.get(nba_id)
-        if not player_id:
-            continue
-            
-        try:
-            resp = await fetch_nba_api_data(
-                PlayerCareerStats,
-                player_id=nba_id,
-                league_id_nullable="00",
-            )
-            df = resp.get_data_frames()[0]
-        except Exception:
-            continue
+    Только игроки с матчами в наших сезонах — это закрывает все пропуски за один
+    проход (раньше для этого был отдельный repair-этап по ~5000 игроков)."""
+    players = await players_with_games(conn)
+    logger.info("История команд: %d игроков с матчами (параллелизм %d)",
+                len(players), client.settings.concurrency)
 
-        for _, row in df.iterrows():
-            season_label_full = str(row.get("SEASON_ID", ""))
-            if len(season_label_full) >= 7:
-                season_label = season_label_full[:7]
-            else:
-                continue
-
-            season_id = season_map.get(season_label)
+    async def fetch(rec: asyncpg.Record) -> Optional[List[Tuple[int, int, int, date]]]:
+        df = await client.fetch_df(PlayerCareerStats, player_id=int(rec["nba_id"]),
+                                   league_id_nullable="00")
+        if df is None:
+            return None
+        player_id = int(rec["player_id"])
+        rows: List[Tuple[int, int, int, date]] = []
+        for _, r in df.iterrows():
+            label = str(r.get("SEASON_ID", ""))[:7]
+            season_id = season_map.get(label)
             if not season_id:
                 continue
-
-            nba_tid = int(row.get("TEAM_ID", 0))
-            team_id = team_map.get(nba_tid)
-            if not team_id:
+            team_id = team_map.get(_safe_int(r.get("TEAM_ID")))
+            if not team_id:  # пропускаем в т.ч. строку TOT (TEAM_ID=0)
                 continue
+            start = _iso_date(SEASON_DATES[label][0])
+            if start:
+                rows.append((player_id, team_id, season_id, start))
+        return rows or None
 
-            try:
-                await conn.execute(
-                    """
-                    INSERT INTO player_team_history
-                        (player_id, team_id, season_id, start_date, contract_type)
-                    VALUES ($1, $2, $3, $4, 'Standard')
-                    ON CONFLICT DO NOTHING
-                    """,
-                    player_id,
-                    team_id,
-                    season_id,
-                    _iso_date(SEASON_DATES.get(season_label, ("2020-01-01", "2021-01-01"))[0]),
-                )
-            except Exception:
-                pass
+    async def write(rows: List[Tuple[int, int, int, date]]) -> None:
+        try:
+            await conn.executemany(
+                """
+                INSERT INTO player_team_history
+                    (player_id, team_id, season_id, start_date, contract_type)
+                VALUES ($1, $2, $3, $4, 'Standard')
+                ON CONFLICT (player_id, season_id, team_id) DO NOTHING
+                """,
+                rows,
+            )
+        except Exception as e:
+            logger.debug("Вставка истории: %s", e)
 
+    await run_concurrent(
+        players, fetch, write,
+        concurrency=client.settings.concurrency, desc="История команд",
+    )
     logger.info("История команд загружена.")
 
 
-async def backfill_game_scores(conn: asyncpg.Connection) -> None:
-    """Счёт матчей из box score + очистка NaN в player_season_stats."""
-    try:
-        from app.sql.backfill_game_scores import BACKFILL_GAME_SCORES_SQL
+# ---------------------------------------------------------------------------
+# Позиции и биометрия
+# ---------------------------------------------------------------------------
 
-        await conn.execute(BACKFILL_GAME_SCORES_SQL)
-        logger.info("Backfill: счёт матчей и очистка NaN в метриках.")
-    except Exception as e:
-        logger.warning("Backfill game scores не выполнен: %s", e)
+async def load_positions_from_rosters(conn: asyncpg.Connection, client: NBAClient) -> int:
+    """Позиции из CommonTeamRoster (30 команд × сезоны). Поздний сезон побеждает."""
+    pos_map = {r["code"]: r["position_id"]
+               for r in await conn.fetch("SELECT position_id, code FROM positions")}
+    await conn.execute("UPDATE players SET position_id = NULL")
 
-
-async def print_counts(conn: asyncpg.Connection) -> None:
-    tables = [
-        "positions", "seasons", "teams", "players",
-        "games", "game_player_stats", "player_season_stats", "player_team_history",
-    ]
-    logger.info("=== ФИНАЛЬНАЯ СТАТИСТИКА ===")
-    for table in tables:
-        try:
-            count = await conn.fetchval(f"SELECT COUNT(*) FROM {table}")
-            logger.info("  %-30s %d строк", table, count)
-        except asyncpg.UndefinedTableError:
-            logger.warning("  %-30s ТАБЛИЦА НЕ СУЩЕСТВУЕТ", table)
-    try:
-        with_stats = await conn.fetchval(
-            "SELECT COUNT(*) FROM players p "
-            "WHERE EXISTS (SELECT 1 FROM game_player_stats gps WHERE gps.player_id = p.player_id)"
-        )
-        with_height = await conn.fetchval("SELECT COUNT(*) FROM players WHERE height_cm IS NOT NULL")
-        with_nat = await conn.fetchval("SELECT COUNT(*) FROM players WHERE nationality IS NOT NULL")
-        with_pos = await conn.fetchval("SELECT COUNT(*) FROM players WHERE position_id IS NOT NULL")
-        logger.info("  %-30s %d / %d с матчами", "players.height_cm", with_height, with_stats)
-        logger.info("  %-30s %d / %d с матчами", "players.nationality", with_nat, with_stats)
-        logger.info("  %-30s %d / %d с матчами", "players.position_id", with_pos, with_stats)
-    except asyncpg.UndefinedTableError:
-        pass
-
-
-# --- Дозаполнение player_team_history (пропуски после первой загрузки карьеры) ---
-
-GAPS_SQL = """
-SELECT DISTINCT p.player_id, p.nba_id, g.season_id, s.label AS season_label
-FROM game_player_stats gps
-JOIN games g ON g.game_id = gps.game_id
-JOIN players p ON p.player_id = gps.player_id
-JOIN seasons s ON s.season_id = g.season_id
-WHERE NOT EXISTS (
-    SELECT 1
-    FROM player_team_history pth
-    WHERE pth.player_id = gps.player_id
-      AND pth.season_id = g.season_id
-)
-ORDER BY p.nba_id, g.season_id;
-"""
-
-FIX_USG_SQL = """
-DROP VIEW IF EXISTS v_top_players CASCADE;
-DROP VIEW IF EXISTS v_player_rankings CASCADE;
-ALTER TABLE player_season_stats
-    ALTER COLUMN usg_pct TYPE DECIMAL(5,4)
-    USING (
-        CASE
-            WHEN usg_pct IS NULL THEN NULL
-            WHEN usg_pct::numeric > 1 THEN usg_pct::numeric / 100.0
-            ELSE usg_pct::numeric
-        END
-    );
-"""
-
-
-async def fetch_missing_history_keys(conn: asyncpg.Connection) -> list:
-    return await conn.fetch(GAPS_SQL)
-
-
-async def insert_history_row(
-    conn: asyncpg.Connection,
-    player_id: int,
-    team_id: int,
-    season_id: int,
-    start_date: Any,
-) -> None:
-    await conn.execute(
-        """
-        INSERT INTO player_team_history
-            (player_id, team_id, season_id, start_date, contract_type)
-        SELECT $1, $2, $3, $4, 'Standard'
-        WHERE NOT EXISTS (
-            SELECT 1 FROM player_team_history e
-            WHERE e.player_id = $1 AND e.team_id = $2 AND e.season_id = $3
-        )
-        """,
-        player_id,
-        team_id,
-        season_id,
-        start_date,
-    )
-
-
-async def repair_missing_player_team_history(conn: asyncpg.Connection) -> None:
-    rows = await fetch_missing_history_keys(conn)
-    if not rows:
-        logger.info("Пропуски player_team_history не найдены.")
-        return
-
-    by_nba: DefaultDict[int, Dict[str, Any]] = defaultdict(dict)
-    for r in rows:
-        nba_id = int(r["nba_id"])
-        pid = int(r["player_id"])
-        sid = int(r["season_id"])
-        label = str(r["season_label"])
-        by_nba[nba_id]["player_id"] = pid
-        if "seasons" not in by_nba[nba_id]:
-            by_nba[nba_id]["seasons"] = {}
-        by_nba[nba_id]["seasons"][label] = sid
-
-    logger.info("Игроков с пропусками истории (по nba_id): %d", len(by_nba))
-
-    failed: list[int] = []
-    for nba_id, data in tqdm(by_nba.items(), desc="Дозагрузка истории"):
-        player_id: int = data["player_id"]
-        season_labels: Dict[str, int] = data["seasons"]
-        needed_labels: Set[str] = set(season_labels.keys())
-
-        try:
-            resp = await fetch_nba_api_data(
-                PlayerCareerStats,
-                player_id=nba_id,
-                league_id_nullable="00",
-            )
-            df = resp.get_data_frames()[0]
-        except Exception as e:
-            logger.warning("nba_id=%s: не удалось получить карьеру: %s", nba_id, e)
-            failed.append(nba_id)
-            continue
-
-        for _, row in df.iterrows():
-            season_full = str(row.get("SEASON_ID", ""))
-            if len(season_full) < 7:
-                continue
-            season_label = season_full[:7]
-            if season_label not in needed_labels:
-                continue
-
-            season_id = season_labels[season_label]
-            try:
-                nba_tid = int(row.get("TEAM_ID", 0))
-            except (TypeError, ValueError):
-                continue
-            if nba_tid == 0:
-                continue
-
-            team_id = await conn.fetchval(
-                "SELECT team_id FROM teams WHERE nba_team_id = $1", nba_tid
-            )
-            if not team_id:
-                continue
-
-            start = SEASON_DATES.get(season_label, ("2020-01-01", "2021-01-01"))[0]
-            start_d = _iso_date(start)
-            if not start_d:
-                continue
-
-            try:
-                await insert_history_row(conn, player_id, team_id, season_id, start_d)
-            except Exception as ex:
-                logger.debug("Вставка истории player=%s season=%s: %s", player_id, season_id, ex)
-
-    if failed:
-        logger.warning("Не загружена карьера для nba_id (сохраните список): %s", failed)
-
-
-async def apply_usg_fix(conn: asyncpg.Connection) -> None:
-    """Применить тип колонки, обновлённую calculate_usg и вьюху (как в db/04_functions.sql + 06_views)."""
-    try:
-        await conn.execute(FIX_USG_SQL)
-    except Exception as e:
-        logger.warning("ALTER usg_pct / DROP VIEW (возможно уже применено): %s", e)
-
-    usg_sql = """
-CREATE OR REPLACE FUNCTION calculate_usg(
-    p_player_id INT,
-    p_season_id INT,
-    p_team_id   INT DEFAULT NULL
-)
-RETURNS DECIMAL(5,4)
-LANGUAGE plpgsql
-STABLE
-AS $$
-DECLARE
-    v_team_id  INTEGER;
-    v_fga      NUMERIC := 0;
-    v_fta      NUMERIC := 0;
-    v_tov      NUMERIC := 0;
-    v_mp       NUMERIC := 0;
-    v_tm_fga   NUMERIC := 0;
-    v_tm_fta   NUMERIC := 0;
-    v_tm_tov   NUMERIC := 0;
-    v_tm_mp    NUMERIC := 0;
-    v_denom    NUMERIC;
-BEGIN
-    IF p_team_id IS NOT NULL THEN
-        v_team_id := p_team_id;
-    ELSE
-        SELECT gps.team_id
-        INTO v_team_id
-        FROM game_player_stats gps
-        JOIN games g ON g.game_id = gps.game_id
-        WHERE gps.player_id = p_player_id
-          AND g.season_id   = p_season_id
-        ORDER BY g.game_date DESC
-        LIMIT 1;
-    END IF;
-
-    IF v_team_id IS NULL THEN
-        RETURN NULL;
-    END IF;
-
-    SELECT
-        COALESCE(SUM(gps.fga), 0),
-        COALESCE(SUM(gps.fta), 0),
-        COALESCE(SUM(gps.turnovers), 0),
-        COALESCE(SUM(gps.minutes_played), 0)
-    INTO v_fga, v_fta, v_tov, v_mp
-    FROM game_player_stats gps
-    JOIN games g ON g.game_id = gps.game_id
-    WHERE gps.player_id = p_player_id
-      AND g.season_id   = p_season_id
-      AND (p_team_id IS NULL OR gps.team_id = p_team_id);
-
-    IF v_mp < 1 THEN
-        RETURN NULL;
-    END IF;
-
-    SELECT
-        COALESCE(SUM(gps2.fga), 0),
-        COALESCE(SUM(gps2.fta), 0),
-        COALESCE(SUM(gps2.turnovers), 0),
-        COALESCE(SUM(gps2.minutes_played), 0)
-    INTO v_tm_fga, v_tm_fta, v_tm_tov, v_tm_mp
-    FROM game_player_stats gps2
-    JOIN games g2 ON g2.game_id = gps2.game_id
-    WHERE gps2.team_id  = v_team_id
-      AND g2.season_id  = p_season_id
-      AND gps2.game_id IN (
-          SELECT gps3.game_id
-          FROM game_player_stats gps3
-          JOIN games g3 ON g3.game_id = gps3.game_id
-          WHERE gps3.player_id = p_player_id
-            AND g3.season_id = p_season_id
-            AND (p_team_id IS NULL OR gps3.team_id = p_team_id)
-      );
-
-    v_denom := v_mp * (v_tm_fga + 0.44 * v_tm_fta + v_tm_tov);
-
-    IF v_denom = 0 THEN
-        RETURN NULL;
-    END IF;
-
-    RETURN ROUND(
-        (v_fga + 0.44 * v_fta + v_tov) * (v_tm_mp / 5.0) / v_denom,
-        4
-    );
-END;
-$$;
-"""
-    await conn.execute(usg_sql)
-    logger.info("Функция calculate_usg обновлена (TmMP/5, опциональный team_id; доля 0–1)")
-
-    # Как в db/06_views.sql — иначе ломается v_top_players (зависит от колонок v_player_rankings)
-    v_rankings = """
-CREATE OR REPLACE VIEW v_player_rankings AS
-SELECT
-    p.player_id,
-    p.first_name || ' ' || p.last_name  AS full_name,
-    p.nba_id,
-    t.name                               AS team_name,
-    t.abbreviation,
-    t.nba_team_id,
-    pos.code                             AS position,
-    s.label                              AS season,
-    s.season_id,
-    pss.games_played,
-    pss.avg_pts,
-    pss.avg_reb,
-    pss.avg_ast,
-    pss.avg_stl,
-    pss.avg_blk,
-    pss.avg_tov,
-    pss.avg_min,
-    pss.fg_pct,
-    pss.fg3_pct,
-    pss.ft_pct,
-    pss.avg_plus_minus,
-    pss.efg_pct,
-    pss.ts_pct,
-    pss.usg_pct,
-    pss.per,
-    pss.bpm
-FROM player_season_stats pss
-JOIN players   p   ON p.player_id   = pss.player_id
-JOIN teams     t   ON t.team_id     = pss.team_id
-JOIN seasons   s   ON s.season_id   = pss.season_id
-LEFT JOIN positions pos ON pos.position_id = p.position_id
-ORDER BY pss.per DESC NULLS LAST
-"""
-    v_top = """
-CREATE OR REPLACE VIEW v_top_players AS
-SELECT
-    full_name,
-    team_name,
-    position,
-    season,
-    avg_pts,
-    avg_reb,
-    avg_ast,
-    per
-FROM v_player_rankings
-WHERE per IS NOT NULL
-ORDER BY per DESC
-"""
-    try:
-        await conn.execute(v_rankings)
-        await conn.execute(v_top)
-        await conn.execute("GRANT SELECT ON v_player_rankings TO analyst, db_admin")
-        await conn.execute("GRANT SELECT ON v_top_players TO reader, analyst, db_admin")
-        logger.info("Вьюхи v_player_rankings и v_top_players восстановлены (как в db/06_views.sql)")
-    except Exception as e:
-        logger.error("Ошибка восстановления вьюх: %s", e)
-
-
-async def load_positions_from_rosters(conn: asyncpg.Connection) -> int:
-    """
-    Позиции из CommonTeamRoster (в ответе есть POSITION).
-    ~30 команд × len(SEASONS) запросов; при конфликте побеждает более поздний сезон.
-    """
-    pos_rows = await conn.fetch("SELECT position_id, code FROM positions")
-    pos_map = {r["code"]: r["position_id"] for r in pos_rows}
-
-    cleared = await conn.execute("UPDATE players SET position_id = NULL")
-    logger.info("Сброс старых позиций: %s", cleared)
+    teams = nba_teams_static.get_teams()
+    items = [(int(t["id"]), season) for season in SEASONS for t in teams]
+    logger.info("Загрузка позиций из ростеров: %d запросов (параллелизм %d)",
+                len(items), client.settings.concurrency)
 
     nba_id_to_code: Dict[int, str] = {}
-    teams = nba_teams_static.get_teams()
-    total_calls = len(teams) * len(SEASONS)
-    logger.info(
-        "Загрузка позиций из ростеров (CommonTeamRoster): %d запросов",
-        total_calls,
-    )
 
-    with tqdm(total=total_calls, desc="Ростеры") as pbar:
-        for season_label in SEASONS:
-            for t in teams:
-                pbar.update(1)
-                nba_team_id = int(t["id"])
-                try:
-                    resp = await fetch_nba_api_data(
-                        CommonTeamRoster,
-                        team_id=nba_team_id,
-                        season=season_label,
-                    )
-                    df = resp.common_team_roster.get_data_frame()
-                except Exception as e:
-                    logger.warning(
-                        "Ростер %s %s: %s", t.get("abbreviation"), season_label, e
-                    )
-                    continue
+    async def fetch(item: Tuple[int, str]) -> Optional[Dict[int, str]]:
+        nba_team_id, season = item
+        df = await client.fetch_df_roster(nba_team_id, season)
+        if df is None:
+            return None
+        result: Dict[int, str] = {}
+        for _, row in df.iterrows():
+            try:
+                code = normalize_position(str(row.get("POSITION", "")))
+                if code:
+                    result[int(row["PLAYER_ID"])] = code
+            except (TypeError, ValueError, KeyError):
+                continue
+        return result or None
 
-                if df is None or df.empty:
-                    continue
+    async def collect(result: Dict[int, str]) -> None:
+        nba_id_to_code.update(result)  # поздние сезоны перезаписывают ранние
 
-                for _, row in df.iterrows():
-                    try:
-                        nba_id = int(row["PLAYER_ID"])
-                    except (TypeError, ValueError, KeyError):
-                        continue
-                    code = normalize_position(str(row.get("POSITION", "")))
-                    if code:
-                        nba_id_to_code[nba_id] = code
+    await run_concurrent(items, fetch, collect,
+                         concurrency=client.settings.concurrency, desc="Ростеры")
 
     updated = 0
     for nba_id, code in nba_id_to_code.items():
@@ -1002,42 +686,23 @@ async def load_positions_from_rosters(conn: asyncpg.Connection) -> int:
         if not position_id:
             continue
         status = await conn.execute(
-            "UPDATE players SET position_id = $1 WHERE nba_id = $2",
-            position_id,
-            nba_id,
+            "UPDATE players SET position_id = $1 WHERE nba_id = $2", position_id, nba_id
         )
-        if status and status.split()[-1].isdigit() and int(status.split()[-1]) > 0:
+        if status.split()[-1] != "0":
             updated += 1
-
-    dist = await conn.fetch(
-        """
-        SELECT pos.code, COUNT(*) AS n
-        FROM players p
-        LEFT JOIN positions pos ON pos.position_id = p.position_id
-        GROUP BY pos.code
-        ORDER BY n DESC
-        """
-    )
-    logger.info(
-        "Ростеры: уникальных игроков с позицией %d, строк UPDATE %d; распределение: %s",
-        len(nba_id_to_code),
-        updated,
-        {r["code"] or "NULL": r["n"] for r in dist},
-    )
+    logger.info("Ростеры: игроков с позицией %d, обновлено строк %d",
+                len(nba_id_to_code), updated)
     return updated
 
 
-async def enrich_player_profiles_from_common_player_info(
-    conn: asyncpg.Connection,
-    *,
-    only_with_stats: bool = True,
-    only_missing: bool = True,
-    update_profile: bool = True,
-    update_position: bool = True,
+async def enrich_profiles(
+    conn: asyncpg.Connection, client: NBAClient,
+    *, only_with_stats: bool = True, only_missing: bool = True, update_position: bool = True,
 ) -> None:
-    """Дозаполнение профиля и/или позиции через CommonPlayerInfo (по одному игроку)."""
-    pos_rows = await conn.fetch("SELECT position_id, code FROM positions ORDER BY position_id")
-    pos_map = {r["code"]: r["position_id"] for r in pos_rows}
+    """Биометрия (рост, вес, гражданство, дата рождения, номер, драфт) и позиция
+    через CommonPlayerInfo. По умолчанию — игроки с матчами, только пустые поля."""
+    pos_map = {r["code"]: r["position_id"]
+               for r in await conn.fetch("SELECT position_id, code FROM positions")}
 
     filters = ["TRUE"]
     if only_with_stats:
@@ -1045,284 +710,254 @@ async def enrich_player_profiles_from_common_player_info(
             "EXISTS (SELECT 1 FROM game_player_stats gps WHERE gps.player_id = p.player_id)"
         )
     if only_missing:
-        missing_parts = []
-        if update_profile:
-            missing_parts.extend([
-                "p.nationality IS NULL",
-                "p.birth_date IS NULL",
-                "p.height_cm IS NULL",
-                "p.weight_kg IS NULL",
-                "p.jersey_number IS NULL",
-                "p.draft_year IS NULL",
-            ])
+        parts = ["p.nationality IS NULL", "p.birth_date IS NULL", "p.height_cm IS NULL",
+                 "p.weight_kg IS NULL", "p.jersey_number IS NULL", "p.draft_year IS NULL"]
         if update_position:
-            missing_parts.append("p.position_id IS NULL")
-        if missing_parts:
-            filters.append(f"({' OR '.join(missing_parts)})")
+            parts.append("p.position_id IS NULL")
+        filters.append(f"({' OR '.join(parts)})")
 
-    where_sql = " AND ".join(filters)
-    players = await conn.fetch(f"""
-        SELECT p.player_id, p.nba_id, p.first_name, p.last_name
-        FROM players p
-        WHERE {where_sql}
-        ORDER BY p.nba_id
-    """)
-    logger.info(
-        "Обогащение профиля (CommonPlayerInfo): %d игроков%s%s",
-        len(players),
-        ", только с матчами" if only_with_stats else ", все в БД",
-        ", только пропуски" if only_missing else ", принудительно",
+    players = await conn.fetch(
+        f"SELECT p.player_id, p.nba_id FROM players p "
+        f"WHERE {' AND '.join(filters)} ORDER BY p.nba_id"
     )
+    logger.info("Биометрия (CommonPlayerInfo): %d игроков%s%s (параллелизм %d)",
+                len(players),
+                ", с матчами" if only_with_stats else ", все в БД",
+                ", только пропуски" if only_missing else ", принудительно",
+                client.settings.concurrency)
 
-    updated = 0
-    skipped_api_fail = 0
-    skipped_empty = 0
+    stats = {"updated": 0, "api_fail": 0, "empty": 0}
 
-    for row in tqdm(players, desc="Профили (API)"):
-        nba_id = int(row["nba_id"])
-        player_id = int(row["player_id"])
-
-        info_row = await _fetch_common_player_info_row(nba_id)
-        if info_row is None:
-            skipped_api_fail += 1
-            continue
-
-        fields = _player_info_to_fields(info_row, pos_map)
-        if not update_profile:
-            fields = {k: v for k, v in fields.items() if k == "position_id"}
+    async def fetch(rec: asyncpg.Record) -> Optional[Tuple[int, Dict[str, Any]]]:
+        df = await client.fetch_df(CommonPlayerInfo, player_id=int(rec["nba_id"]))
+        if df is None:
+            stats["api_fail"] += 1
+            return None
+        fields = _player_info_to_fields(df.iloc[0], pos_map)
         if not update_position:
             fields.pop("position_id", None)
-
         if not any(v is not None for v in fields.values()):
-            skipped_empty += 1
-            continue
+            stats["empty"] += 1
+            return None
+        return int(rec["player_id"]), fields
 
-        if only_missing:
-            await conn.execute(
-                """
-                UPDATE players SET
-                    nationality   = COALESCE($1, nationality),
-                    birth_date    = COALESCE($2, birth_date),
-                    height_cm     = COALESCE($3, height_cm),
-                    weight_kg     = COALESCE($4, weight_kg),
-                    jersey_number = COALESCE($5, jersey_number),
-                    draft_year    = COALESCE($6, draft_year),
-                    draft_round   = COALESCE($7, draft_round),
-                    draft_pick    = COALESCE($8, draft_pick),
-                    position_id   = COALESCE($9, position_id)
-                WHERE player_id = $10
-                """,
-                fields.get("nationality"),
-                fields.get("birth_date"),
-                fields.get("height_cm"),
-                fields.get("weight_kg"),
-                fields.get("jersey_number"),
-                fields.get("draft_year"),
-                fields.get("draft_round"),
-                fields.get("draft_pick"),
-                fields.get("position_id"),
-                player_id,
-            )
-        else:
-            await conn.execute(
-                """
-                UPDATE players SET
-                    nationality   = $1,
-                    birth_date    = $2,
-                    height_cm     = $3,
-                    weight_kg     = $4,
-                    jersey_number = $5,
-                    draft_year    = $6,
-                    draft_round   = $7,
-                    draft_pick    = $8,
-                    position_id   = COALESCE($9, position_id)
-                WHERE player_id = $10
-                """,
-                fields.get("nationality"),
-                fields.get("birth_date"),
-                fields.get("height_cm"),
-                fields.get("weight_kg"),
-                fields.get("jersey_number"),
-                fields.get("draft_year"),
-                fields.get("draft_round"),
-                fields.get("draft_pick"),
-                fields.get("position_id"),
-                player_id,
-            )
-        updated += 1
+    async def write(item: Tuple[int, Dict[str, Any]]) -> None:
+        player_id, f = item
+        # COALESCE($x, col): не перетираем уже заполненное (важно при принудительном режиме)
+        await conn.execute(
+            """
+            UPDATE players SET
+                nationality   = COALESCE($1, nationality),
+                birth_date    = COALESCE($2, birth_date),
+                height_cm     = COALESCE($3, height_cm),
+                weight_kg     = COALESCE($4, weight_kg),
+                jersey_number = COALESCE($5, jersey_number),
+                draft_year    = COALESCE($6, draft_year),
+                draft_round   = COALESCE($7, draft_round),
+                draft_pick    = COALESCE($8, draft_pick),
+                position_id   = COALESCE($9, position_id)
+            WHERE player_id = $10
+            """,
+            f.get("nationality"), f.get("birth_date"), f.get("height_cm"),
+            f.get("weight_kg"), f.get("jersey_number"), f.get("draft_year"),
+            f.get("draft_round"), f.get("draft_pick"), f.get("position_id"), player_id,
+        )
+        stats["updated"] += 1
 
-    logger.info(
-        "Профили: обновлено %d, ошибки API %d, пустой ответ %d",
-        updated,
-        skipped_api_fail,
-        skipped_empty,
+    await run_concurrent(players, fetch, write,
+                         concurrency=client.settings.concurrency, desc="Биометрия")
+    logger.info("Биометрия: обновлено %d, ошибки API %d, пустой ответ %d",
+                stats["updated"], stats["api_fail"], stats["empty"])
+
+
+# NBA API (CommonTeamRoster/CommonPlayerInfo) отдаёт позицию только грубо —
+# Guard/Forward/Center, без деления PG/SG и SF/PF. Поэтому базовый маппинг
+# никогда не даёт PG, а защитники все валятся в SG. Доразмечаем по игровой роли,
+# используя статистику матчей (минимум 50 минут за всё время):
+#   • защитник (SG) → PG, если передач в среднем больше, чем подборов (плеймейкер);
+#   • форвард (SF) → PF, если подборов >= 6.5 за игру или рост >= 206 см (силовой).
+REFINE_POSITIONS_SQL = """
+WITH agg AS (
+    SELECT gps.player_id,
+           AVG(gps.assists)                          AS ast,
+           AVG(gps.rebounds_off + gps.rebounds_def)  AS reb,
+           SUM(gps.minutes_played)                   AS mp
+    FROM game_player_stats gps
+    GROUP BY gps.player_id
+)
+UPDATE players p
+SET position_id = (SELECT position_id FROM positions WHERE code = 'PG')
+FROM agg
+WHERE p.player_id = agg.player_id
+  AND agg.mp >= 50
+  AND p.position_id = (SELECT position_id FROM positions WHERE code = 'SG')
+  AND agg.ast > agg.reb;
+
+WITH agg AS (
+    SELECT gps.player_id,
+           AVG(gps.rebounds_off + gps.rebounds_def)  AS reb,
+           SUM(gps.minutes_played)                   AS mp
+    FROM game_player_stats gps
+    GROUP BY gps.player_id
+)
+UPDATE players p
+SET position_id = (SELECT position_id FROM positions WHERE code = 'PF')
+FROM agg
+WHERE p.player_id = agg.player_id
+  AND agg.mp >= 50
+  AND p.position_id = (SELECT position_id FROM positions WHERE code = 'SF')
+  AND (agg.reb >= 6.5 OR COALESCE(p.height_cm, 0) >= 206);
+"""
+
+
+async def refine_positions_from_stats(conn: asyncpg.Connection) -> None:
+    """Доразметка PG/SG и SF/PF по игровой статистике (API даёт только G/F/C)."""
+    await conn.execute(REFINE_POSITIONS_SQL)
+    dist = await conn.fetch(
+        """
+        SELECT pos.code, COUNT(*) AS n
+        FROM players p
+        JOIN positions pos ON pos.position_id = p.position_id
+        WHERE EXISTS (SELECT 1 FROM game_player_stats g WHERE g.player_id = p.player_id)
+        GROUP BY pos.code ORDER BY n DESC
+        """
     )
+    logger.info("Позиции после доразметки: %s",
+                {r["code"]: r["n"] for r in dist})
 
 
-async def refine_positions_from_common_player_info(
-    conn: asyncpg.Connection,
-    *,
-    only_missing: bool = True,
-) -> None:
-    """Дозаполнение позиций через CommonPlayerInfo (медленно, по одному игроку)."""
-    await enrich_player_profiles_from_common_player_info(
-        conn,
-        only_with_stats=True,
-        only_missing=only_missing,
-        update_profile=False,
-        update_position=True,
-    )
+# ---------------------------------------------------------------------------
+# Пересчёт агрегатов и финальная статистика
+# ---------------------------------------------------------------------------
 
+async def recalc_season_stats(conn: asyncpg.Connection, season_map: Dict[str, int]) -> None:
+    """CALL update_season_stats для каждого сезона (PER/BPM/TS%/eFG%/USG% — функции из db/04)."""
+    for label, season_id in season_map.items():
+        logger.info("Пересчёт агрегатов сезона %s...", label)
+        try:
+            await conn.execute("CALL update_season_stats($1)", season_id)
+        except Exception as e:
+            logger.error("update_season_stats(%s): %s", label, e)
+
+
+async def backfill_game_scores(conn: asyncpg.Connection) -> None:
+    """Счёт матчей из box score + очистка NaN в метриках (db/07_backfill_game_scores.sql)."""
+    try:
+        await conn.execute(BACKFILL_GAME_SCORES_SQL)
+        logger.info("Backfill: счёт матчей и очистка NaN.")
+    except Exception as e:
+        logger.warning("Backfill не выполнен: %s", e)
+
+
+async def print_counts(conn: asyncpg.Connection) -> None:
+    tables = ["positions", "seasons", "teams", "players", "games",
+              "game_player_stats", "player_season_stats", "player_team_history"]
+    logger.info("=== ФИНАЛЬНАЯ СТАТИСТИКА ===")
+    for table in tables:
+        try:
+            count = await conn.fetchval(f"SELECT COUNT(*) FROM {table}")
+            logger.info("  %-22s %d строк", table, count)
+        except asyncpg.UndefinedTableError:
+            logger.warning("  %-22s ТАБЛИЦА НЕ СУЩЕСТВУЕТ", table)
+    try:
+        with_stats = await conn.fetchval(
+            "SELECT COUNT(*) FROM players p WHERE EXISTS "
+            "(SELECT 1 FROM game_player_stats gps WHERE gps.player_id = p.player_id)"
+        )
+        for col in ("height_cm", "nationality", "position_id"):
+            n = await conn.fetchval(f"SELECT COUNT(*) FROM players WHERE {col} IS NOT NULL")
+            logger.info("  players.%-14s %d заполнено (из %d с матчами)", col, n, with_stats)
+    except asyncpg.UndefinedTableError:
+        pass
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Загрузка NBA stats в PostgreSQL")
-    p.add_argument(
-        "--sleep",
-        type=float,
-        default=float(os.getenv("NBA_LOAD_SLEEP", DEFAULT_SLEEP)),
-        help=f"Пауза перед запросом, с (по умолчанию {DEFAULT_SLEEP}, community min ~0.6)",
-    )
-    p.add_argument(
-        "--timeout",
-        type=int,
-        default=int(os.getenv("NBA_LOAD_TIMEOUT", DEFAULT_REQUEST_TIMEOUT)),
-        help=f"HTTP timeout запроса, с (по умолчанию {DEFAULT_REQUEST_TIMEOUT})",
-    )
-    p.add_argument(
-        "--cooldown-every",
-        type=int,
-        default=int(os.getenv("NBA_LOAD_COOLDOWN_EVERY", DEFAULT_COOLDOWN_EVERY)),
-        help=f"Длинная пауза каждые N запросов, 0=выкл (по умолчанию {DEFAULT_COOLDOWN_EVERY})",
-    )
-    p.add_argument(
-        "--cooldown-sec",
-        type=float,
-        default=float(os.getenv("NBA_LOAD_COOLDOWN_SEC", DEFAULT_COOLDOWN_SEC)),
-        help=f"Длительность cooldown, с (по умолчанию {DEFAULT_COOLDOWN_SEC})",
-    )
-    p.add_argument(
-        "--skip-repair-history",
-        action="store_true",
-        help="Не дозаполнять player_team_history по пропускам",
-    )
-    p.add_argument(
-        "--skip-usg-fix",
-        action="store_true",
-        help="Не применять правку USG% и вьюху v_player_rankings",
-    )
-    p.add_argument(
-        "--positions-only",
-        action="store_true",
-        help="Только обновить позиции (ростеры + опционально refine), без перезагрузки матчей",
-    )
-    p.add_argument(
-        "--refine-positions",
-        action="store_true",
-        help="Дозаполнить оставшихся без позиции через CommonPlayerInfo (долго)",
-    )
-    p.add_argument(
-        "--enrich-profiles",
-        action="store_true",
-        help="Обогатить профили (рост, вес, гражданство, драфт) через CommonPlayerInfo",
-    )
-    p.add_argument(
-        "--profiles-only",
-        action="store_true",
-        help="Только обогатить профили, без перезагрузки матчей",
-    )
-    p.add_argument(
-        "--profiles-all",
-        action="store_true",
-        help="С --profiles-only: все игроки в БД, не только с матчами (~5000+ запросов)",
-    )
-    p.add_argument(
-        "--profiles-force",
-        action="store_true",
-        help="Перезаписать профили даже если поля уже заполнены",
-    )
+    p.add_argument("--sleep", type=float,
+                   default=float(os.getenv("NBA_LOAD_SLEEP", DEFAULT_SLEEP)),
+                   help=f"Мин. интервал между стартами запросов, с (по умолч. {DEFAULT_SLEEP})")
+    p.add_argument("--concurrency", type=int,
+                   default=int(os.getenv("NBA_LOAD_CONCURRENCY", DEFAULT_CONCURRENCY)),
+                   help=f"Параллельных запросов «в полёте» (по умолч. {DEFAULT_CONCURRENCY})")
+    p.add_argument("--timeout", type=int,
+                   default=int(os.getenv("NBA_LOAD_TIMEOUT", DEFAULT_REQUEST_TIMEOUT)),
+                   help=f"HTTP timeout, с (по умолч. {DEFAULT_REQUEST_TIMEOUT})")
+    p.add_argument("--cooldown-every", type=int,
+                   default=int(os.getenv("NBA_LOAD_COOLDOWN_EVERY", DEFAULT_COOLDOWN_EVERY)),
+                   help=f"Длинная пауза каждые N запросов, 0=выкл (по умолч. {DEFAULT_COOLDOWN_EVERY})")
+    p.add_argument("--cooldown-sec", type=float,
+                   default=float(os.getenv("NBA_LOAD_COOLDOWN_SEC", DEFAULT_COOLDOWN_SEC)),
+                   help=f"Длительность cooldown, с (по умолч. {DEFAULT_COOLDOWN_SEC})")
+    p.add_argument("--skip-profiles", action="store_true",
+                   help="Не загружать биометрию (быстрее, но поля игроков останутся пустыми)")
+    p.add_argument("--profiles-force", action="store_true",
+                   help="Перезаписать биометрию даже у заполненных полей")
+    # Частичные режимы (без полной перезагрузки матчей)
+    p.add_argument("--positions-only", action="store_true",
+                   help="Только пересчёт позиций из ростеров")
+    p.add_argument("--profiles-only", action="store_true",
+                   help="Только биометрия/позиции игроков (по умолч. с матчами)")
+    p.add_argument("--profiles-all", action="store_true",
+                   help="С --profiles-only: все игроки в БД, не только с матчами")
     return p.parse_args()
 
 
 async def main() -> None:
-    global _load_settings, _api_call_count
     args = parse_args()
-    _load_settings = LoadSettings(
-        sleep=max(0.0, args.sleep),
-        request_timeout=max(5, args.timeout),
-        cooldown_every=max(0, args.cooldown_every),
-        cooldown_sec=max(0.0, args.cooldown_sec),
+    settings = LoadSettings(
+        sleep=args.sleep, concurrency=args.concurrency, request_timeout=args.timeout,
+        cooldown_every=args.cooldown_every, cooldown_sec=args.cooldown_sec,
     )
-    _api_call_count = 0
+    client = NBAClient(settings)
     logger.info(
-        "API pace: sleep=%.2fs timeout=%ds cooldown=%ds каждые %d запросов",
-        _load_settings.sleep,
-        _load_settings.request_timeout,
-        _load_settings.cooldown_sec,
-        _load_settings.cooldown_every,
+        "Параметры: sleep=%.2fс concurrency=%d timeout=%dс cooldown=%.0fс/%d запросов",
+        settings.sleep, settings.concurrency, settings.request_timeout,
+        settings.cooldown_sec, settings.cooldown_every,
     )
     logger.info("Подключение к БД: %s", DATABASE_URL.split("@")[-1])
     conn = await asyncpg.connect(DATABASE_URL)
 
     try:
+        # --- Частичные режимы ---
         if args.profiles_only:
-            await enrich_player_profiles_from_common_player_info(
-                conn,
-                only_with_stats=not args.profiles_all,
-                only_missing=not args.profiles_force,
-                update_profile=True,
-                update_position=True,
-            )
+            await enrich_profiles(conn, client, only_with_stats=not args.profiles_all,
+                                  only_missing=not args.profiles_force)
             await print_counts(conn)
-            logger.info("Обогащение профилей завершено.")
             return
-
         if args.positions_only:
-            await load_positions_from_rosters(conn)
-            if args.refine_positions:
-                await refine_positions_from_common_player_info(conn, only_missing=True)
+            await load_positions_from_rosters(conn, client)
+            await refine_positions_from_stats(conn)
             await print_counts(conn)
-            logger.info("Обновление позиций завершено.")
             return
 
+        # --- Полная загрузка ---
         try:
             await conn.execute("ALTER TABLE game_player_stats DISABLE TRIGGER ALL")
             logger.info("Триггеры отключены.")
         except Exception as e:
-            logger.warning("Не удалось отключить триггеры (продолжаем без этого): %s", e)
+            logger.warning("Не удалось отключить триггеры: %s", e)
 
         team_map = await load_teams(conn)
         season_map = await load_seasons(conn)
-        player_map = await load_players(conn)
+        player_map = await load_players(conn, client)
 
         all_game_ids: Dict[str, int] = {}
-        for season_label in SEASONS:
-            sid = season_map.get(season_label)
-            if not sid:
-                continue
-            gids = await load_games(conn, season_label, sid, team_map)
-            all_game_ids.update(gids)
-            logger.info("Загружено матчей в этом сезоне: %d", len(gids))
+        for label in SEASONS:
+            sid = season_map.get(label)
+            if sid:
+                all_game_ids.update(await load_games(conn, client, label, sid, team_map))
 
-        await load_game_stats(conn, all_game_ids, player_map, team_map)
-        await load_player_history(conn, player_map, team_map, season_map)
-
-        await load_positions_from_rosters(conn)
-        if args.refine_positions:
-            await refine_positions_from_common_player_info(conn, only_missing=True)
-        if args.enrich_profiles:
-            await enrich_player_profiles_from_common_player_info(
-                conn,
-                only_with_stats=not args.profiles_all,
-                only_missing=not args.profiles_force,
-                update_profile=True,
-                update_position=True,
-            )
-
-        if not args.skip_repair_history:
-            await repair_missing_player_team_history(conn)
-
-        if not args.skip_usg_fix:
-            await apply_usg_fix(conn)
+        await load_game_stats(conn, client, all_game_ids, player_map, team_map)
+        await load_player_history(conn, client, team_map, season_map)
+        await load_positions_from_rosters(conn, client)
+        if not args.skip_profiles:
+            await enrich_profiles(conn, client, only_with_stats=True,
+                                  only_missing=not args.profiles_force)
+        await refine_positions_from_stats(conn)
 
         try:
             await conn.execute("ALTER TABLE game_player_stats ENABLE TRIGGER ALL")
@@ -1330,18 +965,10 @@ async def main() -> None:
         except Exception:
             pass
 
-        for season_label, season_id in season_map.items():
-            logger.info("Пересчёт статистики для сезона %s (id=%d)...", season_label, season_id)
-            try:
-                await conn.execute("CALL update_season_stats($1)", season_id)
-            except Exception as e:
-                logger.error("Ошибка вызова процедуры update_season_stats: %s", e)
-
+        await recalc_season_stats(conn, season_map)
         await backfill_game_scores(conn)
-
         await print_counts(conn)
         logger.info("Загрузка завершена успешно.")
-
     finally:
         await conn.close()
         logger.info("Соединение с БД закрыто.")

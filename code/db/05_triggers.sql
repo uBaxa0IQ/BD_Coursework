@@ -151,7 +151,8 @@ COMMENT ON FUNCTION trg_update_season_stats_func() IS
 DROP TRIGGER IF EXISTS trigger_update_season_stats ON game_player_stats;
 DROP TRIGGER IF EXISTS after_game_player_stats_insert ON game_player_stats;
 DROP FUNCTION IF EXISTS trigger_update_season_stats();
-DROP FUNCTION IF EXISTS trg_update_season_stats_func();
+-- NB: trg_update_season_stats_func() здесь НЕ удаляем — она только что создана
+-- выше (CREATE OR REPLACE) и нужна триггеру ниже; DROP ломал init БД.
 
 CREATE TRIGGER trigger_update_season_stats
     AFTER INSERT ON game_player_stats

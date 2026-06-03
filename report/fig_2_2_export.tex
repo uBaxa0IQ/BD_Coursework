@@ -1,0 +1,48 @@
+% Standalone export: рис. 2.2 — trg_validate_team_score_row (для презентации)
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+
+\input{design_part_flowcharts}
+
+\begin{document}
+\begin{tikzpicture}[
+    fc base,
+    node distance=1.8cm,
+    startstop/.style={fc startstop},
+    process/.style={fc process},
+    predefined/.style={fc predefined},
+    io/.style={fc io},
+    decision/.style={fc decision},
+    arrow/.style={fc arrow}
+]
+\node (start) [startstop] {Начало};
+\node (get)   [io,  below of=start]
+  {Получить status, home/away\_id, \\ счёт из \texttt{games} по game\_id};
+\node (dec1)  [decision, below of=get] {status $\neq$ 'Finished' \\ или счёт NULL?};
+\node (skip)  [io,  right of=dec1, xshift=\flowchartRightShift] {Возврат NEW/OLD};
+\node (exp)   [process,  below of=dec1, yshift=\flowchartDecExpExtra]
+  {$expected :=$ счёт команды \\ (\texttt{home\_score} или \texttt{away\_score})};
+\node (loop)  [predefined,  below of=exp]
+  {Для каждой команды в матче: \\ $teamPoints := \mathrm{SUM(points)}$};
+\node (dec2)  [decision, below of=loop] {$teamPoints \neq expected$?};
+\node (exc)   [io,  right of=dec2, xshift=\flowchartRightShift] {RAISE EXCEPTION};
+\node (ret)   [io,  below of=dec2] {Возврат NEW/OLD};
+\node (stop)  [startstop, below of=ret] {Конец};
+
+\draw [arrow] (start) -- (get);
+\draw [arrow] (get)   -- (dec1);
+\draw [arrow] (dec1)  -- node[above] {Да} (skip);
+\draw [arrow] (dec1)  -- node[right] {Нет} (exp);
+\draw [arrow] (exp)   -- (loop);
+\draw [arrow] (loop)  -- (dec2);
+\draw [arrow] (dec2)  -- node[above] {Да} (exc);
+\draw [arrow] (dec2)  -- node[right] {Нет} (ret);
+\draw [arrow] (ret)   -- (stop);
+
+\draw [arrow] (skip.east) -- ++(0.6,0) coordinate (bus) |- (stop);
+\draw [arrow] (exc.east) -- (exc.east -| bus);
+\end{tikzpicture}
+\end{document}

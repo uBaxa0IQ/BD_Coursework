@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="NBA Statistics API",
-    description="API для статистики игроков и команд NBA (2019-20 → 2023-24)",
+    description="API для статистики игроков и команд NBA (2021-22 → 2025-26)",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",

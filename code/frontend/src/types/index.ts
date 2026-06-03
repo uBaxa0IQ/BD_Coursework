@@ -171,7 +171,7 @@ export interface SearchResult {
   teams: Team[]
 }
 
-export type SeasonLabel = '2019-20' | '2020-21' | '2021-22' | '2022-23' | '2023-24'
+export type SeasonLabel = '2021-22' | '2022-23' | '2023-24' | '2024-25' | '2025-26'
 
 export interface Season {
   season_id: number
@@ -179,9 +179,9 @@ export interface Season {
 }
 
 export const SEASONS: Season[] = [
-  { season_id: 1, label: '2019-20' },
-  { season_id: 2, label: '2020-21' },
-  { season_id: 3, label: '2021-22' },
-  { season_id: 4, label: '2022-23' },
-  { season_id: 5, label: '2023-24' },
+  { season_id: 1, label: '2021-22' },
+  { season_id: 2, label: '2022-23' },
+  { season_id: 3, label: '2023-24' },
+  { season_id: 4, label: '2024-25' },
+  { season_id: 5, label: '2025-26' },
 ]

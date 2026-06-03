@@ -165,8 +165,8 @@ PostgreSQL пакетами в порядке, соответствующем и
 
 По результатам контрольных запросов \texttt{SELECT COUNT(*)} объём ключевых
 таблиц после загрузки приведён в таблице~\ref{tab:db-count}. Таблица фактов
-\texttt{game\_player\_stats} содержит 150\,629 записей, таблица
-\texttt{games}~--- 5\,829 матчей. Это полностью покрывает нефункциональное
+\texttt{game\_player\_stats} содержит 159\,652 записей, таблица
+\texttt{games}~--- 6\,140 матчей. Это полностью покрывает нефункциональное
 требование об объёме данных.
 
 {\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
@@ -178,10 +178,10 @@ PostgreSQL пакетами в порядке, соответствующем и
 \hline
 \textbf{Таблица} & \textbf{Число строк} \\
 \hline
-\texttt{game\_player\_stats}  & 150\,629 \\
-\texttt{games}                 & 5\,829 \\
+\texttt{game\_player\_stats}  & 159\,652 \\
+\texttt{games}                 & 6\,140 \\
 \texttt{players}               & 5\,126 \\
-\texttt{player\_season\_stats} & 2\,813 \\
+\texttt{player\_season\_stats} & 2\,897 \\
 \texttt{teams}                 & 30 \\
 \texttt{positions}             & 5 \\
 \texttt{seasons}               & 5 \\
@@ -226,7 +226,7 @@ PostgreSQL пакетами в порядке, соответствующем и
 Многотабличный запрос. Получение результатов матчей с названиями
 команд и меткой сезона (текст запроса см. в Приложении~Б,
 листинг~\ref{lst:sql-join}).
-Результат выполнения запроса (первые 10 строк из 1230) приведён
+Результат выполнения запроса (первые 10 строк из 1225) приведён
 в таблице~\ref{tab:sql-join-result}.
 
 {\footnotesize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
@@ -238,16 +238,16 @@ PostgreSQL пакетами в порядке, соответствующем и
 \hline
 \textbf{Сезон} & \textbf{Дата} & \textbf{Хозяева} & \textbf{Дом.} & \textbf{Гост.} & \textbf{Гости} & \textbf{OT} \\
 \hline
-2025-26 & 24.10.2023 & Denver Nuggets        & 119 & 107 & Los Angeles Lakers       & 0 \\
-2025-26 & 24.10.2023 & Golden State Warriors &  97 & 108 & Phoenix Suns             & 0 \\
-2025-26 & 25.10.2023 & Los Angeles Clippers  & 123 & 111 & Portland Trail Blazers   & 0 \\
-2025-26 & 25.10.2023 & Miami Heat            & 103 & 102 & Detroit Pistons          & 0 \\
-2025-26 & 25.10.2023 & Orlando Magic         & 116 &  86 & Houston Rockets          & 0 \\
-2025-26 & 25.10.2023 & Charlotte Hornets     & 116 & 110 & Atlanta Hawks            & 0 \\
-2025-26 & 25.10.2023 & Indiana Pacers        & 143 & 120 & Washington Wizards       & 0 \\
-2025-26 & 25.10.2023 & Chicago Bulls         & 104 & 124 & Oklahoma City Thunder    & 0 \\
-2025-26 & 25.10.2023 & Toronto Raptors       &  97 &  94 & Minnesota Timberwolves   & 0 \\
-2025-26 & 25.10.2023 & Utah Jazz             & 114 & 130 & Sacramento Kings         & 0 \\
+2025-26 & 21.10.2025 & Los Angeles Lakers     & 109 & 119 & Golden State Warriors    & 0 \\
+2025-26 & 21.10.2025 & Oklahoma City Thunder  & 125 & 124 & Houston Rockets          & 0 \\
+2025-26 & 22.10.2025 & Charlotte Hornets      & 136 & 117 & Brooklyn Nets            & 0 \\
+2025-26 & 22.10.2025 & Dallas Mavericks       &  92 & 125 & San Antonio Spurs        & 0 \\
+2025-26 & 22.10.2025 & Milwaukee Bucks        & 133 & 120 & Washington Wizards       & 0 \\
+2025-26 & 22.10.2025 & New York Knicks        & 119 & 111 & Cleveland Cavaliers      & 0 \\
+2025-26 & 22.10.2025 & Boston Celtics         & 116 & 117 & Philadelphia 76ers       & 0 \\
+2025-26 & 22.10.2025 & Portland Trail Blazers & 114 & 118 & Minnesota Timberwolves   & 0 \\
+2025-26 & 22.10.2025 & Utah Jazz              & 129 & 108 & Los Angeles Clippers     & 0 \\
+2025-26 & 22.10.2025 & Orlando Magic          & 125 & 121 & Miami Heat               & 0 \\
 \hline
 \end{tabular}
 \end{table}}
@@ -267,10 +267,11 @@ PostgreSQL пакетами в порядке, соответствующем и
 \hline
 \textbf{Поз.} & \textbf{Игроков} & \textbf{PTS} & \textbf{REB} & \textbf{AST} & \textbf{PER} \\
 \hline
-C  & 35  & 12.74 & 8.32 & 2.17 & 21.40 \\
-PF & 19  & 13.63 & 6.86 & 2.51 & 20.93 \\
-SG & 129 & 13.20 & 3.53 & 3.84 & 15.67 \\
-SF & 110 & 11.53 & 4.42 & 2.29 & 14.96 \\
+C  & 51  & 10.99 & 7.15 & 2.07 & 20.34 \\
+PF & 44  & 13.89 & 5.95 & 2.41 & 18.46 \\
+PG & 74  & 13.34 & 2.96 & 4.44 & 16.07 \\
+SF & 60  & 11.43 & 4.29 & 2.19 & 14.59 \\
+SG & 110 & 11.27 & 3.67 & 2.43 & 14.07 \\
 \hline
 \end{tabular}
 \end{table}}
@@ -278,7 +279,7 @@ SF & 110 & 11.53 & 4.42 & 2.29 & 14.96 \\
 Запрос с подзапросом. Игроки, чей PER превышает среднее
 по лиге за сезон (текст запроса см. в Приложении~Б,
 листинг~\ref{lst:sql-subquery}).
-Результат выполнения запроса (10 строк из 271) приведён
+Результат выполнения запроса (10 строк из 263) приведён
 в таблице~\ref{tab:sql-subquery-result}.
 
 {\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
@@ -290,16 +291,16 @@ SF & 110 & 11.53 & 4.42 & 2.29 & 14.96 \\
 \hline
 \textbf{Игрок} & \textbf{Команда} & \textbf{PER} & \textbf{PTS} \\
 \hline
-Joel Embiid               & PHI & 37.60 & 31.47 \\
-Nikola Jokić              & DEN & 36.41 & 26.39 \\
-Giannis Antetokounmpo     & MIL & 34.85 & 30.44 \\
-Luka Dončić               & DAL & 32.90 & 33.86 \\
-Anthony Davis             & LAL & 30.96 & 23.75 \\
-Shai Gilgeous-Alexander   & OKC & 30.77 & 30.05 \\
-Leonard Miller            & MIN & 30.75 &  0.91 \\
-Victor Wembanyama         & SAS & 29.65 & 21.14 \\
-Domantas Sabonis          & SAC & 29.41 & 19.43 \\
-LeBron James              & LAL & 28.98 & 24.96 \\
+Nikola Jokić              & DEN & 37.57 & 27.68 \\
+Giannis Antetokounmpo     & MIL & 36.07 & 27.58 \\
+Victor Wembanyama         & SAS & 34.58 & 25.05 \\
+Shai Gilgeous-Alexander   & OKC & 31.27 & 31.16 \\
+Luka Dončić               & LAL & 30.37 & 32.97 \\
+Jalen Duren               & DET & 28.65 & 18.25 \\
+Kawhi Leonard             & LAC & 28.24 & 27.89 \\
+Joel Embiid               & PHI & 26.88 & 26.18 \\
+Ty Jerome                 & MEM & 26.52 & 11.80 \\
+Jalen Johnson             & ATL & 26.33 & 21.61 \\
 \hline
 \end{tabular}
 \end{table}}
@@ -318,16 +319,16 @@ LeBron James              & LAL & 28.98 & 24.96 \\
 \hline
 \textbf{Категория} & \textbf{Игрок} & \textbf{Значение} \\
 \hline
-Scoring & Luka Dončić               & 33.86 \\
-Scoring & Joel Embiid               & 31.47 \\
-Scoring & Giannis Antetokounmpo     & 30.44 \\
-Scoring & Shai Gilgeous-Alexander   & 30.05 \\
-Scoring & Devin Booker              & 27.07 \\
-Assists & Tyrese Haliburton         & 10.90 \\
-Assists & Luka Dončić               &  9.80 \\
-Assists & Trae Young                &  9.40 \\
-Assists & Nikola Jokić              &  8.96 \\
-Assists & James Harden              &  8.53 \\
+Scoring & Luka Dončić               & 32.97 \\
+Scoring & Shai Gilgeous-Alexander   & 31.16 \\
+Scoring & Anthony Edwards           & 28.80 \\
+Scoring & Tyrese Maxey              & 28.29 \\
+Scoring & Kawhi Leonard             & 27.89 \\
+Assists & Nikola Jokić              & 10.72 \\
+Assists & Cade Cunningham           &  9.63 \\
+Assists & Josh Giddey               &  8.23 \\
+Assists & Luka Dončić               &  8.15 \\
+Assists & James Harden              &  8.14 \\
 \hline
 \end{tabular}
 \end{table}}
@@ -472,15 +473,15 @@ return data
 Прямой SQL-запрос суммы сырых фактов из таблицы
 \texttt{game\_player\_stats} вернул следующие значения:
 \begin{itemize}
-    \item очки: 2085;
-    \item броски с игры: 1411;
-    \item штрафные попытки: 438.
+    \item очки: 1799;
+    \item броски с игры: 1132;
+    \item штрафные попытки: 480.
 \end{itemize}
 
 Ручной расчёт истинного процента бросков по формуле~(\ref{eq:ts}):
 \[
-\mathrm{TS\%} = \frac{2085}{2 \cdot (1411 + 0{,}44 \cdot 438)}
-  = \frac{2085}{3207{,}44} \approx 0{,}6501.
+\mathrm{TS\%} = \frac{1799}{2 \cdot (1132 + 0{,}44 \cdot 480)}
+  = \frac{1799}{2686{,}4} \approx 0{,}6697.
 \]
 
 Для верификации в СУБД выполнен вызов хранимой функции:
@@ -493,23 +494,23 @@ eFG\% и USG\%; расхождений не выявлено.
 
 Верификация PER выполнена по той же методике. Из таблицы
 \texttt{game\_player\_stats} получены сезонные суммы для
-\texttt{player\_id = 2327}: $\mathrm{PTS} = 2085$, $\mathrm{TRB} = 976$,
-$\mathrm{AST} = 708$, $\mathrm{STL} = 108$, $\mathrm{BLK} = 68$,
-$\mathrm{TOV} = 237$, $\mathrm{PF} = 194$, $\mathrm{FGM/FGA} = 822/1411$,
-$\mathrm{FTM/FTA} = 358/438$, $\mathrm{MP} = 2736{,}4$.
+\texttt{player\_id = 2327}: $\mathrm{PTS} = 1799$, $\mathrm{TRB} = 836$,
+$\mathrm{AST} = 697$, $\mathrm{STL} = 92$, $\mathrm{BLK} = 53$,
+$\mathrm{TOV} = 243$, $\mathrm{PF} = 173$, $\mathrm{FGM/FGA} = 644/1132$,
+$\mathrm{FTM/FTA} = 399/480$, $\mathrm{MP} = 2264{,}8$.
 Ненормализованный вклад по формуле uPER (раздел~1.2):
 \[
 \mathrm{uPER} =
-(2085 + 976 + 708 + 108 + 68 - 237 - 194 - 589 - 35{,}2)
-\cdot \frac{48}{2736{,}4} = 2889{,}8 \cdot \frac{48}{2736{,}4}
-\approx 50{,}69.
+(1799 + 836 + 697 + 92 + 53 - 243 - 173 - 488 - 35{,}64)
+\cdot \frac{48}{2264{,}8} = 2537{,}36 \cdot \frac{48}{2264{,}8}
+\approx 53{,}78.
 \]
-Лиговое среднее по формуле~(1.5) по 475~игрокам с $\mathrm{MP} > 100$:
-$\mathrm{lg\_aPER} = 20{,}88$. Итоговый рейтинг по формуле~(1.6):
+Лиговое среднее по формуле~(1.5) по 503~игрокам с $\mathrm{MP} > 100$:
+$\mathrm{lg\_aPER} = 21{,}47$. Итоговый рейтинг по формуле~(1.6):
 \[
-\mathrm{PER} = 50{,}69 \cdot \frac{15}{20{,}88} \approx 36{,}41.
+\mathrm{PER} = 53{,}78 \cdot \frac{15}{21{,}47} \approx 37{,}57.
 \]
-Вызов \texttt{SELECT calculate\_per(2327, 5)} вернул $36{,}41$~---
+Вызов \texttt{SELECT calculate\_per(2327, 5)} вернул $37{,}57$~---
 расхождений не выявлено.
 
 Тестирование граничных случаев подтвердило корректный возврат значения
@@ -532,7 +533,7 @@ $\mathrm{lg\_aPER} = 20{,}88$. Итоговый рейтинг по формул
   & \textbf{Ожидание} & \textbf{Результат} \\
 \hline
 1 & Нормальный профиль & \texttt{calculate\_ts(2327, 5)}
-  & $\approx 0{,}6501$ & совпало \\
+  & $\approx 0{,}6697$ & совпало \\
 \hline
 2 & Нет попыток броска & \texttt{calculate\_ts(0, 0)}
   & NULL & NULL \\
@@ -544,7 +545,7 @@ $\mathrm{lg\_aPER} = 20{,}88$. Итоговый рейтинг по формул
   & обновлены строки \texttt{pss} & выполнено \\
 \hline
 5 & Верификация PER & \texttt{calculate\_per(2327, 5)}
-  & $\approx 36{,}41$ (формулы 1.4--1.6) & 36{,}41, совпало \\
+  & $\approx 37{,}57$ (формулы 1.4--1.6) & 37{,}57, совпало \\
 \hline
 6 & Триггер целостности счёта & INSERT с суммой очков,
   не совпадающей с \texttt{home\_score}
@@ -581,12 +582,12 @@ $\mathrm{lg\_aPER} = 20{,}88$. Итоговый рейтинг по формул
  & КЭ4 & team\_id не определён (нет матчей) & несуществующий player\_id & NULL \\
 \hline
 \texttt{calculate\_ts}
- & КЭ1 & FGA $> 0$ или FTA $> 0$ & \texttt{calc\_ts(2327, 5)} & $\approx 0{,}6501$ \\
+ & КЭ1 & FGA $> 0$ или FTA $> 0$ & \texttt{calc\_ts(2327, 5)} & $\approx 0{,}6697$ \\
  & КЭ2 & FGA $= 0$ и FTA $= 0$ & \texttt{calc\_ts(0, 0)} & NULL \\
  & КЭ3 & знаменатель $= 0$ при FGA $= 0$, FTA $> 0$ (редкий) & аномальные тестовые данные & NULL \\
 \hline
 \texttt{calculate\_per}
- & КЭ1 & MP $\geq 50$, lg\_aPER $> 0$ & \texttt{calc\_per(2327, 5)} & $\approx 36{,}41$ \\
+ & КЭ1 & MP $\geq 50$, lg\_aPER $> 0$ & \texttt{calc\_per(2327, 5)} & $\approx 37{,}57$ \\
  & КЭ2 & MP $< 50$ (дисквалифицирован) & игрок с малым числом игр & NULL \\
  & КЭ3 & lg\_aPER $= 0$ или NULL (пустой сезон) & фиктивный season\_id без данных & нормировка на $15{,}0$ \\
 \hline

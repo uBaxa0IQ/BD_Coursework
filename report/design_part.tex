@@ -343,36 +343,37 @@ contract\_type & Строковый & Standard, Two-Way, 10-Day и др. \\
 
 \textbf{Вторая нормальная форма.} Отношение находится во второй нормальной форме, если оно соответствует первой нормальной форме и каждый неключевой атрибут функционально полно зависит от любого потенциального ключа. Неключевым является атрибут, не входящий в состав ни одного потенциального ключа.
 
-Потенциальные ключи спроектированных таблиц приведены в таблице~\ref{tab:potential_keys}.
+Потенциальные ключи и неключевые атрибуты спроектированных таблиц приведены в таблице~\ref{tab:potential_keys}.
 
+{\footnotesize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
 \begin{table}[H]
-\caption{Потенциальные ключи спроектированных таблиц}
+\caption{Потенциальные ключи и неключевые атрибуты спроектированных таблиц}
 \label{tab:potential_keys}
 \centering
-\begin{tabular}{|p{0.28\textwidth}|p{0.62\textwidth}|}
+\begin{tabular}{|>{\RaggedRight\arraybackslash}p{0.28\textwidth}|>{\RaggedRight\arraybackslash}p{0.26\textwidth}|>{\RaggedRight\arraybackslash}p{0.34\textwidth}|}
 \hline
-\textbf{Таблица} & \textbf{Потенциальные ключи} \\
+\textbf{Таблица} & \textbf{Потенциальные ключи} & \textbf{Неключевые атрибуты} \\
 \hline
-\texttt{positions} & \{\texttt{position\_id}\}, \{\texttt{code}\} \\
+\texttt{positions} & \{\texttt{position\_id}\}, \{\texttt{code}\} & \texttt{name} \\
 \hline
-\texttt{seasons} & \{\texttt{season\_id}\}, \{\texttt{label}\} \\
+\texttt{seasons} & \{\texttt{season\_id}\}, \{\texttt{label}\} & \texttt{start\_date}, \texttt{end\_date}, \texttt{season\_type} \\
 \hline
-\texttt{teams} & \{\texttt{team\_id}\}, \{\texttt{nba\_team\_id}\}, \{\texttt{name}\}, \{\texttt{abbreviation}\} \\
+\texttt{teams} & \{\texttt{team\_id}\}, \{\texttt{nba\_team\_id}\}, \{\texttt{name}\}, \{\texttt{abbreviation}\} & \texttt{city}, \texttt{conference}, \texttt{arena\_name}, \texttt{founded\_year}, \texttt{is\_active} \\
 \hline
-\texttt{players} & \{\texttt{player\_id}\}, \{\texttt{nba\_id}\} \\
+\texttt{players} & \{\texttt{player\_id}\}, \{\texttt{nba\_id}\} & \texttt{first\_name}, \texttt{last\_name}, \texttt{birth\_date}, \texttt{nationality}, \texttt{height\_cm}, \texttt{weight\_kg}, \texttt{position\_id}, \texttt{jersey\_number}, \texttt{is\_active}, \texttt{draft\_year}, \texttt{draft\_round}, \texttt{draft\_pick} \\
 \hline
-\texttt{games} & \{\texttt{game\_id}\} \\
+\texttt{games} & \{\texttt{game\_id}\} & \texttt{season\_id}, \texttt{home\_team\_id}, \texttt{away\_team\_id}, \texttt{game\_date}, \texttt{home\_score}, \texttt{away\_score}, \texttt{status}, \texttt{overtime} \\
 \hline
-\texttt{player\_team\_history} & \{\texttt{history\_id}\} \\
+\texttt{player\_team\_history} & \{\texttt{history\_id}\}, \{\texttt{player\_id}, \texttt{season\_id}, \texttt{team\_id}\} & \texttt{start\_date}, \texttt{end\_date}, \texttt{contract\_type} \\
 \hline
-\texttt{game\_player\_stats} & \{\texttt{stat\_id}\}, \{\texttt{game\_id}, \texttt{player\_id}\} \\
+\texttt{game\_player\_stats} & \{\texttt{stat\_id}\}, \{\texttt{game\_id}, \texttt{player\_id}\} & \texttt{team\_id}, \texttt{minutes\_played}, \texttt{points}, \texttt{rebounds\_off}, \texttt{rebounds\_def}, \texttt{assists}, \texttt{steals}, \texttt{blocks}, \texttt{turnovers}, \texttt{fouls}, \texttt{fgm}, \texttt{fga}, \texttt{fg3m}, \texttt{fg3a}, \texttt{ftm}, \texttt{fta}, \texttt{plus\_minus}, \texttt{is\_starter} \\
 \hline
 \end{tabular}
-\end{table}
+\end{table}}
 
-Для таблиц \texttt{positions}, \texttt{seasons}, \texttt{teams}, \texttt{players}, \texttt{games} и \texttt{player\_team\_history} все потенциальные ключи состоят из одного атрибута, поэтому частичная зависимость в них невозможна.
+Для таблиц \texttt{positions}, \texttt{seasons}, \texttt{teams}, \texttt{players} и \texttt{games} все потенциальные ключи состоят из одного атрибута, поэтому частичная зависимость в них невозможна.
 
-Таблица \texttt{game\_player\_stats} имеет составной потенциальный ключ, включающий идентификаторы матча и игрока. Неключевые атрибуты этой таблицы характеризуют результат конкретного игрока в конкретном матче. Ни один показатель не может быть определен только идентификатором игрока или только идентификатором матча. Атрибут команды также зависит от обеих частей ключа из-за возможности переходов игрока в течение сезона. Таким образом, частичные зависимости устранены, и схема соответствует требованиям второй нормальной формы.
+Таблицы \texttt{game\_player\_stats} и \texttt{player\_team\_history} имеют составные потенциальные ключи. В \texttt{game\_player\_stats} ключ включает идентификаторы матча и игрока; неключевые атрибуты характеризуют результат конкретного игрока в конкретном матче, и ни один показатель не определяется только идентификатором игрока или только идентификатором матча. Атрибут команды также зависит от обеих частей ключа из-за возможности переходов игрока в течение сезона. В \texttt{player\_team\_history} составной ключ образуют идентификаторы игрока, сезона и команды: одна запись описывает отдельный период выступления, а атрибуты дат начала и окончания и типа контракта зависят от полного ключа, а не от его части. Таким образом, частичные зависимости устранены, и схема соответствует требованиям второй нормальной формы.
 
 \textbf{Третья нормальная форма.} Отношение находится в третьей нормальной форме, если оно соответствует второй нормальной форме и не содержит транзитивных функциональных зависимостей неключевых атрибутов от потенциальных ключей. Это означает отсутствие функциональных зависимостей между самими неключевыми атрибутами.
 

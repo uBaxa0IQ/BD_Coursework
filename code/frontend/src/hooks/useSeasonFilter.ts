@@ -12,7 +12,7 @@ interface SeasonContextType {
 
 export const SeasonContext = createContext<SeasonContextType>({
   seasonId: 5,
-  seasonLabel: '2023-24',
+  seasonLabel: '2025-26',
   seasons: SEASONS,
   setSeasonId: () => {},
 })
@@ -37,7 +37,7 @@ export function useSeasonState() {
   }, [])
 
   const seasonLabel =
-    seasons.find(s => s.season_id === seasonId)?.label ?? '2023-24'
+    seasons.find(s => s.season_id === seasonId)?.label ?? '2025-26'
 
   const setSeasonId = (id: number) => setSeasonIdRaw(id)
 

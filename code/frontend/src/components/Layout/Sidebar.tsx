@@ -26,7 +26,7 @@ export default function Sidebar() {
           NBA STATS
         </div>
         <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2 }}>
-          2019-20 → 2023-24
+          2021-22 → 2025-26
         </div>
       </div>
 
