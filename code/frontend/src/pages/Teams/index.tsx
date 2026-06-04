@@ -16,7 +16,7 @@ export default function Teams() {
     teamsApi.getStandings(seasonId).then(setStandings).finally(() => setLoading(false))
   }, [seasonId])
 
-  if (loading) return <div className="loading">Загрузка...</div>
+  if (loading) return <div className="loading">Loading...</div>
 
   const list = standings[activeTab]
   const leader = list[0]
@@ -28,7 +28,7 @@ export default function Teams() {
   return (
     <div>
       <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16 }}>
-        Турнирная таблица · {seasonLabel}
+        Standings · {seasonLabel}
       </div>
 
       <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
@@ -39,7 +39,7 @@ export default function Teams() {
             className={`btn ${activeTab === conf ? 'btn-primary' : 'btn-ghost'}`}
             onClick={() => setActiveTab(conf)}
           >
-            {conf === 'East' ? 'Восток' : 'Запад'}
+            {conf === 'East' ? 'East' : 'West'}
           </button>
         ))}
       </div>
@@ -48,7 +48,7 @@ export default function Teams() {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
-              {['#', '', 'Команда', 'W', 'L', 'W%', 'GB'].map(h => (
+              {['#', '', 'Team', 'W', 'L', 'W%', 'GB'].map(h => (
                 <th
                   key={h}
                   style={{
@@ -67,7 +67,7 @@ export default function Teams() {
             {list.length === 0 ? (
               <tr>
                 <td colSpan={7} style={{ padding: 24, textAlign: 'center', color: 'var(--text-secondary)' }}>
-                  Нет данных за сезон
+                  No data for season
                 </td>
               </tr>
             ) : (

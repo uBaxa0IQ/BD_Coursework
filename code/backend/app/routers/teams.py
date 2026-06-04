@@ -88,25 +88,27 @@ async def get_teams_avg_stats(
     db: AsyncSession = Depends(get_db_analyst),
 ):
     if order_by != "avg_pts":
-        from fastapi import HTTPException
         raise HTTPException(status_code=422, detail="Only order_by=avg_pts is supported")
 
-    cache_key = f"teams_avg_stats:{season_id}:{limit}:{order_by}"
+    cache_key = f"teams_avg_stats:v2:{season_id}:{limit}:{order_by}"
     cached = await cache.get(cache_key)
     if cached:
         return cached
 
+    # avg_pts — очки КОМАНДЫ за игру (сумма очков игроков в матче, усреднённая по матчам),
+    # берётся из представления v_team_stats. Раньше ошибочно усреднялись средние очки
+    # игроков ростера, из-за чего значения выходили ~8–10 вместо ~110–120.
     result = await db.execute(
-        select(
-            Team.abbreviation.label("team_abbreviation"),
-            func.round(func.avg(PlayerSeasonStats.avg_pts).cast(Numeric), 2).label("avg_pts"),
-        )
-        .join(PlayerSeasonStats, PlayerSeasonStats.team_id == Team.team_id)
-        .where(PlayerSeasonStats.season_id == season_id)
-        .where(PlayerSeasonStats.games_played >= 5)
-        .group_by(Team.team_id, Team.abbreviation)
-        .order_by(func.avg(PlayerSeasonStats.avg_pts).desc().nulls_last())
-        .limit(limit)
+        text(
+            """
+            SELECT abbreviation AS team_abbreviation, avg_pts
+            FROM v_team_stats
+            WHERE season_id = :season_id
+            ORDER BY avg_pts DESC NULLS LAST
+            LIMIT :limit
+            """
+        ),
+        {"season_id": season_id, "limit": limit},
     )
     data = sanitize_rows(result.mappings().all())
     await cache.set(cache_key, data, ttl=900)

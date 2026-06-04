@@ -1,0 +1,31 @@
+team_id,nba_team_id,name,abbreviation,city,conference,arena_name,founded_year,is_active
+19,1610612740,New Orleans Pelicans,NOP,New Orleans,West,Smoothie King Center,2002,t
+20,1610612752,New York Knicks,NYK,New York,East,Madison Square Garden,1946,t
+21,1610612760,Oklahoma City Thunder,OKC,Oklahoma City,West,Paycom Center,1967,t
+22,1610612753,Orlando Magic,ORL,Orlando,East,Kia Center,1989,t
+23,1610612755,Philadelphia 76ers,PHI,Philadelphia,East,Wells Fargo Center,1946,t
+24,1610612756,Phoenix Suns,PHX,Phoenix,West,Footprint Center,1968,t
+25,1610612757,Portland Trail Blazers,POR,Portland,West,Moda Center,1970,t
+26,1610612758,Sacramento Kings,SAC,Sacramento,West,Golden 1 Center,1945,t
+27,1610612759,San Antonio Spurs,SAS,San Antonio,West,AT&T Center,1967,t
+28,1610612761,Toronto Raptors,TOR,Toronto,East,Scotiabank Arena,1995,t
+29,1610612762,Utah Jazz,UTA,Utah,West,Delta Center,1974,t
+30,1610612764,Washington Wizards,WAS,Washington,East,Capital One Arena,1961,t
+1,1610612737,Atlanta Hawks,ATL,Atlanta,East,State Farm Arena,1946,t
+2,1610612738,Boston Celtics,BOS,Boston,East,TD Garden,1946,t
+3,1610612751,Brooklyn Nets,BKN,Brooklyn,East,Barclays Center,1967,t
+4,1610612766,Charlotte Hornets,CHA,Charlotte,East,Spectrum Center,1988,t
+5,1610612741,Chicago Bulls,CHI,Chicago,East,United Center,1966,t
+6,1610612739,Cleveland Cavaliers,CLE,Cleveland,East,Rocket Mortgage FieldHouse,1970,t
+7,1610612742,Dallas Mavericks,DAL,Dallas,West,American Airlines Center,1980,t
+8,1610612743,Denver Nuggets,DEN,Denver,West,Ball Arena,1967,t
+9,1610612765,Detroit Pistons,DET,Detroit,East,Little Caesars Arena,1941,t
+10,1610612744,Golden State Warriors,GSW,Golden State,West,Chase Center,1946,t
+11,1610612745,Houston Rockets,HOU,Houston,West,Toyota Center,1967,t
+12,1610612754,Indiana Pacers,IND,Indiana,East,Gainbridge Fieldhouse,1967,t
+13,1610612746,Los Angeles Clippers,LAC,Los Angeles,West,Crypto.com Arena,1970,t
+14,1610612747,Los Angeles Lakers,LAL,Los Angeles,West,Crypto.com Arena,1947,t
+15,1610612763,Memphis Grizzlies,MEM,Memphis,West,FedExForum,1995,t
+16,1610612748,Miami Heat,MIA,Miami,East,Kaseya Center,1988,t
+17,1610612749,Milwaukee Bucks,MIL,Milwaukee,East,Fiserv Forum,1968,t
+18,1610612750,Minnesota Timberwolves,MIN,Minnesota,West,Target Center,1989,t

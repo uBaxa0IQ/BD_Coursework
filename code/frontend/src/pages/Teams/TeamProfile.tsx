@@ -26,8 +26,8 @@ export default function TeamProfile() {
     }).finally(() => setLoading(false))
   }, [id, seasonId])
 
-  if (loading) return <div className="loading">Загрузка...</div>
-  if (!team) return <div className="error">Команда не найдена</div>
+  if (loading) return <div className="loading">Loading...</div>
+  if (!team) return <div className="error">Team not found</div>
 
   const fmt = (v?: number | string | null, dec = 1) => v != null ? Number(v).toFixed(dec) : '—'
   const wins = games.filter(g => {
@@ -64,11 +64,11 @@ export default function TeamProfile() {
       {/* Состав */}
       {roster.length > 0 && (
         <div className="card">
-          <h3 style={{ marginBottom: 16, fontSize: 14, color: 'var(--text-secondary)' }}>Состав</h3>
+          <h3 style={{ marginBottom: 16, fontSize: 14, color: 'var(--text-secondary)' }}>Roster</h3>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--text-muted)' }}>
-                {['Игрок', 'Поз', 'GP', 'PTS', 'REB', 'AST', 'PER'].map(h => (
+                {['Player', 'Pos', 'GP', 'PTS', 'REB', 'AST', 'PER'].map(h => (
                   <th key={h} style={{ padding: '6px 10px', textAlign: 'left', fontWeight: 500, fontSize: 11 }}>{h}</th>
                 ))}
               </tr>

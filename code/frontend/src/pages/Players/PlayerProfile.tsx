@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { playersApi } from '../../api/players'
 import { useSeasonFilter } from '../../hooks/useSeasonFilter'
@@ -15,6 +15,7 @@ const CAREER_METRICS = [
 
 export default function PlayerProfile() {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
   const { seasonId } = useSeasonFilter()
   const [player, setPlayer] = useState<PlayerDetail | null>(null)
   const [career, setCareer] = useState<PlayerStats[]>([])
@@ -40,8 +41,8 @@ export default function PlayerProfile() {
     }).finally(() => setLoading(false))
   }, [id, seasonId])
 
-  if (loading) return <div className="loading">Загрузка профиля...</div>
-  if (!player) return <div className="error">Игрок не найден</div>
+  if (loading) return <div className="loading">Loading profile...</div>
+  if (!player) return <div className="error">Player not found</div>
 
   const currentSeason = career.find(s => s.season_id === seasonId) || career[career.length - 1]
   const fmt = (v?: number | string | null, dec = 1) => v != null ? Number(v).toFixed(dec) : '—'
@@ -54,6 +55,13 @@ export default function PlayerProfile() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <button
+        className="btn btn-ghost"
+        onClick={() => navigate('/players')}
+        style={{ alignSelf: 'flex-start', fontSize: 12 }}
+      >
+        ← Players
+      </button>
       {/* Шапка */}
       <div className="card" style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
         <img
@@ -80,9 +88,9 @@ export default function PlayerProfile() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: 16, fontSize: 13, color: 'var(--text-secondary)' }}>
-            {player.height_cm && <span>Рост: {player.height_cm} см</span>}
-            {player.weight_kg && <span>Вес: {player.weight_kg} кг</span>}
-            {player.birth_date && <span>ДР: {player.birth_date}</span>}
+            {player.height_cm && <span>Height: {player.height_cm} cm</span>}
+            {player.weight_kg && <span>Weight: {player.weight_kg} kg</span>}
+            {player.birth_date && <span>DOB: {player.birth_date}</span>}
             {player.nationality && <span>{player.nationality}</span>}
           </div>
         </div>
@@ -91,7 +99,8 @@ export default function PlayerProfile() {
       {/* Метрики */}
       {currentSeason && (
         <div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: 8, marginBottom: 8 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(9, 1fr)', gap: 8, marginBottom: 8 }}>
+            <MetricBadge label="GP" value={currentSeason.games_played} precision={0} />
             <MetricBadge label="PTS" value={currentSeason.avg_pts} />
             <MetricBadge label="REB" value={currentSeason.avg_reb} />
             <MetricBadge label="AST" value={currentSeason.avg_ast} />
@@ -115,7 +124,7 @@ export default function PlayerProfile() {
       {career.length > 1 && (
         <div className="card">
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-            <h3 style={{ fontSize: 14, color: 'var(--text-secondary)', flex: 1 }}>Карьерная динамика</h3>
+            <h3 style={{ fontSize: 14, color: 'var(--text-secondary)', flex: 1 }}>Career trend</h3>
             {CAREER_METRICS.map(m => (
               <button
                 key={m.key}
@@ -139,6 +148,41 @@ export default function PlayerProfile() {
         </div>
       )}
 
+      {/* Team history */}
+      {teams.length > 0 && (
+        <div className="card">
+          <h3 style={{ marginBottom: 16, fontSize: 14, color: 'var(--text-secondary)' }}>Team history</h3>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--text-muted)' }}>
+                {['Season', 'Team', 'Contract'].map(h => (
+                  <th key={h} style={{ padding: '6px 10px', textAlign: 'left', fontWeight: 500, fontSize: 11 }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {teams.map((t, i) => (
+                <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                  <td style={{ padding: '6px 10px', fontFamily: 'var(--font-mono)' }}>{t.season}</td>
+                  <td style={{ padding: '6px 10px' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                      <img
+                        src={`https://cdn.nba.com/logos/nba/${t.nba_team_id}/global/L/logo.svg`}
+                        alt=""
+                        style={{ width: 20, height: 20 }}
+                        onError={(e) => { e.currentTarget.style.visibility = 'hidden' }}
+                      />
+                      {t.team_name}
+                    </span>
+                  </td>
+                  <td style={{ padding: '6px 10px', color: 'var(--text-secondary)' }}>{t.contract_type}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
       {/* Game Log */}
       {gamelog.length > 0 && (
         <div className="card">
@@ -147,7 +191,7 @@ export default function PlayerProfile() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--text-muted)' }}>
-                  {['Дата', 'Соп.', 'MIN', 'PTS', 'REB', 'AST', 'FG', '3P', 'FT', '+/-'].map(h => (
+                  {['Date', 'Opp', 'MIN', 'PTS', 'REB', 'AST', 'FG', '3P', 'FT', '+/-'].map(h => (
                     <th key={h} style={{ padding: '6px 10px', textAlign: 'left', fontWeight: 500, fontSize: 11 }}>{h}</th>
                   ))}
                 </tr>

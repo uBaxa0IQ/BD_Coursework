@@ -5,16 +5,16 @@ import { useSeasonFilter } from '../../hooks/useSeasonFilter'
 import type { LeaderboardEntry } from '../../types'
 
 const METRICS = [
-  { key: 'avg_pts', label: 'PTS', formula: 'Среднее очков за матч' },
-  { key: 'avg_reb', label: 'REB', formula: 'Среднее подборов за матч' },
-  { key: 'avg_ast', label: 'AST', formula: 'Среднее передач за матч' },
-  { key: 'avg_stl', label: 'STL', formula: 'Среднее перехватов за матч' },
-  { key: 'avg_blk', label: 'BLK', formula: 'Среднее блоков за матч' },
-  { key: 'per', label: 'PER', formula: 'Player Efficiency Rating (среднее по лиге = 15)' },
+  { key: 'avg_pts', label: 'PTS', formula: 'Points per game' },
+  { key: 'avg_reb', label: 'REB', formula: 'Rebounds per game' },
+  { key: 'avg_ast', label: 'AST', formula: 'Assists per game' },
+  { key: 'avg_stl', label: 'STL', formula: 'Steals per game' },
+  { key: 'avg_blk', label: 'BLK', formula: 'Blocks per game' },
+  { key: 'per', label: 'PER', formula: 'Player Efficiency Rating (league avg = 15)' },
   { key: 'ts_pct', label: 'TS%', formula: 'TS% = PTS / (2 × (FGA + 0.44 × FTA))' },
   { key: 'efg_pct', label: 'eFG%', formula: 'eFG% = (FGM + 0.5×FG3M) / FGA' },
-  { key: 'bpm', label: 'BPM', formula: 'Box Plus/Minus относительно среднего (0 = avg)' },
-  { key: 'usg_pct', label: 'USG%', formula: 'Процент атак команды с участием игрока' },
+  { key: 'bpm', label: 'BPM', formula: 'Box Plus/Minus vs average (0 = avg)' },
+  { key: 'usg_pct', label: 'USG%', formula: 'Share of team possessions used' },
 ]
 
 export default function Leaderboard() {
@@ -67,12 +67,12 @@ export default function Leaderboard() {
       </div>
 
       {loading ? (
-        <div className="loading">Загрузка...</div>
+        <div className="loading">Loading...</div>
       ) : (
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
-              {['#', '', 'Игрок', 'Команда', 'Поз', 'GP', METRICS.find(m => m.key === metric)?.label || metric].map(h => (
+              {['#', '', 'Player', 'Team', 'Pos', 'GP', METRICS.find(m => m.key === metric)?.label || metric].map(h => (
                 <th key={h} style={{ padding: '8px 12px', textAlign: h === '' ? 'center' : 'left', fontWeight: 500, fontSize: 12 }}>{h}</th>
               ))}
             </tr>

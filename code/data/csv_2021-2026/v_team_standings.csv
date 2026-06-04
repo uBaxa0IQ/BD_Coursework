@@ -1,0 +1,151 @@
+team_id,name,abbreviation,city,conference,nba_team_id,season_id,season,wins,losses,games_played,win_pct
+24,Phoenix Suns,PHX,Phoenix,West,1610612756,1,2021-22,64,18,82,0.780
+15,Memphis Grizzlies,MEM,Memphis,West,1610612763,1,2021-22,56,26,82,0.683
+16,Miami Heat,MIA,Miami,East,1610612748,1,2021-22,53,29,82,0.646
+10,Golden State Warriors,GSW,Golden State,West,1610612744,1,2021-22,53,29,82,0.646
+7,Dallas Mavericks,DAL,Dallas,West,1610612742,1,2021-22,52,30,82,0.634
+23,Philadelphia 76ers,PHI,Philadelphia,East,1610612755,1,2021-22,51,31,82,0.622
+2,Boston Celtics,BOS,Boston,East,1610612738,1,2021-22,51,31,82,0.622
+17,Milwaukee Bucks,MIL,Milwaukee,East,1610612749,1,2021-22,51,31,82,0.622
+29,Utah Jazz,UTA,Utah,West,1610612762,1,2021-22,49,33,82,0.598
+28,Toronto Raptors,TOR,Toronto,East,1610612761,1,2021-22,48,34,82,0.585
+8,Denver Nuggets,DEN,Denver,West,1610612743,1,2021-22,46,36,82,0.561
+5,Chicago Bulls,CHI,Chicago,East,1610612741,1,2021-22,46,36,82,0.561
+18,Minnesota Timberwolves,MIN,Minnesota,West,1610612750,1,2021-22,46,36,82,0.561
+3,Brooklyn Nets,BKN,Brooklyn,East,1610612751,1,2021-22,44,38,82,0.537
+6,Cleveland Cavaliers,CLE,Cleveland,East,1610612739,1,2021-22,44,38,82,0.537
+1,Atlanta Hawks,ATL,Atlanta,East,1610612737,1,2021-22,43,39,82,0.524
+4,Charlotte Hornets,CHA,Charlotte,East,1610612766,1,2021-22,43,39,82,0.524
+13,Los Angeles Clippers,LAC,Los Angeles,West,1610612746,1,2021-22,42,40,82,0.512
+20,New York Knicks,NYK,New York,East,1610612752,1,2021-22,37,45,82,0.451
+19,New Orleans Pelicans,NOP,New Orleans,West,1610612740,1,2021-22,37,45,82,0.451
+30,Washington Wizards,WAS,Washington,East,1610612764,1,2021-22,35,47,82,0.427
+27,San Antonio Spurs,SAS,San Antonio,West,1610612759,1,2021-22,34,48,82,0.415
+14,Los Angeles Lakers,LAL,Los Angeles,West,1610612747,1,2021-22,33,49,82,0.402
+26,Sacramento Kings,SAC,Sacramento,West,1610612758,1,2021-22,31,51,82,0.378
+25,Portland Trail Blazers,POR,Portland,West,1610612757,1,2021-22,27,55,82,0.329
+12,Indiana Pacers,IND,Indiana,East,1610612754,1,2021-22,25,57,82,0.305
+21,Oklahoma City Thunder,OKC,Oklahoma City,West,1610612760,1,2021-22,24,58,82,0.293
+9,Detroit Pistons,DET,Detroit,East,1610612765,1,2021-22,23,59,82,0.280
+22,Orlando Magic,ORL,Orlando,East,1610612753,1,2021-22,22,60,82,0.268
+11,Houston Rockets,HOU,Houston,West,1610612745,1,2021-22,20,62,82,0.244
+17,Milwaukee Bucks,MIL,Milwaukee,East,1610612749,2,2022-23,58,24,82,0.707
+2,Boston Celtics,BOS,Boston,East,1610612738,2,2022-23,57,25,82,0.695
+23,Philadelphia 76ers,PHI,Philadelphia,East,1610612755,2,2022-23,54,28,82,0.659
+8,Denver Nuggets,DEN,Denver,West,1610612743,2,2022-23,53,29,82,0.646
+6,Cleveland Cavaliers,CLE,Cleveland,East,1610612739,2,2022-23,51,31,82,0.622
+15,Memphis Grizzlies,MEM,Memphis,West,1610612763,2,2022-23,51,31,82,0.622
+26,Sacramento Kings,SAC,Sacramento,West,1610612758,2,2022-23,48,34,82,0.585
+20,New York Knicks,NYK,New York,East,1610612752,2,2022-23,47,35,82,0.573
+3,Brooklyn Nets,BKN,Brooklyn,East,1610612751,2,2022-23,45,37,82,0.549
+24,Phoenix Suns,PHX,Phoenix,West,1610612756,2,2022-23,45,36,82,0.549
+13,Los Angeles Clippers,LAC,Los Angeles,West,1610612746,2,2022-23,44,38,82,0.537
+16,Miami Heat,MIA,Miami,East,1610612748,2,2022-23,44,38,82,0.537
+10,Golden State Warriors,GSW,Golden State,West,1610612744,2,2022-23,44,38,82,0.537
+14,Los Angeles Lakers,LAL,Los Angeles,West,1610612747,2,2022-23,43,39,82,0.524
+19,New Orleans Pelicans,NOP,New Orleans,West,1610612740,2,2022-23,42,40,82,0.512
+18,Minnesota Timberwolves,MIN,Minnesota,West,1610612750,2,2022-23,42,40,82,0.512
+28,Toronto Raptors,TOR,Toronto,East,1610612761,2,2022-23,41,41,82,0.500
+1,Atlanta Hawks,ATL,Atlanta,East,1610612737,2,2022-23,41,41,82,0.500
+5,Chicago Bulls,CHI,Chicago,East,1610612741,2,2022-23,40,42,82,0.488
+21,Oklahoma City Thunder,OKC,Oklahoma City,West,1610612760,2,2022-23,39,42,82,0.476
+7,Dallas Mavericks,DAL,Dallas,West,1610612742,2,2022-23,38,44,82,0.463
+29,Utah Jazz,UTA,Utah,West,1610612762,2,2022-23,37,45,82,0.451
+12,Indiana Pacers,IND,Indiana,East,1610612754,2,2022-23,35,47,82,0.427
+30,Washington Wizards,WAS,Washington,East,1610612764,2,2022-23,35,47,82,0.427
+22,Orlando Magic,ORL,Orlando,East,1610612753,2,2022-23,34,48,82,0.415
+25,Portland Trail Blazers,POR,Portland,West,1610612757,2,2022-23,33,49,82,0.402
+4,Charlotte Hornets,CHA,Charlotte,East,1610612766,2,2022-23,27,55,82,0.329
+11,Houston Rockets,HOU,Houston,West,1610612745,2,2022-23,22,60,82,0.268
+27,San Antonio Spurs,SAS,San Antonio,West,1610612759,2,2022-23,22,60,82,0.268
+9,Detroit Pistons,DET,Detroit,East,1610612765,2,2022-23,17,65,82,0.207
+2,Boston Celtics,BOS,Boston,East,1610612738,3,2023-24,64,18,82,0.780
+21,Oklahoma City Thunder,OKC,Oklahoma City,West,1610612760,3,2023-24,58,24,82,0.707
+8,Denver Nuggets,DEN,Denver,West,1610612743,3,2023-24,58,24,82,0.707
+18,Minnesota Timberwolves,MIN,Minnesota,West,1610612750,3,2023-24,56,26,82,0.683
+13,Los Angeles Clippers,LAC,Los Angeles,West,1610612746,3,2023-24,51,31,82,0.622
+20,New York Knicks,NYK,New York,East,1610612752,3,2023-24,50,32,82,0.610
+24,Phoenix Suns,PHX,Phoenix,West,1610612756,3,2023-24,49,33,82,0.598
+19,New Orleans Pelicans,NOP,New Orleans,West,1610612740,3,2023-24,49,33,82,0.598
+17,Milwaukee Bucks,MIL,Milwaukee,East,1610612749,3,2023-24,49,33,82,0.598
+7,Dallas Mavericks,DAL,Dallas,West,1610612742,3,2023-24,48,34,82,0.585
+6,Cleveland Cavaliers,CLE,Cleveland,East,1610612739,3,2023-24,48,34,82,0.585
+26,Sacramento Kings,SAC,Sacramento,West,1610612758,3,2023-24,47,35,82,0.573
+12,Indiana Pacers,IND,Indiana,East,1610612754,3,2023-24,47,35,82,0.573
+14,Los Angeles Lakers,LAL,Los Angeles,West,1610612747,3,2023-24,47,35,82,0.573
+23,Philadelphia 76ers,PHI,Philadelphia,East,1610612755,3,2023-24,47,35,82,0.573
+22,Orlando Magic,ORL,Orlando,East,1610612753,3,2023-24,47,35,82,0.573
+16,Miami Heat,MIA,Miami,East,1610612748,3,2023-24,46,36,82,0.561
+10,Golden State Warriors,GSW,Golden State,West,1610612744,3,2023-24,42,40,82,0.512
+11,Houston Rockets,HOU,Houston,West,1610612745,3,2023-24,41,41,82,0.500
+5,Chicago Bulls,CHI,Chicago,East,1610612741,3,2023-24,39,43,82,0.476
+1,Atlanta Hawks,ATL,Atlanta,East,1610612737,3,2023-24,36,46,82,0.439
+3,Brooklyn Nets,BKN,Brooklyn,East,1610612751,3,2023-24,32,50,82,0.390
+29,Utah Jazz,UTA,Utah,West,1610612762,3,2023-24,32,50,82,0.390
+15,Memphis Grizzlies,MEM,Memphis,West,1610612763,3,2023-24,27,55,82,0.329
+28,Toronto Raptors,TOR,Toronto,East,1610612761,3,2023-24,25,57,82,0.305
+27,San Antonio Spurs,SAS,San Antonio,West,1610612759,3,2023-24,23,59,82,0.280
+25,Portland Trail Blazers,POR,Portland,West,1610612757,3,2023-24,22,60,82,0.268
+4,Charlotte Hornets,CHA,Charlotte,East,1610612766,3,2023-24,21,61,82,0.256
+30,Washington Wizards,WAS,Washington,East,1610612764,3,2023-24,15,67,82,0.183
+9,Detroit Pistons,DET,Detroit,East,1610612765,3,2023-24,14,68,82,0.171
+21,Oklahoma City Thunder,OKC,Oklahoma City,West,1610612760,4,2024-25,67,14,81,0.827
+6,Cleveland Cavaliers,CLE,Cleveland,East,1610612739,4,2024-25,64,18,82,0.780
+2,Boston Celtics,BOS,Boston,East,1610612738,4,2024-25,61,21,82,0.744
+11,Houston Rockets,HOU,Houston,West,1610612745,4,2024-25,52,29,81,0.642
+20,New York Knicks,NYK,New York,East,1610612752,4,2024-25,51,31,82,0.622
+12,Indiana Pacers,IND,Indiana,East,1610612754,4,2024-25,49,31,80,0.613
+8,Denver Nuggets,DEN,Denver,West,1610612743,4,2024-25,50,32,82,0.610
+13,Los Angeles Clippers,LAC,Los Angeles,West,1610612746,4,2024-25,50,32,82,0.610
+14,Los Angeles Lakers,LAL,Los Angeles,West,1610612747,4,2024-25,50,32,82,0.610
+18,Minnesota Timberwolves,MIN,Minnesota,West,1610612750,4,2024-25,49,33,82,0.598
+10,Golden State Warriors,GSW,Golden State,West,1610612744,4,2024-25,48,34,82,0.585
+15,Memphis Grizzlies,MEM,Memphis,West,1610612763,4,2024-25,48,34,82,0.585
+17,Milwaukee Bucks,MIL,Milwaukee,East,1610612749,4,2024-25,47,34,81,0.580
+9,Detroit Pistons,DET,Detroit,East,1610612765,4,2024-25,44,38,82,0.537
+22,Orlando Magic,ORL,Orlando,East,1610612753,4,2024-25,41,41,82,0.500
+1,Atlanta Hawks,ATL,Atlanta,East,1610612737,4,2024-25,40,41,81,0.494
+26,Sacramento Kings,SAC,Sacramento,West,1610612758,4,2024-25,40,42,82,0.488
+5,Chicago Bulls,CHI,Chicago,East,1610612741,4,2024-25,39,43,82,0.476
+7,Dallas Mavericks,DAL,Dallas,West,1610612742,4,2024-25,39,43,82,0.476
+16,Miami Heat,MIA,Miami,East,1610612748,4,2024-25,36,45,81,0.444
+24,Phoenix Suns,PHX,Phoenix,West,1610612756,4,2024-25,36,46,82,0.439
+25,Portland Trail Blazers,POR,Portland,West,1610612757,4,2024-25,36,46,82,0.439
+27,San Antonio Spurs,SAS,San Antonio,West,1610612759,4,2024-25,33,47,80,0.413
+28,Toronto Raptors,TOR,Toronto,East,1610612761,4,2024-25,30,52,82,0.366
+3,Brooklyn Nets,BKN,Brooklyn,East,1610612751,4,2024-25,26,56,82,0.317
+23,Philadelphia 76ers,PHI,Philadelphia,East,1610612755,4,2024-25,24,58,82,0.293
+19,New Orleans Pelicans,NOP,New Orleans,West,1610612740,4,2024-25,21,61,82,0.256
+4,Charlotte Hornets,CHA,Charlotte,East,1610612766,4,2024-25,19,63,82,0.232
+30,Washington Wizards,WAS,Washington,East,1610612764,4,2024-25,18,63,81,0.222
+29,Utah Jazz,UTA,Utah,West,1610612762,4,2024-25,17,65,82,0.207
+21,Oklahoma City Thunder,OKC,Oklahoma City,West,1610612760,5,2025-26,64,17,81,0.790
+27,San Antonio Spurs,SAS,San Antonio,West,1610612759,5,2025-26,61,20,81,0.753
+9,Detroit Pistons,DET,Detroit,East,1610612765,5,2025-26,59,22,81,0.728
+2,Boston Celtics,BOS,Boston,East,1610612738,5,2025-26,56,26,82,0.683
+8,Denver Nuggets,DEN,Denver,West,1610612743,5,2025-26,54,28,82,0.659
+14,Los Angeles Lakers,LAL,Los Angeles,West,1610612747,5,2025-26,53,29,82,0.646
+20,New York Knicks,NYK,New York,East,1610612752,5,2025-26,52,29,81,0.642
+6,Cleveland Cavaliers,CLE,Cleveland,East,1610612739,5,2025-26,52,30,82,0.634
+11,Houston Rockets,HOU,Houston,West,1610612745,5,2025-26,52,30,82,0.634
+18,Minnesota Timberwolves,MIN,Minnesota,West,1610612750,5,2025-26,49,33,82,0.598
+1,Atlanta Hawks,ATL,Atlanta,East,1610612737,5,2025-26,46,36,82,0.561
+28,Toronto Raptors,TOR,Toronto,East,1610612761,5,2025-26,46,36,82,0.561
+22,Orlando Magic,ORL,Orlando,East,1610612753,5,2025-26,44,35,79,0.557
+23,Philadelphia 76ers,PHI,Philadelphia,East,1610612755,5,2025-26,45,37,82,0.549
+24,Phoenix Suns,PHX,Phoenix,West,1610612756,5,2025-26,45,37,82,0.549
+4,Charlotte Hornets,CHA,Charlotte,East,1610612766,5,2025-26,44,38,82,0.537
+16,Miami Heat,MIA,Miami,East,1610612748,5,2025-26,43,39,82,0.524
+13,Los Angeles Clippers,LAC,Los Angeles,West,1610612746,5,2025-26,42,40,82,0.512
+25,Portland Trail Blazers,POR,Portland,West,1610612757,5,2025-26,42,40,82,0.512
+10,Golden State Warriors,GSW,Golden State,West,1610612744,5,2025-26,37,45,82,0.451
+17,Milwaukee Bucks,MIL,Milwaukee,East,1610612749,5,2025-26,32,50,82,0.390
+5,Chicago Bulls,CHI,Chicago,East,1610612741,5,2025-26,31,51,82,0.378
+7,Dallas Mavericks,DAL,Dallas,West,1610612742,5,2025-26,26,55,81,0.321
+19,New Orleans Pelicans,NOP,New Orleans,West,1610612740,5,2025-26,26,56,82,0.317
+15,Memphis Grizzlies,MEM,Memphis,West,1610612763,5,2025-26,24,56,80,0.300
+26,Sacramento Kings,SAC,Sacramento,West,1610612758,5,2025-26,22,60,82,0.268
+29,Utah Jazz,UTA,Utah,West,1610612762,5,2025-26,22,60,82,0.268
+3,Brooklyn Nets,BKN,Brooklyn,East,1610612751,5,2025-26,20,62,82,0.244
+12,Indiana Pacers,IND,Indiana,East,1610612754,5,2025-26,19,63,82,0.232
+30,Washington Wizards,WAS,Washington,East,1610612764,5,2025-26,17,65,82,0.207

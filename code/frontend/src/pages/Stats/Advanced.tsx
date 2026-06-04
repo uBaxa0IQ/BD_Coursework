@@ -224,16 +224,16 @@ export default function Advanced() {
     return out
   }, [raw])
 
-  if (loading) return <div className="loading">Загрузка...</div>
+  if (loading) return <div className="loading">Loading...</div>
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div className="card">
         <h3 style={{ marginBottom: 16, fontSize: 14, color: 'var(--text-secondary)' }}>
-          USG% vs TS% (размер = минуты)
+          USG% vs TS% (size = minutes)
         </h3>
         {usgTsData.length === 0 ? (
-          <div style={{ color: 'var(--text-secondary)', fontSize: 13 }}>Нет данных за сезон</div>
+          <div style={{ color: 'var(--text-secondary)', fontSize: 13 }}>No data for season</div>
         ) : (
           <UsgTsChart data={usgTsData} />
         )}
@@ -241,10 +241,10 @@ export default function Advanced() {
 
       <div className="card">
         <h3 style={{ marginBottom: 16, fontSize: 14, color: 'var(--text-secondary)' }}>
-          PER vs Avg MIN (выявление недооценённых игроков)
+          PER vs Avg MIN (spotting underrated players)
         </h3>
         {perMinData.length === 0 ? (
-          <div style={{ color: 'var(--text-secondary)', fontSize: 13 }}>Нет данных за сезон</div>
+          <div style={{ color: 'var(--text-secondary)', fontSize: 13 }}>No data for season</div>
         ) : (
           <PerMinChart data={perMinData} />
         )}

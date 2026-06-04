@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip,
 } from 'recharts'
@@ -33,6 +34,7 @@ export default function PlayerModal({ playerId, seasonId, onClose }: Props) {
   const [gamelog, setGamelog] = useState<GameLog[]>([])
   const [loading, setLoading] = useState(true)
   const { addToCompare, removeFromCompare, isInCompare } = useCompare()
+  const navigate = useNavigate()
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -160,25 +162,35 @@ export default function PlayerModal({ playerId, seasonId, onClose }: Props) {
                   {player.birth_date && <span>b. {player.birth_date}</span>}
                 </div>
               </div>
-              <button
-                className={`btn ${inCompare ? 'btn-ghost' : 'btn-ghost'}`}
-                style={{
-                  fontSize: 11,
-                  padding: '5px 10px',
-                  borderColor: inCompare ? 'var(--accent)' : 'var(--border)',
-                  color: inCompare ? 'var(--accent)' : 'var(--text-secondary)',
-                }}
-                onClick={handleCompareToggle}
-              >
-                {inCompare ? '− compare' : '+ compare'}
-              </button>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <button
+                  className="btn btn-ghost"
+                  style={{ fontSize: 11, padding: '5px 10px' }}
+                  onClick={() => { onClose(); navigate(`/players/${playerId}`) }}
+                >
+                  open profile ↗
+                </button>
+                <button
+                  className="btn btn-ghost"
+                  style={{
+                    fontSize: 11,
+                    padding: '5px 10px',
+                    borderColor: inCompare ? 'var(--accent)' : 'var(--border)',
+                    color: inCompare ? 'var(--accent)' : 'var(--text-secondary)',
+                  }}
+                  onClick={handleCompareToggle}
+                >
+                  {inCompare ? '− compare' : '+ compare'}
+                </button>
+              </div>
             </div>
 
             {/* Metric badges row 1 */}
             {stats && (
               <>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: 6, marginBottom: 6 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(9, 1fr)', gap: 6, marginBottom: 6 }}>
                   {[
+                    { label: 'GP', value: fmt(stats.games_played, 0) },
                     { label: 'PTS', value: fmt(stats.avg_pts) },
                     { label: 'REB', value: fmt(stats.avg_reb) },
                     { label: 'AST', value: fmt(stats.avg_ast) },
@@ -261,7 +273,7 @@ export default function PlayerModal({ playerId, seasonId, onClose }: Props) {
             {/* Game log */}
             {gamelog.length > 0 && (
               <div>
-                <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 10 }}>game log</div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 10 }}>recent games</div>
                 <div style={{ overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                     <thead>
@@ -272,7 +284,7 @@ export default function PlayerModal({ playerId, seasonId, onClose }: Props) {
                       </tr>
                     </thead>
                     <tbody>
-                      {gamelog.slice(0, 20).map(g => (
+                      {gamelog.slice(0, 8).map(g => (
                         <tr key={g.game_id} style={{ borderBottom: '1px solid var(--border)' }}>
                           <td style={{ padding: '5px 8px', color: 'var(--text-secondary)' }}>{g.game_date}</td>
                           <td style={{ padding: '5px 8px' }}>{g.opponent}</td>
