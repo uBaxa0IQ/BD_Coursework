@@ -11,6 +11,7 @@ import {
 import { statsApi } from '../../api/stats'
 import { useSeasonFilter } from '../../hooks/useSeasonFilter'
 import { numericDomain, useChartSize } from '../../hooks/useChartSize'
+import PlayerModal from '../../components/PlayerModal'
 
 type AdvancedRow = {
   player_id: number
@@ -26,6 +27,7 @@ type ScatterPoint = {
   x: number
   y: number
   z?: number
+  player_id: number
   player_name: string
   team: string
 }
@@ -82,7 +84,7 @@ function UsgTsTooltip({ active, payload }: { active?: boolean; payload?: { paylo
   )
 }
 
-function PerMinChart({ data }: { data: ScatterPoint[] }) {
+function PerMinChart({ data, onPick }: { data: ScatterPoint[]; onPick: (id: number) => void }) {
   const { ref, width, height, ready } = useChartSize(320)
   const xDomain = useMemo(
     () => numericDomain(data.map(d => d.x), { min: 0, max: 42 }),
@@ -122,6 +124,8 @@ function PerMinChart({ data }: { data: ScatterPoint[] }) {
             fill="#7c57ff"
             opacity={0.65}
             isAnimationActive={false}
+            style={{ cursor: 'pointer' }}
+            onClick={(p: any) => { const id = p?.player_id ?? p?.payload?.player_id; if (id) onPick(id) }}
           />
         </ScatterChart>
       )}
@@ -129,7 +133,7 @@ function PerMinChart({ data }: { data: ScatterPoint[] }) {
   )
 }
 
-function UsgTsChart({ data }: { data: ScatterPoint[] }) {
+function UsgTsChart({ data, onPick }: { data: ScatterPoint[]; onPick: (id: number) => void }) {
   const { ref, width, height, ready } = useChartSize(320)
   const xDomain = useMemo(
     () => numericDomain(data.map(d => d.x), { min: 0.05, max: 0.45 }),
@@ -173,6 +177,8 @@ function UsgTsChart({ data }: { data: ScatterPoint[] }) {
             fill="var(--accent)"
             opacity={0.65}
             isAnimationActive={false}
+            style={{ cursor: 'pointer' }}
+            onClick={(p: any) => { const id = p?.player_id ?? p?.payload?.player_id; if (id) onPick(id) }}
           />
         </ScatterChart>
       )}
@@ -184,6 +190,7 @@ export default function Advanced() {
   const { seasonId } = useSeasonFilter()
   const [raw, setRaw] = useState<AdvancedRow[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -201,6 +208,7 @@ export default function Advanced() {
         x: usg,
         y: ts,
         z: min ?? 0,
+        player_id: d.player_id,
         player_name: d.player_name,
         team: d.team,
       })
@@ -217,6 +225,7 @@ export default function Advanced() {
       out.push({
         x: min,
         y: per,
+        player_id: d.player_id,
         player_name: d.player_name,
         team: d.team,
       })
@@ -235,7 +244,7 @@ export default function Advanced() {
         {usgTsData.length === 0 ? (
           <div style={{ color: 'var(--text-secondary)', fontSize: 13 }}>No data for season</div>
         ) : (
-          <UsgTsChart data={usgTsData} />
+          <UsgTsChart data={usgTsData} onPick={setSelectedPlayer} />
         )}
       </div>
 
@@ -246,9 +255,17 @@ export default function Advanced() {
         {perMinData.length === 0 ? (
           <div style={{ color: 'var(--text-secondary)', fontSize: 13 }}>No data for season</div>
         ) : (
-          <PerMinChart data={perMinData} />
+          <PerMinChart data={perMinData} onPick={setSelectedPlayer} />
         )}
       </div>
+
+      {selectedPlayer != null && (
+        <PlayerModal
+          playerId={selectedPlayer}
+          seasonId={seasonId}
+          onClose={() => setSelectedPlayer(null)}
+        />
+      )}
     </div>
   )
 }

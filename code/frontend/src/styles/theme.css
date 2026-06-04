@@ -18,6 +18,23 @@
   --radius-sm: 4px;
 }
 
+/* Светлая тема — переопределяем только цветовые переменные */
+:root[data-theme="light"] {
+  --bg-primary: #f6f7f9;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #eef0f3;
+  --accent: #15a34a;
+  --text-primary: #1f2937;
+  --text-secondary: #5b6573;
+  --text-muted: #9aa3af;
+  --border: #e3e6ea;
+  --success: #15a34a;
+  --danger: #dc2626;
+  --warning: #d97706;
+  --compare-color: #2563eb;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import { useState } from 'react'
 import { useSeasonFilter } from '../../hooks/useSeasonFilter'
 const NAV_TABS = [
   { path: '/dashboard',      label: 'dashboard' },
@@ -10,6 +11,19 @@ const NAV_TABS = [
 
 export default function TopBar() {
   const { seasonId, setSeasonId, seasons } = useSeasonFilter()
+  const [light, setLight] = useState(() => document.documentElement.dataset.theme === 'light')
+
+  const toggleTheme = () => {
+    const next = !light
+    setLight(next)
+    if (next) {
+      document.documentElement.dataset.theme = 'light'
+      localStorage.setItem('theme', 'light')
+    } else {
+      delete document.documentElement.dataset.theme
+      localStorage.setItem('theme', 'dark')
+    }
+  }
 
   return (
     <header style={{
@@ -53,6 +67,24 @@ export default function TopBar() {
           </NavLink>
         ))}
       </nav>
+
+      <button
+        onClick={toggleTheme}
+        title="toggle theme"
+        style={{
+          background: 'var(--bg-primary)',
+          border: '1px solid var(--border)',
+          color: 'var(--text-secondary)',
+          padding: '5px 9px',
+          borderRadius: 'var(--radius-sm)',
+          fontSize: 13,
+          cursor: 'pointer',
+          marginRight: 8,
+          lineHeight: 1,
+        }}
+      >
+        {light ? '☾' : '☀'}
+      </button>
 
       <select
         value={seasonId}

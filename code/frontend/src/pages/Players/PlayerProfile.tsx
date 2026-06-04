@@ -4,6 +4,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianG
 import { playersApi } from '../../api/players'
 import { useSeasonFilter } from '../../hooks/useSeasonFilter'
 import MetricBadge from '../../components/MetricBadge'
+import BoxscoreModal from '../../components/BoxscoreModal'
 import type { PlayerDetail, PlayerStats, GameLog } from '../../types'
 
 const CAREER_METRICS = [
@@ -23,6 +24,8 @@ export default function PlayerProfile() {
   const [teams, setTeams] = useState<any[]>([])
   const [metric, setMetric] = useState('per')
   const [loading, setLoading] = useState(true)
+  const [selectedGame, setSelectedGame] = useState<number | null>(null)
+  const [league, setLeague] = useState<any[]>([])
 
   useEffect(() => {
     if (!id) return
@@ -33,11 +36,13 @@ export default function PlayerProfile() {
       playersApi.getStats(pid),
       playersApi.getGamelog(pid, seasonId),
       playersApi.getTeams(pid),
-    ]).then(([p, s, g, t]) => {
+      playersApi.getList(seasonId, { limit: 1000 }).catch(() => [] as any[]),
+    ]).then(([p, s, g, t, lg]) => {
       setPlayer(p)
       setCareer(s)
       setGamelog(g)
       setTeams(t)
+      setLeague(lg as any[])
     }).finally(() => setLoading(false))
   }, [id, seasonId])
 
@@ -47,6 +52,24 @@ export default function PlayerProfile() {
   const currentSeason = career.find(s => s.season_id === seasonId) || career[career.length - 1]
   const fmt = (v?: number | string | null, dec = 1) => v != null ? Number(v).toFixed(dec) : '—'
   const fmtPct = (v?: number | string | null) => v != null ? (Number(v) * 100).toFixed(1) + '%' : '—'
+
+  // Ранг и перцентиль игрока среди всех игроков сезона (считается на клиенте)
+  const rankOf = (key: string, val?: number | string | null) => {
+    if (val == null || !league.length) return null
+    const v = Number(val)
+    if (Number.isNaN(v)) return null
+    const vals = league
+      .map((r: any) => r[key])
+      .filter((x: any) => x != null && x !== '')
+      .map(Number)
+      .filter((x: number) => !Number.isNaN(x))
+    if (!vals.length) return null
+    const rank = 1 + vals.filter((x: number) => x > v).length
+    const pct = Math.round((100 * vals.filter((x: number) => x <= v).length) / vals.length)
+    return { rank, pct, total: vals.length }
+  }
+  const perR = currentSeason ? rankOf('per', currentSeason.per) : null
+  const ptsR = currentSeason ? rankOf('avg_pts', currentSeason.avg_pts) : null
 
   const chartData = career.map(s => ({
     season: s.season_label,
@@ -117,6 +140,14 @@ export default function PlayerProfile() {
             <MetricBadge label="USG%" value={currentSeason.usg_pct ? Number(currentSeason.usg_pct) * 100 : null} suffix="%" />
             <MetricBadge label="BPM" value={currentSeason.bpm} />
           </div>
+          {(perR || ptsR) && (
+            <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 10 }}>
+              Season rank:&nbsp;
+              {perR && <span>PER #{perR.rank} of {perR.total} ({perR.pct} pct)</span>}
+              {perR && ptsR && <span>&nbsp;·&nbsp;</span>}
+              {ptsR && <span>PTS #{ptsR.rank} of {ptsR.total} ({ptsR.pct} pct)</span>}
+            </div>
+          )}
         </div>
       )}
 
@@ -198,7 +229,13 @@ export default function PlayerProfile() {
               </thead>
               <tbody>
                 {gamelog.slice(0, 30).map((g) => (
-                  <tr key={g.game_id} style={{ borderBottom: '1px solid var(--border)' }}>
+                  <tr
+                    key={g.game_id}
+                    onClick={() => setSelectedGame(g.game_id)}
+                    style={{ borderBottom: '1px solid var(--border)', cursor: 'pointer', transition: 'background 0.1s' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                  >
                     <td style={{ padding: '6px 10px', color: 'var(--text-secondary)' }}>{g.game_date}</td>
                     <td style={{ padding: '6px 10px' }}>{g.opponent}</td>
                     <td style={{ padding: '6px 10px', fontFamily: 'var(--font-mono)' }}>{g.minutes_played ? Number(g.minutes_played).toFixed(0) : '—'}</td>
@@ -217,6 +254,10 @@ export default function PlayerProfile() {
             </table>
           </div>
         </div>
+      )}
+
+      {selectedGame != null && (
+        <BoxscoreModal gameId={selectedGame} onClose={() => setSelectedGame(null)} />
       )}
     </div>
   )

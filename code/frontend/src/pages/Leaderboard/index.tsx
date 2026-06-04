@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { statsApi } from '../../api/stats'
 import { useSeasonFilter } from '../../hooks/useSeasonFilter'
 import PlayerModal from '../../components/PlayerModal'
+import { useSortable } from '../../hooks/useSortable'
+import { exportCsv } from '../../utils/exportCsv'
 import type { LeaderboardEntry } from '../../types'
 
 const METRICS = [
@@ -42,6 +44,30 @@ export default function Leaderboard() {
 
   const currentLabel = METRICS.find(m => m.key === metric)?.label || metric
 
+  const { sorted, toggle, indicator } = useSortable<LeaderboardEntry>(leaders, 'value', 'desc')
+  const columns: { label: string; key?: string }[] = [
+    { label: '#' },
+    { label: '' },
+    { label: 'player', key: 'player_name' },
+    { label: 'team', key: 'team_abbreviation' },
+    { label: 'pos', key: 'position' },
+    { label: 'gp', key: 'games_played' },
+    { label: currentLabel, key: 'value' },
+  ]
+
+  const handleExport = () =>
+    exportCsv(
+      `leaders_${metric}_season${seasonId}.csv`,
+      sorted.map((p, i) => ({
+        rank: i + 1,
+        player: p.player_name,
+        team: p.team_abbreviation,
+        pos: p.position ?? '',
+        gp: p.games_played,
+        [metric]: p.value,
+      })),
+    )
+
   return (
     <div>
       {/* Metric selector */}
@@ -55,6 +81,14 @@ export default function Leaderboard() {
             {m.label}
           </button>
         ))}
+        <button
+          className="btn btn-ghost"
+          onClick={handleExport}
+          style={{ marginLeft: 'auto', fontSize: 12 }}
+          title="export current view to CSV"
+        >
+          ⤓ csv
+        </button>
       </div>
 
       {loading ? (
@@ -63,21 +97,27 @@ export default function Leaderboard() {
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)' }}>
-              {['#', '', 'player', 'team', 'pos', 'gp', currentLabel].map(h => (
-                <th key={h} style={{
-                  padding: '7px 10px',
-                  textAlign: h === '' ? 'center' : 'left',
-                  fontWeight: 500,
-                  fontSize: 10,
-                  color: 'var(--text-muted)',
-                }}>
-                  {h}
+              {columns.map(c => (
+                <th
+                  key={c.label}
+                  onClick={c.key ? () => toggle(c.key!) : undefined}
+                  style={{
+                    padding: '7px 10px',
+                    textAlign: c.label === '' ? 'center' : 'left',
+                    fontWeight: 500,
+                    fontSize: 10,
+                    color: 'var(--text-muted)',
+                    cursor: c.key ? 'pointer' : 'default',
+                    userSelect: 'none',
+                  }}
+                >
+                  {c.label}{c.key ? indicator(c.key) : ''}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {leaders.map(p => (
+            {sorted.map((p, i) => (
               <tr
                 key={p.player_id}
                 onClick={() => setSelectedPlayer(p.player_id)}
@@ -85,7 +125,7 @@ export default function Leaderboard() {
                 onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
                 onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
               >
-                <td style={{ padding: '7px 10px', color: 'var(--text-muted)', width: 28, fontSize: 11 }}>{p.rank}</td>
+                <td style={{ padding: '7px 10px', color: 'var(--text-muted)', width: 28, fontSize: 11 }}>{i + 1}</td>
                 <td style={{ padding: '7px 10px', width: 40 }}>
                   <img
                     src={`https://cdn.nba.com/headshots/nba/latest/1040x760/${p.nba_id}.png`}

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { teamsApi } from '../../api/teams'
 import { useSeasonFilter } from '../../hooks/useSeasonFilter'
 import PlayerModal from '../../components/PlayerModal'
+import { useSortable } from '../../hooks/useSortable'
 import type { Team } from '../../types'
 
 export default function TeamPage() {
@@ -13,6 +14,7 @@ export default function TeamPage() {
   const [roster, setRoster] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null)
+  const { sorted, toggle, indicator } = useSortable<any>(roster)
 
   useEffect(() => {
     if (!id) return
@@ -31,6 +33,17 @@ export default function TeamPage() {
   if (!team) return <div className="error">team not found</div>
 
   const fmt = (v?: number | string | null, dec = 1) => v != null ? Number(v).toFixed(dec) : '—'
+
+  const cols: { label: string; key?: string }[] = [
+    { label: '' },
+    { label: 'player', key: 'last_name' },
+    { label: 'pos', key: 'position' },
+    { label: 'gp', key: 'games_played' },
+    { label: 'pts', key: 'avg_pts' },
+    { label: 'reb', key: 'avg_reb' },
+    { label: 'ast', key: 'avg_ast' },
+    { label: 'per', key: 'per' },
+  ]
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -67,21 +80,27 @@ export default function TeamPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                {['', 'player', 'pos', 'gp', 'pts', 'reb', 'ast', 'per'].map(h => (
-                  <th key={h} style={{
-                    padding: '6px 10px',
-                    textAlign: h === '' ? 'center' : 'left',
-                    fontWeight: 500,
-                    fontSize: 10,
-                    color: 'var(--text-muted)',
-                  }}>
-                    {h}
+                {cols.map(c => (
+                  <th
+                    key={c.label}
+                    onClick={c.key ? () => toggle(c.key!) : undefined}
+                    style={{
+                      padding: '6px 10px',
+                      textAlign: c.label === '' ? 'center' : 'left',
+                      fontWeight: 500,
+                      fontSize: 10,
+                      color: 'var(--text-muted)',
+                      cursor: c.key ? 'pointer' : 'default',
+                      userSelect: 'none',
+                    }}
+                  >
+                    {c.label}{c.key ? indicator(c.key) : ''}
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {roster.map((p: any) => (
+              {sorted.map((p: any) => (
                 <tr
                   key={p.player_id}
                   onClick={() => setSelectedPlayer(p.player_id)}

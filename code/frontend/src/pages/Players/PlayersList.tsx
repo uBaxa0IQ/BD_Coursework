@@ -4,6 +4,7 @@ import { teamsApi } from '../../api/teams'
 import { useSeasonFilter } from '../../hooks/useSeasonFilter'
 import { useDebounce } from '../../hooks/useDebounce'
 import PlayerModal from '../../components/PlayerModal'
+import { exportCsv } from '../../utils/exportCsv'
 import type { Player, Team } from '../../types'
 
 const POSITIONS = ['PG', 'SG', 'SF', 'PF', 'C']
@@ -37,6 +38,29 @@ export default function PlayersList() {
   }, [seasonId, position, teamId, debouncedSearch, page])
 
   const fmt = (v?: number | string | null, dec = 1) => v != null ? Number(v).toFixed(dec) : '—'
+
+  const handleExport = async () => {
+    const rows = await playersApi.getList(seasonId, {
+      position: position || undefined,
+      team_id: teamId,
+      search: debouncedSearch || undefined,
+      limit: 1000,
+    })
+    exportCsv(
+      `players_season${seasonId}.csv`,
+      rows.map(p => ({
+        player: `${p.first_name} ${p.last_name}`,
+        team: p.team_abbreviation ?? '',
+        pos: p.position ?? '',
+        gp: p.games_played ?? '',
+        pts: p.avg_pts ?? '',
+        reb: p.avg_reb ?? '',
+        ast: p.avg_ast ?? '',
+        per: p.per ?? '',
+        ts_pct: p.ts_pct ?? '',
+      })),
+    )
+  }
 
   const selectStyle = {
     background: 'var(--bg-card)',
@@ -76,6 +100,14 @@ export default function PlayersList() {
           <option value="">all teams</option>
           {teams.map(t => <option key={t.team_id} value={t.team_id}>{t.abbreviation}</option>)}
         </select>
+        <button
+          className="btn btn-ghost"
+          onClick={handleExport}
+          style={{ marginLeft: 'auto', fontSize: 12 }}
+          title="export current filter to CSV"
+        >
+          ⤓ csv
+        </button>
       </div>
 
       {loading ? (
