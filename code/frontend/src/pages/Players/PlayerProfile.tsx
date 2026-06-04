@@ -5,6 +5,7 @@ import { playersApi } from '../../api/players'
 import { useSeasonFilter } from '../../hooks/useSeasonFilter'
 import MetricBadge from '../../components/MetricBadge'
 import BoxscoreModal from '../../components/BoxscoreModal'
+import PlusMinusHistogram from '../../components/PlusMinusHistogram'
 import type { PlayerDetail, PlayerStats, GameLog } from '../../types'
 
 const CAREER_METRICS = [
@@ -213,6 +214,19 @@ export default function PlayerProfile() {
           </table>
         </div>
       )}
+
+      {/* Распределение +/- по матчам */}
+      {(() => {
+        const pm = gamelog.map(g => g.plus_minus).filter((v): v is number => v != null)
+        return pm.length > 0 ? (
+          <div className="card">
+            <h3 style={{ marginBottom: 16, fontSize: 14, color: 'var(--text-secondary)' }}>
+              Plus/Minus distribution
+            </h3>
+            <PlusMinusHistogram values={pm} />
+          </div>
+        ) : null
+      })()}
 
       {/* Game Log */}
       {gamelog.length > 0 && (

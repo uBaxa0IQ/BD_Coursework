@@ -150,6 +150,7 @@ async def get_advanced_stats(
             PlayerSeasonStats.efg_pct,
             PlayerSeasonStats.usg_pct,
             PlayerSeasonStats.bpm,
+            PlayerSeasonStats.avg_plus_minus,
             PlayerSeasonStats.avg_min,
             PlayerSeasonStats.games_played,
         )
