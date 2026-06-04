@@ -47,7 +47,7 @@ function median(values: number[]): number | null {
   return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2
 }
 
-const MEDIAN_LINE = { stroke: 'var(--text-muted)', strokeDasharray: '4 4' }
+const MEDIAN_LINE = { stroke: 'var(--warning)', strokeDasharray: '5 4', strokeWidth: 1.5, strokeOpacity: 0.8, ifOverflow: 'extendDomain' as const }
 
 const AXIS = { stroke: 'var(--text-secondary)', fontSize: 11 }
 const MARGIN = { top: 12, right: 20, bottom: 12, left: 8 }
