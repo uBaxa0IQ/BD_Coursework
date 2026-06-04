@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { playersApi } from '../../api/players'
+import { statsApi } from '../../api/stats'
 import { useSeasonFilter } from '../../hooks/useSeasonFilter'
+import { useSortable } from '../../hooks/useSortable'
 import MetricBadge from '../../components/MetricBadge'
 import BoxscoreModal from '../../components/BoxscoreModal'
 import PlusMinusHistogram from '../../components/PlusMinusHistogram'
+import PercentileBars from '../../components/PercentileBars'
 import type { PlayerDetail, PlayerStats, GameLog } from '../../types'
 
 const CAREER_METRICS = [
@@ -27,6 +30,9 @@ export default function PlayerProfile() {
   const [loading, setLoading] = useState(true)
   const [selectedGame, setSelectedGame] = useState<number | null>(null)
   const [league, setLeague] = useState<any[]>([])
+  const [advLeague, setAdvLeague] = useState<any[]>([])
+  const [showAllLog, setShowAllLog] = useState(false)
+  const { sorted: sortedLog, toggle: toggleLog, indicator: logIndicator } = useSortable(gamelog, 'game_date', 'desc')
 
   useEffect(() => {
     if (!id) return
@@ -38,12 +44,14 @@ export default function PlayerProfile() {
       playersApi.getGamelog(pid, seasonId),
       playersApi.getTeams(pid),
       playersApi.getList(seasonId, { limit: 1000 }).catch(() => [] as any[]),
-    ]).then(([p, s, g, t, lg]) => {
+      statsApi.getAdvanced(seasonId).catch(() => [] as any[]),
+    ]).then(([p, s, g, t, lg, adv]) => {
       setPlayer(p)
       setCareer(s)
       setGamelog(g)
       setTeams(t)
       setLeague(lg as any[])
+      setAdvLeague(adv as any[])
     }).finally(() => setLoading(false))
   }, [id, seasonId])
 
@@ -71,6 +79,14 @@ export default function PlayerProfile() {
   }
   const perR = currentSeason ? rankOf('per', currentSeason.per) : null
   const ptsR = currentSeason ? rankOf('avg_pts', currentSeason.avg_pts) : null
+
+  // Пулы значений лиги для перцентилей (из advanced-датасета сезона)
+  const poolOf = (key: string): number[] =>
+    advLeague
+      .map((r: any) => r[key])
+      .filter((x: any) => x != null && x !== '')
+      .map(Number)
+      .filter((x: number) => Number.isFinite(x))
 
   const chartData = career.map(s => ({
     season: s.season_label,
@@ -149,6 +165,24 @@ export default function PlayerProfile() {
               {ptsR && <span>PTS #{ptsR.rank} of {ptsR.total} ({ptsR.pct} pct)</span>}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Перцентили среди игроков сезона */}
+      {currentSeason && advLeague.length > 0 && (
+        <div className="card">
+          <h3 style={{ marginBottom: 16, fontSize: 14, color: 'var(--text-secondary)' }}>
+            League percentile (season)
+          </h3>
+          <PercentileBars
+            rows={[
+              { label: 'PER', value: currentSeason.per, pool: poolOf('per') },
+              { label: 'TS%', value: currentSeason.ts_pct, pool: poolOf('ts_pct'), isPct: true },
+              { label: 'USG%', value: currentSeason.usg_pct, pool: poolOf('usg_pct'), isPct: true },
+              { label: 'BPM', value: currentSeason.bpm, pool: poolOf('bpm') },
+              { label: '+/-', value: currentSeason.avg_plus_minus, pool: poolOf('avg_plus_minus') },
+            ]}
+          />
         </div>
       )}
 
@@ -231,18 +265,46 @@ export default function PlayerProfile() {
       {/* Game Log */}
       {gamelog.length > 0 && (
         <div className="card">
-          <h3 style={{ marginBottom: 16, fontSize: 14, color: 'var(--text-secondary)' }}>Game Log</h3>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+            <h3 style={{ fontSize: 14, color: 'var(--text-secondary)', flex: 1 }}>Game Log</h3>
+            {gamelog.length > 30 && (
+              <button
+                className="btn btn-ghost"
+                onClick={() => setShowAllLog(v => !v)}
+                style={{ fontSize: 12, padding: '4px 10px' }}
+              >
+                {showAllLog ? 'Show recent 30' : `Show all (${gamelog.length})`}
+              </button>
+            )}
+          </div>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--text-muted)' }}>
-                  {['Date', 'Opp', 'MIN', 'PTS', 'REB', 'AST', 'FG', '3P', 'FT', '+/-'].map(h => (
-                    <th key={h} style={{ padding: '6px 10px', textAlign: 'left', fontWeight: 500, fontSize: 11 }}>{h}</th>
+                  {([
+                    { label: 'Date', key: 'game_date' },
+                    { label: 'Opp', key: 'opponent' },
+                    { label: 'MIN', key: 'minutes_played' },
+                    { label: 'PTS', key: 'points' },
+                    { label: 'REB', key: 'rebounds' },
+                    { label: 'AST', key: 'assists' },
+                    { label: 'FG' },
+                    { label: '3P' },
+                    { label: 'FT' },
+                    { label: '+/-', key: 'plus_minus' },
+                  ] as { label: string; key?: string }[]).map(h => (
+                    <th
+                      key={h.label}
+                      onClick={h.key ? () => toggleLog(h.key!) : undefined}
+                      style={{ padding: '6px 10px', textAlign: 'left', fontWeight: 500, fontSize: 11, cursor: h.key ? 'pointer' : 'default', userSelect: 'none' }}
+                    >
+                      {h.label}{h.key ? logIndicator(h.key) : ''}
+                    </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {gamelog.slice(0, 30).map((g) => (
+                {(showAllLog ? sortedLog : sortedLog.slice(0, 30)).map((g) => (
                   <tr
                     key={g.game_id}
                     onClick={() => setSelectedGame(g.game_id)}

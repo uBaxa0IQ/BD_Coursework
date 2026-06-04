@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   ResponsiveContainer, Legend,
@@ -44,6 +45,7 @@ export default function CompareModal({ p1Id, p2Id, seasonId, onClose }: Props) {
   const [p1, setP1] = useState<PlayerData | null>(null)
   const [p2, setP2] = useState<PlayerData | null>(null)
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -102,12 +104,21 @@ export default function CompareModal({ p1Id, p2Id, seasonId, onClose }: Props) {
           borderBottom: '1px solid var(--border)',
         }}>
           <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>player comparison</span>
-          <button
-            onClick={onClose}
-            style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: 18, lineHeight: 1 }}
-          >
-            ×
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <button
+              className="btn btn-ghost"
+              onClick={() => { onClose(); navigate(`/compare?p1=${p1Id}&p2=${p2Id}`) }}
+              style={{ fontSize: 12, padding: '4px 10px' }}
+            >
+              open full comparison ↗
+            </button>
+            <button
+              onClick={onClose}
+              style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: 18, lineHeight: 1 }}
+            >
+              ×
+            </button>
+          </div>
         </div>
 
         {loading ? (

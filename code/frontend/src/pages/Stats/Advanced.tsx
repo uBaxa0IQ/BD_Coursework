@@ -7,6 +7,7 @@ import {
   Tooltip,
   CartesianGrid,
   ZAxis,
+  ReferenceLine,
 } from 'recharts'
 import { statsApi } from '../../api/stats'
 import { useSeasonFilter } from '../../hooks/useSeasonFilter'
@@ -38,6 +39,15 @@ function n(v: unknown): number | null {
   const x = Number(v)
   return Number.isFinite(x) ? x : null
 }
+
+function median(values: number[]): number | null {
+  if (!values.length) return null
+  const s = [...values].sort((a, b) => a - b)
+  const mid = Math.floor(s.length / 2)
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2
+}
+
+const MEDIAN_LINE = { stroke: 'var(--text-muted)', strokeDasharray: '4 4' }
 
 const AXIS = { stroke: 'var(--text-secondary)', fontSize: 11 }
 const MARGIN = { top: 12, right: 20, bottom: 12, left: 8 }
@@ -110,6 +120,8 @@ function PmPerChart({ data, onPick }: { data: ScatterPoint[]; onPick: (id: numbe
   const { ref, width, height, ready } = useChartSize(320)
   const xDomain = useMemo(() => numericDomain(data.map(d => d.x)), [data])
   const yDomain = useMemo(() => numericDomain(data.map(d => d.y)), [data])
+  const mx = useMemo(() => median(data.map(d => d.x)), [data])
+  const my = useMemo(() => median(data.map(d => d.y)), [data])
 
   return (
     <div ref={ref} style={{ width: '100%', height, minHeight: height }}>
@@ -136,6 +148,8 @@ function PmPerChart({ data, onPick }: { data: ScatterPoint[]; onPick: (id: numbe
             width={36}
             {...AXIS}
           />
+          {mx != null && <ReferenceLine x={mx} {...MEDIAN_LINE} />}
+          {my != null && <ReferenceLine y={my} {...MEDIAN_LINE} />}
           <Tooltip content={<PmPerTooltip />} cursor={{ strokeDasharray: '3 3' }} />
           <Scatter
             name="players"
@@ -159,6 +173,8 @@ function PerMinChart({ data, onPick }: { data: ScatterPoint[]; onPick: (id: numb
     [data],
   )
   const yDomain = useMemo(() => numericDomain(data.map(d => d.y)), [data])
+  const mx = useMemo(() => median(data.map(d => d.x)), [data])
+  const my = useMemo(() => median(data.map(d => d.y)), [data])
 
   return (
     <div ref={ref} style={{ width: '100%', height, minHeight: height }}>
@@ -185,6 +201,8 @@ function PerMinChart({ data, onPick }: { data: ScatterPoint[]; onPick: (id: numb
             width={36}
             {...AXIS}
           />
+          {mx != null && <ReferenceLine x={mx} {...MEDIAN_LINE} />}
+          {my != null && <ReferenceLine y={my} {...MEDIAN_LINE} />}
           <Tooltip content={<ScatterTooltip />} cursor={{ strokeDasharray: '3 3' }} />
           <Scatter
             name="players"
@@ -211,6 +229,8 @@ function UsgTsChart({ data, onPick }: { data: ScatterPoint[]; onPick: (id: numbe
     () => numericDomain(data.map(d => d.y), { min: 0.4, max: 0.75 }),
     [data],
   )
+  const mx = useMemo(() => median(data.map(d => d.x)), [data])
+  const my = useMemo(() => median(data.map(d => d.y)), [data])
 
   return (
     <div ref={ref} style={{ width: '100%', height, minHeight: height }}>
@@ -238,6 +258,8 @@ function UsgTsChart({ data, onPick }: { data: ScatterPoint[]; onPick: (id: numbe
             {...AXIS}
           />
           <ZAxis dataKey="z" range={[24, 220]} />
+          {mx != null && <ReferenceLine x={mx} {...MEDIAN_LINE} />}
+          {my != null && <ReferenceLine y={my} {...MEDIAN_LINE} />}
           <Tooltip content={<UsgTsTooltip />} cursor={{ strokeDasharray: '3 3' }} />
           <Scatter
             name="players"
