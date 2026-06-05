@@ -143,7 +143,9 @@ export default function PlayerModal({ playerId, seasonId, onClose }: Props) {
                     <img
                       src={`https://cdn.nba.com/logos/nba/${player.nba_team_id}/global/L/logo.svg`}
                       alt=""
-                      style={{ width: 32, height: 32 }}
+                      title={player.team_id ? `${player.team_name} — open team` : undefined}
+                      onClick={() => { if (player.team_id) { onClose(); navigate(`/teams/${player.team_id}`) } }}
+                      style={{ width: 32, height: 32, cursor: player.team_id ? 'pointer' : 'default' }}
                       onError={(e) => { e.currentTarget.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=' }}
                     />
                   )}
@@ -152,7 +154,15 @@ export default function PlayerModal({ playerId, seasonId, onClose }: Props) {
                       {player.first_name} {player.last_name}
                     </div>
                     <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 2 }}>
-                      {player.team_name} · {player.position || '—'} · #{player.jersey_number ?? '—'}
+                      {player.team_id ? (
+                        <span
+                          onClick={() => { onClose(); navigate(`/teams/${player.team_id}`) }}
+                          style={{ cursor: 'pointer', color: 'var(--accent)' }}
+                        >
+                          {player.team_name}
+                        </span>
+                      ) : player.team_name}
+                      {' · '}{player.position || '—'} · #{player.jersey_number ?? '—'}
                     </div>
                   </div>
                 </div>

@@ -214,7 +214,7 @@ async def get_team_summary(
     из v_team_standings) + расчётная командная статистика за матч
     (PTS/REB/AST/TOV, eFG%, TS% из v_team_stats). Реализует ФТ «расчёт командной
     статистики в рамках матча и сезона»."""
-    cache_key = f"team_summary:{team_id}:{season_id}"
+    cache_key = f"team_summary:v2:{team_id}:{season_id}"
     cached = await cache.get(cache_key)
     if cached:
         return cached
@@ -280,6 +280,38 @@ async def get_team_summary(
     )
     pts_rank = next((i + 1 for i, r in enumerate(pts_order) if r["team_id"] == team_id), None)
 
+    # Рейтинги на 100 владений: владения ≈ FGA − OREB + TOV + 0.44·FTA.
+    # OffRtg — очки команды/100 влад., DefRtg — очки соперника/100 влад. соперника,
+    # NetRtg = OffRtg − DefRtg. Считается из game_player_stats обеих команд матча.
+    rating_row = (
+        await db.execute(
+            text(
+                """
+                WITH tg AS (
+                    SELECT gps.team_id, g.game_id,
+                           SUM(gps.points) AS pts,
+                           SUM(gps.fga - gps.rebounds_off + gps.turnovers
+                               + 0.44 * gps.fta) AS poss
+                    FROM game_player_stats gps
+                    JOIN games g ON g.game_id = gps.game_id
+                    WHERE g.season_id = :season_id AND g.status = 'Finished'
+                    GROUP BY gps.team_id, g.game_id
+                )
+                SELECT
+                    ROUND((100.0 * SUM(t.pts) / NULLIF(SUM(t.poss), 0))::numeric, 1)::float AS off_rtg,
+                    ROUND((100.0 * SUM(o.pts) / NULLIF(SUM(o.poss), 0))::numeric, 1)::float AS def_rtg,
+                    ROUND((100.0 * SUM(t.pts) / NULLIF(SUM(t.poss), 0)
+                         - 100.0 * SUM(o.pts) / NULLIF(SUM(o.poss), 0))::numeric, 1)::float AS net_rtg
+                FROM tg t
+                JOIN tg o ON o.game_id = t.game_id AND o.team_id <> t.team_id
+                WHERE t.team_id = :team_id
+                """
+            ),
+            {"team_id": team_id, "season_id": season_id},
+        )
+    ).mappings().first()
+    ratings = rating_row or {}
+
     data = {
         "team_id": team_id,
         "season_id": season_id,
@@ -298,6 +330,9 @@ async def get_team_summary(
         "avg_tov": stats.get("avg_tov"),
         "efg_pct": stats.get("efg_pct"),
         "ts_pct": stats.get("ts_pct"),
+        "off_rtg": ratings.get("off_rtg"),
+        "def_rtg": ratings.get("def_rtg"),
+        "net_rtg": ratings.get("net_rtg"),
         "pts_rank": pts_rank,
     }
     await cache.set(cache_key, data, ttl=900)

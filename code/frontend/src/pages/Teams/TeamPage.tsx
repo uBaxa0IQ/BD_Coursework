@@ -137,13 +137,19 @@ export default function TeamPage() {
   ]
 
   // Метрики сводки (A)
-  const tiles: { label: string; value: string; sub?: string }[] = summary ? [
+  const netv = summary?.net_rtg
+  const netStr = netv != null ? (Number(netv) >= 0 ? '+' : '') + Number(netv).toFixed(1) : '—'
+  const netColor = netv != null ? (Number(netv) >= 0 ? 'var(--success)' : 'var(--danger)') : undefined
+  const tiles: { label: string; value: string; sub?: string; color?: string }[] = summary ? [
     { label: 'PTS', value: fmt(summary.avg_pts), sub: summary.pts_rank ? `league #${summary.pts_rank}` : undefined },
     { label: 'REB', value: fmt(summary.avg_reb) },
     { label: 'AST', value: fmt(summary.avg_ast) },
     { label: 'TOV', value: fmt(summary.avg_tov) },
     { label: 'eFG%', value: pct(summary.efg_pct) },
     { label: 'TS%', value: pct(summary.ts_pct) },
+    { label: 'ORtg', value: fmt(summary.off_rtg) },
+    { label: 'DRtg', value: fmt(summary.def_rtg) },
+    { label: 'NET', value: netStr, color: netColor },
   ] : []
 
   // Единый ростер; ушедших по ходу сезона помечаем красным (по is_current)
@@ -228,6 +234,9 @@ export default function TeamPage() {
   // Метрики для таблицы сравнения (lower=true → меньше лучше)
   const cmpMetrics: { key: keyof TeamSummary; label: string; isPct?: boolean; lower?: boolean }[] = [
     { key: 'win_pct', label: 'W%', isPct: true },
+    { key: 'net_rtg', label: 'NET' },
+    { key: 'off_rtg', label: 'ORtg' },
+    { key: 'def_rtg', label: 'DRtg', lower: true },
     { key: 'avg_pts', label: 'PTS' },
     { key: 'avg_reb', label: 'REB' },
     { key: 'avg_ast', label: 'AST' },
@@ -294,7 +303,7 @@ export default function TeamPage() {
                 textAlign: 'center',
               }}>
                 <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase' }}>{t.label}</div>
-                <div style={{ fontSize: 20, fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: 4 }}>{t.value}</div>
+                <div style={{ fontSize: 20, fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: 4, color: t.color }}>{t.value}</div>
                 {t.sub && <div style={{ fontSize: 9, color: 'var(--accent)', marginTop: 2 }}>{t.sub}</div>}
               </div>
             ))}

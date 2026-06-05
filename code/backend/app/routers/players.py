@@ -126,7 +126,7 @@ async def get_player(
     cache: CacheManager = Depends(get_cache),
     db: AsyncSession = Depends(get_db_analyst),
 ):
-    cache_key = f"player_detail:{player_id}"
+    cache_key = f"player_detail:v2:{player_id}"
     cached = await cache.get(cache_key)
     if cached:
         return cached
@@ -147,6 +147,7 @@ async def get_player(
             Player.draft_round,
             Player.draft_pick,
             Position.code.label("position"),
+            Team.team_id.label("team_id"),
             Team.name.label("team_name"),
             Team.abbreviation.label("team_abbreviation"),
             Team.nba_team_id,
@@ -340,13 +341,14 @@ async def get_player_teams(
     cache: CacheManager = Depends(get_cache),
     db: AsyncSession = Depends(get_db_analyst),
 ):
-    cache_key = f"player_teams:{player_id}"
+    cache_key = f"player_teams:v2:{player_id}"
     cached = await cache.get(cache_key)
     if cached:
         return cached
 
     query = (
         select(
+            Team.team_id.label("team_id"),
             Team.name.label("team_name"),
             Team.abbreviation,
             Team.nba_team_id,

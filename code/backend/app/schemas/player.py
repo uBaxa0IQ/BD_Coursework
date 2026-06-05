@@ -60,6 +60,7 @@ class PlayerDetailResponse(BaseModel):
     draft_year: Optional[int] = None
     draft_round: Optional[int] = None
     draft_pick: Optional[int] = None
+    team_id: Optional[int] = None
     team_name: Optional[str] = None
     team_abbreviation: Optional[str] = None
     nba_team_id: Optional[int] = None

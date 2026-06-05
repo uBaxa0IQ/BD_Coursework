@@ -116,14 +116,24 @@ export default function PlayerProfile() {
               <img
                 src={`https://cdn.nba.com/logos/nba/${player.nba_team_id}/global/L/logo.svg`}
                 alt=""
-                style={{ width: 40, height: 40 }}
+                title={player.team_id ? `${player.team_name} — open team` : undefined}
+                onClick={() => { if (player.team_id) navigate(`/teams/${player.team_id}`) }}
+                style={{ width: 40, height: 40, cursor: player.team_id ? 'pointer' : 'default' }}
                 onError={(e) => { e.currentTarget.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=' }}
               />
             )}
             <div>
               <h1 style={{ fontSize: 24, fontWeight: 700 }}>{player.first_name} {player.last_name}</h1>
               <div style={{ color: 'var(--text-secondary)', fontSize: 14 }}>
-                {player.team_name} · {player.position || '—'} · #{player.jersey_number ?? '—'}
+                {player.team_id ? (
+                  <span
+                    onClick={() => navigate(`/teams/${player.team_id}`)}
+                    style={{ cursor: 'pointer', color: 'var(--accent)' }}
+                  >
+                    {player.team_name}
+                  </span>
+                ) : player.team_name}
+                {' · '}{player.position || '—'} · #{player.jersey_number ?? '—'}
               </div>
             </div>
           </div>
@@ -228,7 +238,13 @@ export default function PlayerProfile() {
             </thead>
             <tbody>
               {teams.map((t, i) => (
-                <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                <tr
+                  key={i}
+                  onClick={() => { if (t.team_id) navigate(`/teams/${t.team_id}`) }}
+                  style={{ borderBottom: '1px solid var(--border)', cursor: t.team_id ? 'pointer' : 'default', transition: 'background 0.1s' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                >
                   <td style={{ padding: '6px 10px', fontFamily: 'var(--font-mono)' }}>{t.season}</td>
                   <td style={{ padding: '6px 10px' }}>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>

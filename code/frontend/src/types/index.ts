@@ -4,6 +4,7 @@ export interface Player {
   first_name: string
   last_name: string
   full_name?: string
+  team_id?: number
   team_name?: string
   team_abbreviation?: string
   nba_team_id?: number
@@ -109,6 +110,9 @@ export interface TeamSummary {
   avg_tov?: number | string | null
   efg_pct?: number | string | null
   ts_pct?: number | string | null
+  off_rtg?: number | string | null
+  def_rtg?: number | string | null
+  net_rtg?: number | string | null
   pts_rank?: number | null
 }
 

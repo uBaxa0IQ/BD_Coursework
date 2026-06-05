@@ -21,9 +21,13 @@ interface Row {
   avg_tov: number | null
   efg_pct: number | null
   ts_pct: number | null
+  off_rtg: number | null
+  def_rtg: number | null
+  net_rtg: number | null
 }
 
 type MetricKey = 'avg_pts' | 'avg_reb' | 'avg_ast' | 'avg_tov' | 'efg_pct' | 'ts_pct' | 'win_pct'
+  | 'off_rtg' | 'def_rtg' | 'net_rtg'
 
 const METRICS: { key: MetricKey; label: string; pct: boolean; lower: boolean }[] = [
   { key: 'avg_pts', label: 'PTS', pct: false, lower: false },
@@ -32,11 +36,14 @@ const METRICS: { key: MetricKey; label: string; pct: boolean; lower: boolean }[]
   { key: 'avg_tov', label: 'TOV', pct: false, lower: true },
   { key: 'efg_pct', label: 'eFG%', pct: true, lower: false },
   { key: 'ts_pct', label: 'TS%', pct: true, lower: false },
+  { key: 'off_rtg', label: 'ORtg', pct: false, lower: false },
+  { key: 'def_rtg', label: 'DRtg', pct: false, lower: true },
+  { key: 'net_rtg', label: 'NET', pct: false, lower: false },
   { key: 'win_pct', label: 'W%', pct: true, lower: false },
 ]
 
 // Категории для hero-плиток лидеров (везде больше = лучше)
-const HERO: MetricKey[] = ['avg_pts', 'avg_reb', 'avg_ast', 'efg_pct', 'ts_pct', 'win_pct']
+const HERO: MetricKey[] = ['avg_pts', 'avg_reb', 'avg_ast', 'net_rtg', 'ts_pct', 'win_pct']
 
 const numv = (v: unknown): number | null => (v == null || v === '' ? null : Number(v))
 
@@ -82,6 +89,9 @@ export default function TeamLeaders({ seasonId }: { seasonId: number }) {
           avg_tov: numv(s?.avg_tov),
           efg_pct: numv(s?.efg_pct),
           ts_pct: numv(s?.ts_pct),
+          off_rtg: numv(s?.off_rtg),
+          def_rtg: numv(s?.def_rtg),
+          net_rtg: numv(s?.net_rtg),
         }
       }).filter(r => r.avg_pts != null) // команды без статистики за сезон отсеиваем
       setRows(merged)
@@ -131,6 +141,9 @@ export default function TeamLeaders({ seasonId }: { seasonId: number }) {
         tov: r.avg_tov,
         efg_pct: r.efg_pct,
         ts_pct: r.ts_pct,
+        off_rtg: r.off_rtg,
+        def_rtg: r.def_rtg,
+        net_rtg: r.net_rtg,
       })),
     )
 
