@@ -153,34 +153,41 @@ async def get_team_roster(
     cache: CacheManager = Depends(get_cache),
     db: AsyncSession = Depends(get_db_analyst),
 ):
-    cache_key = f"team_roster:{team_id}:{season_id}"
+    cache_key = f"team_roster:v2:{team_id}:{season_id}"
     cached = await cache.get(cache_key)
     if cached:
         return cached
 
-    query = (
-        select(
-            Player.player_id,
-            Player.nba_id,
-            Player.first_name,
-            Player.last_name,
-            Position.code.label("position"),
-            Player.jersey_number,
-            PlayerSeasonStats.games_played,
-            PlayerSeasonStats.avg_pts,
-            PlayerSeasonStats.avg_reb,
-            PlayerSeasonStats.avg_ast,
-            PlayerSeasonStats.per,
-        )
-        .join(PlayerSeasonStats, PlayerSeasonStats.player_id == Player.player_id)
-        .outerjoin(Position, Position.position_id == Player.position_id)
-        .where(PlayerSeasonStats.team_id == team_id)
-        .where(PlayerSeasonStats.season_id == season_id)
-        .order_by(PlayerSeasonStats.avg_pts.desc().nulls_last())
+    # is_current: игрок считается текущим, если его ПОСЛЕДНИЙ матч в сезоне
+    # сыгран за эту команду (игрок, обменянный по ходу сезона, останется
+    # в агрегате команды, но last_team_id у него будет другим).
+    result = await db.execute(
+        text(
+            """
+            WITH last_team AS (
+                SELECT DISTINCT ON (gps.player_id)
+                       gps.player_id,
+                       gps.team_id AS last_team_id
+                FROM game_player_stats gps
+                JOIN games g ON g.game_id = gps.game_id
+                WHERE g.season_id = :season_id
+                ORDER BY gps.player_id, g.game_date DESC, g.game_id DESC
+            )
+            SELECT p.player_id, p.nba_id, p.first_name, p.last_name,
+                   pos.code AS position, p.jersey_number,
+                   pss.games_played, pss.avg_pts, pss.avg_reb, pss.avg_ast, pss.per,
+                   COALESCE(lt.last_team_id = :team_id, TRUE) AS is_current
+            FROM player_season_stats pss
+            JOIN players p ON p.player_id = pss.player_id
+            LEFT JOIN positions pos ON pos.position_id = p.position_id
+            LEFT JOIN last_team lt ON lt.player_id = pss.player_id
+            WHERE pss.team_id = :team_id AND pss.season_id = :season_id
+            ORDER BY pss.avg_pts DESC NULLS LAST
+            """
+        ),
+        {"team_id": team_id, "season_id": season_id},
     )
-    result = await db.execute(query)
-    rows = result.mappings().all()
-    data = sanitize_rows(rows)
+    data = sanitize_rows(result.mappings().all())
     await cache.set(cache_key, data, ttl=300)
     return data
 

@@ -146,6 +146,71 @@ export default function TeamPage() {
     { label: 'TS%', value: pct(summary.ts_pct) },
   ] : []
 
+  // Единый ростер; ушедших по ходу сезона помечаем красным (по is_current)
+  const rosterCard = (list: any[], label: string) => {
+    const hasFormer = list.some((p: any) => p.is_current === false)
+    return (
+    <div className="card">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 14 }}>
+        <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{label}</span>
+        {hasFormer && <span style={{ fontSize: 10, color: 'var(--danger)' }}>● left mid-season</span>}
+      </div>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+        <thead>
+          <tr style={{ borderBottom: '1px solid var(--border)' }}>
+            {cols.map(c => (
+              <th
+                key={c.label}
+                onClick={c.key ? () => toggle(c.key!) : undefined}
+                style={{
+                  padding: '6px 10px',
+                  textAlign: c.label === '' ? 'center' : 'left',
+                  fontWeight: 500, fontSize: 10, color: 'var(--text-muted)',
+                  cursor: c.key ? 'pointer' : 'default', userSelect: 'none',
+                }}
+              >
+                {c.label}{c.key ? indicator(c.key) : ''}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {list.map((p: any) => (
+            <tr
+              key={p.player_id}
+              onClick={() => setSelectedPlayer(p.player_id)}
+              style={{ borderBottom: '1px solid var(--border)', cursor: 'pointer', transition: 'background 0.1s' }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            >
+              <td style={{ padding: '6px 10px', width: 40 }}>
+                <img
+                  src={`https://cdn.nba.com/headshots/nba/latest/1040x760/${p.nba_id}.png`}
+                  alt=""
+                  style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', background: 'var(--bg-secondary)', display: 'block' }}
+                  onError={(e) => { e.currentTarget.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=' }}
+                />
+              </td>
+              <td
+                style={{ padding: '6px 10px', fontWeight: 500, color: p.is_current === false ? 'var(--danger)' : undefined }}
+                title={p.is_current === false ? 'left mid-season' : undefined}
+              >
+                {p.first_name} {p.last_name}
+              </td>
+              <td style={{ padding: '6px 10px', color: 'var(--text-secondary)' }}>{p.position || '—'}</td>
+              <td style={{ padding: '6px 10px', color: 'var(--text-secondary)' }}>{p.games_played ?? '—'}</td>
+              <td style={{ padding: '6px 10px' }}>{fmt(p.avg_pts)}</td>
+              <td style={{ padding: '6px 10px' }}>{fmt(p.avg_reb)}</td>
+              <td style={{ padding: '6px 10px' }}>{fmt(p.avg_ast)}</td>
+              <td style={{ padding: '6px 10px', color: 'var(--accent)', fontWeight: 600 }}>{fmt(p.per)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    )
+  }
+
   // Данные радара сравнения (C)
   const radarData = (compareSummary && summary) ? [
     { axis: 'PTS', a: norm(summary.avg_pts, RADAR_MAXES.avg_pts), b: norm(compareSummary.avg_pts, RADAR_MAXES.avg_pts) },
@@ -352,62 +417,8 @@ export default function TeamPage() {
         </div>
       )}
 
-      {/* Roster */}
-      {roster.length > 0 && (
-        <div className="card">
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 14 }}>roster</div>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                {cols.map(c => (
-                  <th
-                    key={c.label}
-                    onClick={c.key ? () => toggle(c.key!) : undefined}
-                    style={{
-                      padding: '6px 10px',
-                      textAlign: c.label === '' ? 'center' : 'left',
-                      fontWeight: 500,
-                      fontSize: 10,
-                      color: 'var(--text-muted)',
-                      cursor: c.key ? 'pointer' : 'default',
-                      userSelect: 'none',
-                    }}
-                  >
-                    {c.label}{c.key ? indicator(c.key) : ''}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {sorted.map((p: any) => (
-                <tr
-                  key={p.player_id}
-                  onClick={() => setSelectedPlayer(p.player_id)}
-                  style={{ borderBottom: '1px solid var(--border)', cursor: 'pointer', transition: 'background 0.1s' }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-                >
-                  <td style={{ padding: '6px 10px', width: 40 }}>
-                    <img
-                      src={`https://cdn.nba.com/headshots/nba/latest/1040x760/${p.nba_id}.png`}
-                      alt=""
-                      style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', background: 'var(--bg-secondary)', display: 'block' }}
-                      onError={(e) => { e.currentTarget.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=' }}
-                    />
-                  </td>
-                  <td style={{ padding: '6px 10px', fontWeight: 500 }}>{p.first_name} {p.last_name}</td>
-                  <td style={{ padding: '6px 10px', color: 'var(--text-secondary)' }}>{p.position || '—'}</td>
-                  <td style={{ padding: '6px 10px', color: 'var(--text-secondary)' }}>{p.games_played ?? '—'}</td>
-                  <td style={{ padding: '6px 10px' }}>{fmt(p.avg_pts)}</td>
-                  <td style={{ padding: '6px 10px' }}>{fmt(p.avg_reb)}</td>
-                  <td style={{ padding: '6px 10px' }}>{fmt(p.avg_ast)}</td>
-                  <td style={{ padding: '6px 10px', color: 'var(--accent)', fontWeight: 600 }}>{fmt(p.per)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      {/* Roster: единая таблица, ушедшие по ходу сезона помечены красным */}
+      {sorted.length > 0 && rosterCard(sorted, 'roster')}
 
       {selectedPlayer != null && (
         <PlayerModal
