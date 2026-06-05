@@ -153,34 +153,45 @@ async def get_team_roster(
     cache: CacheManager = Depends(get_cache),
     db: AsyncSession = Depends(get_db_analyst),
 ):
-    cache_key = f"team_roster:v2:{team_id}:{season_id}"
+    cache_key = f"team_roster:v3:{team_id}:{season_id}"
     cached = await cache.get(cache_key)
     if cached:
         return cached
 
-    # is_current: игрок считается текущим, если его ПОСЛЕДНИЙ матч в сезоне
-    # сыгран за эту команду (игрок, обменянный по ходу сезона, останется
-    # в агрегате команды, но last_team_id у него будет другим).
+    # is_current:          ПОСЛЕДНИЙ матч сезона сыгран за эту команду
+    #                      (обменянный по ходу сезона останется в агрегате,
+    #                       но last_team_id будет другим → is_current = FALSE);
+    # arrived_mid_season:  ПЕРВЫЙ матч сезона сыгран за ДРУГУЮ команду
+    #                      (игрок пришёл в команду по ходу сезона).
     result = await db.execute(
         text(
             """
             WITH last_team AS (
                 SELECT DISTINCT ON (gps.player_id)
-                       gps.player_id,
-                       gps.team_id AS last_team_id
+                       gps.player_id, gps.team_id AS last_team_id
                 FROM game_player_stats gps
                 JOIN games g ON g.game_id = gps.game_id
                 WHERE g.season_id = :season_id
                 ORDER BY gps.player_id, g.game_date DESC, g.game_id DESC
+            ),
+            first_team AS (
+                SELECT DISTINCT ON (gps.player_id)
+                       gps.player_id, gps.team_id AS first_team_id
+                FROM game_player_stats gps
+                JOIN games g ON g.game_id = gps.game_id
+                WHERE g.season_id = :season_id
+                ORDER BY gps.player_id, g.game_date ASC, g.game_id ASC
             )
             SELECT p.player_id, p.nba_id, p.first_name, p.last_name,
                    pos.code AS position, p.jersey_number,
                    pss.games_played, pss.avg_pts, pss.avg_reb, pss.avg_ast, pss.per,
-                   COALESCE(lt.last_team_id = :team_id, TRUE) AS is_current
+                   COALESCE(lt.last_team_id = :team_id, TRUE)  AS is_current,
+                   COALESCE(ft.first_team_id <> :team_id, FALSE) AS arrived_mid_season
             FROM player_season_stats pss
             JOIN players p ON p.player_id = pss.player_id
             LEFT JOIN positions pos ON pos.position_id = p.position_id
             LEFT JOIN last_team lt ON lt.player_id = pss.player_id
+            LEFT JOIN first_team ft ON ft.player_id = pss.player_id
             WHERE pss.team_id = :team_id AND pss.season_id = :season_id
             ORDER BY pss.avg_pts DESC NULLS LAST
             """

@@ -149,11 +149,15 @@ export default function TeamPage() {
   // Единый ростер; ушедших по ходу сезона помечаем красным (по is_current)
   const rosterCard = (list: any[], label: string) => {
     const hasFormer = list.some((p: any) => p.is_current === false)
+    const hasArrival = list.some((p: any) => p.is_current !== false && p.arrived_mid_season)
     return (
     <div className="card">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 14 }}>
         <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{label}</span>
-        {hasFormer && <span style={{ fontSize: 10, color: 'var(--danger)' }}>● left mid-season</span>}
+        <span style={{ display: 'flex', gap: 12 }}>
+          {hasArrival && <span style={{ fontSize: 10, color: 'var(--success)' }}>● joined mid-season</span>}
+          {hasFormer && <span style={{ fontSize: 10, color: 'var(--danger)' }}>● left mid-season</span>}
+        </span>
       </div>
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
         <thead>
@@ -192,8 +196,8 @@ export default function TeamPage() {
                 />
               </td>
               <td
-                style={{ padding: '6px 10px', fontWeight: 500, color: p.is_current === false ? 'var(--danger)' : undefined }}
-                title={p.is_current === false ? 'left mid-season' : undefined}
+                style={{ padding: '6px 10px', fontWeight: 500, color: p.is_current === false ? 'var(--danger)' : (p.arrived_mid_season ? 'var(--success)' : undefined) }}
+                title={p.is_current === false ? 'left mid-season' : (p.arrived_mid_season ? 'joined mid-season' : undefined)}
               >
                 {p.first_name} {p.last_name}
               </td>
