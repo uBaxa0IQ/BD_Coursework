@@ -285,7 +285,13 @@ export default function PlayerModal({ playerId, seasonId, onClose }: Props) {
                     </thead>
                     <tbody>
                       {gamelog.slice(0, 8).map(g => (
-                        <tr key={g.game_id} style={{ borderBottom: '1px solid var(--border)' }}>
+                        <tr
+                          key={g.game_id}
+                          onClick={() => { onClose(); navigate(`/games/${g.game_id}`) }}
+                          style={{ borderBottom: '1px solid var(--border)', cursor: 'pointer', transition: 'background 0.1s' }}
+                          onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
+                          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                        >
                           <td style={{ padding: '5px 8px', color: 'var(--text-secondary)' }}>{g.game_date}</td>
                           <td style={{ padding: '5px 8px' }}>{g.opponent}</td>
                           <td style={{ padding: '5px 8px', color: 'var(--text-secondary)' }}>{g.minutes_played ? Number(g.minutes_played).toFixed(0) : '—'}</td>

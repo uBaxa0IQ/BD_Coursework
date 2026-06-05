@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { statsApi } from '../../api/stats'
 import { teamsApi } from '../../api/teams'
 import type { Team } from '../../types'
@@ -84,6 +85,7 @@ function StatTable({ rows, abbr }: { rows: BoxRow[]; abbr?: string }) {
 }
 
 export default function BoxscoreModal({ gameId, onClose }: Props) {
+  const navigate = useNavigate()
   const [box, setBox] = useState<Boxscore | null>(null)
   const [teams, setTeams] = useState<Record<number, Team>>({})
   const [loading, setLoading] = useState(true)
@@ -125,7 +127,16 @@ export default function BoxscoreModal({ gameId, onClose }: Props) {
           padding: '14px 20px', borderBottom: '1px solid var(--border)',
         }}>
           <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>box score</span>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: 18, lineHeight: 1 }}>×</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <button
+              className="btn btn-ghost"
+              onClick={() => { onClose(); navigate(`/games/${gameId}`) }}
+              style={{ fontSize: 12, padding: '4px 10px' }}
+            >
+              full analysis ↗
+            </button>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: 18, lineHeight: 1 }}>×</button>
+          </div>
         </div>
 
         {loading ? (

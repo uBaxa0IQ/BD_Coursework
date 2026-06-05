@@ -1,5 +1,5 @@
 import client from './client'
-import type { Standing, Team } from '../types'
+import type { Standing, Team, TeamSummary } from '../types'
 
 export const teamsApi = {
   getList: () =>
@@ -15,6 +15,9 @@ export const teamsApi = {
 
   getRoster: (id: number, seasonId: number) =>
     client.get(`/teams/${id}/roster`, { params: { season_id: seasonId } }).then(r => r.data),
+
+  getSummary: (id: number, seasonId: number) =>
+    client.get<TeamSummary>(`/teams/${id}/summary`, { params: { season_id: seasonId } }).then(r => r.data),
 
   getGames: (id: number, seasonId?: number) =>
     client.get(`/teams/${id}/games`, { params: seasonId ? { season_id: seasonId } : {} }).then(r => r.data),

@@ -185,6 +185,107 @@ async def get_team_roster(
     return data
 
 
+@router.get("/{team_id}/summary")
+async def get_team_summary(
+    team_id: int,
+    season_id: int,
+    cache: CacheManager = Depends(get_cache),
+    db: AsyncSession = Depends(get_db_analyst),
+):
+    """Сводка команды за сезон: турнирные показатели (W/L/W%, место в конференции
+    из v_team_standings) + расчётная командная статистика за матч
+    (PTS/REB/AST/TOV, eFG%, TS% из v_team_stats). Реализует ФТ «расчёт командной
+    статистики в рамках матча и сезона»."""
+    cache_key = f"team_summary:{team_id}:{season_id}"
+    cached = await cache.get(cache_key)
+    if cached:
+        return cached
+
+    # Турнирная таблица всего сезона — нужна для вычисления места команды
+    st_rows = sanitize_rows(
+        (
+            await db.execute(
+                text(
+                    """
+                    SELECT team_id, name, abbreviation, conference, nba_team_id,
+                           season_id, season, wins, losses, games_played, win_pct
+                    FROM v_team_standings
+                    WHERE season_id = :season_id
+                    ORDER BY win_pct DESC NULLS LAST
+                    """
+                ),
+                {"season_id": season_id},
+            )
+        ).mappings().all()
+    )
+
+    standing = next((r for r in st_rows if r["team_id"] == team_id), None)
+    if not standing:
+        raise HTTPException(status_code=404, detail="Team standing not found for this season")
+
+    conference = standing.get("conference")
+    conf_rows = [r for r in st_rows if r.get("conference") == conference]
+    conf_rank = next((i + 1 for i, r in enumerate(conf_rows) if r["team_id"] == team_id), None)
+
+    # Командная статистика за матч (агрегат из game_player_stats через v_team_stats)
+    stats_row = sanitize_rows(
+        (
+            await db.execute(
+                text(
+                    """
+                    SELECT avg_pts, avg_reb, avg_ast, avg_tov, efg_pct, ts_pct
+                    FROM v_team_stats
+                    WHERE season_id = :season_id AND team_id = :team_id
+                    """
+                ),
+                {"season_id": season_id, "team_id": team_id},
+            )
+        ).mappings().all()
+    )
+    stats = stats_row[0] if stats_row else {}
+
+    # Лиговый ранг по очкам за матч (для подписи «N-я атака лиги»)
+    pts_order = sanitize_rows(
+        (
+            await db.execute(
+                text(
+                    """
+                    SELECT team_id
+                    FROM v_team_stats
+                    WHERE season_id = :season_id
+                    ORDER BY avg_pts DESC NULLS LAST
+                    """
+                ),
+                {"season_id": season_id},
+            )
+        ).mappings().all()
+    )
+    pts_rank = next((i + 1 for i, r in enumerate(pts_order) if r["team_id"] == team_id), None)
+
+    data = {
+        "team_id": team_id,
+        "season_id": season_id,
+        "season": standing.get("season"),
+        "conference": conference,
+        "conf_rank": conf_rank,
+        "conf_teams": len(conf_rows),
+        "league_teams": len(pts_order),
+        "wins": standing.get("wins"),
+        "losses": standing.get("losses"),
+        "games_played": standing.get("games_played"),
+        "win_pct": standing.get("win_pct"),
+        "avg_pts": stats.get("avg_pts"),
+        "avg_reb": stats.get("avg_reb"),
+        "avg_ast": stats.get("avg_ast"),
+        "avg_tov": stats.get("avg_tov"),
+        "efg_pct": stats.get("efg_pct"),
+        "ts_pct": stats.get("ts_pct"),
+        "pts_rank": pts_rank,
+    }
+    await cache.set(cache_key, data, ttl=900)
+    return data
+
+
 @router.get("/{team_id}/games")
 async def get_team_games(
     team_id: int,

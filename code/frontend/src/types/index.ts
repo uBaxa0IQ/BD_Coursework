@@ -91,6 +91,27 @@ export interface Standing {
   win_pct?: number | string | null
 }
 
+export interface TeamSummary {
+  team_id: number
+  season_id: number
+  season: string
+  conference: string
+  conf_rank?: number | null
+  conf_teams?: number
+  league_teams?: number
+  wins?: number
+  losses?: number
+  games_played?: number
+  win_pct?: number | string | null
+  avg_pts?: number | string | null
+  avg_reb?: number | string | null
+  avg_ast?: number | string | null
+  avg_tov?: number | string | null
+  efg_pct?: number | string | null
+  ts_pct?: number | string | null
+  pts_rank?: number | null
+}
+
 export interface LeaderboardEntry {
   rank: number
   player_id: number
