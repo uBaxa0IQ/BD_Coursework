@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { statsApi } from '../../api/stats'
 import { useSeasonFilter } from '../../hooks/useSeasonFilter'
 import PlayerModal from '../../components/PlayerModal'
@@ -21,9 +22,19 @@ const METRICS = [
 
 const PCT_METRICS = new Set(['ts_pct', 'efg_pct', 'usg_pct'])
 
+const METRIC_KEYS = new Set(METRICS.map(m => m.key))
+
 export default function Leaderboard() {
   const { seasonId } = useSeasonFilter()
-  const [metric, setMetric] = useState('per')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const rawMetric = searchParams.get('metric') ?? 'per'
+  const metric = METRIC_KEYS.has(rawMetric) ? rawMetric : 'per'
+  const setMetric = (m: string) =>
+    setSearchParams(p => {
+      const np = new URLSearchParams(p)
+      if (m !== 'per') np.set('metric', m); else np.delete('metric')
+      return np
+    }, { replace: true })
   const [leaders, setLeaders] = useState<LeaderboardEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null)

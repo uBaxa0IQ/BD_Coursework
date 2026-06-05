@@ -1,14 +1,30 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { teamsApi } from '../../api/teams'
 import { useSeasonFilter } from '../../hooks/useSeasonFilter'
+import TeamLeaders from './TeamLeaders'
 import type { Standing } from '../../types'
 
 export default function Teams() {
   const navigate = useNavigate()
   const { seasonId, seasonLabel } = useSeasonFilter()
+  // Состояние табов держим в URL, чтобы «назад» восстанавливал выбранный вид
+  const [searchParams, setSearchParams] = useSearchParams()
+  const mode: 'standings' | 'leaders' = searchParams.get('view') === 'leaders' ? 'leaders' : 'standings'
+  const activeTab: 'East' | 'West' = searchParams.get('conf') === 'West' ? 'West' : 'East'
+  const setMode = (m: 'standings' | 'leaders') =>
+    setSearchParams(p => {
+      const np = new URLSearchParams(p)
+      if (m === 'leaders') np.set('view', 'leaders'); else np.delete('view')
+      return np
+    }, { replace: true })
+  const setActiveTab = (c: 'East' | 'West') =>
+    setSearchParams(p => {
+      const np = new URLSearchParams(p)
+      if (c === 'West') np.set('conf', 'West'); else np.delete('conf')
+      return np
+    }, { replace: true })
   const [standings, setStandings] = useState<{ East: Standing[]; West: Standing[] }>({ East: [], West: [] })
-  const [activeTab, setActiveTab] = useState<'East' | 'West'>('East')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -16,7 +32,40 @@ export default function Teams() {
     teamsApi.getStandings(seasonId).then(setStandings).finally(() => setLoading(false))
   }, [seasonId])
 
-  if (loading) return <div className="loading">Loading...</div>
+  const modeTabs = (
+    <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+      {(['standings', 'leaders'] as const).map(m => (
+        <button
+          key={m}
+          type="button"
+          className={`btn ${mode === m ? 'btn-primary' : 'btn-ghost'}`}
+          onClick={() => setMode(m)}
+        >
+          {m}
+        </button>
+      ))}
+    </div>
+  )
+
+  if (mode === 'leaders') {
+    return (
+      <div>
+        <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16 }}>
+          Team leaders · {seasonLabel}
+        </div>
+        {modeTabs}
+        <TeamLeaders seasonId={seasonId} />
+      </div>
+    )
+  }
+
+  if (loading) return (
+    <div>
+      <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16 }}>Standings · {seasonLabel}</div>
+      {modeTabs}
+      <div className="loading">loading...</div>
+    </div>
+  )
 
   const list = standings[activeTab]
   const leader = list[0]
@@ -30,6 +79,8 @@ export default function Teams() {
       <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16 }}>
         Standings · {seasonLabel}
       </div>
+
+      {modeTabs}
 
       <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
         {(['East', 'West'] as const).map(conf => (

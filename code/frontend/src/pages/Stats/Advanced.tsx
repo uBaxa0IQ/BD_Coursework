@@ -340,7 +340,7 @@ export default function Advanced() {
     return out
   }, [raw])
 
-  if (loading) return <div className="loading">Loading...</div>
+  if (loading) return <div className="loading">loading...</div>
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>

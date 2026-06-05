@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   ResponsiveContainer, Legend,
@@ -44,8 +44,16 @@ export default function TeamPage() {
   const [loading, setLoading] = useState(true)
   const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null)
   const [selectedGame, setSelectedGame] = useState<number | null>(null)
-  // Сравнение команд (C)
-  const [compareId, setCompareId] = useState<number | null>(null)
+  // Сравнение команд (C) — выбранный соперник хранится в URL (?vs=), переживает back/refresh
+  const [searchParams, setSearchParams] = useSearchParams()
+  const rawVs = searchParams.get('vs') ? Number(searchParams.get('vs')) : null
+  const compareId = rawVs != null && rawVs !== Number(id) ? rawVs : null
+  const setCompareId = (v: number | null) =>
+    setSearchParams(p => {
+      const np = new URLSearchParams(p)
+      if (v != null) np.set('vs', String(v)); else np.delete('vs')
+      return np
+    }, { replace: true })
   const [compareTeam, setCompareTeam] = useState<Team | null>(null)
   const [compareSummary, setCompareSummary] = useState<TeamSummary | null>(null)
   const { sorted, toggle, indicator } = useSortable<any>(roster)
@@ -54,9 +62,6 @@ export default function TeamPage() {
     if (!id) return
     const tid = Number(id)
     setLoading(true)
-    setCompareId(null)
-    setCompareSummary(null)
-    setCompareTeam(null)
     Promise.all([
       teamsApi.getById(tid),
       teamsApi.getSummary(tid, seasonId).catch(() => null),

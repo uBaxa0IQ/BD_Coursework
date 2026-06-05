@@ -43,10 +43,13 @@ interface Boxscore {
 
 const COLS = ['min', 'pts', 'reb', 'ast', 'stl', 'blk', 'fg', '3p', 'ft', '+/-']
 
-function StatTable({ rows, abbr }: { rows: BoxRow[]; abbr?: string }) {
+function StatTable({ rows, abbr, color }: { rows: BoxRow[]; abbr?: string; color: string }) {
   return (
     <div style={{ marginBottom: 16 }}>
-      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 6 }}>{abbr ?? 'Team'}</div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color }}>{abbr ?? 'Team'}</span>
+        <span style={{ fontSize: 10, color }}>● starter</span>
+      </div>
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
           <thead>
@@ -60,8 +63,8 @@ function StatTable({ rows, abbr }: { rows: BoxRow[]; abbr?: string }) {
           <tbody>
             {rows.map(r => (
               <tr key={r.player_id} style={{ borderBottom: '1px solid var(--border)' }}>
-                <td style={{ padding: '5px 8px', fontWeight: r.is_starter ? 600 : 400 }}>
-                  {r.player_name}{r.is_starter ? ' *' : ''}
+                <td style={{ padding: '5px 8px', fontWeight: r.is_starter ? 600 : 400, color: r.is_starter ? color : 'var(--text-primary)' }}>
+                  {r.player_name}
                 </td>
                 <td style={{ padding: '5px 8px', color: 'var(--text-secondary)' }}>{r.minutes_played ? Number(r.minutes_played).toFixed(0) : '—'}</td>
                 <td style={{ padding: '5px 8px', fontWeight: 600 }}>{r.points}</td>
@@ -153,8 +156,8 @@ export default function BoxscoreModal({ gameId, onClose }: Props) {
                 {box.game.game_date}{(box.game.overtime ?? 0) > 0 ? ` · OT${box.game.overtime}` : ''}
               </div>
             </div>
-            <StatTable rows={box.away_team_stats} abbr={away?.name ?? 'Away'} />
-            <StatTable rows={box.home_team_stats} abbr={home?.name ?? 'Home'} />
+            <StatTable rows={box.away_team_stats} abbr={away?.name ?? 'Away'} color="#60a5fa" />
+            <StatTable rows={box.home_team_stats} abbr={home?.name ?? 'Home'} color="#4ade80" />
           </div>
         )}
       </div>

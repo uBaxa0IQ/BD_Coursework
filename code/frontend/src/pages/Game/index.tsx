@@ -5,6 +5,7 @@ import {
 } from 'recharts'
 import { statsApi } from '../../api/stats'
 import { teamsApi } from '../../api/teams'
+import PlayerModal from '../../components/PlayerModal'
 import type { Team } from '../../types'
 
 interface BoxRow {
@@ -30,6 +31,7 @@ interface BoxRow {
 interface Boxscore {
   game: {
     game_id: number
+    season_id?: number
     home_team_id: number
     away_team_id: number
     game_date: string
@@ -89,10 +91,13 @@ function CompareRow({ label, a, b, fmt }: { label: string; a: number; b: number;
 
 const BOX_COLS = ['min', 'pts', 'oreb', 'dreb', 'reb', 'ast', 'stl', 'blk', 'tov', 'pf', 'fg', '3p', 'ft', '+/-']
 
-function BoxTable({ rows, name, color }: { rows: BoxRow[]; name: string; color: string }) {
+function BoxTable({ rows, name, color, onSelect }: { rows: BoxRow[]; name: string; color: string; onSelect: (id: number) => void }) {
   return (
     <div className="card">
-      <div style={{ fontSize: 13, fontWeight: 600, color, marginBottom: 10 }}>{name}</div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color }}>{name}</span>
+        <span style={{ fontSize: 10, color }}>● starter</span>
+      </div>
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
           <thead>
@@ -105,8 +110,14 @@ function BoxTable({ rows, name, color }: { rows: BoxRow[]; name: string; color: 
           </thead>
           <tbody>
             {rows.map(r => (
-              <tr key={r.player_id} style={{ borderBottom: '1px solid var(--border)' }}>
-                <td style={{ padding: '5px 8px', fontWeight: r.is_starter ? 600 : 400 }}>{r.player_name}{r.is_starter ? ' *' : ''}</td>
+              <tr
+                key={r.player_id}
+                onClick={() => onSelect(r.player_id)}
+                style={{ borderBottom: '1px solid var(--border)', cursor: 'pointer', transition: 'background 0.1s' }}
+                onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
+                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+              >
+                <td style={{ padding: '5px 8px', fontWeight: r.is_starter ? 600 : 400, color: r.is_starter ? color : 'var(--text-primary)' }}>{r.player_name}</td>
                 <td style={{ padding: '5px 8px', color: 'var(--text-secondary)' }}>{r.minutes_played ? Number(r.minutes_played).toFixed(0) : '—'}</td>
                 <td style={{ padding: '5px 8px', fontWeight: 600 }}>{r.points}</td>
                 <td style={{ padding: '5px 8px', color: 'var(--text-secondary)' }}>{r.rebounds_off}</td>
@@ -138,6 +149,7 @@ export default function GamePage() {
   const [box, setBox] = useState<Boxscore | null>(null)
   const [teams, setTeams] = useState<Record<number, Team>>({})
   const [loading, setLoading] = useState(true)
+  const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null)
 
   useEffect(() => {
     if (!id) return
@@ -243,8 +255,16 @@ export default function GamePage() {
       </div>
 
       {/* Box scores */}
-      <BoxTable rows={box.away_team_stats} name={away?.name ?? 'Away'} color={AWAY} />
-      <BoxTable rows={box.home_team_stats} name={home?.name ?? 'Home'} color={HOME} />
+      <BoxTable rows={box.away_team_stats} name={away?.name ?? 'Away'} color={AWAY} onSelect={setSelectedPlayer} />
+      <BoxTable rows={box.home_team_stats} name={home?.name ?? 'Home'} color={HOME} onSelect={setSelectedPlayer} />
+
+      {selectedPlayer != null && (
+        <PlayerModal
+          playerId={selectedPlayer}
+          seasonId={box.game.season_id ?? 0}
+          onClose={() => setSelectedPlayer(null)}
+        />
+      )}
     </div>
   )
 }

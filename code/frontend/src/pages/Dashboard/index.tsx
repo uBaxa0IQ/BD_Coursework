@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip,
   ResponsiveContainer, CartesianGrid, ScatterChart, Scatter,
@@ -26,11 +27,13 @@ function shortPlayerLabel(name: string): string {
 
 export default function Dashboard() {
   const { seasonId } = useSeasonFilter()
+  const navigate = useNavigate()
   const [trends, setTrends] = useState<LeagueTrend[]>([])
   const [dashboard, setDashboard] = useState<LeagueDashboard | null>(null)
   const [scatterRaw, setScatterRaw] = useState<ScatterPlayerPoint[]>([])
   const [teamStats, setTeamStats] = useState<any[]>([])
   const [topUsg, setTopUsg] = useState<any[]>([])
+  const [abbrToId, setAbbrToId] = useState<Record<string, number>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [selectedPlayer, setSelectedPlayer] = useState<number | null>(null)
@@ -44,12 +47,16 @@ export default function Dashboard() {
       teamsApi.getAvgStats(seasonId, 10),
       statsApi.getLeaders({ metric: 'usg_pct', season_id: seasonId, limit: 10 }),
       statsApi.getScatter(seasonId).catch(() => [] as ScatterPlayerPoint[]),
-    ]).then(([t, dash, ts, usg, sc]) => {
+      teamsApi.getList().catch(() => [] as any[]),
+    ]).then(([t, dash, ts, usg, sc, list]) => {
       setTrends(t)
       setDashboard(dash)
       setTeamStats(ts)
       setTopUsg(usg)
       setScatterRaw(sc)
+      const map: Record<string, number> = {}
+      for (const tm of list) map[tm.abbreviation] = tm.team_id
+      setAbbrToId(map)
     }).catch(() => {
       setError(true)
     }).finally(() => setLoading(false))
@@ -304,7 +311,7 @@ export default function Dashboard() {
 
       {teamStats.length > 0 && (
         <div className="card">
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 14 }}>top-10 teams avg pts</div>
+          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 14 }}>top-10 teams avg pts (click bar for team)</div>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart
               data={[...teamStats]
@@ -319,12 +326,23 @@ export default function Dashboard() {
               <YAxis type="category" dataKey="team_abbreviation" {...axisStyle} width={36} />
               <Tooltip
                 {...tooltipStyle}
+                cursor={{ fill: 'var(--bg-card-hover)' }}
                 formatter={(v: unknown) => {
                   const num = n(v)
                   return [num != null ? num.toFixed(1) : '—', 'avg pts']
                 }}
               />
-              <Bar dataKey="avg_pts" fill="var(--accent)" radius={[0, 2, 2, 0]} isAnimationActive={false} />
+              <Bar
+                dataKey="avg_pts"
+                fill="var(--accent)"
+                radius={[0, 2, 2, 0]}
+                isAnimationActive={false}
+                style={{ cursor: 'pointer' }}
+                onClick={(d: { team_abbreviation?: string }) => {
+                  const id = d?.team_abbreviation ? abbrToId[d.team_abbreviation] : undefined
+                  if (id != null) navigate(`/teams/${id}`)
+                }}
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -332,12 +350,13 @@ export default function Dashboard() {
 
       {topUsg.length > 0 && (
         <div className="card">
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 14 }}>top-10 usg%</div>
+          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 14 }}>top-10 usg% (click bar for profile)</div>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart
               data={topUsg.map(p => ({
                 name: typeof p.player_name === 'string' ? shortPlayerLabel(p.player_name) : '—',
                 fullName: typeof p.player_name === 'string' ? p.player_name : '—',
+                player_id: p.player_id,
                 usg: n(p.value) != null ? Number((n(p.value)! * 100).toFixed(1)) : 0,
               }))}
               layout="vertical"
@@ -348,6 +367,7 @@ export default function Dashboard() {
               <YAxis type="category" dataKey="name" {...axisStyle} width={88} />
               <Tooltip
                 {...tooltipStyle}
+                cursor={{ fill: 'var(--bg-card-hover)' }}
                 formatter={(v: unknown) => {
                   const num = n(v)
                   return [num != null ? num.toFixed(1) + '%' : '—', 'usg%']
@@ -357,7 +377,16 @@ export default function Dashboard() {
                   return row?.fullName ?? ''
                 }}
               />
-              <Bar dataKey="usg" fill="var(--accent)" radius={[0, 2, 2, 0]} isAnimationActive={false} />
+              <Bar
+                dataKey="usg"
+                fill="var(--accent)"
+                radius={[0, 2, 2, 0]}
+                isAnimationActive={false}
+                style={{ cursor: 'pointer' }}
+                onClick={(d: { player_id?: number }) => {
+                  if (d?.player_id != null) setSelectedPlayer(d.player_id)
+                }}
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
