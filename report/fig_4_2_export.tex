@@ -1,4 +1,4 @@
-% Standalone export: рис. 4.2 — P95 / стратегии индексирования
+% Standalone export: рис. 4.2 — селективная выборка, без индекса vs индекс
 \documentclass[tikz,border=8pt]{standalone}
 \usepackage[utf8]{inputenc}
 \usepackage[T2A]{fontenc}
@@ -11,30 +11,36 @@
 \begin{tikzpicture}
 \begin{axis}[
     ybar,
-    bar width=15pt,
+    bar width=30pt,
     width=14cm,
     height=6.6cm,
     ylabel={Время выполнения (мс)},
-    symbolic x coords={Без индекса, Сезон, Игрок, Комбинация},
+    symbolic x coords={Без индекса, С индексом},
     xtick=data,
     x tick label style={font=\small},
-    ymin=0, ymax=100,
-    ytick={0,20,40,60,80,100},
+    enlarge x limits=1.2,
+    ymin=0, ymax=56,
+    ytick={0,10,20,30,40,50},
     ymajorgrids=true,
     grid style=dashed,
     nodes near coords,
-    nodes near coords style={font=\tiny,
+    nodes near coords style={font=\small,
       /pgf/number format/fixed,
       /pgf/number format/precision=2},
     every node near coord/.append style={anchor=south, yshift=1pt},
+    legend style={at={(0.5,1.08)}, anchor=south, legend columns=2,
+      font=\small, draw=none},
 ]
 \addplot+[fill=white, draw=black,
           postaction={pattern=north east lines}] coordinates {
-    (Без индекса, 85.28)
-    (Сезон, 17.93)
-    (Игрок, 28.89)
-    (Комбинация, 24.02)
+    (Без индекса, 13.05)
+    (С индексом, 2.46)
 };
+\addplot+[fill=black!15, draw=black] coordinates {
+    (Без индекса, 48.74)
+    (С индексом, 11.08)
+};
+\legend{Медиана, P95}
 \end{axis}
 \end{tikzpicture}
 \end{document}

@@ -22,14 +22,14 @@
 \node (get)   [io,  below of=start]
   {Получить status, home/away\_id, \\ счёт из \texttt{games} по game\_id};
 \node (dec1)  [decision, below of=get] {status $\neq$ 'Finished' \\ или счёт NULL?};
-\node (skip)  [io,  right of=dec1, xshift=\flowchartRightShift] {Возврат NEW/OLD};
+\node (skip)  [io,  right of=dec1, xshift=\flowchartRightShift] {Пропустить проверку};
 \node (exp)   [process,  below of=dec1, yshift=\flowchartDecExpExtra]
   {$expected :=$ счёт команды \\ (\texttt{home\_score} или \texttt{away\_score})};
 \node (loop)  [predefined,  below of=exp]
-  {Для каждой команды в матче: \\ $teamPoints := \mathrm{SUM(points)}$};
+  {Для каждой команды матча: \\ $teamPoints :=$ сумма очков её игроков};
 \node (dec2)  [decision, below of=loop] {$teamPoints \neq expected$?};
-\node (exc)   [io,  right of=dec2, xshift=\flowchartRightShift] {RAISE EXCEPTION};
-\node (ret)   [io,  below of=dec2] {Возврат NEW/OLD};
+\node (exc)   [io,  right of=dec2, xshift=\flowchartRightShift] {Отклонить транзакцию};
+\node (ret)   [io,  below of=dec2] {Разрешить операцию};
 \node (stop)  [startstop, below of=ret] {Конец};
 
 \draw [arrow] (start) -- (get);

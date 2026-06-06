@@ -20,11 +20,11 @@ DATABASE_URL = os.getenv(
     "postgresql://nba_admin:nba_secure_pass_2024@localhost:5432/nba_stats",
 ).replace("postgresql+asyncpg://", "postgresql://")
 
-API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8888")
 API_KEY = os.getenv("SECRET_KEY", "nba-stats-secret-key-2024")
 SEASON_ID = 5
 WARMUP = 10
-ITERATIONS_DEFAULT = 100
+ITERATIONS_DEFAULT = int(os.getenv("ITERATIONS", "100"))
 CONCURRENCY_LEVELS = [1, 10, 50, 100]
 CONCURRENCY_ROUNDS = 10
 

@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "endpoint": "http://localhost:8000/stats/leaders?metric=per&season_id=5&limit=20",
+    "levels": [
+      1,
+      10,
+      50,
+      100
+    ],
+    "rounds": 10,
+    "warm_cache": "one warm-up GET before every round"
+  },
+  "warm_cache": {
+    "c1": {
+      "median_ms": 3.45,
+      "mean_ms": 4.31,
+      "p95_ms": 7.58,
+      "error_pct": 0.0,
+      "concurrency": 1,
+      "rounds": 10,
+      "total_requests": 10
+    },
+    "c10": {
+      "median_ms": 15.1,
+      "mean_ms": 16.49,
+      "p95_ms": 31.87,
+      "error_pct": 0.0,
+      "concurrency": 10,
+      "rounds": 10,
+      "total_requests": 100
+    },
+    "c50": {
+      "median_ms": 72.2,
+      "mean_ms": 76.66,
+      "p95_ms": 147.78,
+      "error_pct": 0.0,
+      "concurrency": 50,
+      "rounds": 10,
+      "total_requests": 500
+    },
+    "c100": {
+      "median_ms": 129.85,
+      "mean_ms": 136.48,
+      "p95_ms": 237.53,
+      "error_pct": 0.0,
+      "concurrency": 100,
+      "rounds": 10,
+      "total_requests": 1000
+    }
+  }
+}

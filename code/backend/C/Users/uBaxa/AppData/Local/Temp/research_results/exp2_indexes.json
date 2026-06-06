@@ -1,0 +1,474 @@
+{
+  "season_id": 5,
+  "facts_row_count": 32045,
+  "no_index": {
+    "median_ms": 36.6,
+    "mean_ms": 45.56,
+    "p95_ms": 86.05,
+    "error_pct": 0.0,
+    "iterations": 100,
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 4243.22,
+          "Total Cost": 4243.27,
+          "Plan Rows": 20,
+          "Plan Width": 28,
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 4243.22,
+              "Total Cost": 4245.72,
+              "Plan Rows": 1000,
+              "Plan Width": 28,
+              "Sort Key": [
+                "(sum(gps.points)) DESC"
+              ],
+              "Plans": [
+                {
+                  "Node Type": "Aggregate",
+                  "Strategy": "Hashed",
+                  "Partial Mode": "Simple",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Startup Cost": 4204.11,
+                  "Total Cost": 4216.61,
+                  "Plan Rows": 1000,
+                  "Plan Width": 28,
+                  "Group Key": [
+                    "gps.player_id"
+                  ],
+                  "Planned Partitions": 0,
+                  "Plans": [
+                    {
+                      "Node Type": "Hash Join",
+                      "Parent Relationship": "Outer",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Join Type": "Inner",
+                      "Startup Cost": 144.06,
+                      "Total Cost": 3805.96,
+                      "Plan Rows": 31852,
+                      "Plan Width": 6,
+                      "Inner Unique": true,
+                      "Hash Cond": "(gps.game_id = g.game_id)",
+                      "Plans": [
+                        {
+                          "Node Type": "Seq Scan",
+                          "Parent Relationship": "Outer",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Relation Name": "game_player_stats",
+                          "Alias": "gps",
+                          "Startup Cost": 0.0,
+                          "Total Cost": 3242.52,
+                          "Plan Rows": 159652,
+                          "Plan Width": 10
+                        },
+                        {
+                          "Node Type": "Hash",
+                          "Parent Relationship": "Inner",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Startup Cost": 128.75,
+                          "Total Cost": 128.75,
+                          "Plan Rows": 1225,
+                          "Plan Width": 4,
+                          "Plans": [
+                            {
+                              "Node Type": "Seq Scan",
+                              "Parent Relationship": "Outer",
+                              "Parallel Aware": false,
+                              "Async Capable": false,
+                              "Relation Name": "games",
+                              "Alias": "g",
+                              "Startup Cost": 0.0,
+                              "Total Cost": 128.75,
+                              "Plan Rows": 1225,
+                              "Plan Width": 4,
+                              "Filter": "(season_id = 5)"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "idx_games_season": {
+    "median_ms": 18.45,
+    "mean_ms": 19.39,
+    "p95_ms": 25.58,
+    "error_pct": 0.0,
+    "iterations": 100,
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 4199.75,
+          "Total Cost": 4199.8,
+          "Plan Rows": 20,
+          "Plan Width": 28,
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 4199.75,
+              "Total Cost": 4202.26,
+              "Plan Rows": 1005,
+              "Plan Width": 28,
+              "Sort Key": [
+                "(sum(gps.points)) DESC"
+              ],
+              "Plans": [
+                {
+                  "Node Type": "Aggregate",
+                  "Strategy": "Hashed",
+                  "Partial Mode": "Simple",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Startup Cost": 4160.45,
+                  "Total Cost": 4173.01,
+                  "Plan Rows": 1005,
+                  "Plan Width": 28,
+                  "Group Key": [
+                    "gps.player_id"
+                  ],
+                  "Planned Partitions": 0,
+                  "Plans": [
+                    {
+                      "Node Type": "Hash Join",
+                      "Parent Relationship": "Outer",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Join Type": "Inner",
+                      "Startup Cost": 100.4,
+                      "Total Cost": 3762.3,
+                      "Plan Rows": 31852,
+                      "Plan Width": 6,
+                      "Inner Unique": true,
+                      "Hash Cond": "(gps.game_id = g.game_id)",
+                      "Plans": [
+                        {
+                          "Node Type": "Seq Scan",
+                          "Parent Relationship": "Outer",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Relation Name": "game_player_stats",
+                          "Alias": "gps",
+                          "Startup Cost": 0.0,
+                          "Total Cost": 3242.52,
+                          "Plan Rows": 159652,
+                          "Plan Width": 10
+                        },
+                        {
+                          "Node Type": "Hash",
+                          "Parent Relationship": "Inner",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Startup Cost": 85.09,
+                          "Total Cost": 85.09,
+                          "Plan Rows": 1225,
+                          "Plan Width": 4,
+                          "Plans": [
+                            {
+                              "Node Type": "Bitmap Heap Scan",
+                              "Parent Relationship": "Outer",
+                              "Parallel Aware": false,
+                              "Async Capable": false,
+                              "Relation Name": "games",
+                              "Alias": "g",
+                              "Startup Cost": 17.78,
+                              "Total Cost": 85.09,
+                              "Plan Rows": 1225,
+                              "Plan Width": 4,
+                              "Recheck Cond": "(season_id = 5)",
+                              "Plans": [
+                                {
+                                  "Node Type": "Bitmap Index Scan",
+                                  "Parent Relationship": "Outer",
+                                  "Parallel Aware": false,
+                                  "Async Capable": false,
+                                  "Index Name": "idx_games_season_id",
+                                  "Startup Cost": 0.0,
+                                  "Total Cost": 17.47,
+                                  "Plan Rows": 1225,
+                                  "Plan Width": 0,
+                                  "Index Cond": "(season_id = 5)"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "idx_gps_player": {
+    "median_ms": 18.05,
+    "mean_ms": 18.76,
+    "p95_ms": 23.5,
+    "error_pct": 0.0,
+    "iterations": 100,
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 4199.17,
+          "Total Cost": 4199.22,
+          "Plan Rows": 20,
+          "Plan Width": 28,
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 4199.17,
+              "Total Cost": 4201.64,
+              "Plan Rows": 990,
+              "Plan Width": 28,
+              "Sort Key": [
+                "(sum(gps.points)) DESC"
+              ],
+              "Plans": [
+                {
+                  "Node Type": "Aggregate",
+                  "Strategy": "Hashed",
+                  "Partial Mode": "Simple",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Startup Cost": 4160.45,
+                  "Total Cost": 4172.82,
+                  "Plan Rows": 990,
+                  "Plan Width": 28,
+                  "Group Key": [
+                    "gps.player_id"
+                  ],
+                  "Planned Partitions": 0,
+                  "Plans": [
+                    {
+                      "Node Type": "Hash Join",
+                      "Parent Relationship": "Outer",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Join Type": "Inner",
+                      "Startup Cost": 100.4,
+                      "Total Cost": 3762.3,
+                      "Plan Rows": 31852,
+                      "Plan Width": 6,
+                      "Inner Unique": true,
+                      "Hash Cond": "(gps.game_id = g.game_id)",
+                      "Plans": [
+                        {
+                          "Node Type": "Seq Scan",
+                          "Parent Relationship": "Outer",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Relation Name": "game_player_stats",
+                          "Alias": "gps",
+                          "Startup Cost": 0.0,
+                          "Total Cost": 3242.52,
+                          "Plan Rows": 159652,
+                          "Plan Width": 10
+                        },
+                        {
+                          "Node Type": "Hash",
+                          "Parent Relationship": "Inner",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Startup Cost": 85.09,
+                          "Total Cost": 85.09,
+                          "Plan Rows": 1225,
+                          "Plan Width": 4,
+                          "Plans": [
+                            {
+                              "Node Type": "Bitmap Heap Scan",
+                              "Parent Relationship": "Outer",
+                              "Parallel Aware": false,
+                              "Async Capable": false,
+                              "Relation Name": "games",
+                              "Alias": "g",
+                              "Startup Cost": 17.78,
+                              "Total Cost": 85.09,
+                              "Plan Rows": 1225,
+                              "Plan Width": 4,
+                              "Recheck Cond": "(season_id = 5)",
+                              "Plans": [
+                                {
+                                  "Node Type": "Bitmap Index Scan",
+                                  "Parent Relationship": "Outer",
+                                  "Parallel Aware": false,
+                                  "Async Capable": false,
+                                  "Index Name": "idx_games_season_id",
+                                  "Startup Cost": 0.0,
+                                  "Total Cost": 17.47,
+                                  "Plan Rows": 1225,
+                                  "Plan Width": 0,
+                                  "Index Cond": "(season_id = 5)"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "idx_both": {
+    "median_ms": 18.58,
+    "mean_ms": 22.67,
+    "p95_ms": 57.95,
+    "error_pct": 0.0,
+    "iterations": 100,
+    "explain": [
+      {
+        "Plan": {
+          "Node Type": "Limit",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 4198.97,
+          "Total Cost": 4199.02,
+          "Plan Rows": 20,
+          "Plan Width": 28,
+          "Plans": [
+            {
+              "Node Type": "Sort",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 4198.97,
+              "Total Cost": 4201.43,
+              "Plan Rows": 985,
+              "Plan Width": 28,
+              "Sort Key": [
+                "(sum(gps.points)) DESC"
+              ],
+              "Plans": [
+                {
+                  "Node Type": "Aggregate",
+                  "Strategy": "Hashed",
+                  "Partial Mode": "Simple",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Startup Cost": 4160.45,
+                  "Total Cost": 4172.76,
+                  "Plan Rows": 985,
+                  "Plan Width": 28,
+                  "Group Key": [
+                    "gps.player_id"
+                  ],
+                  "Planned Partitions": 0,
+                  "Plans": [
+                    {
+                      "Node Type": "Hash Join",
+                      "Parent Relationship": "Outer",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Join Type": "Inner",
+                      "Startup Cost": 100.4,
+                      "Total Cost": 3762.3,
+                      "Plan Rows": 31852,
+                      "Plan Width": 6,
+                      "Inner Unique": true,
+                      "Hash Cond": "(gps.game_id = g.game_id)",
+                      "Plans": [
+                        {
+                          "Node Type": "Seq Scan",
+                          "Parent Relationship": "Outer",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Relation Name": "game_player_stats",
+                          "Alias": "gps",
+                          "Startup Cost": 0.0,
+                          "Total Cost": 3242.52,
+                          "Plan Rows": 159652,
+                          "Plan Width": 10
+                        },
+                        {
+                          "Node Type": "Hash",
+                          "Parent Relationship": "Inner",
+                          "Parallel Aware": false,
+                          "Async Capable": false,
+                          "Startup Cost": 85.09,
+                          "Total Cost": 85.09,
+                          "Plan Rows": 1225,
+                          "Plan Width": 4,
+                          "Plans": [
+                            {
+                              "Node Type": "Bitmap Heap Scan",
+                              "Parent Relationship": "Outer",
+                              "Parallel Aware": false,
+                              "Async Capable": false,
+                              "Relation Name": "games",
+                              "Alias": "g",
+                              "Startup Cost": 17.78,
+                              "Total Cost": 85.09,
+                              "Plan Rows": 1225,
+                              "Plan Width": 4,
+                              "Recheck Cond": "(season_id = 5)",
+                              "Plans": [
+                                {
+                                  "Node Type": "Bitmap Index Scan",
+                                  "Parent Relationship": "Outer",
+                                  "Parallel Aware": false,
+                                  "Async Capable": false,
+                                  "Index Name": "idx_games_season_id",
+                                  "Startup Cost": 0.0,
+                                  "Total Cost": 17.47,
+                                  "Plan Rows": 1225,
+                                  "Plan Width": 0,
+                                  "Index Cond": "(season_id = 5)"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -48,11 +48,11 @@
     arrow/.style={fc arrow}
 ]
 \node (start)  [startstop] {Начало};
-\node (pro1)   [process,  below of=start] {$PTS, FGA, FTA := \mathrm{SUM}(\ldots)$};
+\node (pro1)   [process,  below of=start] {$PTS, FGA, FTA :=$ суммы одноимённых \\ показателей игрока за сезон};
 \node (pro2)   [process,  below of=pro1]
   {$D = 2 \cdot (\mathrm{FGA} + 0{,}44 \cdot \mathrm{FTA})$};
 \node (dec1)   [decision, below of=pro2, yshift=-0.5cm] {$D = 0$?};
-\node (pro3a)  [io,  right of=dec1, xshift=\flowchartRightShiftSmall] {Вывод:\\ значение не определено};
+\node (pro3a)  [io,  right of=dec1, xshift=\flowchartRightShiftSmall] {Результат не определён};
 \node (pro3b)  [io,  below of=dec1, yshift=-0.5cm]
   {Возврат $\mathrm{PTS} / D$};
 \node (stop)   [startstop, below of=pro3b] {Конец};
@@ -84,9 +84,9 @@
 ]
 \node (start)  [startstop] {Начало};
 \node (agg)    [process,  below of=start]
-  {$FGM, FG3M, FGA := \mathrm{SUM}(\ldots)$ \\ из \texttt{game\_player\_stats}};
+  {$FGM, FG3M, FGA :=$ суммы одноимённых \\ показателей игрока за сезон};
 \node (dec1)   [decision, below of=agg] {$\mathrm{FGA} = 0$?};
-\node (null1)  [io,  right of=dec1, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (null1)  [io,  right of=dec1, xshift=\flowchartRightShift] {Результат не определён};
 \node (ret)    [io,  below of=dec1]
   {Возврат $\displaystyle\frac{\mathrm{FGM}+0{,}5\cdot\mathrm{FG3M}}{\mathrm{FGA}}$};
 \node (stop)   [startstop, below of=ret] {Конец};
@@ -119,17 +119,17 @@
 \node (tid)    [process,  below of=start]
   {Определить team\_id \\ (параметр или последняя игра)};
 \node (dec0)   [decision, below of=tid, yshift=-0.2cm] {team\_id IS NULL?};
-\node (null0)  [io,  right of=dec0, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (null0)  [io,  right of=dec0, xshift=\flowchartRightShift] {Результат не определён};
 \node (aggP)   [process,  below of=dec0, yshift=-0.2cm]
-  {$pFGA, pFTA, pTOV, pMP :=$ \\ $\mathrm{SUM}(\ldots)$ игрока};
+  {$pFGA, pFTA, pTOV, pMP :=$ суммы \\ одноимённых показателей игрока};
 \node (dec1)   [decision, below of=aggP, yshift=-0.2cm] {$pMP < 1$?};
-\node (null1)  [io,  right of=dec1, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (null1)  [io,  right of=dec1, xshift=\flowchartRightShift] {Результат не определён};
 \node (aggT)   [process,  below of=dec1, yshift=-0.2cm]
-  {$tmFGA, tmFTA, tmTOV, tmMP :=$ \\ $\mathrm{SUM}(\ldots)$ команды};
+  {$tmFGA, tmFTA, tmTOV, tmMP :=$ суммы \\ одноимённых показателей команды};
 \node (denom)  [process,  below of=aggT, yshift=-0.2cm]
   {$denom := pMP \cdot (tmFGA + 0{,}44 \cdot tmFTA + tmTOV)$};
 \node (dec2)   [decision, below of=denom, yshift=-0.2cm] {denom $= 0$?};
-\node (null2)  [io,  right of=dec2, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (null2)  [io,  right of=dec2, xshift=\flowchartRightShift] {Результат не определён};
 \node (ret)    [io,  below of=dec2, yshift=-0.2cm]
   {Возврат $\displaystyle\frac{(pFGA+0{,}44\cdot pFTA+pTOV)\cdot\frac{tmMP}{5}}{denom}$};
 \node (stop)   [startstop, below of=ret] {Конец};
@@ -171,9 +171,9 @@
 ]
 \node (start) [startstop] {Начало};
 \node (agg)   [process,  below of=start]
-  {$PTS, TRB, AST, STL, BLK,$ \\ $TOV, PF, FGM/FGA, FTM/FTA, MP := \mathrm{SUM}(\ldots)$};
+  {$PTS, TRB, AST, STL, BLK, TOV, PF,$ \\ $FGM, FGA, FTM, FTA, MP :=$ суммы \\ одноимённых показателей игрока за сезон};
 \node (dec1)  [decision, below of=agg] {$\mathrm{MP} < 50$?};
-\node (null1) [io,  right of=dec1, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (null1) [io,  right of=dec1, xshift=\flowchartRightShift] {Результат не определён};
 \node (uper)  [process,  below of=dec1]
   {$\mathrm{uPER} = (\mathrm{PTS}+\mathrm{TRB}+\ldots - \mathrm{TOV}-\mathrm{PF}-\Delta\mathrm{FG}-0{,}44\cdot\Delta\mathrm{FT}) \cdot \tfrac{48}{\mathrm{MP}}$};
 \node (lg)    [predefined,  below of=uper]
@@ -216,9 +216,9 @@
 ]
 \node (start) [startstop] {Начало};
 \node (agg)   [process,  below of=start]
-  {$PTS, TRB, AST, STL,$ \\ $BLK, TOV, PF, MP := \mathrm{SUM}(\ldots)$};
+  {$PTS, TRB, AST, STL, BLK, TOV, PF, MP$ \\ $:=$ суммы одноимённых показателей \\ игрока за сезон};
 \node (dec1)  [decision, below of=agg] {$\mathrm{MP} < 50$?};
-\node (null1) [io,  right of=dec1, xshift=\flowchartRightShift] {Вывод:\\ значение не определено};
+\node (null1) [io,  right of=dec1, xshift=\flowchartRightShift] {Результат не определён};
 \node (norm)  [process,  below of=dec1]
   {Нормировка на 100 мин: $X_{100} = X \cdot 100\,/\,\mathrm{MP}$};
 \node (raw)   [process,  below of=norm]
@@ -264,7 +264,7 @@
 \node (exp)   [process,  below of=dec1, yshift=\flowchartDecExpExtra]
   {$expected :=$ счёт команды \\ (\texttt{home\_score} или \texttt{away\_score})};
 \node (loop)  [predefined,  below of=exp]
-  {Для каждой команды в матче: \\ $teamPoints := \mathrm{SUM(points)}$};
+  {Для каждой команды матча: \\ $teamPoints :=$ сумма очков её игроков};
 \node (dec2)  [decision, below of=loop] {$teamPoints \neq expected$?};
 \node (exc)   [io,  right of=dec2, xshift=\flowchartRightShift] {Отклонить транзакцию};
 \node (ret)   [io,  below of=dec2] {Разрешить операцию};
@@ -329,30 +329,32 @@
 \centering
 \begin{tikzpicture}[
     fc base,
-    node distance=1.2cm,
+    node distance=2.0cm,
     startstop/.style={fc startstop},
     process/.style={fc process},
+    process tall/.style={fc process, minimum height=1.35cm, inner sep=5pt},
+    io/.style={fc io},
     arrow/.style={fc arrow}
 ]
-\node (start) [startstop] {Начало построения представления \texttt{v\_team\_stats}};
-\node (join)  [process, below of=start]
-  {Соединение \texttt{game\_player\_stats} с \texttt{games}};
-\node (role)  [process, below of=join]
-  {Определение команды по \texttt{home\_team\_id} и \texttt{away\_team\_id}};
-\node (group) [process, below of=role]
-  {Группировка по \texttt{team\_id} и \texttt{season\_id}};
-\node (agg)   [process, below of=group]
-  {teamTotals := SUM(очки, подборы, \\ передачи, потери, броски)};
-\node (avg)   [process, below of=agg]
-  {Деление накопленных сумм на число матчей команды};
-\node (stop)  [startstop, below of=avg] {Вывод средних командных показателей};
+\node (start) [startstop] {Начало};
+\node (in)    [io, below of=start]
+  {Получить данные из \texttt{game\_player\_stats} \\ и \texttt{games} (только завершённые матчи)};
+\node (group) [process, below of=in]
+  {Группировка статистики игроков \\ по (\texttt{team\_id}, \texttt{season\_id}, \texttt{game\_id})};
+\node (agg)   [process tall, below of=group, yshift=-0.15cm]
+  {$\mathrm{PTS}, \mathrm{REB}, \mathrm{AST}, \mathrm{TOV},$ \\ $\mathrm{FGM}, \mathrm{FGA}, \mathrm{FG3M}, \mathrm{FTM}, \mathrm{FTA}$ \\ $:=$ суммы одноимённых \\ показателей в матче};
+\node (avg)   [process tall, below of=agg, yshift=-0.35cm]
+  {$N :=$ число матчей команды \\ avg\_pts, avg\_reb, avg\_ast, avg\_tov $:=$ \\ суммы показателей $/ N$ \\ efg\_pct, ts\_pct $:=$ расчёт по сезонным суммам бросков};
+\node (out)   [io, below of=avg, yshift=-0.25cm]
+  {Возврат средних командных показателей};
+\node (stop)  [startstop, below of=out] {Конец};
 
-\draw [arrow] (start) -- (join);
-\draw [arrow] (join)  -- (role);
-\draw [arrow] (role)  -- (group);
+\draw [arrow] (start) -- (in);
+\draw [arrow] (in)    -- (group);
 \draw [arrow] (group) -- (agg);
 \draw [arrow] (agg)   -- (avg);
-\draw [arrow] (avg)   -- (stop);
+\draw [arrow] (avg)   -- (out);
+\draw [arrow] (out)   -- (stop);
 \end{tikzpicture}
 \caption{Схема алгоритма агрегирования командной статистики в представлении \texttt{v\_team\_stats}}
 \label{fig:algo-team-stats}
@@ -370,18 +372,18 @@
     predefined/.style={fc predefined},
     arrow/.style={fc arrow}
 ]
-\node (start) [startstop] {Начало транзакции};
+\node (start) [startstop] {Начало};
 \node (pro1)  [process, below of=start]
   {Группировка по \texttt{player\_id}, \texttt{team\_id}: базовые агрегаты};
 \node (pro2)  [predefined, below of=pro1]
   {Подзапрос TmFGA/TmFTA/TmTOV по (\texttt{game\_id}, \texttt{team\_id}) для USG};
-\node (pro3)  [process, below of=pro2]
+\node (pro3)  [predefined, below of=pro2]
   {Двухпроходный расчёт лигового среднего (PER, BPM)};
 \node (pro4)  [predefined, below of=pro3, yshift=\flowchartUpdateMidExtra]
   {Вызов \texttt{calculate\_efg}, \texttt{calculate\_ts}, \\ \texttt{calculate\_usg}, \texttt{calculate\_per}, \texttt{calculate\_bpm}};
 \node (pro5)  [process, below of=pro4, yshift=\flowchartUpdateMidExtra]
   {Вставка с обновлением в таблицу \texttt{player\_season\_stats}};
-\node (stop)  [startstop, below of=pro5] {Конец транзакции};
+\node (stop)  [startstop, below of=pro5] {Конец};
 
 \draw [arrow] (start) -- (pro1);
 \draw [arrow] (pro1)  -- (pro2);
