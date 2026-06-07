@@ -56,12 +56,11 @@
 
 % --- МЕХАНИЗМЫ (снизу) ---
 \foreach \x/\t in {
-    -34/{Веб-\\ приложение},
-    -11.5/{База\\ данных},
-    11.5/{Подсистема\\ кэширования},
-    34/{Скрипт\\ загрузки\\ данных}} {
+    -30/{Реляционная\\ СУБД (РСУБД)},
+    0/{In-Memory\\ СУБД},
+    30/{Внешние\\ источники\\ данных}} {
   \draw[arr] ([xshift=\x mm,yshift=-\stub]sys.south) -- ([xshift=\x mm]sys.south);
-  \node[lbl, anchor=north, align=center, text width=22mm]
+  \node[lbl, anchor=north, align=center, text width=26mm]
     at ([xshift=\x mm,yshift=-\stub-1mm]sys.south) {\t};
 }
 \end{tikzpicture}
