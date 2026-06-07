@@ -125,7 +125,7 @@ export default function TeamPage() {
   if (loading) return <div className="loading">loading...</div>
   if (!team) return <div className="error">team not found</div>
 
-  const cols: { label: string; key?: string }[] = [
+  const cols: { label: string; key?: string; title?: string }[] = [
     { label: '' },
     { label: 'player', key: 'last_name' },
     { label: 'pos', key: 'position' },
@@ -134,6 +134,7 @@ export default function TeamPage() {
     { label: 'reb', key: 'avg_reb' },
     { label: 'ast', key: 'avg_ast' },
     { label: 'per', key: 'per' },
+    { label: '±', key: 'avg_plus_minus', title: 'средний показатель плюс-минус за матч' },
   ]
 
   // Метрики сводки (A)
@@ -171,6 +172,7 @@ export default function TeamPage() {
             {cols.map(c => (
               <th
                 key={c.label}
+                title={c.title}
                 onClick={c.key ? () => toggle(c.key!) : undefined}
                 style={{
                   padding: '6px 10px',
@@ -213,6 +215,14 @@ export default function TeamPage() {
               <td style={{ padding: '6px 10px' }}>{fmt(p.avg_reb)}</td>
               <td style={{ padding: '6px 10px' }}>{fmt(p.avg_ast)}</td>
               <td style={{ padding: '6px 10px', color: 'var(--accent)', fontWeight: 600 }}>{fmt(p.per)}</td>
+              {(() => {
+                const pm = p.avg_plus_minus != null ? Number(p.avg_plus_minus) : null
+                return (
+                  <td style={{ padding: '6px 10px', fontWeight: 600, color: pm == null ? 'var(--text-muted)' : (pm >= 0 ? 'var(--success)' : 'var(--danger)') }}>
+                    {pm == null ? '—' : (pm >= 0 ? '+' : '') + pm.toFixed(1)}
+                  </td>
+                )
+              })()}
             </tr>
           ))}
         </tbody>

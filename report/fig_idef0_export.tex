@@ -1,0 +1,68 @@
+% Standalone export: контекстная диаграмма IDEF0 (A0) — постановка задачи
+\documentclass[tikz,border=8pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usetikzlibrary{arrows.meta, positioning, calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  font=\normalsize,
+  arr/.style={-{Stealth[length=2.8mm]}, thick},
+  lbl/.style={font=\small, inner sep=1pt},
+  arrlen/.store in=\arrlen,
+  arrlen=12mm,
+  outlen/.store in=\outlen,
+  outlen=12mm,
+  stub/.store in=\stub,
+  stub=14mm,
+]
+% Центральный блок (функция)
+\node[draw, very thick, minimum width=10.5cm, minimum height=4.2cm, align=center]
+  (sys) {Хранение и анализ\\ статистики игроков\\ и команд NBA};
+\node[anchor=south east, inner sep=3pt, font=\small] at (sys.south east) {A0};
+
+% --- ВХОДЫ (слева) ---
+\foreach \y/\t in {
+    17/{Первичная статистика\\ матчей и игроков},
+    0/{Справочные данные\\ (игроки, команды, сезоны)},
+    -17/{Запросы аналитиков\\ и пользователей}} {
+  \node[lbl, anchor=east, align=right, text width=36mm]
+    at ([xshift=-\arrlen,yshift=\y mm]sys.west) {\t};
+  \draw[arr] ([xshift=-\arrlen,yshift=\y mm]sys.west) -- ([yshift=\y mm]sys.west);
+}
+
+% --- УПРАВЛЕНИЕ (сверху) ---
+\foreach \x/\t in {
+    -42/{Ограничения\\ предметной области},
+    -14/{Требования\\ целостности данных},
+    14/{Правила\\ разграничения доступа},
+    42/{Математические модели\\ и алгоритмы расчёта\\ метрик}} {
+  \draw[arr] ([xshift=\x mm,yshift=\stub]sys.north) -- ([xshift=\x mm]sys.north);
+  \node[lbl, anchor=south, align=center, text width=24mm]
+    at ([xshift=\x mm,yshift=\stub+1mm]sys.north) {\t};
+}
+
+% --- ВЫХОДЫ (справа) ---
+\foreach \y/\t in {
+    17/{Рассчитанные показатели\\ эффективности},
+    6/{Рейтинги и лидерборды},
+    -6/{Командные сводки и сравнение профилей},
+    -17/{Турнирные таблицы}} {
+  \draw[arr] ([yshift=\y mm]sys.east) -- ([xshift=\outlen,yshift=\y mm]sys.east);
+  \node[lbl, anchor=west, align=left, text width=42mm]
+    at ([xshift=\outlen+1mm,yshift=\y mm]sys.east) {\t};
+}
+
+% --- МЕХАНИЗМЫ (снизу) ---
+\foreach \x/\t in {
+    -34/{Веб-\\ приложение},
+    -11.5/{База\\ данных},
+    11.5/{Подсистема\\ кэширования},
+    34/{Скрипт\\ загрузки\\ данных}} {
+  \draw[arr] ([xshift=\x mm,yshift=-\stub]sys.south) -- ([xshift=\x mm]sys.south);
+  \node[lbl, anchor=north, align=center, text width=22mm]
+    at ([xshift=\x mm,yshift=-\stub-1mm]sys.south) {\t};
+}
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,10 @@
+﻿@startuml test_fix
+hide circle
+skinparam linetype ortho
+skinparam nodesep 80
+skinparam ranksep 80
+entity teams { + team_id PK }
+entity games { + game_id PK \n home_team_id FK \n away_team_id FK }
+teams ||-up-o{ games : home
+teams ||-right-o{ games : away
+@enduml

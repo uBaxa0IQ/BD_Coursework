@@ -153,7 +153,7 @@ async def get_team_roster(
     cache: CacheManager = Depends(get_cache),
     db: AsyncSession = Depends(get_db_analyst),
 ):
-    cache_key = f"team_roster:v3:{team_id}:{season_id}"
+    cache_key = f"team_roster:v4:{team_id}:{season_id}"
     cached = await cache.get(cache_key)
     if cached:
         return cached
@@ -185,6 +185,7 @@ async def get_team_roster(
             SELECT p.player_id, p.nba_id, p.first_name, p.last_name,
                    pos.code AS position, p.jersey_number,
                    pss.games_played, pss.avg_pts, pss.avg_reb, pss.avg_ast, pss.per,
+                   pss.avg_plus_minus,
                    COALESCE(lt.last_team_id = :team_id, TRUE)  AS is_current,
                    COALESCE(ft.first_team_id <> :team_id, FALSE) AS arrived_mid_season
             FROM player_season_stats pss

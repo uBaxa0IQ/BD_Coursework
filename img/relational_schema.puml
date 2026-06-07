@@ -1,12 +1,13 @@
 @startuml relational_schema
-top to bottom direction
 hide circle
 skinparam linetype ortho
-skinparam defaultFontSize 12
+skinparam defaultFontSize 14
 skinparam shadowing false
 skinparam roundcorner 5
-skinparam nodesep 35
-skinparam ranksep 45
+
+' Увеличиваем расстояние между элементами
+skinparam nodesep 80
+skinparam ranksep 80
 
 skinparam class {
   BackgroundColor White
@@ -15,154 +16,141 @@ skinparam class {
 }
 
 entity "positions" {
-  + position_id : Int PK
+  + position_id PK
   --
-  code : Char UQ
-  name : Str
+  code UQ
+  name
 }
 
 entity "seasons" {
-  + season_id : Int PK
+  + season_id PK
   --
-  label : Str UQ
-  start_date : Date
-  end_date : Date
-  season_type : Str
+  label UQ
+  start_date
+  end_date
+  season_type
 }
 
 entity "teams" {
-  + team_id : Int PK
+  + team_id PK
   --
-  nba_team_id : Int UQ
-  name : Str UQ
-  abbreviation : Char UQ
-  city : Str
-  conference : Str
-  arena_name : Str
-  founded_year : Int
-  is_active : Bool
+  nba_team_id UQ
+  name UQ
+  abbreviation UQ
+  city
+  conference
+  arena_name
+  founded_year
+  is_active
 }
 
 entity "players" {
-  + player_id : Int PK
+  + player_id PK
   --
-  position_id : Int FK
-  nba_id : Int UQ
-  first_name : Str
-  last_name : Str
-  birth_date : Date
-  nationality : Str
-  height_cm : Int
-  weight_kg : Int
-  jersey_number : Int
-  draft_year : Int
-  draft_round : Int
-  draft_pick : Int
-  is_active : Bool
+  position_id FK
+  nba_id UQ
+  first_name
+  last_name
+  birth_date
+  nationality
+  height_cm
+  weight_kg
+  jersey_number
+  draft_year
+  draft_round
+  draft_pick
+  is_active
 }
 
 entity "games" {
-  + game_id : Int PK
+  + game_id PK
   --
-  season_id : Int FK
-  home_team_id : Int FK
-  away_team_id : Int FK
-  game_date : Date
-  home_score : Int
-  away_score : Int
-  status : Str
-  overtime : Int
+  season_id FK
+  home_team_id FK
+  away_team_id FK
+  game_date
+  home_score
+  away_score
+  status
+  overtime
 }
 
 entity "game_player_stats" {
-  + stat_id : Int PK
+  + stat_id PK
   --
-  game_id : Int FK
-  player_id : Int FK
-  team_id : Int FK
-  minutes_played : Num
-  points : Int
-  rebounds_off : Int
-  rebounds_def : Int
-  assists : Int
-  steals : Int
-  blocks : Int
-  turnovers : Int
-  fouls : Int
-  fgm : Int
-  fga : Int
-  fg3m : Int
-  fg3a : Int
-  ftm : Int
-  fta : Int
-  plus_minus : Int
-  is_starter : Bool
+  game_id FK
+  player_id FK
+  team_id FK
+  minutes_played
+  points
+  rebounds_off
+  rebounds_def
+  assists
+  steals
+  blocks
+  turnovers
+  fouls
+  fgm
+  fga
+  fg3m
+  fg3a
+  ftm
+  fta
+  plus_minus
+  is_starter
 }
 
 entity "player_season_stats" {
-  + pss_id : Int PK
+  + pss_id PK
   --
-  player_id : Int FK
-  season_id : Int FK
-  team_id : Int FK
-  games_played : Int
-  avg_pts : Num
-  avg_reb : Num
-  avg_ast : Num
-  avg_stl : Num
-  avg_blk : Num
-  avg_tov : Num
-  avg_min : Num
-  avg_plus_minus : Num
-  fg_pct : Num
-  fg3_pct : Num
-  ft_pct : Num
-  efg_pct : Num
-  ts_pct : Num
-  usg_pct : Num
-  per : Num
-  bpm : Num
+  player_id FK
+  season_id FK
+  team_id FK
+  games_played
+  avg_pts
+  avg_reb
+  avg_ast
+  avg_stl
+  avg_blk
+  avg_tov
+  avg_min
+  avg_plus_minus
+  fg_pct
+  fg3_pct
+  ft_pct
+  efg_pct
+  ts_pct
+  usg_pct
+  per
+  bpm
 }
 
 entity "player_team_history" {
-  + history_id : Int PK
+  + history_id PK
   --
-  player_id : Int FK
-  team_id : Int FK
-  season_id : Int FK
-  start_date : Date
-  end_date : Date
-  contract_type : Str
+  player_id FK
+  team_id FK
+  season_id FK
+  start_date
+  end_date
+  contract_type
 }
 
-' Раскладка: 3 ряда по 3 / 2 сущности (без принудительного left-to-right)
-positions -[hidden]right- seasons
-seasons -[hidden]right- teams
-players -[hidden]right- games
-games -[hidden]right- player_team_history
-game_player_stats -[hidden]right- player_season_stats
+' Явно задаем горизонтальное направление (вправо) для основных цепочек таблиц
+positions ||-right-o{ players : ""
+players ||-right-o{ player_team_history : ""
+players ||-down-o{ game_player_stats : ""
+players ||-down-o{ player_season_stats : ""
 
-positions -[hidden]down- players
-seasons -[hidden]down- games
-teams -[hidden]down- player_team_history
-games -[hidden]down- game_player_stats
-player_team_history -[hidden]down- player_season_stats
+teams ||-right-o{ games : ""
+teams ||-right-o{ games : ""
+teams ||-down-o{ game_player_stats : ""
+teams ||-down-o{ player_season_stats : ""
+teams ||-down-o{ player_team_history : ""
 
-positions ||--o{ players
-players ||--o{ player_team_history
-players ||--o{ game_player_stats
-players ||--o{ player_season_stats
-
-teams ||--o{ games : home_team_id
-teams ||--o{ games : away_team_id
-teams ||--o{ game_player_stats
-teams ||--o{ player_season_stats
-teams ||--o{ player_team_history
-
-seasons ||--o{ games
-seasons ||--o{ player_season_stats
-seasons ||--o{ player_team_history
-
-games ||--o{ game_player_stats
+seasons ||-right-o{ games : ""
+seasons ||-down-o{ player_season_stats : ""
+seasons ||-down-o{ player_team_history : ""
+games ||-down-o{ game_player_stats : ""
 
 @enduml
