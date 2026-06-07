@@ -110,7 +110,7 @@ export default function CompareModal({ p1Id, p2Id, seasonId, onClose }: Props) {
               onClick={() => { onClose(); navigate(`/compare?p1=${p1Id}&p2=${p2Id}`) }}
               style={{ fontSize: 12, padding: '4px 10px' }}
             >
-              open full comparison ↗
+              open full comparison
             </button>
             <button
               onClick={onClose}

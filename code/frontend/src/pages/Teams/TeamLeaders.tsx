@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { teamsApi } from '../../api/teams'
 import { useSortable } from '../../hooks/useSortable'
 import { exportCsv } from '../../utils/exportCsv'
+import { SHOW_TEAM_NET_RATINGS, TEAM_RATING_KEYS } from '../../config'
 import type { Team, TeamSummary } from '../../types'
 
 interface Row {
@@ -44,6 +45,11 @@ const METRICS: { key: MetricKey; label: string; pct: boolean; lower: boolean }[]
 
 // Категории для hero-плиток лидеров (везде больше = лучше)
 const HERO: MetricKey[] = ['avg_pts', 'avg_reb', 'avg_ast', 'net_rtg', 'ts_pct', 'win_pct']
+
+// Скрываем командные рейтинги, если выключен флаг SHOW_TEAM_NET_RATINGS
+const isRatingKey = (k: string) => (TEAM_RATING_KEYS as readonly string[]).includes(k)
+const VISIBLE_METRICS = SHOW_TEAM_NET_RATINGS ? METRICS : METRICS.filter(m => !isRatingKey(m.key))
+const VISIBLE_HERO = SHOW_TEAM_NET_RATINGS ? HERO : HERO.filter(k => !isRatingKey(k))
 
 const numv = (v: unknown): number | null => (v == null || v === '' ? null : Number(v))
 
@@ -102,7 +108,7 @@ export default function TeamLeaders({ seasonId }: { seasonId: number }) {
   // min/max по каждой метрике для хитмэпа
   const bounds = useMemo(() => {
     const b: Record<string, { min: number; max: number }> = {}
-    for (const m of METRICS) {
+    for (const m of VISIBLE_METRICS) {
       const vals = rows.map(r => r[m.key]).filter((v): v is number => v != null)
       b[m.key] = { min: vals.length ? Math.min(...vals) : 0, max: vals.length ? Math.max(...vals) : 0 }
     }
@@ -111,7 +117,7 @@ export default function TeamLeaders({ seasonId }: { seasonId: number }) {
 
   // лидеры по категориям для hero-плиток
   const leaders = useMemo(() => {
-    return HERO.map(key => {
+    return VISIBLE_HERO.map(key => {
       let best: Row | null = null
       for (const r of rows) {
         if (r[key] == null) continue
@@ -141,9 +147,11 @@ export default function TeamLeaders({ seasonId }: { seasonId: number }) {
         tov: r.avg_tov,
         efg_pct: r.efg_pct,
         ts_pct: r.ts_pct,
-        off_rtg: r.off_rtg,
-        def_rtg: r.def_rtg,
-        net_rtg: r.net_rtg,
+        ...(SHOW_TEAM_NET_RATINGS ? {
+          off_rtg: r.off_rtg,
+          def_rtg: r.def_rtg,
+          net_rtg: r.net_rtg,
+        } : {}),
       })),
     )
 
@@ -199,7 +207,7 @@ export default function TeamLeaders({ seasonId }: { seasonId: number }) {
                   { label: 'team', key: 'name' },
                   { label: 'gp', key: 'games_played' },
                   { label: 'w-l', key: 'wins' },
-                  ...METRICS.map(m => ({ label: m.label, key: m.key })),
+                  ...VISIBLE_METRICS.map(m => ({ label: m.label, key: m.key })),
                 ] as { label: string; key?: string }[]).map(c => (
                   <th
                     key={c.label}
@@ -239,7 +247,7 @@ export default function TeamLeaders({ seasonId }: { seasonId: number }) {
                   <td style={{ padding: '7px 10px', fontFamily: 'var(--font-mono)', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>
                     {r.wins ?? '—'}-{r.losses ?? '—'}
                   </td>
-                  {METRICS.map(m => (
+                  {VISIBLE_METRICS.map(m => (
                     <td
                       key={m.key}
                       style={{

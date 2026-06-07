@@ -178,7 +178,7 @@ export default function PlayerModal({ playerId, seasonId, onClose }: Props) {
                   style={{ fontSize: 11, padding: '5px 10px' }}
                   onClick={() => { onClose(); navigate(`/players/${playerId}`) }}
                 >
-                  open profile ↗
+                  open profile
                 </button>
                 <button
                   className="btn btn-ghost"

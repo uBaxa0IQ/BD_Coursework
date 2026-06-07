@@ -80,14 +80,20 @@ input, select, button, textarea {
 }
 
 .btn {
-  padding: 6px 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 14px;
   border-radius: var(--radius-sm);
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   font-family: var(--font-mono);
-  transition: opacity 0.15s;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s;
 }
 
 .btn-primary {
@@ -98,12 +104,13 @@ input, select, button, textarea {
 .btn-primary:hover { opacity: 0.85; }
 
 .btn-ghost {
-  background: transparent;
+  background: var(--bg-secondary);
   color: var(--text-secondary);
   border: 1px solid var(--border);
 }
 
 .btn-ghost:hover {
+  background: var(--bg-card-hover);
   color: var(--text-primary);
   border-color: var(--text-secondary);
 }

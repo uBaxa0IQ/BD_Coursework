@@ -142,6 +142,11 @@ export default function PlayerProfile() {
             {player.weight_kg && <span>Weight: {player.weight_kg} kg</span>}
             {player.birth_date && <span>DOB: {player.birth_date}</span>}
             {player.nationality && <span>{player.nationality}</span>}
+            <span>
+              {player.draft_year
+                ? `Draft: ${player.draft_year}${player.draft_round ? ` · R${player.draft_round}` : ''}${player.draft_pick ? ` · Pick ${player.draft_pick}` : ''}`
+                : 'Undrafted'}
+            </span>
           </div>
         </div>
       </div>

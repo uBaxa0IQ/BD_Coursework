@@ -136,7 +136,7 @@ export default function BoxscoreModal({ gameId, onClose }: Props) {
               onClick={() => { onClose(); navigate(`/games/${gameId}`) }}
               style={{ fontSize: 12, padding: '4px 10px' }}
             >
-              full analysis ↗
+              full analysis
             </button>
             <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: 18, lineHeight: 1 }}>×</button>
           </div>

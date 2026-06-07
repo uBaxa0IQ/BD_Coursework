@@ -172,7 +172,7 @@ export default function Compare() {
             />
             <div>
               <div style={{ fontWeight: 700, fontSize: 16, color: i === 0 ? P1_COLOR : P2_COLOR }}>
-                {pd.player.first_name} {pd.player.last_name} ↗
+                {pd.player.first_name} {pd.player.last_name}
               </div>
               <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
                 {pd.player.team_name} · {pd.player.position || '—'}

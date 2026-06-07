@@ -36,10 +36,10 @@ services:
   backend:
     build: ./backend
     container_name: nba_backend
-    # Порт 8000 на хосте не пробрасываем: в Windows он часто в excluded range 7999–8098.
-    # Backend внутри compose слушает 8000; с хоста — http://localhost:8888
+    # Порт на хосте должен быть ВНЕ excluded range Windows (netsh interface ipv4 show excludedportrange).
+    # 8888 часто попадает в 8822–8921; используем 8700. Внутри compose backend слушает 8000.
     ports:
-      - "8888:8000"
+      - "8700:8000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -61,7 +61,7 @@ services:
     depends_on:
       - backend
     environment:
-      VITE_API_URL: http://localhost:8888
+      VITE_API_URL: http://localhost:8700
     volumes:
       - ./frontend:/app
       - /app/node_modules

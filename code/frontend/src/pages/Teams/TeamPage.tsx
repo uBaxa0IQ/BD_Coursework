@@ -9,6 +9,7 @@ import { useSeasonFilter } from '../../hooks/useSeasonFilter'
 import PlayerModal from '../../components/PlayerModal'
 import BoxscoreModal from '../../components/BoxscoreModal'
 import { useSortable } from '../../hooks/useSortable'
+import { SHOW_TEAM_NET_RATINGS } from '../../config'
 import type { Team, TeamSummary } from '../../types'
 
 // Нормировочные максимумы для радара сравнения команд (за матч)
@@ -148,9 +149,11 @@ export default function TeamPage() {
     { label: 'TOV', value: fmt(summary.avg_tov) },
     { label: 'eFG%', value: pct(summary.efg_pct) },
     { label: 'TS%', value: pct(summary.ts_pct) },
-    { label: 'ORtg', value: fmt(summary.off_rtg) },
-    { label: 'DRtg', value: fmt(summary.def_rtg) },
-    { label: 'NET', value: netStr, color: netColor },
+    ...(SHOW_TEAM_NET_RATINGS ? [
+      { label: 'ORtg', value: fmt(summary.off_rtg) },
+      { label: 'DRtg', value: fmt(summary.def_rtg) },
+      { label: 'NET', value: netStr, color: netColor },
+    ] : []),
   ] : []
 
   // Единый ростер; ушедших по ходу сезона помечаем красным (по is_current)
@@ -244,9 +247,11 @@ export default function TeamPage() {
   // Метрики для таблицы сравнения (lower=true → меньше лучше)
   const cmpMetrics: { key: keyof TeamSummary; label: string; isPct?: boolean; lower?: boolean }[] = [
     { key: 'win_pct', label: 'W%', isPct: true },
-    { key: 'net_rtg', label: 'NET' },
-    { key: 'off_rtg', label: 'ORtg' },
-    { key: 'def_rtg', label: 'DRtg', lower: true },
+    ...(SHOW_TEAM_NET_RATINGS ? [
+      { key: 'net_rtg' as const, label: 'NET' },
+      { key: 'off_rtg' as const, label: 'ORtg' },
+      { key: 'def_rtg' as const, label: 'DRtg', lower: true },
+    ] : []),
     { key: 'avg_pts', label: 'PTS' },
     { key: 'avg_reb', label: 'REB' },
     { key: 'avg_ast', label: 'AST' },
@@ -276,8 +281,9 @@ export default function TeamPage() {
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 20, fontWeight: 700 }}>{team.name}</div>
           <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>
-            {team.conference}
+            {team.city} · {team.conference}
             {team.arena_name && ` · ${team.arena_name}`}
+            {team.founded_year && ` · est. ${team.founded_year}`}
           </div>
         </div>
         {/* Запись и место (A) */}
