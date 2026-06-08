@@ -15,8 +15,8 @@
     store/.style={draw, thick, cylinder, shape border rotate=90,
       minimum width=2.8cm, minimum height=1.2cm, aspect=0.2,
       align=center},
-    arrow/.style={thick,->,>=stealth},
-    label/.style={font=\footnotesize, midway}
+    arrow/.style={draw=black, thick,->,>=stealth},
+    label/.style={font=\footnotesize, text=black, midway}
 ]
 
 \node (react) [layer, fill=white] at (0, 0)
@@ -42,8 +42,8 @@
   node[pos=0.8, above, font=\scriptsize] {ключ--значение};
 \draw [arrow, dashed] ([yshift=-5pt]redis.west) -| ++(-0.6,0) |- ([yshift=-8pt]api.east);
 
-\node [font=\footnotesize\itshape, text=gray] at (0, -1.8) {Уровень представления};
-\node [font=\footnotesize\itshape, text=gray] at (6, -1.8) {Уровень приложения};
-\node [font=\footnotesize\itshape, text=gray] at (12.5, -2.8) {Уровень данных};
+\node [font=\footnotesize\itshape, text=black] at (0, -1.8) {Уровень представления};
+\node [font=\footnotesize\itshape, text=black] at (6, -1.8) {Уровень приложения};
+\node [font=\footnotesize\itshape, text=black] at (12.5, -2.8) {Уровень данных};
 \end{tikzpicture}
 \end{document}

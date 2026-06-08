@@ -1,0 +1,64 @@
+\begin{tikzpicture}[
+    >=Stealth,
+    entity/.style={rectangle, draw=black, thick, minimum width=3.2cm,
+      minimum height=1.2cm, align=center, text centered, fill=white,
+      font=\small\bfseries},
+    relation/.style={diamond, draw=black, thick, minimum width=3.6cm,
+      minimum height=1.6cm, align=center, text centered, aspect=1.8, font=\footnotesize,
+      fill=white},
+    line/.style={draw=black, thick},
+    lbl/.style={font=\scriptsize, fill=white, inner sep=1.5pt}
+]
+
+    % ================= СУЩНОСТИ =================
+    \node[entity] (Position) at (0, 7) {Позиция};
+    \node[entity] (Player)   at (0, 3) {Игрок};
+    % Ассоциативная сущность (внешний прямоугольник + ромб связи):
+    \node[relation] (GameStat) at (0, -3) {Статистика\\игрока в матче};
+    \node[draw=black, thick, inner sep=0pt, fit=(GameStat)] (GameStat_rect) {};
+    \node[entity] (Game)     at (0, -9) {Матч};
+
+    \node[entity] (Team)     at (14, 3) {Команда};
+    \node[entity] (Season)   at (14, -9) {Сезон};
+
+    % ================= СВЯЗИ (РОМБЫ) =================
+    \node[relation] (HasPos)     at (0, 5) {Имеет позицию};
+
+    % Сами ромбы с текстом (остаются на месте):
+    \node[relation] (History)    at (7, 7) {История выступлений};
+    \node[draw=black, thick, inner sep=0pt, fit=(History)] (History_rect) {};
+    
+    \node[relation] (SeasonStat) at (7, 3) {Статистика за сезон};
+    \node[draw=black, thick, inner sep=0pt, fit=(SeasonStat)] (SeasonStat_rect) {};
+    \node[relation] (Home)       at (7, -3) {Домашняя команда};
+    \node[relation] (Away)       at (7, -6) {Гостевая команда};
+    \node[relation] (InSeason)   at (7, -9) {Проходит в сезоне};
+
+    % ================= ЛИНИИ СВЯЗЕЙ =================
+    \draw[line] (Player.north) -- (HasPos.south) node[midway, lbl] {M};
+    \draw[line] (HasPos.north) -- (Position.south) node[midway, lbl] {1};
+    \draw[line] (Player.south) -- (GameStat.north) node[midway, lbl] {M};
+    \draw[line] (GameStat.south) -- (Game.north) node[midway, lbl] {N};
+
+    \draw[line] (Player.north east) -- ++(1.5, 0.5) |- (History.west)
+      node[near start, lbl] {M};
+    \draw[line] (Team.north) |- (History.east) node[near start, lbl] {N};
+    \draw[line] (Season.east) -- (21, -9) -- (21, 9) -| (History.north)
+      node[near end, lbl] {K};
+
+    \draw[line] (Player.east) -- (SeasonStat.west) node[midway, lbl] {M};
+    \draw[line] (Team.west) -- (SeasonStat.east) node[midway, lbl] {N};
+    \draw[line] (SeasonStat.south) -- (7, 1.5) -- (10.5, 1.5) -- (10.5, -7.5)
+      -| (Season.north) node[near end, lbl] {K};
+
+    \draw[line] (Game.east) -- (InSeason.west) node[near end, lbl] {M};
+    \draw[line] (2.5, -9) -- (2.5, -3) -- (Home.west) node[midway, lbl] {M};
+    \draw[line] (2.5, -6) -- (Away.west) node[midway, lbl] {M};
+
+    \draw[line] (Team.south) -- (14, 0) -- (12, 0) -- (12, -6) -- (Away.east)
+      node[near end, lbl] {1};
+    \draw[line] (12, -3) -- (Home.east) node[near end, lbl] {1};
+
+    \draw[line] (Season.west) -- (InSeason.east) node[midway, lbl] {1};
+
+\end{tikzpicture}
