@@ -75,6 +75,12 @@ postgres_data/
 *.bak
 ~$*
 
-# --- Materials (local only, GitHub 100 MB limit) ---
-materials/05 - Connolly Begg - Bazy dannykh.pdf
-materials/05 - Connolly Begg - Bazy dannykh.*.pdf
+# --- Local references and generated exports ---
+materials/
+report_example/
+code/data/csv_export/
+code/backend/research_results/
+code/backend/C*/
+code/research_results/*.json
+report/*_export.pdf
+*.jar

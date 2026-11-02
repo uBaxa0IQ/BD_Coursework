@@ -2,6 +2,8 @@
 Тесты для функций и процедур PostgreSQL.
 Используют реальную тестовую БД — без моков.
 """
+import os
+
 import pytest
 import pytest_asyncio
 import asyncpg
@@ -119,7 +121,10 @@ async def test_update_season_stats_idempotent(pg_conn: asyncpg.Connection):
 @pytest.mark.asyncio
 async def test_role_reader_cannot_select_tables(pg_conn: asyncpg.Connection):
     """Роль reader не должна иметь доступа к таблицам напрямую."""
-    reader_url = "postgresql://nba_reader_user:reader_pass_2024@localhost:5432/nba_stats"
+    reader_url = os.getenv(
+        "TEST_READER_DATABASE_URL",
+        "postgresql://nba_reader_user:reader_pass_2024@localhost:5432/nba_stats",
+    )
     try:
         reader_conn = await asyncpg.connect(reader_url)
         try:
@@ -133,5 +138,3 @@ async def test_role_reader_cannot_select_tables(pg_conn: asyncpg.Connection):
             await reader_conn.close()
     except asyncpg.InvalidCatalogNameError:
         pytest.skip("Тестовая БД недоступна")
-    except Exception as e:
-        pytest.skip(f"Пропуск: {e}")

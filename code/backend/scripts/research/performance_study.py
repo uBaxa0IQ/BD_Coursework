@@ -30,13 +30,13 @@ CONCURRENCY_ROUNDS = 10
 
 
 def _resolve_results_dir() -> Path:
+    custom = os.getenv("RESEARCH_RESULTS_DIR")
+    if custom:
+        return Path(custom)
     backend_root = Path(__file__).resolve().parents[2]
     code_root = backend_root.parent
     if (code_root / "docker-compose.yml").is_file():
         return code_root / "research_results"
-    custom = os.getenv("RESEARCH_RESULTS_DIR")
-    if custom:
-        return Path(custom)
     return backend_root / "research_results"
 
 

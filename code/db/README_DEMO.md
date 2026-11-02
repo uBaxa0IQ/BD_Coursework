@@ -7,6 +7,8 @@
 Герой демо — **Luka Dončić (LAL), сезон 2025-26**. Добавляем ему один
 выдающийся матч (70 очков + трипл-дабл) и наблюдаем изменение средних и PER.
 
+Значение `x-api-key` в примерах должно совпадать с `SECRET_KEY` в `code/.env`; здесь используется значение из `.env.example`. Команды выполняются из каталога `code`, если явно не указано иное. Числа «до/после» относятся к исходному демо-срезу и могут измениться после обновления данных.
+
 ## Файлы
 
 | Файл | Назначение |
@@ -16,8 +18,8 @@
 
 ## Предусловие
 
-Система поднята: `docker compose up -d` (postgres, redis, backend :8000, frontend :3000).
-Проверить: <http://localhost:8000/health> должен вернуть
+Система поднята: `docker compose up -d` (postgres, redis, backend :8700, frontend :3000).
+Проверить: <http://localhost:8700/health> должен вернуть
 `{"status":"ok","postgresql":"healthy","redis":"healthy"}`.
 
 ---
@@ -33,7 +35,7 @@
 
 **Способ 1 — терминал (curl):**
 ```powershell
-curl.exe -X POST "http://localhost:8000/admin/refresh/5" -H "x-api-key: nba-stats-secret-key-2024"
+curl.exe -X POST "http://localhost:8700/admin/refresh/5" -H "x-api-key: your-secret-key-here"
 ```
 Ответ при успехе:
 ```json
@@ -43,12 +45,12 @@ curl.exe -X POST "http://localhost:8000/admin/refresh/5" -H "x-api-key: nba-stat
 кэш был пуст (никто ещё не запрашивал данные после рестарта).
 
 **Способ 2 — Swagger UI (нагляднее на защите):**
-<http://localhost:8000/docs> → `POST /admin/refresh/{season_id}` → *Try it out* →
-`season_id = 5`, поле `x-api-key` = `nba-stats-secret-key-2024` → *Execute*.
+<http://localhost:8700/docs> → `POST /admin/refresh/{season_id}` → *Try it out* →
+`season_id = 5`, поле `x-api-key` = `your-secret-key-here` → *Execute*.
 
 **Способ 3 — только лидерборд (точечно, без пересчёта):**
 ```powershell
-curl.exe -X DELETE "http://localhost:8000/admin/cache/leaders" -H "x-api-key: nba-stats-secret-key-2024"
+curl.exe -X DELETE "http://localhost:8700/admin/cache/leaders" -H "x-api-key: your-secret-key-here"
 ```
 
 > ⚠️ Если `/admin/refresh` отдаёт `Internal Server Error` — проверь, что в
@@ -70,7 +72,6 @@ curl.exe -X DELETE "http://localhost:8000/admin/cache/leaders" -H "x-api-key: nb
 
 ### Шаг 2. Вставить демо-матч (срабатывает триггер)
 ```powershell
-cd E:\CW\code
 Get-Content db\demo_insert.sql | docker compose exec -T postgres psql -U nba_admin -d nba_stats
 ```
 В выводе psql видно:
@@ -91,9 +92,9 @@ Get-Content db\demo_insert.sql | docker compose exec -T postgres psql -U nba_adm
 
 Сбросить кэш и пересчитать через admin-эндпоинт:
 ```powershell
-curl.exe -X POST "http://localhost:8000/admin/refresh/5" -H "x-api-key: nba-stats-secret-key-2024"
+curl.exe -X POST "http://localhost:8700/admin/refresh/5" -H "x-api-key: your-secret-key-here"
 ```
-(или `DELETE http://localhost:8000/admin/cache/leaders` — точечно для лидерборда)
+(или `DELETE http://localhost:8700/admin/cache/leaders` — точечно для лидерборда)
 
 ### Шаг 4. Показать состояние «ПОСЛЕ» в интерфейсе
 Обновить страницы из шага 1 — теперь среднее очков и PER выросли, Лука
@@ -102,7 +103,7 @@ curl.exe -X POST "http://localhost:8000/admin/refresh/5" -H "x-api-key: nba-stat
 ### Шаг 5. Откат (чтобы демо можно было повторить)
 ```powershell
 Get-Content db\demo_teardown.sql | docker compose exec -T postgres psql -U nba_admin -d nba_stats
-curl.exe -X POST "http://localhost:8000/admin/refresh/5" -H "x-api-key: nba-stats-secret-key-2024"
+curl.exe -X POST "http://localhost:8700/admin/refresh/5" -H "x-api-key: your-secret-key-here"
 ```
 Статистика Луки вернётся к 65 играм / 32.97 / PER 30.37.
 
@@ -124,9 +125,8 @@ curl.exe -X POST "http://localhost:8000/admin/refresh/5" -H "x-api-key: nba-stat
 (<=48 мин) игрок в агрегат не попадёт.
 
 ```powershell
-cd E:\CW\code
 Get-Content db\demo_new_player.sql | docker compose exec -T postgres psql -U nba_admin -d nba_stats
-curl.exe -X POST "http://localhost:8000/admin/refresh/5" -H "x-api-key: nba-stats-secret-key-2024"
+curl.exe -X POST "http://localhost:8700/admin/refresh/5" -H "x-api-key: your-secret-key-here"
 ```
 Результат: игрок появляется с **2 играми, 28.0 очк, PER 31.43**.
 В UI: <http://localhost:3000/players> → поиск «Zhuravlev» → открыть профиль.
@@ -135,7 +135,7 @@ curl.exe -X POST "http://localhost:8000/admin/refresh/5" -H "x-api-key: nba-stat
 Откат:
 ```powershell
 Get-Content db\demo_new_player_teardown.sql | docker compose exec -T postgres psql -U nba_admin -d nba_stats
-curl.exe -X POST "http://localhost:8000/admin/refresh/5" -H "x-api-key: nba-stats-secret-key-2024"
+curl.exe -X POST "http://localhost:8700/admin/refresh/5" -H "x-api-key: your-secret-key-here"
 ```
 
 ---
@@ -163,4 +163,4 @@ ERROR:  Player points sum (game_id=..., team_id=14) does not match team score (7
 ## Запасной вариант — через REST API (если спросят про backend)
 Эндпоинт `POST /admin/refresh/{season_id}` пересчитывает сезон и инвалидирует
 кэш программно — то же самое, что делает триггер на уровне БД, но вызвано из
-приложения. Удобно показать Swagger UI: <http://localhost:8000/docs>.
+приложения. Удобно показать Swagger UI: <http://localhost:8700/docs>.

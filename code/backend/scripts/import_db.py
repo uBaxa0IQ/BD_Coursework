@@ -14,8 +14,8 @@
 ВНИМАНИЕ: операция перезаписывает текущие данные БД содержимым из CSV.
 
 Примеры:
-  python scripts/import_db.py --in data/csv_2021-2026
-  python scripts/import_db.py --in data/csv_export   # старый сейв (2019-20..2023-24)
+  python scripts/import_db.py --in csv_2021-2026
+  python scripts/import_db.py --in /absolute/path/to/csv
 """
 from __future__ import annotations
 
@@ -58,8 +58,8 @@ TABLES = [
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Загрузка БД NBA из CSV-сейва")
-    p.add_argument("--in", dest="src", default="csv_export",
-                   help="Имя подпапки в data/ или абсолютный путь (по умолчанию csv_export)")
+    p.add_argument("--in", dest="src", default="csv_2021-2026",
+                   help="Имя подпапки в data/ или абсолютный путь (по умолчанию csv_2021-2026)")
     return p.parse_args()
 
 

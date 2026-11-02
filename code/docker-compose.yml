@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15-alpine
@@ -9,10 +7,11 @@ services:
       POSTGRES_USER: nba_admin
       POSTGRES_PASSWORD: nba_secure_pass_2024
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./db:/docker-entrypoint-initdb.d
+      - ./db:/schema:ro
+      - ./db/init.sh:/docker-entrypoint-initdb.d/01-init.sh:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U nba_admin -d nba_stats"]
       interval: 10s
@@ -39,7 +38,7 @@ services:
     # Порт на хосте должен быть ВНЕ excluded range Windows (netsh interface ipv4 show excludedportrange).
     # 8888 часто попадает в 8822–8921; используем 8700. Внутри compose backend слушает 8000.
     ports:
-      - "8700:8000"
+      - "127.0.0.1:8700:8000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -57,7 +56,7 @@ services:
     build: ./frontend
     container_name: nba_frontend
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     depends_on:
       - backend
     environment:

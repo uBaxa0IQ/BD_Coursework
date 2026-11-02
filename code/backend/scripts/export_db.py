@@ -9,7 +9,7 @@
 
 Примеры:
   python scripts/export_db.py                          # -> data/csv_export
-  python scripts/export_db.py --out data/csv_2021-2026 # в отдельную подпапку
+  python scripts/export_db.py --out my_backup       # в отдельную подпапку data/
 """
 from __future__ import annotations
 
